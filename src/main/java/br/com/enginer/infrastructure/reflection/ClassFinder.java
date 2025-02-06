@@ -18,18 +18,23 @@ public class ClassFinder {
 	public static Object findClassUsingClassLoader(String className) {
 
 		try {
+			// Ajusta o caminho para o sistema operacional atual
+			String packagePath = Constants.DIRECTORY_APPLICATION + Constants.PACKAGE_NAME_DOMAIN.replace(".", "/");
 
-			String packagePath = (Constants.DIRECTORY_APPLICATION + Constants.PACKAGE_NAME_DOMAIN).replaceAll("[.]", "/");
+			Path basePath = Paths.get(packagePath).toAbsolutePath().normalize();
+			if (!Files.exists(basePath)) {
+				System.err.println("Pacote não encontrado: " + basePath);
+				return null;
+			}
 
-			List<Path> dirs = Files.walk(Paths.get(packagePath), 1).filter(Files::isDirectory).collect(Collectors.toList());
+			List<Path> dirs = Files.walk(basePath, 1).filter(Files::isDirectory).collect(Collectors.toList());
 
 			for (Path path : dirs) {
+				String packageName = path.toString().replace(basePath.toString(), Constants.PACKAGE_NAME_DOMAIN).replaceAll("[/\\\\]", ".");
 
-				String packageName = (path.toString().replaceAll("[/]", ".").replace(Constants.DIRECTORY_APPLICATION, ""));
-
-				try (InputStream stream = ClassFinder.class.getClassLoader() .getResourceAsStream(packageName.replace(".", "/"));
-
-					BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+				try (InputStream stream = ClassFinder.class.getClassLoader()
+						.getResourceAsStream(packageName.replace(".", "/"));
+						BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
 
 					Set<Class<?>> classes = reader.lines().filter(line -> line.endsWith(".class"))
 							.map(line -> getClass(line, packageName)).collect(Collectors.toSet());
@@ -41,12 +46,10 @@ public class ClassFinder {
 						}
 					}
 				}
-
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return null;
 	}
 
@@ -55,9 +58,8 @@ public class ClassFinder {
 			String className = classFileName.replace(".class", "");
 			return Class.forName(packageName + "." + className);
 		} catch (ClassNotFoundException e) {
-			System.err.println("Class not found: " + packageName + "." + classFileName);
+			System.err.println("Classe não encontrada: " + packageName + "." + classFileName);
 		}
 		return null;
 	}
-
 }

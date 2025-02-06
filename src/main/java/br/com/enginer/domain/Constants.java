@@ -3,7 +3,7 @@ package br.com.enginer.domain;
 public class Constants {
 	
 	// Inicio do nome do diretorio
-	public static final String DIRECTORY_APPLICATION = "src.main.java.";
+	public static final String DIRECTORY_APPLICATION = "src/main/java/";
 
 	// Nome do pacote onde estao as classes do dominio
 	public static final String PACKAGE_NAME_DOMAIN = "br.com.enginer.domain.rule.dto";
