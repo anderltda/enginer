@@ -8,7 +8,6 @@ public class Constants {
 	// Nome do pacote onde estao as classes do dominio
 	public static final String PACKAGE_NAME_DOMAIN = "br.com.enginer.domain.rule.dto";
 	
-	
 	// Types para @Button
 	public static final String TYPE_BUTTON_SUBMIT = "submit";
 	public static final String TYPE_BUTTON_RESET = "reset";
