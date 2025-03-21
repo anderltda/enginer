@@ -19,14 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.enginer.domain.rule.dto.Model;
 import br.com.enginer.domain.rule.port.RuleInboundPort;
+import br.com.enginer.infrastructure.reflection.ClassFinder;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
-@RequestMapping("/v1/rule")
-public class RuleInboundPortAdapter {
+@RequestMapping("/v2/rule")
+public class RuleInboundPortAdapter_ {
 
-	private static final Logger LOGGER = LogManager.getLogger(RuleInboundPortAdapter.class);
+	private static final Logger LOGGER = LogManager.getLogger(RuleInboundPortAdapter_.class);
 
 	private final ObjectMapper objectMapper;
 	private final RuleInboundPort ruleInboundPort;
@@ -35,22 +37,23 @@ public class RuleInboundPortAdapter {
     // Caminho base no macOS
     private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public RuleInboundPortAdapter(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
+	public RuleInboundPortAdapter_(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
 			TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
 		this.ruleInboundPort = ruleInboundPort;
 		this.trackingProvider = trackingProvider;
 	}
 
-	@PostMapping("/{model}")
-	public ResponseEntity<String> post(@PathVariable String model, @RequestBody JsonNode json) throws Exception {
+	@PostMapping
+	public ResponseEntity<String> post(@RequestBody JsonNode json) throws Exception {
+		Model<?> model = (Model<?>) ClassFinder.findClassUsingClassLoader("EntityFour");
 
-		LOGGER.info("Executando modelo: {}", model);
+		LOGGER.info("Executando modelo: {}", model.getClass());
 		configureTrackingLog();
 		LOGGER.info("Payload recebido: {}", json.toPrettyString());
 
 		try {
-			Thread.sleep(9000);
+			Thread.sleep(3000);
 			ruleInboundPort.executeRuleAcaoCivil(null);
 			ruleInboundPort.executeRuleFraude(null);
 		} catch (InterruptedException e) {
@@ -68,11 +71,11 @@ public class RuleInboundPortAdapter {
 	}
 
 
-    @GetMapping("/{type}/{model}")
-    public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String model) {
+    @GetMapping("/{type}/{fileName}")
+    public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String fileName) {
         try {
             // Monta o caminho do arquivo com o diretório desejado
-            Path filePath = Paths.get(BASE_PATH, type, model + ".json");
+            Path filePath = Paths.get(BASE_PATH, type, fileName + ".json");
 
             LOGGER.info("Buscando arquivo JSON: {}", filePath);
 
@@ -90,7 +93,7 @@ public class RuleInboundPortAdapter {
 
             return ResponseEntity.ok(jsonNode);
         } catch (IOException e) {
-            LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", model, e.getMessage());
+            LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", fileName, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
