@@ -47,21 +47,21 @@ public class RuleInboundPortAdapter {
 
 		LOGGER.info("Executando modelo: {}", model);
 		configureTrackingLog();
-		LOGGER.info("Payload recebido: {}", json.toPrettyString());
+		LOGGER.info("Payload recebido: \r {} \r", json.toPrettyString());
+
+		boolean error = false;
+
+		if (error) {
+			throw new Exception("ENGINER MESSAGE: Erro interno no servidor: Operação não pode continuar.");
+		}
 
 		try {
-			Thread.sleep(9000);
+			Thread.sleep(1000);
 			ruleInboundPort.executeRuleAcaoCivil(null);
 			ruleInboundPort.executeRuleFraude(null);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			LOGGER.error("Erro ao executar regras", e);
-		}
-
-		boolean error = false;
-
-		if (error) {
-			throw new Exception("Erro interno no servidor: Operação não pode continuar.");
 		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(json.toPrettyString());
