@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,13 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.enginer.domain.rule.dto.Model;
 import br.com.enginer.domain.rule.port.RuleInboundPort;
-import br.com.enginer.infrastructure.reflection.ClassFinder;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
-@RequestMapping("/rule")
+@RequestMapping("/v1/rule")
 public class RuleInboundPortAdapter {
 
 	private static final Logger LOGGER = LogManager.getLogger(RuleInboundPortAdapter.class);
@@ -34,8 +34,8 @@ public class RuleInboundPortAdapter {
 	private final RuleInboundPort ruleInboundPort;
 	private final TrackingProvider trackingProvider;
 
-    // Caminho base no macOS
-    private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
+	// Caminho base no macOS
+	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
 	public RuleInboundPortAdapter(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
 			TrackingProvider trackingProvider) {
@@ -44,16 +44,21 @@ public class RuleInboundPortAdapter {
 		this.trackingProvider = trackingProvider;
 	}
 
-	@PostMapping
-	public ResponseEntity<String> post(@RequestBody JsonNode json) throws Exception {
-		Model<?> model = (Model<?>) ClassFinder.findClassUsingClassLoader("EntityFour");
+	@PostMapping("/{model}")
+	public ResponseEntity<String> post(@PathVariable String model, @RequestBody JsonNode json) throws Exception {
 
-		LOGGER.info("Executando modelo: {}", model.getClass());
+		LOGGER.info("Executando modelo: {}", model);
 		configureTrackingLog();
-		LOGGER.info("Payload recebido: {}", json.toPrettyString());
+		LOGGER.info("Payload recebido: \r {} \r", json.toPrettyString());
+
+		boolean error = false;
+
+		if (error) {
+			throw new Exception("ENGINER MESSAGE: Erro interno no servidor: Operação não pode continuar.");
+		}
 
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 			ruleInboundPort.executeRuleAcaoCivil(null);
 			ruleInboundPort.executeRuleFraude(null);
 		} catch (InterruptedException e) {
@@ -61,42 +66,69 @@ public class RuleInboundPortAdapter {
 			LOGGER.error("Erro ao executar regras", e);
 		}
 
-		boolean error = false;
-
-		if (error) {
-			throw new Exception("Erro interno no servidor: Operação não pode continuar.");
-		}
-
 		return ResponseEntity.status(HttpStatus.CREATED).body(json.toPrettyString());
 	}
 
+	@PostMapping("/{method}/validatorsAsync")
+	public ResponseEntity<Map<String, Boolean>> validatorsAsync(@PathVariable String method, @RequestBody String value) throws Exception {
 
-    @GetMapping("/{type}/{fileName}")
-    public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String fileName) {
-        try {
-            // Monta o caminho do arquivo com o diretório desejado
-            Path filePath = Paths.get(BASE_PATH, type, fileName + ".json");
+		LOGGER.info("Executando method: {}", method);
+		LOGGER.info("Valor recebido: \r {} \r", value);
 
-            LOGGER.info("Buscando arquivo JSON: {}", filePath);
+		String[] array = new String[] { "johndoe", "admin", "user123" };
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("validators", false);
 
-            // Verifica se o arquivo existe antes de tentar ler
-            if (!Files.exists(filePath)) {
-                LOGGER.error("Arquivo não encontrado: {}", filePath);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
+		for (String string : array) {
+			if (value.equals(string)) {
+			    response.put("validators", true);
+			}
+		}
 
-            // Lê o conteúdo do arquivo
-            String content = Files.readString(filePath);
+		boolean error = false;
 
-            // Converte o conteúdo do JSON em um objeto JsonNode
-            JsonNode jsonNode = objectMapper.readTree(content);
+		if (error) {
+			throw new Exception("ENGINER MESSAGE: Erro interno no servidor: Operação não pode continuar.");
+		}
 
-            return ResponseEntity.ok(jsonNode);
-        } catch (IOException e) {
-            LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", fileName, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+		try {
+			Thread.sleep(0);
+			ruleInboundPort.executeRuleAcaoCivil(null);
+			ruleInboundPort.executeRuleFraude(null);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			LOGGER.error("Erro ao executar regras", e);
+		}
+
+	    return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{type}/{model}")
+	public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String model) {
+		try {
+			// Monta o caminho do arquivo com o diretório desejado
+			Path filePath = Paths.get(BASE_PATH, type, model + ".json");
+
+			LOGGER.info("Buscando arquivo JSON: {}", filePath);
+
+			// Verifica se o arquivo existe antes de tentar ler
+			if (!Files.exists(filePath)) {
+				LOGGER.error("Arquivo não encontrado: {}", filePath);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+
+			// Lê o conteúdo do arquivo
+			String content = Files.readString(filePath);
+
+			// Converte o conteúdo do JSON em um objeto JsonNode
+			JsonNode jsonNode = objectMapper.readTree(content);
+
+			return ResponseEntity.ok(jsonNode);
+		} catch (IOException e) {
+			LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", model, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
 	private void configureTrackingLog() {
 		trackingProvider.setInnerId("1");
