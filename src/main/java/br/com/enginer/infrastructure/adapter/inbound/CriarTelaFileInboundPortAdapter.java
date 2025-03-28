@@ -26,9 +26,9 @@ import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
 @RequestMapping("/v1/rule")
-public class RuleInboundPortAdapter {
+public class CriarTelaFileInboundPortAdapter {
 
-	private static final Logger LOGGER = LogManager.getLogger(RuleInboundPortAdapter.class);
+	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
 
 	private final ObjectMapper objectMapper;
 	private final RuleInboundPort ruleInboundPort;
@@ -37,17 +37,17 @@ public class RuleInboundPortAdapter {
 	// Caminho base no macOS
 	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public RuleInboundPortAdapter(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
+	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
 			TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
 		this.ruleInboundPort = ruleInboundPort;
 		this.trackingProvider = trackingProvider;
 	}
 
-	@PostMapping("/{model}")
-	public ResponseEntity<String> post(@PathVariable String model, @RequestBody JsonNode json) throws Exception {
+	@PostMapping("/{domain}")
+	public ResponseEntity<String> post(@PathVariable String domain, @RequestBody JsonNode json) throws Exception {
 
-		LOGGER.info("Executando modelo: {}", model);
+		LOGGER.info("Executando domaino: {}", domain);
 		configureTrackingLog();
 		LOGGER.info("Payload recebido: \r {} \r", json.toPrettyString());
 
@@ -103,11 +103,11 @@ public class RuleInboundPortAdapter {
 	    return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/{type}/{model}")
-	public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String model) {
+	@GetMapping("/{type}/{domain}")
+	public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String domain) {
 		try {
 			// Monta o caminho do arquivo com o diretório desejado
-			Path filePath = Paths.get(BASE_PATH, type, model + ".json");
+			Path filePath = Paths.get(BASE_PATH, type, domain + ".json");
 
 			LOGGER.info("Buscando arquivo JSON: {}", filePath);
 
@@ -125,7 +125,7 @@ public class RuleInboundPortAdapter {
 
 			return ResponseEntity.ok(jsonNode);
 		} catch (IOException e) {
-			LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", model, e.getMessage());
+			LOGGER.error("Erro ao ler o arquivo JSON: {} - {}", domain, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
