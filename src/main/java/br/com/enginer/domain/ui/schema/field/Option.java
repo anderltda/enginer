@@ -8,6 +8,11 @@ public class Option {
 	private String label;
 	private Object value;
 
+	public Option(String label, Object value) {
+		this.label = label;
+		this.value = value;
+	}
+
 	public String getLabel() {
 		return label;
 	}

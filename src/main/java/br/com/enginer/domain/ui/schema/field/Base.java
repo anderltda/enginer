@@ -10,11 +10,11 @@ public abstract class Base {
 	private String type;
 	private String label;
 	private String field;
-	private Boolean required;
 	private Object value;
-	private Integer order;
-	private Integer group;
-	private Boolean disabled;
+	private Boolean required = false;
+	private Integer order = 1;
+	private Integer group = 1;
+	private Boolean disabled = false;
 	private String asyncValidatorFn;
 	private String asyncValidatorFnMessage;
 	private String syncValidatorFnMessage;

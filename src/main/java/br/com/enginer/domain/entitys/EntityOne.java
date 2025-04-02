@@ -1,35 +1,31 @@
-package br.com.enginer.domain.rule.dto;
+package br.com.enginer.domain.entitys;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+/**
+ * 
+ */
+public class EntityOne {
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class EntityOne implements Model<Long> {
-
-	private Long id;
-
+	private Object id;
 	private String name;
-
 	private Integer age;
-
 	private Double height;
-
 	private LocalDate birthDate;
-
 	private LocalDateTime prohibitedDateTime;
-	
-	private Boolean code = true;
-
+	private Boolean code;
+	private EntityStatus entityStatus;
 	private EntityTwo entityTwo;
+	
+	private List<String> codigos;
 
-	public Long getId() {
+	public Object getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Object id) {
 		this.id = id;
 	}
 
@@ -80,6 +76,22 @@ public class EntityOne implements Model<Long> {
 	public void setCode(Boolean code) {
 		this.code = code;
 	}
+	
+	public List<String> getCodigos() {
+		return codigos;
+	}
+
+	public void setCodigos(List<String> codigos) {
+		this.codigos = codigos;
+	}
+
+	public EntityStatus getEntityStatus() {
+		return entityStatus;
+	}
+
+	public void setEntityStatus(EntityStatus entityStatus) {
+		this.entityStatus = entityStatus;
+	}
 
 	public EntityTwo getEntityTwo() {
 		return entityTwo;
@@ -88,30 +100,5 @@ public class EntityOne implements Model<Long> {
 	public void setEntityTwo(EntityTwo entityTwo) {
 		this.entityTwo = entityTwo;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(age, birthDate, code, entityTwo, height, id, name, prohibitedDateTime);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EntityOne other = (EntityOne) obj;
-		return Objects.equals(age, other.age) && Objects.equals(birthDate, other.birthDate)
-				&& Objects.equals(code, other.code) && Objects.equals(entityTwo, other.entityTwo)
-				&& Objects.equals(height, other.height) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name) && Objects.equals(prohibitedDateTime, other.prohibitedDateTime);
-	}
-
-	
 
 }

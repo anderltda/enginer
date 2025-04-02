@@ -6,18 +6,18 @@ package br.com.enginer.domain.ui.schema.field;
 public class Area extends Base {
 
 	private static final String TYPE = "textarea";
-	private String editor;
+	private Boolean editor;
 	private String placeholder;
 
 	public String getType() {
 		return TYPE;
 	}
 
-	public String getEditor() {
+	public Boolean getEditor() {
 		return editor;
 	}
 
-	public void setEditor(String editor) {
+	public void setEditor(Boolean editor) {
 		this.editor = editor;
 	}
 

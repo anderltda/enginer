@@ -2,6 +2,7 @@ package br.com.enginer.infrastructure.adapter.inbound;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,24 +13,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.enginer.domain.entityOne.EntityOne;
+import br.com.enginer.domain.entitys.EntityOne;
+import br.com.enginer.domain.ui.schema.Form;
+import br.com.enginer.domain.ui.schema.field.Field;
+import br.com.enginer.domain.utils.ReflectionUtils;
 
 @RestController
-@RequestMapping("/v1/enginer")
+@RequestMapping("/v2/enginer")
 public class CriarTelaStreamInboundPortAdapter {
 
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaStreamInboundPortAdapter.class);
 
-	private final ObjectMapper objectMapper;
-
-	public CriarTelaStreamInboundPortAdapter(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper;
-	}
-
-	@GetMapping("/{domain}")
-	public ResponseEntity<EntityOne> create(@PathVariable String domain) {
+	@GetMapping("/{type}/{domain}")
+	public ResponseEntity<Form> create(@PathVariable String type, @PathVariable String domain) {
 		try {
 			LOGGER.info("Executando domínio: {}", domain);
 
@@ -41,8 +37,13 @@ public class CriarTelaStreamInboundPortAdapter {
 			entityOne.setCode(true);
 			entityOne.setBirthDate(LocalDate.now());
 			entityOne.setProhibitedDateTime(LocalDateTime.now());
+			
+			List<Field> fields = ReflectionUtils.extractFieldsDomain(entityOne);
+			Form form = new Form();			
+			form.setTitle("Entity One");
+			form.setFields(fields);
 
-			return ResponseEntity.ok(entityOne);
+			return ResponseEntity.ok(form);
 			
 		} catch (Exception ex) {
 			LOGGER.error("Erro ao criar entidade", ex);

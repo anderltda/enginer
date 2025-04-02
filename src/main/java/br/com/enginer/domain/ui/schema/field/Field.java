@@ -6,8 +6,11 @@ package br.com.enginer.domain.ui.schema.field;
 public class Field {
 
 	private Hidden hidden;
+	
 	private Text text;
 	private Email email;
+	private Area textarea;
+	
 	private Number number;
 	private Decimal decimal;
 	private Password password;
@@ -18,7 +21,6 @@ public class Field {
 	private Switch swittch;
 	private Select select;
 	private Tag tag;
-	private Area textarea;
 	private File file;
 	private Filter filter;
 	private Join join;
@@ -177,4 +179,5 @@ public class Field {
 		this.blank = blank;
 	}
 
+	
 }

@@ -1,23 +1,17 @@
-package br.com.enginer.domain.rule.dto;
+package br.com.enginer.domain.entitys;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class EntityTwo implements Model<String> {
+/**
+ * 
+ */
+public class EntityTwo {
 
 	private String id;
-
 	private String color;
-
 	private Integer hex;
-
 	private Double cost;
-
 	private LocalDate inclusionDate;
-
 	private EntityTree entityTree;
 
 	public String getId() {
@@ -66,27 +60,5 @@ public class EntityTwo implements Model<String> {
 
 	public void setEntityTree(EntityTree entityTree) {
 		this.entityTree = entityTree;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(color, cost, inclusionDate, entityTree, hex, id);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EntityTwo other = (EntityTwo) obj;
-		return Objects.equals(color, other.color) && Objects.equals(cost, other.cost)
-				&& Objects.equals(inclusionDate, other.inclusionDate) && Objects.equals(entityTree, other.entityTree)
-				&& Objects.equals(hex, other.hex) && Objects.equals(id, other.id);
 	}
 }

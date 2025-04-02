@@ -25,7 +25,7 @@ import br.com.enginer.domain.rule.port.RuleInboundPort;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
-@RequestMapping("/v1/rule")
+@RequestMapping("/v1/enginer")
 public class CriarTelaFileInboundPortAdapter {
 
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
