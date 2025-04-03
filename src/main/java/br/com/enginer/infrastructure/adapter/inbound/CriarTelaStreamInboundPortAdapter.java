@@ -2,6 +2,7 @@ package br.com.enginer.infrastructure.adapter.inbound;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.enginer.domain.entitys.EntityOne;
 import br.com.enginer.domain.ui.schema.Form;
-import br.com.enginer.domain.ui.schema.field.Field;
 import br.com.enginer.domain.utils.ReflectionUtils;
 
 @RestController
@@ -27,21 +27,24 @@ public class CriarTelaStreamInboundPortAdapter {
 	@GetMapping("/{type}/{domain}")
 	public ResponseEntity<Form> create(@PathVariable String type, @PathVariable String domain) {
 		try {
+			LOGGER.info("Type template: {}", type);
 			LOGGER.info("Executando domínio: {}", domain);
 
+			List<String> codigos = new ArrayList<>();
 			EntityOne entityOne = new EntityOne();
 			entityOne.setId(1L);
-			entityOne.setName("Anderson Silva");
-			entityOne.setAge(41);
-			entityOne.setHeight(1.89);
-			entityOne.setCode(true);
+			entityOne.setName("Jao Pedro da Silva");
+			entityOne.setAge(23);
+			entityOne.setHeight(2.19);
+			entityOne.setCode(false);
 			entityOne.setBirthDate(LocalDate.now());
 			entityOne.setProhibitedDateTime(LocalDateTime.now());
+			entityOne.setCodigos(codigos);
 			
-			List<Field> fields = ReflectionUtils.extractFieldsDomain(entityOne);
-			Form form = new Form();			
-			form.setTitle("Entity One");
-			form.setFields(fields);
+			codigos.add("value_1");
+			codigos.add("value_4");
+			
+			Form form = ReflectionUtils.extractFieldsDomain(entityOne);
 
 			return ResponseEntity.ok(form);
 			

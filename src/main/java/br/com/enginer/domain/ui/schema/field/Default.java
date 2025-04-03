@@ -14,11 +14,15 @@ public class Default {
 	private String label;
 	private String field;
 	private Object value;
+	private Integer order;
+	private Integer group;
 
-	public Default(String name, Object object) {
-		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString());
-		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(object.getClass().getSimpleName().toString());
+	public Default(Integer order, Integer group, String name, Object object) {
+		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
+		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
 		this.value = ReflectionUtils.executeGetMethod(StringsUtils.getMethod(name), object);
+		this.order = order;
+		this.group = group;
 	}
 
 	/**
@@ -40,6 +44,8 @@ public class Default {
 		text.setMin(1);
 		text.setMax(20);
 		text.setPlaceholder(text.getLabel());
+		text.setOrder(order);
+		text.setGroup(group);
 		return text;
 	}
 
@@ -51,6 +57,8 @@ public class Default {
 		email.setMin(1);
 		email.setMax(50);
 		email.setPlaceholder(email.getLabel());
+		email.setOrder(order);
+		email.setGroup(group);
 		return email;
 	}
 
@@ -62,6 +70,8 @@ public class Default {
 		number.setMin(1);
 		number.setMax(50);
 		number.setPlaceholder(number.getLabel());
+		number.setOrder(order);
+		number.setGroup(group);
 		return number;
 	}
 
@@ -71,6 +81,8 @@ public class Default {
 		decimal.setField(field);
 		decimal.setValue(value);
 		decimal.setPlaceholder(decimal.getLabel());
+		decimal.setOrder(order);
+		decimal.setGroup(group);
 		return decimal;
 	}
 
@@ -81,6 +93,8 @@ public class Default {
 		password.setMin(1);
 		password.setMax(10);
 		password.setPlaceholder(password.getLabel());
+		password.setOrder(order);
+		password.setGroup(group);
 		return password;
 	}
 
@@ -92,6 +106,8 @@ public class Default {
 		date.setShowtime(showTime);
 		date.setFormat(showTime ? "DD/MM/YYYY HH:mm:ss" : "DD/MM/YYYY");
 		date.setPlaceholder(date.getLabel());
+		date.setOrder(order);
+		date.setGroup(group);
 		return date;
 	}
 
@@ -101,6 +117,8 @@ public class Default {
 		time.setField(field);
 		time.setValue(value);
 		time.setPlaceholder(time.getLabel());
+		time.setOrder(order);
+		time.setGroup(group);
 		return time;
 	}
 
@@ -114,6 +132,8 @@ public class Default {
 		objects.forEach(option -> {
 			options.add(new Option(option.toString(), option.toString()));
 		});
+		radio.setOrder(order);
+		radio.setGroup(group);
 		return radio;
 	}
 
@@ -122,6 +142,8 @@ public class Default {
 		checkbox.setLabel(label);
 		checkbox.setField(field);
 		checkbox.setValue(value);
+		checkbox.setOrder(order);
+		checkbox.setGroup(group);
 		return checkbox;
 	}
 
@@ -130,6 +152,8 @@ public class Default {
 		swittch.setLabel(label);
 		swittch.setField(field);
 		swittch.setValue(value);
+		swittch.setOrder(order);
+		swittch.setGroup(group);
 		return swittch;
 	}
 
@@ -139,12 +163,13 @@ public class Default {
 		select.setLabel(label);
 		select.setField(field);
 		select.setValue(value);
-		select.setMulti(false);
+		select.setMulti(true);
 		select.setOptions(options);
 		objects.forEach(option -> {
 			options.add(new Option(option.toString(), option.toString()));
 		});
-
+		select.setOrder(order);
+		select.setGroup(group);
 		return select;
 	}
 
@@ -163,6 +188,8 @@ public class Default {
 		textarea.setValue(value);
 		textarea.setEditor(false);
 		textarea.setPlaceholder(textarea.getLabel());
+		textarea.setOrder(order);
+		textarea.setGroup(group);
 		return textarea;
 	}
 
@@ -171,6 +198,8 @@ public class Default {
 		file.setLabel(label);
 		file.setField(field);
 		file.setValue(value);
+		file.setOrder(order);
+		file.setGroup(group);
 		return file;
 	}
 
@@ -181,6 +210,8 @@ public class Default {
 		filter.setValue(value);
 		filter.setDomain(domain);
 		filter.setPlaceholder(filter.getLabel());
+		filter.setOrder(order);
+		filter.setGroup(group);
 		return filter;
 	}
 

@@ -16,9 +16,8 @@ public class EntityOne {
 	private LocalDate birthDate;
 	private LocalDateTime prohibitedDateTime;
 	private Boolean code;
-	private EntityStatus entityStatus;
-	private EntityTwo entityTwo;
-	
+	//private EntityStatus entityStatus;
+	//private EntityTwo entityTwo;
 	private List<String> codigos;
 
 	public Object getId() {
@@ -85,20 +84,20 @@ public class EntityOne {
 		this.codigos = codigos;
 	}
 
-	public EntityStatus getEntityStatus() {
-		return entityStatus;
-	}
+	//public EntityStatus getEntityStatus() {
+	//	return entityStatus;
+	//}
 
-	public void setEntityStatus(EntityStatus entityStatus) {
-		this.entityStatus = entityStatus;
-	}
+	//public void setEntityStatus(EntityStatus entityStatus) {
+	//	this.entityStatus = entityStatus;
+	//}
 
-	public EntityTwo getEntityTwo() {
-		return entityTwo;
-	}
+	//public EntityTwo getEntityTwo() {
+	//	return entityTwo;
+	//}
 
-	public void setEntityTwo(EntityTwo entityTwo) {
-		this.entityTwo = entityTwo;
-	}
+	//public void setEntityTwo(EntityTwo entityTwo) {
+	//	this.entityTwo = entityTwo;
+	//}
 
 }
