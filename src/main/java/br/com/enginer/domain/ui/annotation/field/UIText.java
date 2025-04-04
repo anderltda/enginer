@@ -21,5 +21,4 @@ public @interface UIText {
 	int min() default 0;
 	int max() default 20;
 	boolean disabled() default false;
-	boolean required() default false;
 }

@@ -24,7 +24,6 @@ import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIPassword;
-import br.com.enginer.domain.ui.annotation.field.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.UIRadio;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
 import br.com.enginer.domain.ui.annotation.field.UITag;
@@ -37,6 +36,9 @@ import br.com.enginer.domain.ui.schema.Form;
 import br.com.enginer.domain.ui.schema.field.behavior.Base;
 import br.com.enginer.domain.ui.schema.field.behavior.Default;
 import br.com.enginer.domain.ui.schema.field.behavior.Pattern;
+import br.com.enginer.domain.ui.schema.field.behavior.validation.Async;
+import br.com.enginer.domain.ui.schema.field.behavior.validation.Sync;
+import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
 import br.com.enginer.domain.ui.schema.field.type.Area;
 import br.com.enginer.domain.ui.schema.field.type.Checkbox;
 import br.com.enginer.domain.ui.schema.field.type.Date;
@@ -54,7 +56,6 @@ public class FormTemplate {
 	private static final Map<Class<? extends Annotation>, Class<? extends Annotation>> annotationMap = new HashMap<>();
 
     static {
-        annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
         annotationMap.put(UICheckbox.class, UICheckbox.class);
         annotationMap.put(UIDate.class, UIDate.class);
         annotationMap.put(UIDecimal.class, UIDecimal.class);
@@ -65,13 +66,14 @@ public class FormTemplate {
         annotationMap.put(UIJoin.class, UIJoin.class);
         annotationMap.put(UINumber.class, UINumber.class);
         annotationMap.put(UIPassword.class, UIPassword.class);
-        annotationMap.put(UIPattern.class, UIPattern.class);
         annotationMap.put(UIRadio.class, UIRadio.class);
         annotationMap.put(UISelect.class, UISelect.class);
         annotationMap.put(UITag.class, UITag.class);
         annotationMap.put(UIText.class, UIText.class);
         annotationMap.put(UITextArea.class, UITextArea.class);
         annotationMap.put(UITime.class, UITime.class);
+
+        annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
         annotationMap.put(UIValidation.class, UIValidation.class);
     }
 
@@ -199,21 +201,24 @@ public class FormTemplate {
 			if (annotationMap.containsKey(annotationType)) {
 				
 				if (annotation instanceof UIAutoComplete uiAutoComplete) {
-                	
-                } else if (annotation instanceof UIPattern uiPattern) {
-                	
-                	Pattern pattern = new Pattern(uiPattern.regex(), uiPattern.message());
-                	ReflectionUtils.executeSetMethod(base, StringsUtils.setMethod("pattern"), new Class<?>[] { pattern.getClass() }, new Object[] { pattern });
+					
                 	
                 } else if (annotation instanceof UIValidation uiValidation) {
+                	
+                	Validation validation = new Validation();
+                	validation.setPattern(new Pattern(uiValidation.pattern(), uiValidation.patternError()));
+                	validation.setAsync(new Async(uiValidation.asyncFunc(), uiValidation.asyncError()));
+                	validation.setSync(new Sync(uiValidation.syncFunc(), uiValidation.syncError()));
+                	base.setRequired(uiValidation.required());
+                	base.setValidation(validation);
                 	
                 } else {
                 			
         			Method[] methods = annotation.annotationType().getDeclaredMethods();
 
         			for (Method method : methods) {
-        				Object object = ReflectionUtils.executeGetMethod(method.getName(), annotation);
-        				ReflectionUtils.executeSetMethod(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
+        				Object object = ReflectionUtils.set(method.getName(), annotation);
+        				ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
         			}
 
                 }

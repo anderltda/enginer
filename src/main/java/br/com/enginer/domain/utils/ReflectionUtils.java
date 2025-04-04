@@ -82,7 +82,7 @@ public class ReflectionUtils {
 	/**
 	 * SET REFLECTION
 	 */
-	public static void executeSetMethod(Object object, String methodName, Class<?>[] paramClass, Object[] paramValue) {
+	public static void set(Object object, String methodName, Class<?>[] paramClass, Object[] paramValue) {
 		try {
 			Method method = object.getClass().getMethod(methodName, paramClass);
 			if (method != null) {
@@ -96,7 +96,7 @@ public class ReflectionUtils {
 	/**
 	 * GET REFLECTION
 	 */
-	public static Object executeGetMethod(String methodName, Object object) {
+	public static Object set(String methodName, Object object) {
 		Method method = getMethod(object.getClass(), methodName);
 		if (method != null) {
 			try {

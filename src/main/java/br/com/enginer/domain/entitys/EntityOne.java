@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import br.com.enginer.domain.ui.annotation.field.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 
 /**
@@ -16,8 +16,10 @@ public class EntityOne {
 
 	private Long id;
 	
-	@UIText(label = "Nome", order = 25, group = 15, icon = "tet")
-	@UIPattern(regex = "^[^wW]*$", message = "*** PATTERN ***, nao pode adiciona a letra 'W'")
+	@UIText(label = "Nome", order = 25, group = 15)
+	@UIValidation(required = true, pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'", 
+	asyncFunc = "asyncValidatorField", asyncError = "Validação direto no field 'ASYNC'",
+	syncFunc = {"dogMel", "dogMagrela"}, syncError = {"message1", "message2"})
 	private String name;
 	
 	private Integer age;

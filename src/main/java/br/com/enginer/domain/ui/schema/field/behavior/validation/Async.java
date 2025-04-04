@@ -1,12 +1,22 @@
-package br.com.enginer.domain.ui.schema.field.behavior;
+package br.com.enginer.domain.ui.schema.field.behavior.validation;
 
 /**
  * 
  */
-public class AsyncValidator {
+public class Async {
 
 	private String function;
 	private String message;
+
+	public Async() {
+		super();
+	}
+
+	public Async(String function, String message) {
+		super();
+		this.function = function;
+		this.message = message;
+	}
 
 	public String getFunction() {
 		return function;

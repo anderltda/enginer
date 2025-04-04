@@ -2,6 +2,8 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
+import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
+
 /**
  * 
  */
@@ -30,9 +32,7 @@ public abstract class Base {
 	private Boolean multi;
 	private Object value;
 	
-	private Pattern pattern;
-	private AsyncValidator asyncValidator;
-	private SyncValidator syncValidator;
+	private Validation validation;
 	private Autocomplete autocomplete;
 	
 	private List<String> files;
@@ -134,14 +134,6 @@ public abstract class Base {
 		this.icon = icon;
 	}
 
-	public Pattern getPattern() {
-		return pattern;
-	}
-
-	public void setPattern(Pattern pattern) {
-		this.pattern = pattern;
-	}
-
 	public String getPlaceholder() {
 		return placeholder;
 	}
@@ -222,20 +214,12 @@ public abstract class Base {
 		this.multi = multi;
 	}
 
-	public AsyncValidator getAsyncValidator() {
-		return asyncValidator;
+	public Validation getValidation() {
+		return validation;
 	}
 
-	public void setAsyncValidator(AsyncValidator asyncValidator) {
-		this.asyncValidator = asyncValidator;
-	}
-
-	public SyncValidator getSyncValidator() {
-		return syncValidator;
-	}
-
-	public void setSyncValidator(SyncValidator syncValidator) {
-		this.syncValidator = syncValidator;
+	public void setValidation(Validation validation) {
+		this.validation = validation;
 	}
 
 	public Autocomplete getAutocomplete() {

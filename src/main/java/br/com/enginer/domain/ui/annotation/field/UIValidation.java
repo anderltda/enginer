@@ -13,8 +13,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Inherited
 public @interface UIValidation {
-    String asyncValidatorFn();
-    String asyncValidatorFnMessage();
-    String syncValidatorFnMessage();
-    String[] syncValidatorFn();
+	
+	boolean required();
+	
+	String pattern() default "";
+	String patternError() default "";
+	
+    String asyncFunc() default "";
+    String asyncError() default "";
+    
+    String[] syncFunc() default "";
+    String[] syncError() default "";
 }

@@ -37,7 +37,7 @@ public class Default {
 	public Default(Integer order, Integer group, String name, Object object) {
 		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
 		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
-		this.value = ReflectionUtils.executeGetMethod(StringsUtils.getMethod(name), object);
+		this.value = ReflectionUtils.set(StringsUtils.getMethod(name), object);
 		this.order = order;
 		this.group = group;
 	}
