@@ -4,27 +4,36 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.UIPattern;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.instance.UITitle;
+
 /**
  * 
  */
+@UITitle("Teste que fiz para criar a anotation")
 public class EntityOne {
 
-	private Object id;
+	private Long id;
+	
+	@UIText(label = "Nome", order = 25, group = 15, icon = "tet")
+	@UIPattern(regex = "^[^wW]*$", message = "*** PATTERN ***, nao pode adiciona a letra 'W'")
 	private String name;
+	
 	private Integer age;
 	private Double height;
 	private LocalDate birthDate;
 	private LocalDateTime prohibitedDateTime;
 	private Boolean code;
-	//private EntityStatus entityStatus;
-	//private EntityTwo entityTwo;
+	private EntityStatus entityStatus;
+	private EntityTwo entityTwo;
 	private List<String> codigos;
 
-	public Object getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Object id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -75,7 +84,7 @@ public class EntityOne {
 	public void setCode(Boolean code) {
 		this.code = code;
 	}
-	
+
 	public List<String> getCodigos() {
 		return codigos;
 	}
@@ -84,20 +93,20 @@ public class EntityOne {
 		this.codigos = codigos;
 	}
 
-	//public EntityStatus getEntityStatus() {
-	//	return entityStatus;
-	//}
+	public EntityStatus getEntityStatus() {
+		return entityStatus;
+	}
 
-	//public void setEntityStatus(EntityStatus entityStatus) {
-	//	this.entityStatus = entityStatus;
-	//}
+	public void setEntityStatus(EntityStatus entityStatus) {
+		this.entityStatus = entityStatus;
+	}
 
-	//public EntityTwo getEntityTwo() {
-	//	return entityTwo;
-	//}
+	public EntityTwo getEntityTwo() {
+		return entityTwo;
+	}
 
-	//public void setEntityTwo(EntityTwo entityTwo) {
-	//	this.entityTwo = entityTwo;
-	//}
+	public void setEntityTwo(EntityTwo entityTwo) {
+		this.entityTwo = entityTwo;
+	}
 
 }

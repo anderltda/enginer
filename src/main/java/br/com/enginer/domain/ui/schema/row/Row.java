@@ -2,7 +2,7 @@ package br.com.enginer.domain.ui.schema.row;
 
 import java.util.List;
 
-import br.com.enginer.domain.ui.schema.field.Button;
+import br.com.enginer.domain.ui.schema.instance.Button;
 import br.com.enginer.domain.ui.schema.row.config.Config;
 
 /**

@@ -1,5 +1,24 @@
 package br.com.enginer.domain.ui.schema.field;
 
+import br.com.enginer.domain.ui.schema.field.behavior.Blank;
+import br.com.enginer.domain.ui.schema.field.type.Area;
+import br.com.enginer.domain.ui.schema.field.type.Checkbox;
+import br.com.enginer.domain.ui.schema.field.type.Date;
+import br.com.enginer.domain.ui.schema.field.type.Decimal;
+import br.com.enginer.domain.ui.schema.field.type.Email;
+import br.com.enginer.domain.ui.schema.field.type.File;
+import br.com.enginer.domain.ui.schema.field.type.Filter;
+import br.com.enginer.domain.ui.schema.field.type.Hidden;
+import br.com.enginer.domain.ui.schema.field.type.Join;
+import br.com.enginer.domain.ui.schema.field.type.Number;
+import br.com.enginer.domain.ui.schema.field.type.Password;
+import br.com.enginer.domain.ui.schema.field.type.Radio;
+import br.com.enginer.domain.ui.schema.field.type.Select;
+import br.com.enginer.domain.ui.schema.field.type.Tag;
+import br.com.enginer.domain.ui.schema.field.type.Text;
+import br.com.enginer.domain.ui.schema.field.type.Time;
+import br.com.enginer.domain.ui.schema.instance.Button;
+
 /**
  * 
  */
@@ -16,7 +35,6 @@ public class Field {
 	private Time time;
 	private Radio radio;
 	private Checkbox checkbox;
-	private Switch swittch;
 	private Select select;
 	private Tag tag;
 	private File file;
@@ -103,14 +121,6 @@ public class Field {
 
 	public void setCheckbox(Checkbox checkbox) {
 		this.checkbox = checkbox;
-	}
-
-	public Switch getSwittch() {
-		return swittch;
-	}
-
-	public void setSwittch(Switch swittch) {
-		this.swittch = swittch;
 	}
 
 	public Select getSelect() {

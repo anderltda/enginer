@@ -2,7 +2,7 @@ package br.com.enginer.domain.ui.schema.paginator;
 
 import java.util.List;
 
-import br.com.enginer.domain.ui.schema.field.Button;
+import br.com.enginer.domain.ui.schema.instance.Button;
 import br.com.enginer.domain.ui.schema.paginator.column.Column;
 import br.com.enginer.domain.ui.schema.paginator.config.Config;
 
