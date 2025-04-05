@@ -5,11 +5,11 @@ package br.com.enginer.domain.entitys;
  */
 public class EntityFive {
 
-	private String id;
+	private Object id;
 	private String reference;
 	private Integer factor;
 
-	public String getId() {
+	public Object getId() {
 		return id;
 	}
 

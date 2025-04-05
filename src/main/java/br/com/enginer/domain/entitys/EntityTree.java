@@ -3,12 +3,15 @@ package br.com.enginer.domain.entitys;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.ui.annotation.instance.UITitle;
+
 /**
  * 
  */
+@UITitle("Criando a classe entity tree")
 public class EntityTree {
 
-	private String id;
+	private Object id;
 	private String animal;
 	private Integer indicator;
 	private Double amount;
@@ -16,7 +19,7 @@ public class EntityTree {
 	private LocalDateTime localDateTime;
 	private EntityFour entityFour;
 
-	public String getId() {
+	public Object getId() {
 		return id;
 	}
 

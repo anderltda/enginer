@@ -15,7 +15,6 @@ public @interface UICheckbox {
 	String label();
 	int order() default -1;
 	int group() default -1;
-	boolean iswitch();
-	boolean disabled();
-	boolean required();
+	boolean enableSwitch();
+	boolean disabled() default false;
 }

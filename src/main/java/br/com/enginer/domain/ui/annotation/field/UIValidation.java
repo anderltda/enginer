@@ -7,21 +7,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * ✅ Validações
+ * Validações
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Inherited
 public @interface UIValidation {
-	
 	boolean required();
-	
 	String pattern() default "";
 	String patternError() default "";
-	
-    String asyncFunc() default "";
+	String method() default "";
+    String asyncFunc() default "asyncValidatorField";
     String asyncError() default "";
-    
     String[] syncFunc() default "";
     String[] syncError() default "";
 }

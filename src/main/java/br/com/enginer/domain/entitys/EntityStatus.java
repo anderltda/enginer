@@ -7,13 +7,13 @@ import java.time.LocalDateTime;
  */
 public class EntityStatus {
 
-	private Long id;
+	private Object id;
 	private String name;
 	private Integer status;
 	private Boolean ativo;
 	private LocalDateTime startDateTime;
 
-	public Long getId() {
+	public Object getId() {
 		return id;
 	}
 

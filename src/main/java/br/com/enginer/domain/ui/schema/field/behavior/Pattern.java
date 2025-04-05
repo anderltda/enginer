@@ -15,7 +15,7 @@ public class Pattern {
 	}
 
 	public String getRegex() {
-		return regex;
+		return !regex.isEmpty() ? regex : null;
 	}
 
 	public void setRegex(String regex) {
@@ -23,7 +23,7 @@ public class Pattern {
 	}
 
 	public String getMessage() {
-		return message;
+		return !message.isEmpty() ? message : null;
 	}
 
 	public void setMessage(String message) {

@@ -13,13 +13,11 @@ import java.lang.annotation.Target;
 public @interface UINumber {
 	
 	String label();
-	String mask();
-	String icon();
-	String placeholder();
+	String icon() default "";
+	String placeholder() default "";
 	int order() default -1;
 	int group() default -1;
-	int min() default -1;
-	int max() default -1;
-	boolean disabled();
-	boolean required();
+	int min() default 0;
+	int max() default 10;
+	boolean disabled() default false;
 }

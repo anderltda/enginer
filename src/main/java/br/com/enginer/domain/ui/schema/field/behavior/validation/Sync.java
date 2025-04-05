@@ -1,6 +1,8 @@
 package br.com.enginer.domain.ui.schema.field.behavior.validation;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,22 +10,25 @@ import java.util.Map;
  */
 public class Sync {
 
-	private String[] functions;
+	private List<String> functions;
 	private Map<String, String> messages;
 
 	public Sync(String[] functions, String[] messages) {
-		this.functions = functions;
+		this.functions = new ArrayList<>();
 		this.messages = new LinkedHashMap<>();
 		for (int i = 0; i < functions.length; i++) {
-			this.messages.put(functions[i], messages[i]);
+			if(!functions[i].isEmpty()) {
+				this.functions.add(functions[i]);
+				this.messages.put(functions[i], messages[i]);
+			}
 		}
 	}
 
-	public String[] getFunctions() {
-		return functions;
+	public List<String> getFunctions() {
+		return functions.size() > 0 ? functions : null;
 	}
 
-	public void setFunctions(String[] functions) {
+	public void setFunctions(List<String> functions) {
 		this.functions = functions;
 	}
 

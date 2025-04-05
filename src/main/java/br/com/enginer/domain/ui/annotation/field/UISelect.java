@@ -18,5 +18,4 @@ public @interface UISelect {
 	int group() default -1;
 	boolean multi();
 	boolean disabled();
-	boolean required();
 }

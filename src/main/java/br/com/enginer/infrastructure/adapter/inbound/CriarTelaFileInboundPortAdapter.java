@@ -72,8 +72,8 @@ public class CriarTelaFileInboundPortAdapter {
 	@PostMapping("/{method}/validatorsAsync")
 	public ResponseEntity<Map<String, Boolean>> validatorsAsync(@PathVariable String method, @RequestBody String value) throws Exception {
 
-		LOGGER.info("Executando method: {}", method);
-		LOGGER.info("Valor recebido: \r {} \r", value);
+		System.out.println("Executando method: " + method);
+		System.out.println("Valor recebido: " + value);
 
 		String[] array = new String[] { "johndoe", "admin", "user123" };
 		Map<String, Boolean> response = new HashMap<>();

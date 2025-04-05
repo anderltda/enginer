@@ -10,12 +10,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Inherited
 public @interface UIId {
-	String label();
-	String icon();
-	String placeholder();
-	int order() default -1;
-	int group() default -1;
-	boolean disabled();
-	boolean required();
-	boolean hidden() default false;
 }

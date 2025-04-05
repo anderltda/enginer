@@ -7,19 +7,29 @@ public class Async {
 
 	private String function;
 	private String message;
+	private String method;
 
+	/**
+	 * 
+	 */
 	public Async() {
 		super();
 	}
 
-	public Async(String function, String message) {
+	/**
+	 * @param function
+	 * @param message
+	 * @param method
+	 */
+	public Async(String function, String message, String method) {
 		super();
 		this.function = function;
 		this.message = message;
+		this.method = method;
 	}
 
 	public String getFunction() {
-		return function;
+		return getMessage() != null && getMethod() != null ? function: null;
 	}
 
 	public void setFunction(String function) {
@@ -27,11 +37,19 @@ public class Async {
 	}
 
 	public String getMessage() {
-		return message;
+		return !message.isEmpty() ? message : null;
 	}
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getMethod() {
+		return !method.isEmpty() ? method : null;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 }

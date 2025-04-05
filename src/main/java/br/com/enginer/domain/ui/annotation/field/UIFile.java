@@ -19,5 +19,4 @@ public @interface UIFile {
 	int order() default -1;
 	int group() default -1;
 	boolean disabled();
-	boolean required();
 }

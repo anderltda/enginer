@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class EntityFour {
 
-	private String id;
+	private Object id;
 	private String fruit;
 	private Integer attribute;
 	private LocalDateTime inclusionDateTime;
 	private EntityFive entityFive;
 
-	public String getId() {
+	public Object getId() {
 		return id;
 	}
 

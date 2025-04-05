@@ -2,19 +2,22 @@ package br.com.enginer.domain.entitys;
 
 import java.time.LocalDate;
 
+import br.com.enginer.domain.ui.annotation.instance.UITitle;
+
 /**
  * 
  */
+@UITitle("#### Entity -> Two #####")
 public class EntityTwo {
 
-	private String id;
+	private Object id;
 	private String color;
 	private Integer hex;
 	private Double cost;
 	private LocalDate inclusionDate;
 	private EntityTree entityTree;
 
-	public String getId() {
+	public Object getId() {
 		return id;
 	}
 

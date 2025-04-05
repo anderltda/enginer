@@ -13,14 +13,11 @@ import java.lang.annotation.Target;
 public @interface UIDate {
 	
 	String label();
-	String icon();
-	String placeholder();
+	String icon() default "calendar";
+	String placeholder() default "";
 	String format();
 	int order() default -1;
 	int group() default -1;
-	int min() default -1;
-	int max() default -1;
 	boolean showtime();
-	boolean disabled();
-	boolean required();
+	boolean disabled() default false;
 }

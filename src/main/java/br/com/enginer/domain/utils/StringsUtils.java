@@ -16,6 +16,13 @@ public class StringsUtils {
 			returnValue += name.substring(1);
 		return returnValue;
 	}
+	
+	public static String firstLower(String name) {
+		String returnValue = name.substring(0, 1).toLowerCase();
+		if (name.length() > 1)
+			returnValue += name.substring(1);
+		return returnValue;
+	}	
 
 	/**
 	 * Formatar atributo para uma formacao ex: Prohibited Date Time ou

@@ -33,6 +33,7 @@ import br.com.enginer.domain.ui.annotation.field.UITime;
 import br.com.enginer.domain.ui.annotation.field.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.schema.Form;
+import br.com.enginer.domain.ui.schema.field.behavior.Autocomplete;
 import br.com.enginer.domain.ui.schema.field.behavior.Base;
 import br.com.enginer.domain.ui.schema.field.behavior.Default;
 import br.com.enginer.domain.ui.schema.field.behavior.Pattern;
@@ -43,6 +44,7 @@ import br.com.enginer.domain.ui.schema.field.type.Area;
 import br.com.enginer.domain.ui.schema.field.type.Checkbox;
 import br.com.enginer.domain.ui.schema.field.type.Date;
 import br.com.enginer.domain.ui.schema.field.type.Decimal;
+import br.com.enginer.domain.ui.schema.field.type.Filter;
 import br.com.enginer.domain.ui.schema.field.type.Hidden;
 import br.com.enginer.domain.ui.schema.field.type.Join;
 import br.com.enginer.domain.ui.schema.field.type.Number;
@@ -72,7 +74,6 @@ public class FormTemplate {
         annotationMap.put(UIText.class, UIText.class);
         annotationMap.put(UITextArea.class, UITextArea.class);
         annotationMap.put(UITime.class, UITime.class);
-
         annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
         annotationMap.put(UIValidation.class, UIValidation.class);
     }
@@ -111,17 +112,19 @@ public class FormTemplate {
 
 			Annotation[] annotations = f.getAnnotations();
 
-			System.out.println(annotations.length);
-
 			if (f.getType().equals(Integer.class) || f.getType().equals(Long.class) || f.getType().equals(Short.class) || f.getType().equals(Byte.class) || f.getType().equals(BigInteger.class)) {
 
 				Number number = default_.getNumber();
+				
+				createAnnotation(number, f, annotations);
 
 				field.setNumber(number);
 
 			} else if (f.getType().equals(Double.class) || f.getType().equals(Float.class) || f.getType().equals(BigDecimal.class)) {
 
 				Decimal decimal = default_.getDecimal();
+				
+				createAnnotation(decimal, f, annotations);
 
 				field.setDecimal(decimal);
 
@@ -129,7 +132,7 @@ public class FormTemplate {
 
 				Text text = default_.getText();
 
-				test(text, f, annotations);
+				createAnnotation(text, f, annotations);
 
 				field.setText(text);
 
@@ -137,23 +140,31 @@ public class FormTemplate {
 				
 				Area textarea = default_.getTextarea();
 
+				createAnnotation(textarea, f, annotations);
+				
 				field.setTextarea(textarea);
 
 			} else if (f.getType().equals(LocalDate.class)) {
 				
 				Date date = default_.getDate(false);
+				
+				createAnnotation(date, f, annotations);
 
 				field.setDate(date);
 
 			} else if (f.getType().equals(LocalDateTime.class)) {
 				
 				Date date = default_.getDate(true);
+				
+				createAnnotation(date, f, annotations);
 
 				field.setDate(date);
 
 			} else if (f.getType().equals(Boolean.class)) {
 				
 				Checkbox checkbox = default_.getCheckbox();
+				
+				createAnnotation(checkbox, f, annotations);
 
 				field.setCheckbox(checkbox);
 
@@ -166,20 +177,30 @@ public class FormTemplate {
 				options.add("value_4");
 				
 				Select select = default_.getSelect(options);
+				
+				createAnnotation(select, f, annotations);
 
 				field.setSelect(select);
 
 			} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
 				
 				Join join = default_.getJoin(f.getType().getSimpleName());
+				
+				Filter filter = default_.getFilter(f.getType().getSimpleName());
+				
+				createAnnotation(filter, f, annotations);
 
-				field.setJoin(join);
+				//field.setJoin(join);
+				
+				field.setFilter(filter);
 				
 				count--;
 
 			} else if (f.getType() == Object.class) {
 				
 				Hidden hidden = default_.getHidden();
+				
+				createAnnotation(hidden, f, annotations);
 
 				field.setHidden(hidden);
 				
@@ -192,7 +213,7 @@ public class FormTemplate {
 		return form;
 	}
 
-	private static void test(Base base, Field field, Annotation[] annotations) {
+	private static void createAnnotation(Base base, Field field, Annotation[] annotations) {
 
 		for (Annotation annotation : annotations) {
 
@@ -202,13 +223,15 @@ public class FormTemplate {
 				
 				if (annotation instanceof UIAutoComplete uiAutoComplete) {
 					
+					Autocomplete autocomplete = new Autocomplete();
+					
                 	
                 } else if (annotation instanceof UIValidation uiValidation) {
                 	
-                	Validation validation = new Validation();
-                	validation.setPattern(new Pattern(uiValidation.pattern(), uiValidation.patternError()));
-                	validation.setAsync(new Async(uiValidation.asyncFunc(), uiValidation.asyncError()));
-                	validation.setSync(new Sync(uiValidation.syncFunc(), uiValidation.syncError()));
+                	Pattern pattern = new Pattern(uiValidation.pattern(), uiValidation.patternError());
+                	Async async = new Async(uiValidation.asyncFunc(), uiValidation.asyncError(), uiValidation.method());
+                	Sync sync = new Sync(uiValidation.syncFunc(), uiValidation.syncError());
+                	Validation validation = createValidationIfNotNull(pattern, async, sync);
                 	base.setRequired(uiValidation.required());
                 	base.setValidation(validation);
                 	
@@ -225,6 +248,17 @@ public class FormTemplate {
 			}
 		}
 
+	}
+	
+	private static Validation createValidationIfNotNull(Pattern pattern, Async async, Sync sync) {
+	    if (pattern.getRegex() != null || async.getFunction() != null || sync.getFunctions() != null) {
+        	Validation validation = new Validation();
+        	validation.setPattern(pattern.getRegex() != null ? pattern : null);
+        	validation.setAsync(async.getFunction() != null ? async : null);
+        	validation.setSync(sync.getFunctions() != null ? sync : null);
+	        return validation;
+	    }
+	    return null;
 	}
 
 }

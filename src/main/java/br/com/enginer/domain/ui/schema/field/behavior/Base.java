@@ -30,6 +30,7 @@ public abstract class Base {
 	private Boolean editor;
 	private Boolean showtime;
 	private Boolean multi;
+	private Boolean enableSwitch;
 	private Object value;
 	
 	private Validation validation;
@@ -246,4 +247,11 @@ public abstract class Base {
 		this.options = options;
 	}
 
+	public Boolean getEnableSwitch() {
+		return enableSwitch;
+	}
+
+	public void setEnableSwitch(Boolean enableSwitch) {
+		this.enableSwitch = enableSwitch;
+	}
 }

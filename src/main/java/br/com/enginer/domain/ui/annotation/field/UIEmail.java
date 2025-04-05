@@ -21,5 +21,4 @@ public @interface UIEmail {
 	int min() default -1;
 	int max() default -1;
 	boolean disabled();
-	boolean required();
 }

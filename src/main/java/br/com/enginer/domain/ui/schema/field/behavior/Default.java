@@ -60,7 +60,6 @@ public class Default {
 		text.setValue(value);
 		text.setMin(1);
 		text.setMax(20);
-		text.setPlaceholder(text.getLabel());
 		text.setOrder(order);
 		text.setGroup(group);
 		return text;
@@ -73,7 +72,6 @@ public class Default {
 		email.setValue(value);
 		email.setMin(1);
 		email.setMax(50);
-		email.setPlaceholder(email.getLabel());
 		email.setOrder(order);
 		email.setGroup(group);
 		return email;
@@ -86,7 +84,6 @@ public class Default {
 		number.setValue(value);
 		number.setMin(1);
 		number.setMax(50);
-		number.setPlaceholder(number.getLabel());
 		number.setOrder(order);
 		number.setGroup(group);
 		return number;
@@ -97,7 +94,6 @@ public class Default {
 		decimal.setLabel(label);
 		decimal.setField(field);
 		decimal.setValue(value);
-		decimal.setPlaceholder(decimal.getLabel());
 		decimal.setOrder(order);
 		decimal.setGroup(group);
 		return decimal;
@@ -109,7 +105,6 @@ public class Default {
 		password.setField(field);
 		password.setMin(1);
 		password.setMax(10);
-		password.setPlaceholder(password.getLabel());
 		password.setOrder(order);
 		password.setGroup(group);
 		return password;
@@ -122,7 +117,6 @@ public class Default {
 		date.setValue(value);
 		date.setShowtime(showTime);
 		date.setFormat(showTime ? "DD/MM/YYYY HH:mm:ss" : "DD/MM/YYYY");
-		date.setPlaceholder(date.getLabel());
 		date.setOrder(order);
 		date.setGroup(group);
 		return date;
@@ -133,7 +127,6 @@ public class Default {
 		time.setLabel(label);
 		time.setField(field);
 		time.setValue(value);
-		time.setPlaceholder(time.getLabel());
 		time.setOrder(order);
 		time.setGroup(group);
 		return time;
@@ -194,7 +187,6 @@ public class Default {
 		textarea.setField(field);
 		textarea.setValue(value);
 		textarea.setEditor(false);
-		textarea.setPlaceholder(textarea.getLabel());
 		textarea.setOrder(order);
 		textarea.setGroup(group);
 		return textarea;
@@ -215,8 +207,7 @@ public class Default {
 		filter.setLabel(label);
 		filter.setField(field);
 		filter.setValue(value);
-		filter.setDomain(domain);
-		filter.setPlaceholder(filter.getLabel());
+		filter.setDomain(StringsUtils.firstLower(domain));
 		filter.setOrder(order);
 		filter.setGroup(group);
 		return filter;
