@@ -1,4 +1,4 @@
-package br.com.enginer.domain.ui.annotation.field;
+package br.com.enginer.domain.ui.annotation.field.behavior;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

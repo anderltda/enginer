@@ -16,8 +16,6 @@ public @interface UIDate {
 	String icon() default "calendar";
 	String placeholder() default "";
 	String format();
-	int order() default -1;
-	int group() default -1;
 	boolean showtime();
 	boolean disabled() default false;
 }

@@ -15,10 +15,6 @@ public @interface UITextArea {
 	String label();
 	String icon();
 	String placeholder();
-	int order() default -1;
-	int group() default -1;
-	int min() default -1;
-	int max() default -1;
 	boolean disabled();
 	boolean editor();
 }

@@ -31,15 +31,13 @@ public class Default {
 	private String label;
 	private String field;
 	private Object value;
-	private Integer order;
-	private Integer group;
+	private Position position;
 
-	public Default(Integer order, Integer group, String name, Object object) {
+	public Default(Integer xposition, Integer yposition, String name, Object object) {
 		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
 		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
 		this.value = ReflectionUtils.set(StringsUtils.getMethod(name), object);
-		this.order = order;
-		this.group = group;
+		this.position = new Position(xposition, yposition);
 	}
 
 	/**
@@ -50,6 +48,7 @@ public class Default {
 		Hidden hidden = new Hidden();
 		hidden.setField(field);
 		hidden.setValue(value);
+		hidden.setPosition(new Position(0, 0));
 		return hidden;
 	}
 
@@ -60,8 +59,7 @@ public class Default {
 		text.setValue(value);
 		text.setMin(1);
 		text.setMax(20);
-		text.setOrder(order);
-		text.setGroup(group);
+		text.setPosition(position);
 		return text;
 	}
 
@@ -72,8 +70,7 @@ public class Default {
 		email.setValue(value);
 		email.setMin(1);
 		email.setMax(50);
-		email.setOrder(order);
-		email.setGroup(group);
+		email.setPosition(position);
 		return email;
 	}
 
@@ -84,8 +81,7 @@ public class Default {
 		number.setValue(value);
 		number.setMin(1);
 		number.setMax(50);
-		number.setOrder(order);
-		number.setGroup(group);
+		number.setPosition(position);
 		return number;
 	}
 
@@ -94,8 +90,7 @@ public class Default {
 		decimal.setLabel(label);
 		decimal.setField(field);
 		decimal.setValue(value);
-		decimal.setOrder(order);
-		decimal.setGroup(group);
+		decimal.setPosition(position);
 		return decimal;
 	}
 
@@ -105,8 +100,7 @@ public class Default {
 		password.setField(field);
 		password.setMin(1);
 		password.setMax(10);
-		password.setOrder(order);
-		password.setGroup(group);
+		password.setPosition(position);
 		return password;
 	}
 
@@ -117,8 +111,7 @@ public class Default {
 		date.setValue(value);
 		date.setShowtime(showTime);
 		date.setFormat(showTime ? "DD/MM/YYYY HH:mm:ss" : "DD/MM/YYYY");
-		date.setOrder(order);
-		date.setGroup(group);
+		date.setPosition(position);
 		return date;
 	}
 
@@ -127,8 +120,7 @@ public class Default {
 		time.setLabel(label);
 		time.setField(field);
 		time.setValue(value);
-		time.setOrder(order);
-		time.setGroup(group);
+		time.setPosition(position);
 		return time;
 	}
 
@@ -139,11 +131,10 @@ public class Default {
 		radio.setField(field);
 		radio.setValue(value);
 		radio.setOptions(options);
+		radio.setPosition(position);
 		objects.forEach(option -> {
 			options.add(new Option(option.toString(), option.toString()));
 		});
-		radio.setOrder(order);
-		radio.setGroup(group);
 		return radio;
 	}
 
@@ -152,8 +143,7 @@ public class Default {
 		checkbox.setLabel(label);
 		checkbox.setField(field);
 		checkbox.setValue(value);
-		checkbox.setOrder(order);
-		checkbox.setGroup(group);
+		checkbox.setPosition(position);
 		return checkbox;
 	}
 
@@ -164,12 +154,11 @@ public class Default {
 		select.setField(field);
 		select.setValue(value);
 		select.setMulti(true);
+		select.setPosition(position);
 		select.setOptions(options);
 		objects.forEach(option -> {
 			options.add(new Option(option.toString(), option.toString()));
 		});
-		select.setOrder(order);
-		select.setGroup(group);
 		return select;
 	}
 
@@ -178,6 +167,7 @@ public class Default {
 		tag.setLabel(label);
 		tag.setField(field);
 		tag.setValue(value);
+		tag.setPosition(position);
 		return tag;
 	}
 
@@ -187,8 +177,7 @@ public class Default {
 		textarea.setField(field);
 		textarea.setValue(value);
 		textarea.setEditor(false);
-		textarea.setOrder(order);
-		textarea.setGroup(group);
+		textarea.setPosition(position);
 		return textarea;
 	}
 
@@ -197,26 +186,23 @@ public class Default {
 		file.setLabel(label);
 		file.setField(field);
 		file.setValue(value);
-		file.setOrder(order);
-		file.setGroup(group);
+		file.setPosition(position);
 		return file;
 	}
 
 	public Filter getFilter(String domain) {
 		Filter filter = new Filter();
 		filter.setLabel(label);
-		filter.setField(field);
 		filter.setValue(value);
 		filter.setDomain(StringsUtils.firstLower(domain));
-		filter.setOrder(order);
-		filter.setGroup(group);
+		filter.setPosition(position);
 		return filter;
 	}
 
 	public Join getJoin(String domain) {
 		Join join = new Join();
 		join.setLabel(label);
-		join.setDomain(domain);
+		join.setDomain(StringsUtils.firstLower(domain));
 		join.setLayoutTarget("form");
 		return join;
 	}

@@ -14,8 +14,6 @@ public @interface UISelect {
 	
 	String label();
 	String options();
-	int order() default -1;
-	int group() default -1;
 	boolean multi();
 	boolean disabled();
 }

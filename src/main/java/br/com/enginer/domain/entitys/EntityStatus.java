@@ -2,22 +2,27 @@ package br.com.enginer.domain.entitys;
 
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.ui.schema.field.type.Id;
+import br.com.enginer.domain.ui.schema.instance.Domain;
+
 /**
  * 
  */
-public class EntityStatus {
+public class EntityStatus implements Domain<String> {
 
-	private Object id;
+	private Id<String> id;
 	private String name;
 	private Integer status;
 	private Boolean ativo;
 	private LocalDateTime startDateTime;
 
-	public Object getId() {
+	@Override
+	public Id<String> getId() {
 		return id;
 	}
-
-	public void setId(Long id) {
+	
+	@Override
+	public void setId(Id<String> id) {
 		this.id = id;
 	}
 

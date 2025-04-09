@@ -4,14 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.schema.field.type.Id;
+import br.com.enginer.domain.ui.schema.instance.Domain;
 
 /**
  * 
  */
 @UITitle("Criando a classe entity tree")
-public class EntityTree {
+public class EntityTree implements Domain<String> {
 
-	private Object id;
+	private Id<String> id;
 	private String animal;
 	private Integer indicator;
 	private Double amount;
@@ -19,14 +21,16 @@ public class EntityTree {
 	private LocalDateTime localDateTime;
 	private EntityFour entityFour;
 
-	public Object getId() {
+	@Override
+	public Id<String> getId() {
 		return id;
 	}
-
-	public void setId(String id) {
+	
+	@Override
+	public void setId(Id<String> id) {
 		this.id = id;
 	}
-
+	
 	public String getAnimal() {
 		return animal;
 	}

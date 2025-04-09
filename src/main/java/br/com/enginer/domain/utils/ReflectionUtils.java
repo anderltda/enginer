@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
+import br.com.enginer.domain.ui.schema.field.type.Id;
 
 public class ReflectionUtils {
 
@@ -50,7 +53,8 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param result
 	 */
-	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited, List<Field> result) {
+	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited,
+			List<Field> result) {
 		if (clazz == null || clazz.equals(classLimit) || visited.contains(clazz))
 			return;
 		visited.add(clazz);
@@ -65,8 +69,6 @@ public class ReflectionUtils {
 			}
 		}
 		extractFieldsRecursively(clazz.getSuperclass(), classLimit, visited, result);
-		
-		
 
 	}
 
@@ -76,7 +78,50 @@ public class ReflectionUtils {
 	 */
 	public static boolean extractIsJavaLangType(Class<?> clazz) {
 		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class)
-				|| clazz.equals(LocalDateTime.class);
+				|| clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
+	}
+	
+	/**
+	 * CONVERTE ID<T>
+	 */
+	
+	
+	/**
+	 * @param <T>
+	 * @param inputId
+	 * @param expectedType
+	 * @return
+	 */
+	public static <T> Id<T> convertIdToExpectedType(Id<?> inputId, Class<T> expectedType) {
+		
+		Object rawValue = inputId.getValue();
+
+		if (rawValue == null) {
+			return Id.of(null);
+		}
+
+		if (expectedType.isInstance(rawValue)) {
+			return Id.of(expectedType.cast(rawValue));
+		}
+
+		// Conversão comum
+		try {
+			
+			if (expectedType.equals(Long.class)) {
+				return Id.of(expectedType.cast(Long.valueOf(rawValue.toString())));
+			} else if (expectedType.equals(Integer.class)) {
+				return Id.of(expectedType.cast(Integer.valueOf(rawValue.toString())));
+			} else if (expectedType.equals(UUID.class)) {
+				return Id.of(expectedType.cast(UUID.fromString(rawValue.toString())));
+			} else if (expectedType.equals(String.class)) {
+				return Id.of(expectedType.cast(rawValue.toString()));
+			}
+			
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Falha ao converter Id para tipo esperado: " + expectedType.getSimpleName(), e);
+		}
+
+		return Id.of(expectedType.cast(rawValue));
 	}
 
 	/**
@@ -86,7 +131,7 @@ public class ReflectionUtils {
 		try {
 			Method method = object.getClass().getMethod(methodName, paramClass);
 			if (method != null) {
-				method.invoke(object, paramValue); 
+				method.invoke(object, paramValue);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

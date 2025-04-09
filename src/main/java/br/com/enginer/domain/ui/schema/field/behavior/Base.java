@@ -21,8 +21,6 @@ public abstract class Base {
 	private String mode;
 	private String domain;
 	private String layoutTarget;
-	private Integer order;
-	private Integer group;
 	private Integer min;
 	private Integer max;
 	private Boolean required;
@@ -33,6 +31,7 @@ public abstract class Base {
 	private Boolean enableSwitch;
 	private Object value;
 	
+	private Position position;
 	private Validation validation;
 	private Autocomplete autocomplete;
 	
@@ -69,22 +68,6 @@ public abstract class Base {
 
 	public void setValue(Object value) {
 		this.value = value;
-	}
-
-	public Integer getOrder() {
-		return order;
-	}
-
-	public void setOrder(Integer order) {
-		this.order = order;
-	}
-
-	public Integer getGroup() {
-		return group;
-	}
-
-	public void setGroup(Integer group) {
-		this.group = group;
 	}
 
 	public Boolean getRequired() {
@@ -221,6 +204,14 @@ public abstract class Base {
 
 	public void setValidation(Validation validation) {
 		this.validation = validation;
+	}
+	
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 	public Autocomplete getAutocomplete() {

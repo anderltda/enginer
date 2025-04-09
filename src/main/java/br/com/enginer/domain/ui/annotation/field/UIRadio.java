@@ -15,7 +15,5 @@ public @interface UIRadio {
 	String label();
 	String placeholder();
 	String options();
-	int order() default -1;
-	int group() default -1;
 	boolean disabled();
 }

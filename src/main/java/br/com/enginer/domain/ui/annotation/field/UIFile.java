@@ -16,7 +16,5 @@ public @interface UIFile {
 	String title();
 	String action();
 	String mode();
-	int order() default -1;
-	int group() default -1;
 	boolean disabled();
 }

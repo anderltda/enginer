@@ -12,8 +12,6 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface UIJoin {
 	
-	String label();
-	String icon();
-	String domain();
+	String icon() default "";
 	String layoutTarget();
 }

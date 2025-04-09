@@ -16,9 +16,7 @@ public @interface UIText {
 	String mask() default "";
 	String icon() default "";
 	String placeholder() default "";
-	int order();
-	int group();
-	int min() default 0;
+	int min() default 1;
 	int max() default 20;
 	boolean disabled() default false;
 }

@@ -2,26 +2,32 @@ package br.com.enginer.domain.entitys;
 
 import java.time.LocalDate;
 
+import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.schema.field.type.Id;
+import br.com.enginer.domain.ui.schema.instance.Domain;
 
 /**
  * 
  */
 @UITitle("#### Entity -> Two #####")
-public class EntityTwo {
+public class EntityTwo implements Domain<String> {
 
-	private Object id;
+	private Id<String> id;
+	@UIText(label = "Color", disabled = false)
 	private String color;
 	private Integer hex;
 	private Double cost;
 	private LocalDate inclusionDate;
 	private EntityTree entityTree;
 
-	public Object getId() {
+	@Override
+	public Id<String> getId() {
 		return id;
 	}
-
-	public void setId(String id) {
+	
+	@Override
+	public void setId(Id<String> id) {
 		this.id = id;
 	}
 

@@ -16,7 +16,5 @@ public @interface UIDecimal {
 	String mask();
 	String icon() default "";
 	String placeholder() default "";
-	int order() default -1;
-	int group() default -1;
 	boolean disabled() default false;
 }

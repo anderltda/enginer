@@ -13,8 +13,7 @@ import java.lang.annotation.Target;
 public @interface UIFilter {
 	
 	String label();
+	String field();
 	String placeholder() default "";
-	int order() default -1;
-	int group() default -1;
 	boolean disabled() default false;
 }
