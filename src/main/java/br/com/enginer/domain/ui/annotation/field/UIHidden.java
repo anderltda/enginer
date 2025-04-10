@@ -6,16 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Inherited
-public @interface UIFilter {
-	
-	String label();
-	String field();
-	String placeholder() default "";
-	boolean select() default false;
-	boolean disabled() default false;
-	boolean readonly() default false;
+public @interface UIHidden {
 }

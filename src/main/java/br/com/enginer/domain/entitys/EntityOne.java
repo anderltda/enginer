@@ -12,6 +12,9 @@ import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoCompleteSuggestion;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.schema.field.type.Id;
@@ -20,44 +23,48 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
 /**
  * 
  */
-@UITitle("Entity One")
+@UITitle("Entity One -> Stream")
 public class EntityOne implements Domain<Long> {
 
 	@UIId
 	private Id<Long> id;
 	
 	@UIText(label = "Name")
-	//@UIPosition(x = 1, y = 1)
+	@UIAutoCompleteSuggestion(suggestions = {"anderson", "pedro"})
+	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIPosition(x = 1, y = 1)
 	@UIValidation(required = true, pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'", method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'", syncFunc = {"dogMel", "dogMagrela"}, syncError = {"message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro."})
 	private String name;
-
-	@UINumber(label = "Age")
-	@UIValidation(required = true)
-	private Integer age;
 	
+	@UIPosition(x = 1, y = 2)
 	@UIValidation(required = true)
-	@UIDecimal(label = "Height", mask = "0.00")
-	private Double height;
+	@UIFilter(label = "Entity Status", field = "name", readonly = true)
+	private EntityStatus entityStatus;
 	
-	@UIValidation(required = true)
-	@UIDate(label = "Birth Date", format = Constants.DATE_FORMAT, showtime = false)
-	private LocalDate birthDate;
-	
-	@UIValidation(required = true)
-	@UIDate(label = "Prohibited Date Time", format = Constants.DATE_TIME_FORMAT, showtime = true)
-	private LocalDateTime prohibitedDateTime;
-	
+	@UIPosition(x = 2, y = 2)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false)
 	private Boolean code = true;
 
-	@UIValidation(required = true)
-	@UIFilter(label = "Entity Status", field = "name")
-	private EntityStatus entityStatus;
+	@UIPosition(x = 1, y = 3)
+	@UINumber(label = "Age", min = 1, max = 60)
+	private Integer age;
 	
+	@UIPosition(x = 2, y = 3)
+	@UIDecimal(label = "Height", mask = "00.00")
+	private Double height;
+	
+	@UIPosition(x = 3, y = 3)
+	@UIDate(label = "Birth Date", format = Constants.DATE_FORMAT, showtime = false)
+	private LocalDate birthDate;
+	
+	@UIPosition(x = 4, y = 3)
+	@UIDate(label = "Prohibited Date Time", format = Constants.DATE_TIME_FORMAT, showtime = true)
+	private LocalDateTime prohibitedDateTime;
+
 	@UIValidation(required = true)
 	@UIJoin(layoutTarget = "form")
 	private EntityTwo entityTwo;
-	
+
 	@Override
 	public Id<Long> getId() {
 		return id;

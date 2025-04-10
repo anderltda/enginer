@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Inherited
 public @interface UIAutoComplete {
-	String domain() default "";
-	String attribute() default "";
-	String[] suggestions() default "";
+	String domain();
+	String attribute();
 }

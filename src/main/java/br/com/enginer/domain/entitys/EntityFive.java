@@ -1,15 +1,33 @@
 package br.com.enginer.domain.entitys;
 
+import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UINumber;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
 /**
  * 
  */
+@UITitle("Entity Five -> Stream")
 public class EntityFive implements Domain<String> {
 
 	private Id<String> id;
+	
+	@UIPosition(x = 1, y = 2)
+	@UIText(label = "Reference", min = 1, max = 100)
+	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	private String reference;
+	
+	@UIPosition(x = 1, y = 1)
+	@UIFilter(label = "Entity Status", field = "name", select = true)
+	private EntityStatus entityStatus;	
+	
+	@UIPosition(x = 2, y = 1)
+	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
 
 	@Override

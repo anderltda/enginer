@@ -20,6 +20,7 @@ public abstract class Base {
 	private String action;
 	private String mode;
 	private String domain;
+	private String method;
 	private String layoutTarget;
 	private Integer min;
 	private Integer max;
@@ -29,14 +30,18 @@ public abstract class Base {
 	private Boolean showtime;
 	private Boolean multi;
 	private Boolean enableSwitch;
+	private Boolean readonly;
+	private Boolean select;
 	private Object value;
 	
 	private Position position;
 	private Validation validation;
 	private Autocomplete autocomplete;
 	
+	private Class<?> provider;
+	
 	private List<String> files;
-	private List<Option> options;
+	private List<Object> options;
 
 	public String getType() {
 		return type;
@@ -230,11 +235,11 @@ public abstract class Base {
 		this.files = files;
 	}
 
-	public List<Option> getOptions() {
+	public List<Object> getOptions() {
 		return options;
 	}
 
-	public void setOptions(List<Option> options) {
+	public void setOptions(List<Object> options) {
 		this.options = options;
 	}
 
@@ -245,4 +250,37 @@ public abstract class Base {
 	public void setEnableSwitch(Boolean enableSwitch) {
 		this.enableSwitch = enableSwitch;
 	}
+
+	public Boolean getReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(Boolean readonly) {
+		this.readonly = readonly;
+	}
+
+	public Class<?> getProvider() {
+		return provider;
+	}
+
+	public void setProvider(Class<?> provider) {
+		this.provider = provider;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public Boolean getSelect() {
+		return select;
+	}
+
+	public void setSelect(Boolean select) {
+		this.select = select;
+	}
+	
 }

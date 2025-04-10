@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,9 +56,12 @@ public class ReflectionUtils {
 	 */
 	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited,
 			List<Field> result) {
+
 		if (clazz == null || clazz.equals(classLimit) || visited.contains(clazz))
 			return;
+
 		visited.add(clazz);
+
 		for (Field field : clazz.getDeclaredFields()) {
 			field.setAccessible(true);
 			Class<?> fieldType = field.getType();
@@ -80,12 +84,11 @@ public class ReflectionUtils {
 		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class)
 				|| clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
 	}
-	
+
 	/**
 	 * CONVERTE ID<T>
 	 */
-	
-	
+
 	/**
 	 * @param <T>
 	 * @param inputId
@@ -93,7 +96,7 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static <T> Id<T> convertIdToExpectedType(Id<?> inputId, Class<T> expectedType) {
-		
+
 		Object rawValue = inputId.getValue();
 
 		if (rawValue == null) {
@@ -106,7 +109,7 @@ public class ReflectionUtils {
 
 		// Conversão comum
 		try {
-			
+
 			if (expectedType.equals(Long.class)) {
 				return Id.of(expectedType.cast(Long.valueOf(rawValue.toString())));
 			} else if (expectedType.equals(Integer.class)) {
@@ -116,9 +119,10 @@ public class ReflectionUtils {
 			} else if (expectedType.equals(String.class)) {
 				return Id.of(expectedType.cast(rawValue.toString()));
 			}
-			
+
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Falha ao converter Id para tipo esperado: " + expectedType.getSimpleName(), e);
+			throw new IllegalArgumentException(
+					"Falha ao converter Id para tipo esperado: " + expectedType.getSimpleName(), e);
 		}
 
 		return Id.of(expectedType.cast(rawValue));
@@ -141,7 +145,7 @@ public class ReflectionUtils {
 	/**
 	 * GET REFLECTION
 	 */
-	public static Object set(String methodName, Object object) {
+	public static Object get(String methodName, Object object) {
 		Method method = getMethod(object.getClass(), methodName);
 		if (method != null) {
 			try {
@@ -151,6 +155,56 @@ public class ReflectionUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * EXECUTE METHOD REFLECTION
+	 */
+	
+	/**
+	 * @param object
+	 * @param methodName
+	 * @param paramValue
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Object executeMethod(Object object, String methodName, Object... paramValue) throws Exception {
+		Class[] paramTypes = transformParametersTypes(paramValue);
+		Method method = getMethod(object.getClass(), methodName, paramTypes);
+		if (method != null) {
+			return method.invoke(object, paramValue);
+		}
+		return null;
+	}
+
+	/**
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	private static Class<?>[] transformParametersTypes(Object... params) throws Exception {
+
+		Class<?>[] paramTypes = new Class[params.length];
+		for (int i = 0; i < params.length; i++) {
+			paramTypes[i] = getParameterType(params[i]);
+		}
+
+		return paramTypes;
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 */
+	private static Class<?> getParameterType(Object param) {
+		if (param instanceof Map) {
+			return Map.class;
+		}
+		if (param instanceof List) {
+			return List.class;
+		}
+		return param.getClass();
 	}
 
 	/**

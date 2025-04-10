@@ -1,7 +1,5 @@
 package br.com.enginer.domain.ui.schema.field.behavior;
 
-import java.util.List;
-
 /**
  * 
  */
@@ -9,7 +7,7 @@ public class Autocomplete {
 
 	private String domain;
 	private String attribute;
-	private List<String> suggestions;
+	private String[] suggestions;
 
 	public String getDomain() {
 		return domain;
@@ -27,11 +25,11 @@ public class Autocomplete {
 		this.attribute = attribute;
 	}
 
-	public List<String> getSuggestions() {
+	public String[] getSuggestions() {
 		return suggestions;
 	}
 
-	public void setSuggestions(List<String> suggestions) {
+	public void setSuggestions(String[] suggestions) {
 		this.suggestions = suggestions;
 	}
 

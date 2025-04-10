@@ -1,6 +1,5 @@
 package br.com.enginer.domain.ui.schema.field.behavior;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.enginer.domain.ui.schema.field.type.Area;
@@ -36,7 +35,7 @@ public class Default {
 	public Default(Integer xposition, Integer yposition, String name, Object object) {
 		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
 		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
-		this.value = ReflectionUtils.set(StringsUtils.getMethod(name), object);
+		this.value = ReflectionUtils.get(StringsUtils.getMethod(name), object);
 		this.position = new Position(xposition, yposition);
 	}
 
@@ -124,17 +123,13 @@ public class Default {
 		return time;
 	}
 
-	public Radio getRadio(List<Object> objects) {
-		List<Option> options = new ArrayList<>();
+	public Radio getRadio(List<Object> options) {
 		Radio radio = new Radio();
 		radio.setLabel(label);
 		radio.setField(field);
 		radio.setValue(value);
 		radio.setOptions(options);
 		radio.setPosition(position);
-		objects.forEach(option -> {
-			options.add(new Option(option.toString(), option.toString()));
-		});
 		return radio;
 	}
 
@@ -147,18 +142,13 @@ public class Default {
 		return checkbox;
 	}
 
-	public Select getSelect(List<Object> objects) {
-		List<Option> options = new ArrayList<>();
+	public Select getSelect(List<Object> options) {
 		Select select = new Select();
 		select.setLabel(label);
 		select.setField(field);
 		select.setValue(value);
-		select.setMulti(true);
 		select.setPosition(position);
 		select.setOptions(options);
-		objects.forEach(option -> {
-			options.add(new Option(option.toString(), option.toString()));
-		});
 		return select;
 	}
 

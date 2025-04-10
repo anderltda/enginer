@@ -19,6 +19,7 @@ import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
 import br.com.enginer.domain.ui.annotation.field.UIFile;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
@@ -29,6 +30,7 @@ import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.UITextArea;
 import br.com.enginer.domain.ui.annotation.field.UITime;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoCompleteSuggestion;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.UITag;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIValidation;
@@ -37,6 +39,7 @@ import br.com.enginer.domain.ui.schema.Form;
 import br.com.enginer.domain.ui.schema.field.behavior.Autocomplete;
 import br.com.enginer.domain.ui.schema.field.behavior.Base;
 import br.com.enginer.domain.ui.schema.field.behavior.Default;
+import br.com.enginer.domain.ui.schema.field.behavior.Option;
 import br.com.enginer.domain.ui.schema.field.behavior.Pattern;
 import br.com.enginer.domain.ui.schema.field.behavior.Position;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Async;
@@ -83,9 +86,11 @@ public class FormTemplate {
 		annotationMap.put(UIFile.class, UIFile.class);
 		annotationMap.put(UIFilter.class, UIFilter.class);
 		annotationMap.put(UIJoin.class, UIJoin.class);
-		
+		annotationMap.put(UIHidden.class, UIHidden.class);
+
 		annotationMap.put(UIPosition.class, UIPosition.class);
 		annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
+		annotationMap.put(UIAutoCompleteSuggestion.class, UIAutoCompleteSuggestion.class);
 		annotationMap.put(UIValidation.class, UIValidation.class);
 	}
 
@@ -93,272 +98,309 @@ public class FormTemplate {
 	 * @param object
 	 * @return
 	 */
-	public static Form create(Object object) {
+	public static Form create(Object object) throws Exception {
 
-		List<br.com.enginer.domain.ui.schema.field.Field> fields = new ArrayList<>();
-		br.com.enginer.domain.ui.schema.field.Field field = null;
+		Form form = null;
 
-		Form form = new Form();
-		form.setTitle(StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
-		form.setFields(fields);
+		try {
 
-		List<Field> fs = ReflectionUtils.extractFieldsDomain(object, false);
+			List<br.com.enginer.domain.ui.schema.field.Field> fields = new ArrayList<>();
+			br.com.enginer.domain.ui.schema.field.Field field = null;
 
-		int count = 1;
+			form = new Form();
+			form.setTitle(
+					StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
+			form.setFields(fields);
 
-		if (object.getClass().isAnnotationPresent(UITitle.class)) {
-			UITitle title = object.getClass().getAnnotation(UITitle.class);
-			form.setTitle(title.value());
-		}
+			List<Field> fs = ReflectionUtils.extractFieldsDomain(object, false);
 
-		for (Field f : fs) {
+			int count = 1;
 
-			int x = count;
-			int y = count % 2 == 0 ? count - 1 : count;
+			if (object.getClass().isAnnotationPresent(UITitle.class)) {
+				UITitle title = object.getClass().getAnnotation(UITitle.class);
+				form.setTitle(title.value());
+			}
 
-			Default default_ = new Default(x, y, f.getName(), object);
+			for (Field f : fs) {
 
-			field = new br.com.enginer.domain.ui.schema.field.Field();
-			fields.add(field);
+				int x = count;
+				int y = count % 2 == 0 ? count - 1 : count;
 
-			Annotation[] annotations = f.getAnnotations();
-			
-			boolean identity = false;
+				Default default_ = new Default(x, y, f.getName(), object);
 
-			for (Annotation annotation : annotations) {
+				field = new br.com.enginer.domain.ui.schema.field.Field();
+				fields.add(field);
 
-				Class<? extends Annotation> annotationType = annotation.annotationType();
+				Annotation[] annotations = f.getAnnotations();
 
-				if (annotationMap.containsKey(annotationType)) {
+				boolean identity = false;
 
-					if (annotation instanceof UIId uiId) {
+				for (Annotation annotation : annotations) {
 
-						Hidden hidden = default_.getHidden();
-						addBehaviorAnnotation(hidden, f, annotations);
-						field.setHidden(hidden);
-						identity = true;
+					Class<? extends Annotation> annotationType = annotation.annotationType();
 
-					} else if (annotation instanceof UIJoin uiJoin) {
+					if (annotationMap.containsKey(annotationType)) {
 
-						Join join = default_.getJoin(f.getType().getSimpleName());
-						addBehaviorAnnotation(join, f, annotations);
-						field.setJoin(join);
-						identity = true;
-						
-					} else if (annotation instanceof UIText uiText) {
+						if (annotation instanceof UIId) {
 
-						Text text = default_.getText();
-						addBehaviorAnnotation(text, f, annotations);
-						field.setText(text);
-						identity = true;
-						count++;
+							Hidden hidden = default_.getHidden();
+							addBehaviorAnnotation(hidden, f, annotations);
+							field.setHidden(hidden);
+							identity = true;
 
-					} else if (annotation instanceof UIEmail uiEmail) {
+						} else if (annotation instanceof UIHidden) {
 
-						Email email = default_.getEmail();
-						addBehaviorAnnotation(email, f, annotations);
-						field.setEmail(email);
-						identity = true;
-						count++;
+							Hidden hidden = default_.getHidden();
+							addBehaviorAnnotation(hidden, f, annotations);
+							field.setHidden(hidden);
+							identity = true;
 
-					} else if (annotation instanceof UIPassword uiPassword) {
+						} else if (annotation instanceof UIJoin) {
 
-						Password password = default_.getPassword();
-						addBehaviorAnnotation(password, f, annotations);
-						field.setPassword(password);
-						identity = true;
-						count++;
+							Join join = default_.getJoin(f.getType().getSimpleName());
+							addBehaviorAnnotation(join, f, annotations);
+							field.setJoin(join);
+							identity = true;
 
-					} else if (annotation instanceof UINumber uiNumber) {
+						} else if (annotation instanceof UIText) {
 
-						Number number = default_.getNumber();
-						addBehaviorAnnotation(number, f, annotations);
-						field.setNumber(number);
-						identity = true;
-						count++;
+							Text text = default_.getText();
+							addBehaviorAnnotation(text, f, annotations);
+							field.setText(text);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UIDecimal uiDecimal) {
+						} else if (annotation instanceof UIEmail) {
 
-						Decimal decimal = default_.getDecimal();
-						addBehaviorAnnotation(decimal, f, annotations);
-						field.setDecimal(decimal);
-						identity = true;
-						count++;
+							Email email = default_.getEmail();
+							addBehaviorAnnotation(email, f, annotations);
+							field.setEmail(email);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UICheckbox uiCheckbox) {
+						} else if (annotation instanceof UIPassword) {
 
-						Checkbox checkbox = default_.getCheckbox();
-						addBehaviorAnnotation(checkbox, f, annotations);
-						field.setCheckbox(checkbox);
-						identity = true;
-						count++;
+							Password password = default_.getPassword();
+							addBehaviorAnnotation(password, f, annotations);
+							field.setPassword(password);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UIDate uiDate) {
+						} else if (annotation instanceof UINumber) {
 
-						Date date = default_.getDate(uiDate.showtime());
-						addBehaviorAnnotation(date, f, annotations);
-						field.setDate(date);
-						identity = true;
-						count++;
+							Number number = default_.getNumber();
+							addBehaviorAnnotation(number, f, annotations);
+							field.setNumber(number);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UITime uiTime) {
+						} else if (annotation instanceof UIDecimal) {
 
-						Time time = default_.getTime();
-						addBehaviorAnnotation(time, f, annotations);
-						field.setTime(time);
-						identity = true;
-						count++;
+							Decimal decimal = default_.getDecimal();
+							addBehaviorAnnotation(decimal, f, annotations);
+							field.setDecimal(decimal);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UIRadio uiRadio) {
+						} else if (annotation instanceof UICheckbox) {
 
-						Radio radio = default_.getRadio(null);
-						addBehaviorAnnotation(radio, f, annotations);
-						field.setRadio(radio);
-						identity = true;
-						count++;
+							Checkbox checkbox = default_.getCheckbox();
+							addBehaviorAnnotation(checkbox, f, annotations);
+							field.setCheckbox(checkbox);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UISelect uiSelect) {
+						} else if (annotation instanceof UIDate uiDate) {
 
-						Select select = default_.getSelect(null);
-						addBehaviorAnnotation(select, f, annotations);
-						field.setSelect(select);
-						identity = true;
-						count++;
+							Date date = default_.getDate(uiDate.showtime());
+							addBehaviorAnnotation(date, f, annotations);
+							field.setDate(date);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UITag uiTag) {
+						} else if (annotation instanceof UITime) {
 
-						Tag tag = default_.getTag();
-						addBehaviorAnnotation(tag, f, annotations);
-						field.setTag(tag);
-						identity = true;
-						count++;
+							Time time = default_.getTime();
+							addBehaviorAnnotation(time, f, annotations);
+							field.setTime(time);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UIFile uiFile) {
+						} else if (annotation instanceof UIRadio) {
 
-						File file = default_.getFile();
-						addBehaviorAnnotation(file, f, annotations);
-						field.setFile(file);
-						identity = true;
-						count++;
+							Radio radio = default_.getRadio(null);
+							addBehaviorAnnotation(radio, f, annotations);
+							field.setRadio(radio);
+							identity = true;
+							count++;
 
-					} else if (annotation instanceof UITextArea textArea) {
+						} else if (annotation instanceof UISelect uiSelect) {
+							
+							Object provider = uiSelect.provider().getDeclaredConstructor().newInstance();
 
-						Area textarea = default_.getTextarea();
-						addBehaviorAnnotation(textarea, f, annotations);
-						field.setTextarea(textarea);
-						identity = true;
-						count++;
+							@SuppressWarnings("unchecked")
+							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiSelect.method());
 
-					} else if (annotation instanceof UIFilter) {
+							Select select = default_.getSelect(options);
 
-						Filter filter = default_.getFilter(f.getType().getSimpleName());
-						addBehaviorAnnotation(filter, f, annotations);
-						field.setFilter(filter);
-						identity = true;
-						count++;
+							addBehaviorAnnotation(select, f, annotations);
+							
+							field.setSelect(select);
+							identity = true;
+							count++;
 
+						} else if (annotation instanceof UITag) {
+
+							Tag tag = default_.getTag();
+							addBehaviorAnnotation(tag, f, annotations);
+							field.setTag(tag);
+							identity = true;
+							count++;
+
+						} else if (annotation instanceof UIFile) {
+
+							File file = default_.getFile();
+							addBehaviorAnnotation(file, f, annotations);
+							field.setFile(file);
+							identity = true;
+							count++;
+
+						} else if (annotation instanceof UITextArea) {
+
+							Area textarea = default_.getTextarea();
+							addBehaviorAnnotation(textarea, f, annotations);
+							field.setTextarea(textarea);
+							identity = true;
+							count++;
+
+						} else if (annotation instanceof UIFilter uiFilter) {
+
+							Filter filter = default_.getFilter(f.getType().getSimpleName());
+							
+							// Refazer, com uma chamada para o database
+							if(uiFilter.select()) {
+								Object provider = f.getType().getDeclaredConstructor().newInstance();
+								@SuppressWarnings("unchecked")
+								List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, "options");
+								filter.setOptions(options);
+							}
+							
+							addBehaviorAnnotation(filter, f, annotations);
+							
+							field.setFilter(filter);
+							identity = true;
+							count++;
+
+						}
 					}
 				}
+
+				if (identity)
+					continue;
+
+				if (f.getType() == Id.class) {
+
+					Hidden hidden = default_.getHidden();
+
+					addBehaviorAnnotation(hidden, f, annotations);
+
+					field.setHidden(hidden);
+
+					count--;
+
+				} else if (f.getType().equals(Integer.class) || f.getType().equals(Short.class)
+						|| f.getType().equals(Long.class) || f.getType().equals(Byte.class)
+						|| f.getType().equals(BigInteger.class)) {
+
+					Number number = default_.getNumber();
+
+					addBehaviorAnnotation(number, f, annotations);
+
+					field.setNumber(number);
+
+				} else if (f.getType().equals(Float.class) || f.getType().equals(Double.class)
+						|| f.getType().equals(BigDecimal.class)) {
+
+					Decimal decimal = default_.getDecimal();
+
+					addBehaviorAnnotation(decimal, f, annotations);
+
+					field.setDecimal(decimal);
+
+				} else if (f.getType().equals(String.class)) {
+
+					Text text = default_.getText();
+
+					addBehaviorAnnotation(text, f, annotations);
+
+					field.setText(text);
+
+				} else if (f.getType().equals(StringBuilder.class) || f.getType().equals(StringBuffer.class)) {
+
+					Area textarea = default_.getTextarea();
+
+					addBehaviorAnnotation(textarea, f, annotations);
+
+					field.setTextarea(textarea);
+
+				} else if (f.getType().equals(LocalDate.class)) {
+
+					Date date = default_.getDate(false);
+
+					addBehaviorAnnotation(date, f, annotations);
+
+					field.setDate(date);
+
+				} else if (f.getType().equals(LocalDateTime.class)) {
+
+					Date date = default_.getDate(true);
+
+					addBehaviorAnnotation(date, f, annotations);
+
+					field.setDate(date);
+
+				} else if (f.getType().equals(Boolean.class)) {
+
+					Checkbox checkbox = default_.getCheckbox();
+
+					addBehaviorAnnotation(checkbox, f, annotations);
+
+					field.setCheckbox(checkbox);
+
+				} else if (Collection.class.isAssignableFrom(f.getType())) {
+
+					List<Object> options = new ArrayList<>();
+					options.add(new Option("1", "value_1"));
+					options.add(new Option("2", "value_2"));
+					options.add(new Option("3", "value_3"));
+					options.add(new Option("4", "value_4"));
+					options.add(new Option("5", "value_5"));
+					options.add(new Option("6", "value_6"));
+					options.add(new Option("7", "value_7"));
+					options.add(new Option("8", "value_8"));
+
+					Select select = default_.getSelect(options);
+
+					addBehaviorAnnotation(select, f, annotations);
+
+					field.setSelect(select);
+
+				} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
+
+					Join join = default_.getJoin(f.getType().getSimpleName());
+					addBehaviorAnnotation(join, f, annotations);
+					field.setJoin(join);
+
+					count--;
+
+				}
+
+				count++;
 			}
-			
-			
-			if(identity) continue;
-			
 
-			if (f.getType() == Id.class) {
-
-				Hidden hidden = default_.getHidden();
-
-				addBehaviorAnnotation(hidden, f, annotations);
-
-				field.setHidden(hidden);
-
-				count--;
-
-			} else if (f.getType().equals(Integer.class) || f.getType().equals(Short.class)
-					|| f.getType().equals(Long.class) || f.getType().equals(Byte.class)
-					|| f.getType().equals(BigInteger.class)) {
-
-				Number number = default_.getNumber();
-
-				addBehaviorAnnotation(number, f, annotations);
-
-				field.setNumber(number);
-
-			} else if (f.getType().equals(Float.class) || f.getType().equals(Double.class)
-					|| f.getType().equals(BigDecimal.class)) {
-
-				Decimal decimal = default_.getDecimal();
-
-				addBehaviorAnnotation(decimal, f, annotations);
-
-				field.setDecimal(decimal);
-
-			} else if (f.getType().equals(String.class)) {
-
-				Text text = default_.getText();
-
-				addBehaviorAnnotation(text, f, annotations);
-
-				field.setText(text);
-
-			} else if (f.getType().equals(StringBuilder.class) || f.getType().equals(StringBuffer.class)) {
-
-				Area textarea = default_.getTextarea();
-
-				addBehaviorAnnotation(textarea, f, annotations);
-
-				field.setTextarea(textarea);
-
-			} else if (f.getType().equals(LocalDate.class)) {
-
-				Date date = default_.getDate(false);
-
-				addBehaviorAnnotation(date, f, annotations);
-
-				field.setDate(date);
-
-			} else if (f.getType().equals(LocalDateTime.class)) {
-
-				Date date = default_.getDate(true);
-
-				addBehaviorAnnotation(date, f, annotations);
-
-				field.setDate(date);
-
-			} else if (f.getType().equals(Boolean.class)) {
-
-				Checkbox checkbox = default_.getCheckbox();
-
-				addBehaviorAnnotation(checkbox, f, annotations);
-
-				field.setCheckbox(checkbox);
-
-			} else if (Collection.class.isAssignableFrom(f.getType())) {
-
-				List<Object> options = new ArrayList<>();
-				options.add("value_1");
-				options.add("value_2");
-				options.add("value_3");
-				options.add("value_4");
-
-				Select select = default_.getSelect(options);
-
-				addBehaviorAnnotation(select, f, annotations);
-
-				field.setSelect(select);
-
-			} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
-
-				Join join = default_.getJoin(f.getType().getSimpleName());
-				addBehaviorAnnotation(join, f, annotations);
-				field.setJoin(join);
-
-				count--;
-
-			}
-
-			count++;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw ex;
 		}
 
 		return form;
@@ -375,10 +417,20 @@ public class FormTemplate {
 				if (annotation instanceof UIAutoComplete uiAutoComplete) {
 
 					Autocomplete autocomplete = new Autocomplete();
+					autocomplete.setDomain(uiAutoComplete.domain());
+					autocomplete.setAttribute(uiAutoComplete.attribute());
+					base.setAutocomplete(autocomplete);
+
+				} else if (annotation instanceof UIAutoCompleteSuggestion uiAutoCompleteSuggestion) {
+
+					Autocomplete autocomplete = new Autocomplete();
+					autocomplete.setSuggestions(uiAutoCompleteSuggestion.suggestions());
+					base.setAutocomplete(autocomplete);
 
 				} else if (annotation instanceof UIPosition uiPosition) {
 
-					base.setPosition(new Position(uiPosition.x(), uiPosition.y()));
+					Position position = new Position(uiPosition.x(), uiPosition.y());
+					base.setPosition(position);
 
 				} else if (annotation instanceof UIValidation uiValidation) {
 
@@ -394,9 +446,8 @@ public class FormTemplate {
 					Method[] methods = annotation.annotationType().getDeclaredMethods();
 
 					for (Method method : methods) {
-						Object object = ReflectionUtils.set(method.getName(), annotation);
-						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()),
-								new Class<?>[] { object.getClass() }, new Object[] { object });
+						Object object = ReflectionUtils.get(method.getName(), annotation);
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
 					}
 
 				}

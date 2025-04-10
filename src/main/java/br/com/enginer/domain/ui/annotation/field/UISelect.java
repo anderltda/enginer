@@ -13,7 +13,8 @@ import java.lang.annotation.Target;
 public @interface UISelect {
 	
 	String label();
-	String options();
-	boolean multi();
-	boolean disabled();
+	Class<?> provider();
+	String method();
+	boolean multi() default false;
+	boolean disabled() default false;
 }
