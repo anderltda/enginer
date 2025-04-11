@@ -7,7 +7,10 @@ import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.annotation.field.behavior.UIValidation;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
@@ -19,30 +22,33 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
 public class EntityFour implements Domain<String> {
 
 	private Id<String> id;
-	
+
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
-	@UIValidation(required = true, pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'", method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'", syncFunc = {"dogMel", "dogMagrela"}, syncError = {"Validação direto no field 'SYNC' - O campo não pode conter apenas números.", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro."})
+	@UIValidation(required = true, 
+			pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), 
+			async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), 
+			sync = @UISync(syncFunc = { "dogMel", "dogMagrela" }, syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	private String fruit;
-	
+
 	@UIPosition(x = 1, y = 2)
 	@UIFilter(label = "Entity Status", field = "name")
-	private EntityStatus entityStatus;	
-	
+	private EntityStatus entityStatus;
+
 	@UIPosition(x = 2, y = 2)
 	private Integer attribute;
-	
+
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date Time Inclusion", format = Constants.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
-	
+
 	private EntityFive entityFive;
 
 	@Override
 	public Id<String> getId() {
 		return id;
 	}
-	
+
 	@Override
 	public void setId(Id<String> id) {
 		this.id = id;

@@ -1,7 +1,5 @@
 package br.com.enginer.domain.ui.schema.validate.dependency;
 
-import java.util.List;
-
 /**
  * 
  */
@@ -9,7 +7,7 @@ public class Dependency {
 
 	private String label;
 	private String field;
-	private List<String> depends;
+	private String[] depends;
 
 	public String getLabel() {
 		return label;
@@ -27,11 +25,12 @@ public class Dependency {
 		this.field = field;
 	}
 
-	public List<String> getDepends() {
+	public String[] getDepends() {
 		return depends;
 	}
 
-	public void setDepends(List<String> depends) {
+	public void setDepends(String[] depends) {
 		this.depends = depends;
 	}
+
 }

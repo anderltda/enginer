@@ -1,7 +1,5 @@
 package br.com.enginer.domain.ui.schema.validate.conditional;
 
-import java.util.List;
-
 /**
  * 
  */
@@ -10,7 +8,7 @@ public class Conditional {
 	private String label;
 	private String field;
 	private String operator; // '>' | '<' | '>=' | '<=' | '===' | '!==';
-	private List<String> matchs;
+	private String[] matchs;
 
 	public String getLabel() {
 		return label;
@@ -36,12 +34,11 @@ public class Conditional {
 		this.operator = operator;
 	}
 
-	public List<String> getMatchs() {
+	public String[] getMatchs() {
 		return matchs;
 	}
 
-	public void setMatchs(List<String> matchs) {
+	public void setMatchs(String[] matchs) {
 		this.matchs = matchs;
 	}
-
 }

@@ -1,4 +1,4 @@
-package br.com.enginer.domain.ui.annotation.field;
+package br.com.enginer.domain.ui.annotation.instance.validate.global;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,10 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface UIRadio {
-	String label();
-	String placeholder();
-	String options();
-	boolean disabled();
+@Target(ElementType.TYPE)
+public @interface UIGlobal {
+	UIGlobalOn[] value();
 }

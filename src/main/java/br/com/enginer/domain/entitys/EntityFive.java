@@ -3,9 +3,13 @@ package br.com.enginer.domain.entitys;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIText;
-import br.com.enginer.domain.ui.annotation.field.behavior.UIAutoComplete;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
+import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -13,6 +17,10 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
  * 
  */
 @UITitle("Entity Five -> Stream")
+@UIButtonAction({
+	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", needsValidation = true, state = "btn-complete", action = @UIAction(method = "onSubmit"))
+})
+@UISubmit(label = "Editar", method = "submitBackEnd()", icon = "edit", needsValidation = true)
 public class EntityFive implements Domain<String> {
 
 	private Id<String> id;

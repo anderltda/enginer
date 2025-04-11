@@ -5,10 +5,11 @@ package br.com.enginer.domain.ui.schema.instance;
  */
 public class Button {
 
-	private static final String SUBMIT = "submit";
-	private static final String BUTTON = "button";
+	public static final String SUBMIT = "submit";
+	public static final String BUTTON = "button";
 	private String type; // 'SUBMIT' | 'BUTTON';
 	private String label;
+	private String method;
 	private String icon;
 	private Boolean disabled;
 	private Boolean highlight;
@@ -16,6 +17,16 @@ public class Button {
 	private Boolean needsValidation;
 	private String state; // 'btn-primary' | 'btn-complete' | 'btn-success' | 'btn-danger' | 'btn-warning' // | 'btn-default';
 	private Action action;
+
+	public Button() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Button(String type) {
+		super();
+		this.type = type;
+	}
 
 	public String getType() {
 		return type;
@@ -31,6 +42,14 @@ public class Button {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public String getIcon() {
@@ -88,5 +107,4 @@ public class Button {
 	public void setAction(Action action) {
 		this.action = action;
 	}
-
 }
