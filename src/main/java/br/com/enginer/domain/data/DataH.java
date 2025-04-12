@@ -1,15 +1,18 @@
 package br.com.enginer.domain.data;
 
-import java.io.File;
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
 import br.com.enginer.domain.ui.annotation.field.file.UIFile;
+import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.schema.field.behavior.UploadFile;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
+@UISubmit(label = "Salvar", method = "salvandoDataH", state = "btn-primary", icon = "save")
 public class DataH implements Domain<Long> {
 
 	private Id<Long> id;
@@ -34,19 +37,22 @@ public class DataH implements Domain<Long> {
 
 	private LocalDate dateMemory;
 
-	@UIFile(label = "Photo Wall <span class='semi-bold'>Picker</span>", title = "Gallery like file uploader for images that looks cool! Simply use <code>ListType='picture-card'</code>", mode = TypeFileUpload.WALL_PICKER)
-	private File photo;
-
-	@UIFile(label = "Simple <span class='semi-bold'>List</span>", title = "The most common way of upload control. Use any custom button and style you wish", mode = TypeFileUpload.SIMPLE)
-	private File registre;
-
-	@UIFile(label = "Image <span class='semi-bold'>List</span>", title = "Have a horizontal list of image uploader as you need, you can limit the type and size of the files you wish by using <code>Limit = 2</code> and <code>FileType = 'image/png'</code>.", mode = TypeFileUpload.LIST)
-	private File image;
-
 	@UIPosition(x = 1, y = 12)
+	@UIFile(label = "Photo Wall <span class='semi-bold'>Picker</span>", title = "Gallery like file uploader for images that looks cool! Simply use <code>ListType='picture-card'</code>", mode = TypeFileUpload.WALL_PICKER)
+	private List<UploadFile> wallPickers;
+
+	@UIPosition(x = 2, y = 12)
+	@UIFile(label = "Simple <span class='semi-bold'>List</span>", title = "The most common way of upload control. Use any custom button and style you wish", mode = TypeFileUpload.SIMPLE)
+	private List<UploadFile> simples;
+
+	@UIPosition(x = 1, y = 13)
+	@UIFile(label = "Image <span class='semi-bold'>List</span>", title = "Have a horizontal list of image uploader as you need, you can limit the type and size of the files you wish by using <code>Limit = 2</code> and <code>FileType = 'image/png'</code>.", mode = TypeFileUpload.LIST)
+	private List<UploadFile> lists;
+
 	@UIValidation(required = true)
+	@UIPosition(x = 2, y = 13)
 	@UIFile(label = "Drag n' drop uploader", mode = TypeFileUpload.DRAG_DROP)
-	private File dragdrop;
+	private List<UploadFile> dragdrops;
 
 	@Override
 	public Id<Long> getId() {
@@ -138,36 +144,35 @@ public class DataH implements Domain<Long> {
 		this.dateMemory = dateMemory;
 	}
 
-	public File getRegistre() {
-		return registre;
+	public List<UploadFile> getWallPickers() {
+		return wallPickers;
 	}
 
-	public void setRegistre(File registre) {
-		this.registre = registre;
+	public void setWallPickers(List<UploadFile> wallPickers) {
+		this.wallPickers = wallPickers;
 	}
 
-	public File getPhoto() {
-		return photo;
+	public List<UploadFile> getSimples() {
+		return simples;
 	}
 
-	public void setPhoto(File photo) {
-		this.photo = photo;
+	public void setSimples(List<UploadFile> simples) {
+		this.simples = simples;
 	}
 
-	public File getImage() {
-		return image;
+	public List<UploadFile> getLists() {
+		return lists;
 	}
 
-	public void setImage(File image) {
-		this.image = image;
+	public void setLists(List<UploadFile> lists) {
+		this.lists = lists;
 	}
 
-	public File getDragdrop() {
-		return dragdrop;
+	public List<UploadFile> getDragdrops() {
+		return dragdrops;
 	}
 
-	public void setDragdrop(File dragdrop) {
-		this.dragdrop = dragdrop;
+	public void setDragdrops(List<UploadFile> dragdrops) {
+		this.dragdrops = dragdrops;
 	}
-
 }

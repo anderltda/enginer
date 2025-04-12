@@ -2,6 +2,7 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
 import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
 
@@ -16,10 +17,8 @@ public abstract class Base {
 	private String mask;
 	private String icon;
 	private String placeholder;
-	private String format;
 	private String title;
 	private String action;
-	private TypeFileUpload mode;
 	private String domain;
 	private String method;
 	private String layoutTarget;
@@ -35,6 +34,9 @@ public abstract class Base {
 	private Boolean readonly;
 	private Boolean select;
 	private Object value;
+
+	private TypeDateFormat format;
+	private TypeFileUpload mode;
 
 	private Position position;
 	private Validation validation;
@@ -69,46 +71,6 @@ public abstract class Base {
 		this.field = field;
 	}
 
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
-	public Boolean getRequired() {
-		return required;
-	}
-
-	public void setRequired(Boolean required) {
-		this.required = required;
-	}
-
-	public Boolean getDisabled() {
-		return disabled;
-	}
-
-	public void setDisabled(Boolean disabled) {
-		this.disabled = disabled;
-	}
-
-	public Integer getMin() {
-		return min;
-	}
-
-	public void setMin(Integer min) {
-		this.min = min;
-	}
-
-	public Integer getMax() {
-		return max;
-	}
-
-	public void setMax(Integer max) {
-		this.max = max;
-	}
-
 	public String getMask() {
 		return mask;
 	}
@@ -133,30 +95,6 @@ public abstract class Base {
 		this.placeholder = placeholder;
 	}
 
-	public Boolean getEditor() {
-		return editor;
-	}
-
-	public void setEditor(Boolean editor) {
-		this.editor = editor;
-	}
-
-	public String getFormat() {
-		return format;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
-	public Boolean getShowtime() {
-		return showtime;
-	}
-
-	public void setShowtime(Boolean showtime) {
-		this.showtime = showtime;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -173,20 +111,20 @@ public abstract class Base {
 		this.action = action;
 	}
 
-	public TypeFileUpload getMode() {
-		return mode;
-	}
-
-	public void setMode(TypeFileUpload mode) {
-		this.mode = mode;
-	}
-
 	public String getDomain() {
 		return domain;
 	}
 
 	public void setDomain(String domain) {
 		this.domain = domain;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public String getLayoutTarget() {
@@ -197,52 +135,68 @@ public abstract class Base {
 		this.layoutTarget = layoutTarget;
 	}
 
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
+
+	public Boolean getRequired() {
+		return required;
+	}
+
+	public void setRequired(Boolean required) {
+		this.required = required;
+	}
+
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public Boolean getEditor() {
+		return editor;
+	}
+
+	public void setEditor(Boolean editor) {
+		this.editor = editor;
+	}
+
+	public Boolean getShowtime() {
+		return showtime;
+	}
+
+	public void setShowtime(Boolean showtime) {
+		this.showtime = showtime;
+	}
+
 	public Boolean getMulti() {
 		return multi;
 	}
 
 	public void setMulti(Boolean multi) {
 		this.multi = multi;
-	}
-
-	public Validation getValidation() {
-		return validation;
-	}
-
-	public void setValidation(Validation validation) {
-		this.validation = validation;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	public Autocomplete getAutocomplete() {
-		return autocomplete;
-	}
-
-	public void setAutocomplete(Autocomplete autocomplete) {
-		this.autocomplete = autocomplete;
-	}
-
-	public List<UploadFile> getFiles() {
-		return files;
-	}
-
-	public void setFiles(List<UploadFile> files) {
-		this.files = files;
-	}
-
-	public List<Object> getOptions() {
-		return options;
-	}
-
-	public void setOptions(List<Object> options) {
-		this.options = options;
 	}
 
 	public Boolean getEnableSwitch() {
@@ -261,22 +215,6 @@ public abstract class Base {
 		this.readonly = readonly;
 	}
 
-	public Class<?> getProvider() {
-		return provider;
-	}
-
-	public void setProvider(Class<?> provider) {
-		this.provider = provider;
-	}
-
-	public String getMethod() {
-		return method;
-	}
-
-	public void setMethod(String method) {
-		this.method = method;
-	}
-
 	public Boolean getSelect() {
 		return select;
 	}
@@ -285,11 +223,76 @@ public abstract class Base {
 		this.select = select;
 	}
 
-	public Integer getLimit() {
-		return limit;
+	public Object getValue() {
+		return value;
 	}
 
-	public void setLimit(Integer limit) {
-		this.limit = limit;
+	public void setValue(Object value) {
+		this.value = value;
 	}
+
+	public TypeDateFormat getFormat() {
+		return format;
+	}
+
+	public void setFormat(TypeDateFormat format) {
+		this.format = format;
+	}
+
+	public TypeFileUpload getMode() {
+		return mode;
+	}
+
+	public void setMode(TypeFileUpload mode) {
+		this.mode = mode;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Validation getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Validation validation) {
+		this.validation = validation;
+	}
+
+	public Autocomplete getAutocomplete() {
+		return autocomplete;
+	}
+
+	public void setAutocomplete(Autocomplete autocomplete) {
+		this.autocomplete = autocomplete;
+	}
+
+	public Class<?> getProvider() {
+		return provider;
+	}
+
+	public void setProvider(Class<?> provider) {
+		this.provider = provider;
+	}
+
+	public List<UploadFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<UploadFile> files) {
+		this.files = files;
+	}
+
+	public List<Object> getOptions() {
+		return options;
+	}
+
+	public void setOptions(List<Object> options) {
+		this.options = options;
+	}
+
 }

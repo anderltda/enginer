@@ -2,6 +2,24 @@ package br.com.enginer.domain.data;
 
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.ui.annotation.field.UIDecimal;
+import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UINumber;
+import br.com.enginer.domain.ui.annotation.field.UIPassword;
+import br.com.enginer.domain.ui.annotation.field.UIRadio;
+import br.com.enginer.domain.ui.annotation.field.UISelect;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.UITime;
+import br.com.enginer.domain.ui.annotation.field.behavior.Combo;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
+import br.com.enginer.domain.ui.annotation.field.date.UIDate;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -9,44 +27,107 @@ public class DataA implements Domain<Long> {
 
 	private Id<Long> id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIText(label = "First Name")
+	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
+			"dogMel", "dogMagrela" }, syncError = {
+					"Validação direto no field 'SYNC' - O campo não pode conter apenas números.",
+					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	private String firstName;
 
+	@UIPosition(x = 2, y = 1)
+	@UIText(label = "Last Name")
+	@UIAutoCompleteSuggestion(suggestions = { "johndoe", "admin", "user123" })
+	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
+			"dogMel", "dogMagrela" }, syncError = {
+					"Validação direto no field 'SYNC' - O campo não pode conter apenas números.",
+					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	private String lastName;
 
+	@UIPosition(x = 1, y = 2)
+	@UIText(label = "User Name", icon = "user")
+	@UIAutoCompleteSuggestion(suggestions = { "johndoe", "admin", "user123" })
+	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"))
 	private String userName;
 
+	@UIPosition(x = 2, y = 2)
+	@UIEmail(label = "Login")
+	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	private String login;
 
+	@UIPosition(x = 1, y = 3)
+	@UIPassword(label = "Password", icon = "shield_lock")
+	@UIValidation(required = true)
 	private String password;
 
+	@UIPosition(x = 2, y = 3)
+	@UIPassword(label = "Confirm Password", icon = "shield_lock")
+	@UIValidation(required = true)
 	private String confirmPassword;
 
+	@UIPosition(x = 1, y = 4)
+	@UINumber(label = "Count in Animal", icon = "animal")
+	@UIValidation(required = true)
 	private Integer countAnimal;
 
+	@UIPosition(x = 2, y = 4)
+	@UITime(label = "Time 1")
 	private LocalDateTime timeOne;
 
+	@UIPosition(x = 3, y = 4)
+	@UITime(label = "Time 2")
+	@UIValidation(required = true)
 	private LocalDateTime timeTwo;
 
+	@UIPosition(x = 4, y = 4)
+	@UIDate(label = "Date Time Start", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIValidation(required = true)
 	private LocalDateTime dateTimeStart;
 
+	@UIPosition(x = 1, y = 5)
+	@UIText(label = "Phone", mask = "(00) 0000-0000")
+	@UIValidation(required = true)
 	private String phone;
 
+	@UIPosition(x = 2, y = 5)
+	@UIText(label = "Zip Code", mask = "00000-000")
+	@UIValidation(required = true)
 	private String zipCode;
 
+	@UIPosition(x = 3, y = 5)
+	@UIText(label = "CPF", mask = "000.000.000-00")
+	@UIValidation(required = true)
 	private String cpf;
 
+	@UIPosition(x = 4, y = 5)
+	@UIText(label = "CNPJ", mask = "000.000.000/0000-00")
+	@UIValidation(required = true)
 	private String cnpj;
 
+	@UIPosition(x = 1, y = 6)
+	@UIDecimal(label = "Money", placeholder = "Ex. 1,00", icon = "keyboard")
+	@UIValidation(required = true)
 	private Double money;
 
+	@UIPosition(x = 2, y = 6)
+	@UIDecimal(label = "Cost", placeholder = "Ex. 1,00", icon = "keyboard")
+	@UIValidation(required = true)
 	private Double cost;
 
+	@UIPosition(x = 1, y = 7)
+	@UISelect(label = "Drinks", multi = false, provider = Combo.class, method = "drinks")
+	@UIValidation(required = true)
 	private String drink;
 
-	private String statement;
-
+	@UIPosition(x = 2, y = 7)
+	@UISelect(label = "Color", multi = false, provider = Combo.class, method = "colors")
+	@UIValidation(required = true)
 	private String color;
 
+	@UIPosition(x = 3, y = 7)
+	@UIRadio(label = "This statement is correct?", provider = Combo.class, method = "question")
+	@UIValidation(required = true)
 	private String accept;
 
 	private DataB dataB;
@@ -195,14 +276,6 @@ public class DataA implements Domain<Long> {
 
 	public void setDrink(String drink) {
 		this.drink = drink;
-	}
-
-	public String getStatement() {
-		return statement;
-	}
-
-	public void setStatement(String statement) {
-		this.statement = statement;
 	}
 
 	public String getColor() {

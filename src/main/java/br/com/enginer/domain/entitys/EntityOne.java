@@ -3,13 +3,9 @@ package br.com.enginer.domain.entitys;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
-import br.com.enginer.domain.ui.annotation.field.UIDate;
-import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UIId;
-import br.com.enginer.domain.ui.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
@@ -19,12 +15,14 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
+import br.com.enginer.domain.ui.annotation.field.date.UIDate;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
-import br.com.enginer.domain.ui.annotation.instance.validate.conditional.Operator;
+import br.com.enginer.domain.ui.annotation.instance.validate.conditional.TypeOperator;
 import br.com.enginer.domain.ui.annotation.instance.validate.conditional.UIConditional;
 import br.com.enginer.domain.ui.annotation.instance.validate.conditional.UIConditionalOn;
 import br.com.enginer.domain.ui.annotation.instance.validate.custom.UICustom;
@@ -47,12 +45,12 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
 @UIGlobal({ @UIGlobalOn(function = "customEntitySumValuesValidator",       message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!")})
 @UICustom({ @UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = {	"entityOne.entityTwo.cost", "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.amount", "entityOne.entityTwo.entityTree.entityFour.attribute", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor"} )})
 @UIConditional({
-	@UIConditionalOn(label = "Age",       					field = "entityOne.age", 											   operator = Operator.LESS_THAN, 			   matchs = { "entityOne.entityTwo.hex" }),
-	@UIConditionalOn(label = "Hex",       					field = "entityOne.entityTwo.hex", 									   operator = Operator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.entityTwo.entityTree.indicator" }),
-	@UIConditionalOn(label = "Indicator", 					field = "entityOne.entityTwo.entityTree.indicator", 				   operator = Operator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
-	@UIConditionalOn(label = "Attribute", 					field = "entityOne.entityTwo.entityTree.entityFour.attribute", 		   operator = Operator.EQUALS,                 matchs = { "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
-	@UIConditionalOn(label = "Factor",                      field = "entityOne.entityTwo.entityTree.entityFour.entityFive.factor", operator = Operator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.age" }),
-	@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", 									   operator = Operator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" })
+	@UIConditionalOn(label = "Age",       					field = "entityOne.age", 											   operator = TypeOperator.LESS_THAN, 			   matchs = { "entityOne.entityTwo.hex" }),
+	@UIConditionalOn(label = "Hex",       					field = "entityOne.entityTwo.hex", 									   operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.entityTwo.entityTree.indicator" }),
+	@UIConditionalOn(label = "Indicator", 					field = "entityOne.entityTwo.entityTree.indicator", 				   operator = TypeOperator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
+	@UIConditionalOn(label = "Attribute", 					field = "entityOne.entityTwo.entityTree.entityFour.attribute", 		   operator = TypeOperator.EQUALS,                 matchs = { "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
+	@UIConditionalOn(label = "Factor",                      field = "entityOne.entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.age" }),
+	@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", 									   operator = TypeOperator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" })
 })
 @UIDependency({ 
 	@UIDependsOn(label = "Age",    field = "entityOne.age", 								  depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
@@ -90,19 +88,17 @@ public class EntityOne implements Domain<Long> {
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
-	@UIDecimal(label = "Height", mask = "00.00")
+	@UIText(label = "Height", mask = "0.00")
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
-	@UIDate(label = "Birth Date", format = Constants.DATE_FORMAT, showtime = false)
+	@UIDate(label = "Birth Date", format = TypeDateFormat.DATE_FORMAT, showtime = false)
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
-	@UIDate(label = "Prohibited Date Time", format = Constants.DATE_TIME_FORMAT, showtime = true)
+	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime prohibitedDateTime;
 
-	@UIValidation(required = true)
-	@UIJoin(layoutTarget = "form")
 	private EntityTwo entityTwo;
 
 	@Override

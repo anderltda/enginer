@@ -12,6 +12,6 @@ public @interface UIFile {
 	String title() default "";
 	String action() default "http://localhost:8081/api/upload";
 	TypeFileUpload mode();
-	int limit() default 1;
+	int limit() default 3;
 	boolean disabled() default false;
 }

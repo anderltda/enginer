@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UIDecimal {
 	String label();
-	String mask();
 	String icon() default "";
 	String placeholder() default "";
 	boolean disabled() default false;

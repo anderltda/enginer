@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UITime {
 	String label();
-	String icon() default "";
+	String icon() default "time";
 	String placeholder() default "";
 	boolean disabled() default false;
 }

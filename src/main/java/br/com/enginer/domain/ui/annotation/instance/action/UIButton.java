@@ -17,6 +17,6 @@ public @interface UIButton {
 	boolean disabled() default false;
 	boolean highlight() default false;
 	boolean confirm() default false;
-	boolean needsValidation() default false;
+	boolean needsValidation() default true;
 	UIAction action() default @UIAction;
 }

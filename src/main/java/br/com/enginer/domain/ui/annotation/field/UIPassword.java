@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UIPassword {
 	String label();
-	String icon();
-	String placeholder();
-	int min() default -1;
-	int max() default -1;
-	boolean disabled();
+	String icon() default "";
+	String placeholder() default "";
+	int min() default 4;
+	int max() default 20;
+	boolean disabled() default false;
 }

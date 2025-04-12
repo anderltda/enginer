@@ -1,4 +1,4 @@
-package br.com.enginer.domain.ui.annotation.field;
+package br.com.enginer.domain.ui.annotation.field.date;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ public @interface UIDate {
 	String label();
 	String icon() default "calendar";
 	String placeholder() default "";
-	String format();
+	TypeDateFormat format();
 	boolean showtime();
 	boolean disabled() default false;
 }

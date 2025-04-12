@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UIRadio {
 	String label();
-	String placeholder();
-	String options();
-	boolean disabled();
+	Class<?> provider();
+	String method();
+	boolean disabled() default false;
 }

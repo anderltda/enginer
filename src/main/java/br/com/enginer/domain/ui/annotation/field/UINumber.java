@@ -11,7 +11,7 @@ public @interface UINumber {
 	String label();
 	String icon() default "";
 	String placeholder() default "";
-	int min() default 0;
+	int min() default 1;
 	int max() default 10;
 	boolean disabled() default false;
 }

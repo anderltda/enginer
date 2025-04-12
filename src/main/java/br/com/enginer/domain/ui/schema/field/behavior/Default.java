@@ -2,6 +2,7 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
 import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.type.Area;
 import br.com.enginer.domain.ui.schema.field.type.Checkbox;
@@ -19,7 +20,6 @@ import br.com.enginer.domain.ui.schema.field.type.Select;
 import br.com.enginer.domain.ui.schema.field.type.Tag;
 import br.com.enginer.domain.ui.schema.field.type.Text;
 import br.com.enginer.domain.ui.schema.field.type.Time;
-import br.com.enginer.domain.ui.schema.instance.Button;
 import br.com.enginer.domain.utils.ReflectionUtils;
 import br.com.enginer.domain.utils.StringsUtils;
 
@@ -32,12 +32,14 @@ public class Default {
 	private String field;
 	private Object value;
 	private Position position;
+	private Boolean disabled;
 
-	public Default(Integer xposition, Integer yposition, String name, Object object) {
+	public Default(Integer xposition, Integer yposition, String name, Boolean disabled, Object object) {
+		this.position = new Position(xposition, yposition);
 		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
 		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
+		this.disabled = disabled;
 		this.value = ReflectionUtils.get(StringsUtils.getMethod(name), object);
-		this.position = new Position(xposition, yposition);
 	}
 
 	/**
@@ -60,6 +62,7 @@ public class Default {
 		text.setMin(1);
 		text.setMax(20);
 		text.setPosition(position);
+		text.setDisabled(disabled);
 		return text;
 	}
 
@@ -71,6 +74,7 @@ public class Default {
 		email.setMin(1);
 		email.setMax(50);
 		email.setPosition(position);
+		email.setDisabled(disabled);
 		return email;
 	}
 
@@ -82,6 +86,7 @@ public class Default {
 		number.setMin(1);
 		number.setMax(50);
 		number.setPosition(position);
+		number.setDisabled(disabled);
 		return number;
 	}
 
@@ -91,6 +96,7 @@ public class Default {
 		decimal.setField(field);
 		decimal.setValue(value);
 		decimal.setPosition(position);
+		decimal.setDisabled(disabled);
 		return decimal;
 	}
 
@@ -101,6 +107,7 @@ public class Default {
 		password.setMin(1);
 		password.setMax(10);
 		password.setPosition(position);
+		password.setDisabled(disabled);
 		return password;
 	}
 
@@ -110,8 +117,9 @@ public class Default {
 		date.setField(field);
 		date.setValue(value);
 		date.setShowtime(showTime);
-		date.setFormat(showTime ? "DD/MM/YYYY HH:mm:ss" : "DD/MM/YYYY");
+		date.setFormat(showTime ? TypeDateFormat.DATE_TIME_FORMAT : TypeDateFormat.DATE_FORMAT);
 		date.setPosition(position);
+		date.setDisabled(disabled);
 		return date;
 	}
 
@@ -121,6 +129,7 @@ public class Default {
 		time.setField(field);
 		time.setValue(value);
 		time.setPosition(position);
+		time.setDisabled(disabled);
 		return time;
 	}
 
@@ -131,6 +140,7 @@ public class Default {
 		radio.setValue(value);
 		radio.setOptions(options);
 		radio.setPosition(position);
+		radio.setDisabled(disabled);
 		return radio;
 	}
 
@@ -140,6 +150,7 @@ public class Default {
 		checkbox.setField(field);
 		checkbox.setValue(value);
 		checkbox.setPosition(position);
+		checkbox.setDisabled(disabled);
 		return checkbox;
 	}
 
@@ -150,6 +161,7 @@ public class Default {
 		select.setValue(value);
 		select.setPosition(position);
 		select.setOptions(options);
+		select.setDisabled(disabled);
 		return select;
 	}
 
@@ -159,6 +171,7 @@ public class Default {
 		tag.setField(field);
 		tag.setValue(value);
 		tag.setPosition(position);
+		tag.setDisabled(disabled);
 		return tag;
 	}
 
@@ -169,17 +182,20 @@ public class Default {
 		textarea.setValue(value);
 		textarea.setEditor(false);
 		textarea.setPosition(position);
+		textarea.setDisabled(disabled);
 		return textarea;
 	}
 
-	public File getFile() {
+	public File getFile(List<UploadFile> files) {
 		File file = new File();
 		file.setLabel(label);
 		file.setField(field);
 		file.setValue(value);
 		file.setAction("http://localhost:8081/api/upload");
 		file.setMode(TypeFileUpload.SIMPLE);
+		file.setFiles(files);
 		file.setPosition(position);
+		file.setDisabled(disabled);
 		return file;
 	}
 
@@ -189,6 +205,7 @@ public class Default {
 		filter.setValue(value);
 		filter.setDomain(StringsUtils.firstLower(domain));
 		filter.setPosition(position);
+		filter.setDisabled(disabled);
 		return filter;
 	}
 
@@ -198,16 +215,6 @@ public class Default {
 		join.setDomain(StringsUtils.firstLower(domain));
 		join.setLayoutTarget("form");
 		return join;
-	}
-
-	public Button getButton() {
-		Button button = new Button();
-		return button;
-	}
-
-	public Blank getBlank() {
-		Blank blank = new Blank();
-		return blank;
 	}
 
 }

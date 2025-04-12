@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UIEmail {
 	String label();
-	String mask();
-	String icon();
-	String placeholder();
-	int min() default -1;
-	int max() default -1;
+	String mask() default "";
+	String icon() default "mail";
+	String placeholder() default "";
+	int min() default 5;
+	int max() default 50;
 	boolean disabled() default false;
 }

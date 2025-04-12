@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 public @interface UIConditionalOn {
 	String label();
 	String field();
-	Operator operator();
+	TypeOperator operator();
 	String[] matchs();
 }

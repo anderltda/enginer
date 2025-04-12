@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.enginer.domain.Constants;
-import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
+import br.com.enginer.domain.ui.annotation.field.date.UIDate;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.schema.field.behavior.Option;
 import br.com.enginer.domain.ui.schema.field.type.Id;
@@ -42,11 +42,11 @@ public class EntityTree implements Domain<String> {
 	private Double amount;
 	
 	@UIPosition(x = 4, y = 2)
-	@UIDate(label = "Date local", format = Constants.DATE_FORMAT, showtime = false)
+	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
 	private LocalDate localDate;
 	
 	@UIPosition(x = 3, y = 2)
-	@UIDate(label = "Date local time", format = Constants.DATE_TIME_FORMAT, showtime = true)
+	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime localDateTime;
 	
 	private EntityFour entityFour;

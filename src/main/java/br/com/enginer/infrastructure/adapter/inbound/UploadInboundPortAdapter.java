@@ -23,7 +23,9 @@ public class UploadInboundPortAdapter {
 
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> handleFileUpload(@RequestParam MultipartFile file) {
+		
 		try {
+			
 			if (file.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("error", "Arquivo está vazio."));
 			}
@@ -38,8 +40,7 @@ public class UploadInboundPortAdapter {
 			return ResponseEntity.ok(Map.of("message", "Arquivo enviado com sucesso!", "filename", filename));
 
 		} catch (IOException ex) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Map.of("error", "Erro ao salvar arquivo: " + ex.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Erro ao salvar arquivo: " + ex.getMessage()));
 		}
 	}
 

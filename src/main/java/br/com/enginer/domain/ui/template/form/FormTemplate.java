@@ -3,6 +3,8 @@ package br.com.enginer.domain.ui.template.form;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
-import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
@@ -36,6 +37,7 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.annotation.field.date.UIDate;
 import br.com.enginer.domain.ui.annotation.field.file.UIFile;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
@@ -57,6 +59,7 @@ import br.com.enginer.domain.ui.schema.field.behavior.Default;
 import br.com.enginer.domain.ui.schema.field.behavior.Option;
 import br.com.enginer.domain.ui.schema.field.behavior.Pattern;
 import br.com.enginer.domain.ui.schema.field.behavior.Position;
+import br.com.enginer.domain.ui.schema.field.behavior.UploadFile;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Async;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Sync;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
@@ -133,8 +136,7 @@ public class FormTemplate {
 			br.com.enginer.domain.ui.schema.field.Field field = null;
 
 			form = new Form();
-			form.setTitle(
-					StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
+			form.setTitle(StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
 
 			Validate validate = new Validate();
 			List<Global> globals = new ArrayList<>();
@@ -258,7 +260,7 @@ public class FormTemplate {
 				int x = count;
 				int y = count % 2 == 0 ? count - 1 : count;
 
-				Default default_ = new Default(x, y, f.getName(), object);
+				Default default_ = new Default(x, y, f.getName(), false, object);
 
 				field = new br.com.enginer.domain.ui.schema.field.Field();
 				fields.add(field);
@@ -358,10 +360,17 @@ public class FormTemplate {
 							identity = true;
 							count++;
 
-						} else if (annotation instanceof UIRadio) {
+						} else if (annotation instanceof UIRadio uiRadio) {
+							
+							Object provider = uiRadio.provider().getDeclaredConstructor().newInstance();
 
-							Radio radio = default_.getRadio(null);
+							@SuppressWarnings("unchecked")
+							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiRadio.method());
+
+							Radio radio = default_.getRadio(options);
+							
 							addBehaviorAnnotation(radio, f, annotations);
+							
 							field.setRadio(radio);
 							identity = true;
 							count++;
@@ -371,8 +380,7 @@ public class FormTemplate {
 							Object provider = uiSelect.provider().getDeclaredConstructor().newInstance();
 
 							@SuppressWarnings("unchecked")
-							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider,
-									uiSelect.method());
+							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiSelect.method());
 
 							Select select = default_.getSelect(options);
 
@@ -391,8 +399,26 @@ public class FormTemplate {
 							count++;
 
 						} else if (annotation instanceof UIFile) {
+							
+							List<UploadFile> files = new ArrayList<>();
+							
+							UploadFile uploadFile = new UploadFile();
+							uploadFile.setUid("550e8400-e29b-41d4-a716-44ar5wq00");
+							uploadFile.setName("avatar_small2x.jpg");
+							uploadFile.setStatus("done");
+							uploadFile.setUrl("https://cdn.awsli.com.br/2500x2500/1063/1063988/produto/240150477/bp3121s---002-2370yhtkq3.jpg");
+							
+							files.add(uploadFile);
+							
+							uploadFile = new UploadFile();
+							uploadFile.setUid("110e8400-e29b-41d4-a716-44ar5wq00");
+							uploadFile.setName("avatar_small2x.jpg");
+							uploadFile.setStatus("done");
+							uploadFile.setUrl("https://beefpoint.com.br/wp-content/uploads/2022/02/Foto-1440px-x-960px-2022-02-03T104828.205-1200x675.png");
+							
+							files.add(uploadFile);
 
-							File file = default_.getFile();
+							File file = default_.getFile(files);
 							addBehaviorAnnotation(file, f, annotations);
 							field.setFile(file);
 							identity = true;
@@ -492,14 +518,6 @@ public class FormTemplate {
 
 					field.setDate(date);
 
-				} else if (f.getType().equals(java.io.File.class)) {
-
-					File file = default_.getFile();
-
-					addBehaviorAnnotation(file, f, annotations);
-
-					field.setFile(file);
-
 				} else if (f.getType().equals(Boolean.class)) {
 
 					Checkbox checkbox = default_.getCheckbox();
@@ -509,6 +527,47 @@ public class FormTemplate {
 					field.setCheckbox(checkbox);
 
 				} else if (Collection.class.isAssignableFrom(f.getType())) {
+					
+			        Type genericType = f.getGenericType();
+			        
+			        if (genericType instanceof ParameterizedType parameterizedType) {
+			        	
+			            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+			            
+			            if (actualTypeArguments.length == 1) {
+			            	
+			                Class<?> itemType = (Class<?>) actualTypeArguments[0];
+			                
+			                if(itemType.equals(UploadFile.class)) {
+			                	
+			                	List<UploadFile> files = new ArrayList<>();
+								
+								UploadFile uploadFile = new UploadFile();
+								uploadFile.setUid("550e8400-e29b-41d4-a716-44ar5wq00");
+								uploadFile.setName("avatar_small2x.jpg");
+								uploadFile.setStatus("done");
+								uploadFile.setUrl("http://pages.revox.io/dashboard/3.0.0/html/condensed/assets/img/profiles/avatar_small2x.jpg");
+								
+								files.add(uploadFile);
+								
+								uploadFile = new UploadFile();
+								uploadFile.setUid("110e8400-e29b-41d4-a716-44ar5wq00");
+								uploadFile.setName("avatar_small2x.jpg");
+								uploadFile.setStatus("done");
+								uploadFile.setUrl("http://pages.revox.io/dashboard/3.0.0/html/condensed/assets/img/profiles/avatar_small2x.jpg");
+								
+								files.add(uploadFile);
+
+								File file = default_.getFile(files);
+
+								addBehaviorAnnotation(file, f, annotations);
+
+								field.setFile(file);
+								
+			                }
+			            }
+			            continue;
+			        }
 
 					List<Object> options = new ArrayList<>();
 					options.add(new Option("1", "value_1"));
