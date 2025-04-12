@@ -1,6 +1,7 @@
 package br.com.enginer.domain.entitys;
 
 import java.io.File;
+import java.util.List;
 
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
@@ -15,6 +16,7 @@ import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.schema.field.behavior.UploadFile;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -45,8 +47,8 @@ public class EntityFive implements Domain<String> {
 	
 	@UIPosition(x = 1, y = 3)
 	@UIValidation(required = false)
-	@UIFile(label = "Drag n' drop uploader", mode = TypeFileUpload.DRAG_DROP)
-	private File dragdrop;
+	@UIFile(mode = TypeFileUpload.DRAG_DROP)
+	private List<UploadFile> files;
 
 	@Override
 	public Id<String> getId() {
@@ -82,12 +84,11 @@ public class EntityFive implements Domain<String> {
 		this.entityStatus = entityStatus;
 	}
 
-	public File getDragdrop() {
-		return dragdrop;
+	public List<UploadFile> getFiles() {
+		return files;
 	}
 
-	public void setDragdrop(File dragdrop) {
-		this.dragdrop = dragdrop;
+	public void setFiles(List<UploadFile> files) {
+		this.files = files;
 	}
-
 }

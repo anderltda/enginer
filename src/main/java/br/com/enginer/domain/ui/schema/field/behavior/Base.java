@@ -42,7 +42,7 @@ public abstract class Base {
 
 	private Class<?> provider;
 
-	private List<FileUpload> files;
+	private List<UploadFile> files;
 	private List<Object> options;
 
 	public String getType() {
@@ -229,11 +229,11 @@ public abstract class Base {
 		this.autocomplete = autocomplete;
 	}
 
-	public List<FileUpload> getFiles() {
+	public List<UploadFile> getFiles() {
 		return files;
 	}
 
-	public void setFiles(List<FileUpload> files) {
+	public void setFiles(List<UploadFile> files) {
 		this.files = files;
 	}
 

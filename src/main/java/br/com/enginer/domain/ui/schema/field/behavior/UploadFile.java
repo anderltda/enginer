@@ -3,12 +3,13 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 /**
  * 
  */
-public class FileUpload {
+public class UploadFile {
 
 	private String uid;
 	private String name;
 	private String status;
 	private String url;
+	private UploadResponse response;
 
 	public String getUid() {
 		return uid;
@@ -40,6 +41,14 @@ public class FileUpload {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public UploadResponse getResponse() {
+		return response;
+	}
+
+	public void setResponse(UploadResponse response) {
+		this.response = response;
 	}
 
 }
