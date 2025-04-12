@@ -17,7 +17,6 @@ import br.com.enginer.domain.ui.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
-import br.com.enginer.domain.ui.annotation.field.UIFile;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.annotation.field.UIId;
@@ -37,6 +36,7 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.annotation.field.file.UIFile;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
@@ -115,7 +115,7 @@ public class FormTemplate {
 		annotationMap.put(UIAutoCompleteSuggestion.class, UIAutoCompleteSuggestion.class);
 		annotationMap.put(UIValidation.class, UIValidation.class);
 		annotationMap.put(UIDependency.class, UIDependency.class);
-		
+
 	}
 
 	/**
@@ -127,20 +127,21 @@ public class FormTemplate {
 		Form form = null;
 
 		try {
-			
+
 			List<br.com.enginer.domain.ui.schema.field.Field> fields = new ArrayList<>();
-			
+
 			br.com.enginer.domain.ui.schema.field.Field field = null;
-			
+
 			form = new Form();
-			form.setTitle(StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
-			
+			form.setTitle(
+					StringsUtils.normalizeLabelToLowercaseCamelization(object.getClass().getSimpleName().toString()));
+
 			Validate validate = new Validate();
 			List<Global> globals = new ArrayList<>();
 			List<Custom> custons = new ArrayList<>();
 			List<Conditional> conditionals = new ArrayList<>();
 			List<Dependency> dependencys = new ArrayList<>();
-			
+
 			validate.setGlobal(globals);
 			validate.setCustom(custons);
 			validate.setConditional(conditionals);
@@ -155,8 +156,8 @@ public class FormTemplate {
 					global.setMessage(uiGlobalOn.message());
 					globals.add(global);
 				}
-			}			
-			
+			}
+
 			if (object.getClass().isAnnotationPresent(UICustom.class)) {
 				UICustomOn[] uiCustomOns = object.getClass().getAnnotationsByType(UICustomOn.class);
 				Custom custom = null;
@@ -168,7 +169,7 @@ public class FormTemplate {
 					custons.add(custom);
 				}
 			}
-			
+
 			if (object.getClass().isAnnotationPresent(UIConditional.class)) {
 				UIConditionalOn[] uiConditionalOns = object.getClass().getAnnotationsByType(UIConditionalOn.class);
 				Conditional conditional = null;
@@ -181,7 +182,7 @@ public class FormTemplate {
 					conditionals.add(conditional);
 				}
 			}
-			
+
 			if (object.getClass().isAnnotationPresent(UIDependency.class)) {
 				UIDependsOn[] uiDependsOns = object.getClass().getAnnotationsByType(UIDependsOn.class);
 				Dependency dependency = null;
@@ -193,15 +194,14 @@ public class FormTemplate {
 					dependencys.add(dependency);
 				}
 			}
-			
+
 			if (object.getClass().isAnnotationPresent(UITitle.class)) {
 				UITitle uiTitle = object.getClass().getAnnotation(UITitle.class);
 				form.setTitle(uiTitle.value());
 			}
-			
-			
+
 			Button button = null;
-			
+
 			if (object.getClass().isAnnotationPresent(UISubmit.class)) {
 				UISubmit uiSubmit = object.getClass().getAnnotation(UISubmit.class);
 				field = new br.com.enginer.domain.ui.schema.field.Field();
@@ -214,32 +214,33 @@ public class FormTemplate {
 				field.setButton(button);
 				fields.add(field);
 			}
-			
+
 			if (object.getClass().isAnnotationPresent(UIButtonAction.class)) {
-				
+
 				UIButton[] uiButtons = object.getClass().getAnnotationsByType(UIButton.class);
-				
+
 				for (UIButton uiButton : uiButtons) {
 					Method[] methods = uiButton.annotationType().getDeclaredMethods();
 					field = new br.com.enginer.domain.ui.schema.field.Field();
 					button = new Button(Button.BUTTON);
 					for (Method method : methods) {
 						Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
-						if(buttonObject instanceof UIAction uiAction) {
+						if (buttonObject instanceof UIAction uiAction) {
 							Action action = new Action();
 							action.setMethod(uiAction.method());
 							action.setRedirect(uiAction.redirect());
-							//action.setDomain(uiAction.actionObject());
+							// action.setDomain(uiAction.actionObject());
 							button.setAction(action);
 							continue;
-						} 
-						ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+						}
+						ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+								new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
 					}
 					field.setButton(button);
 					fields.add(field);
 				}
 			}
-			
+
 			form.setValidate(validate);
 			form.setFields(fields);
 
@@ -275,28 +276,28 @@ public class FormTemplate {
 						if (annotation instanceof UIId) {
 
 							Hidden hidden = default_.getHidden();
-							addBehaviorAnnotation(hidden, f, dependencys, annotations);
+							addBehaviorAnnotation(hidden, f, annotations);
 							field.setHidden(hidden);
 							identity = true;
 
 						} else if (annotation instanceof UIHidden) {
 
 							Hidden hidden = default_.getHidden();
-							addBehaviorAnnotation(hidden, f, dependencys, annotations);
+							addBehaviorAnnotation(hidden, f, annotations);
 							field.setHidden(hidden);
 							identity = true;
 
 						} else if (annotation instanceof UIJoin) {
 
 							Join join = default_.getJoin(f.getType().getSimpleName());
-							addBehaviorAnnotation(join, f, dependencys, annotations);
+							addBehaviorAnnotation(join, f, annotations);
 							field.setJoin(join);
 							identity = true;
 
 						} else if (annotation instanceof UIText) {
 
 							Text text = default_.getText();
-							addBehaviorAnnotation(text, f, dependencys, annotations);
+							addBehaviorAnnotation(text, f, annotations);
 							field.setText(text);
 							identity = true;
 							count++;
@@ -304,7 +305,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UIEmail) {
 
 							Email email = default_.getEmail();
-							addBehaviorAnnotation(email, f, dependencys, annotations);
+							addBehaviorAnnotation(email, f, annotations);
 							field.setEmail(email);
 							identity = true;
 							count++;
@@ -312,7 +313,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UIPassword) {
 
 							Password password = default_.getPassword();
-							addBehaviorAnnotation(password, f, dependencys, annotations);
+							addBehaviorAnnotation(password, f, annotations);
 							field.setPassword(password);
 							identity = true;
 							count++;
@@ -320,7 +321,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UINumber) {
 
 							Number number = default_.getNumber();
-							addBehaviorAnnotation(number, f, dependencys, annotations);
+							addBehaviorAnnotation(number, f, annotations);
 							field.setNumber(number);
 							identity = true;
 							count++;
@@ -328,7 +329,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UIDecimal) {
 
 							Decimal decimal = default_.getDecimal();
-							addBehaviorAnnotation(decimal, f, dependencys, annotations);
+							addBehaviorAnnotation(decimal, f, annotations);
 							field.setDecimal(decimal);
 							identity = true;
 							count++;
@@ -336,7 +337,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UICheckbox) {
 
 							Checkbox checkbox = default_.getCheckbox();
-							addBehaviorAnnotation(checkbox, f, dependencys, annotations);
+							addBehaviorAnnotation(checkbox, f, annotations);
 							field.setCheckbox(checkbox);
 							identity = true;
 							count++;
@@ -344,7 +345,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UIDate uiDate) {
 
 							Date date = default_.getDate(uiDate.showtime());
-							addBehaviorAnnotation(date, f, dependencys, annotations);
+							addBehaviorAnnotation(date, f, annotations);
 							field.setDate(date);
 							identity = true;
 							count++;
@@ -352,7 +353,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UITime) {
 
 							Time time = default_.getTime();
-							addBehaviorAnnotation(time, f, dependencys, annotations);
+							addBehaviorAnnotation(time, f, annotations);
 							field.setTime(time);
 							identity = true;
 							count++;
@@ -360,22 +361,23 @@ public class FormTemplate {
 						} else if (annotation instanceof UIRadio) {
 
 							Radio radio = default_.getRadio(null);
-							addBehaviorAnnotation(radio, f, dependencys, annotations);
+							addBehaviorAnnotation(radio, f, annotations);
 							field.setRadio(radio);
 							identity = true;
 							count++;
 
 						} else if (annotation instanceof UISelect uiSelect) {
-							
+
 							Object provider = uiSelect.provider().getDeclaredConstructor().newInstance();
 
 							@SuppressWarnings("unchecked")
-							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiSelect.method());
+							List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider,
+									uiSelect.method());
 
 							Select select = default_.getSelect(options);
 
-							addBehaviorAnnotation(select, f, dependencys, annotations);
-							
+							addBehaviorAnnotation(select, f, annotations);
+
 							field.setSelect(select);
 							identity = true;
 							count++;
@@ -383,7 +385,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UITag) {
 
 							Tag tag = default_.getTag();
-							addBehaviorAnnotation(tag, f, dependencys, annotations);
+							addBehaviorAnnotation(tag, f, annotations);
 							field.setTag(tag);
 							identity = true;
 							count++;
@@ -391,7 +393,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UIFile) {
 
 							File file = default_.getFile();
-							addBehaviorAnnotation(file, f, dependencys, annotations);
+							addBehaviorAnnotation(file, f, annotations);
 							field.setFile(file);
 							identity = true;
 							count++;
@@ -399,7 +401,7 @@ public class FormTemplate {
 						} else if (annotation instanceof UITextArea) {
 
 							Area textarea = default_.getTextarea();
-							addBehaviorAnnotation(textarea, f, dependencys, annotations);
+							addBehaviorAnnotation(textarea, f, annotations);
 							field.setTextarea(textarea);
 							identity = true;
 							count++;
@@ -407,17 +409,17 @@ public class FormTemplate {
 						} else if (annotation instanceof UIFilter uiFilter) {
 
 							Filter filter = default_.getFilter(f.getType().getSimpleName());
-							
+
 							// Refazer, com uma chamada para o database
-							if(uiFilter.select()) {
+							if (uiFilter.select()) {
 								Object provider = f.getType().getDeclaredConstructor().newInstance();
 								@SuppressWarnings("unchecked")
 								List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, "options");
 								filter.setOptions(options);
 							}
-							
-							addBehaviorAnnotation(filter, f, dependencys, annotations);
-							
+
+							addBehaviorAnnotation(filter, f, annotations);
+
 							field.setFilter(filter);
 							identity = true;
 							count++;
@@ -433,7 +435,7 @@ public class FormTemplate {
 
 					Hidden hidden = default_.getHidden();
 
-					addBehaviorAnnotation(hidden, f, dependencys, annotations);
+					addBehaviorAnnotation(hidden, f, annotations);
 
 					field.setHidden(hidden);
 
@@ -445,7 +447,7 @@ public class FormTemplate {
 
 					Number number = default_.getNumber();
 
-					addBehaviorAnnotation(number, f, dependencys, annotations);
+					addBehaviorAnnotation(number, f, annotations);
 
 					field.setNumber(number);
 
@@ -454,7 +456,7 @@ public class FormTemplate {
 
 					Decimal decimal = default_.getDecimal();
 
-					addBehaviorAnnotation(decimal, f, dependencys, annotations);
+					addBehaviorAnnotation(decimal, f, annotations);
 
 					field.setDecimal(decimal);
 
@@ -462,7 +464,7 @@ public class FormTemplate {
 
 					Text text = default_.getText();
 
-					addBehaviorAnnotation(text, f, dependencys, annotations);
+					addBehaviorAnnotation(text, f, annotations);
 
 					field.setText(text);
 
@@ -470,7 +472,7 @@ public class FormTemplate {
 
 					Area textarea = default_.getTextarea();
 
-					addBehaviorAnnotation(textarea, f, dependencys, annotations);
+					addBehaviorAnnotation(textarea, f, annotations);
 
 					field.setTextarea(textarea);
 
@@ -478,7 +480,7 @@ public class FormTemplate {
 
 					Date date = default_.getDate(false);
 
-					addBehaviorAnnotation(date, f, dependencys, annotations);
+					addBehaviorAnnotation(date, f, annotations);
 
 					field.setDate(date);
 
@@ -486,15 +488,23 @@ public class FormTemplate {
 
 					Date date = default_.getDate(true);
 
-					addBehaviorAnnotation(date, f, dependencys, annotations);
+					addBehaviorAnnotation(date, f, annotations);
 
 					field.setDate(date);
+
+				} else if (f.getType().equals(java.io.File.class)) {
+
+					File file = default_.getFile();
+
+					addBehaviorAnnotation(file, f, annotations);
+
+					field.setFile(file);
 
 				} else if (f.getType().equals(Boolean.class)) {
 
 					Checkbox checkbox = default_.getCheckbox();
 
-					addBehaviorAnnotation(checkbox, f, dependencys, annotations);
+					addBehaviorAnnotation(checkbox, f, annotations);
 
 					field.setCheckbox(checkbox);
 
@@ -512,14 +522,14 @@ public class FormTemplate {
 
 					Select select = default_.getSelect(options);
 
-					addBehaviorAnnotation(select, f, dependencys, annotations);
+					addBehaviorAnnotation(select, f, annotations);
 
 					field.setSelect(select);
 
 				} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
 
 					Join join = default_.getJoin(f.getType().getSimpleName());
-					addBehaviorAnnotation(join, f, dependencys, annotations);
+					addBehaviorAnnotation(join, f, annotations);
 					field.setJoin(join);
 
 					count--;
@@ -529,7 +539,9 @@ public class FormTemplate {
 				count++;
 			}
 
-		} catch (Exception ex) {
+		} catch (
+
+		Exception ex) {
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -537,7 +549,7 @@ public class FormTemplate {
 		return form;
 	}
 
-	private static void addBehaviorAnnotation(Base base, Field field, List<Dependency> dependencys, Annotation[] annotations) {
+	private static void addBehaviorAnnotation(Base base, Field field, Annotation[] annotations) {
 
 		for (Annotation annotation : annotations) {
 
@@ -563,8 +575,8 @@ public class FormTemplate {
 					Position position = new Position(uiPosition.x(), uiPosition.y());
 					base.setPosition(position);
 
-				}  else if (annotation instanceof UIValidation uiValidation) {
-					
+				} else if (annotation instanceof UIValidation uiValidation) {
+
 					UIPattern uiPattern = uiValidation.pattern();
 					UIAsync uiAsync = uiValidation.async();
 					UISync uiSync = uiValidation.sync();
@@ -574,7 +586,7 @@ public class FormTemplate {
 					Sync sync = new Sync(uiSync.syncFunc(), uiSync.syncError());
 
 					Validation validation = createValidationIfNotNull(pattern, async, sync);
-					
+
 					base.setRequired(uiValidation.required());
 					base.setValidation(validation);
 

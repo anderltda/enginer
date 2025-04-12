@@ -13,7 +13,7 @@ public interface Domain<T> {
 	public Id<T> getId();
 	
 	/**
-	 * @param value
+	 * @param id
 	 */
-	public void setId(Id<T> value);
+	public void setId(Id<T> id);
 }

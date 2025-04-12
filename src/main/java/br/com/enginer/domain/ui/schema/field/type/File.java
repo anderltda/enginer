@@ -12,5 +12,4 @@ public class File extends Base {
 	public String getType() {
 		return TYPE;
 	}
-
 }

@@ -2,6 +2,7 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.type.Area;
 import br.com.enginer.domain.ui.schema.field.type.Checkbox;
 import br.com.enginer.domain.ui.schema.field.type.Date;
@@ -176,6 +177,8 @@ public class Default {
 		file.setLabel(label);
 		file.setField(field);
 		file.setValue(value);
+		file.setAction("http://localhost:8081/api/upload");
+		file.setMode(TypeFileUpload.SIMPLE);
 		file.setPosition(position);
 		return file;
 	}

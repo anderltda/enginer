@@ -2,6 +2,7 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
 
 /**
@@ -18,12 +19,13 @@ public abstract class Base {
 	private String format;
 	private String title;
 	private String action;
-	private String mode;
+	private TypeFileUpload mode;
 	private String domain;
 	private String method;
 	private String layoutTarget;
 	private Integer min;
 	private Integer max;
+	private Integer limit;
 	private Boolean required;
 	private Boolean disabled;
 	private Boolean editor;
@@ -33,14 +35,14 @@ public abstract class Base {
 	private Boolean readonly;
 	private Boolean select;
 	private Object value;
-	
+
 	private Position position;
 	private Validation validation;
 	private Autocomplete autocomplete;
-	
+
 	private Class<?> provider;
-	
-	private List<String> files;
+
+	private List<FileUpload> files;
 	private List<Object> options;
 
 	public String getType() {
@@ -171,11 +173,11 @@ public abstract class Base {
 		this.action = action;
 	}
 
-	public String getMode() {
+	public TypeFileUpload getMode() {
 		return mode;
 	}
 
-	public void setMode(String mode) {
+	public void setMode(TypeFileUpload mode) {
 		this.mode = mode;
 	}
 
@@ -210,7 +212,7 @@ public abstract class Base {
 	public void setValidation(Validation validation) {
 		this.validation = validation;
 	}
-	
+
 	public Position getPosition() {
 		return position;
 	}
@@ -227,11 +229,11 @@ public abstract class Base {
 		this.autocomplete = autocomplete;
 	}
 
-	public List<String> getFiles() {
+	public List<FileUpload> getFiles() {
 		return files;
 	}
 
-	public void setFiles(List<String> files) {
+	public void setFiles(List<FileUpload> files) {
 		this.files = files;
 	}
 
@@ -282,5 +284,12 @@ public abstract class Base {
 	public void setSelect(Boolean select) {
 		this.select = select;
 	}
-	
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
 }
