@@ -1,13 +1,14 @@
 package br.com.enginer.domain.ui.schema.instance;
 
+import br.com.enginer.domain.ui.enums.TypeButton;
+import br.com.enginer.domain.ui.enums.TypeButtonState;
+
 /**
  * 
  */
 public class Button {
 
-	public static final String SUBMIT = "submit";
-	public static final String BUTTON = "button";
-	private String type; // 'SUBMIT' | 'BUTTON';
+	private String type;
 	private String label;
 	private String method;
 	private String icon;
@@ -15,25 +16,24 @@ public class Button {
 	private Boolean highlight;
 	private Boolean confirm;
 	private Boolean needsValidation;
-	private String state; // 'btn-primary' | 'btn-complete' | 'btn-success' | 'btn-danger' | 'btn-warning' // | 'btn-default';
+	private String state;
 	private Action action;
 
 	public Button() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
-	public Button(String type) {
+	public Button(TypeButton type) {
 		super();
-		this.type = type;
+		this.type = type.getValue();
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setType(TypeButton type) {
+		this.type = type.getValue();
 	}
 
 	public String getLabel() {
@@ -96,8 +96,8 @@ public class Button {
 		return state;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setState(TypeButtonState state) {
+		this.state = state.getValue();
 	}
 
 	public Action getAction() {

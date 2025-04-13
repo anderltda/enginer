@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UICheckbox {
 	String label();
-	boolean enableSwitch();
+	boolean enableSwitch() default false;
 	boolean disabled() default false;
 }

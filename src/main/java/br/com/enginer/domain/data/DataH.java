@@ -3,16 +3,16 @@ package br.com.enginer.domain.data;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.UIFile;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
-import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
-import br.com.enginer.domain.ui.annotation.field.file.UIFile;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.behavior.UploadFile;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
-@UISubmit(label = "Salvar", method = "salvandoDataH", state = "btn-primary", icon = "save")
+@UISubmit(label = "Salvar", method = "salvandoDataH", icon = "save")
 public class DataH implements Domain<Long> {
 
 	private Id<Long> id;

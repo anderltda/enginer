@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UIFile;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.annotation.field.UIId;
@@ -37,8 +39,6 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
-import br.com.enginer.domain.ui.annotation.field.date.UIDate;
-import br.com.enginer.domain.ui.annotation.field.file.UIFile;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
@@ -52,6 +52,7 @@ import br.com.enginer.domain.ui.annotation.instance.validate.dependency.UIDepend
 import br.com.enginer.domain.ui.annotation.instance.validate.dependency.UIDependsOn;
 import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobalOn;
+import br.com.enginer.domain.ui.enums.TypeButton;
 import br.com.enginer.domain.ui.schema.Form;
 import br.com.enginer.domain.ui.schema.field.behavior.Autocomplete;
 import br.com.enginer.domain.ui.schema.field.behavior.Base;
@@ -179,7 +180,7 @@ public class FormTemplate {
 					conditional = new Conditional();
 					conditional.setLabel(uiConditionalOn.label());
 					conditional.setField(uiConditionalOn.field());
-					conditional.setOperator(uiConditionalOn.operator().getSymbol());
+					conditional.setOperator(uiConditionalOn.operator());
 					conditional.setMatchs(uiConditionalOn.matchs());
 					conditionals.add(conditional);
 				}
@@ -207,7 +208,7 @@ public class FormTemplate {
 			if (object.getClass().isAnnotationPresent(UISubmit.class)) {
 				UISubmit uiSubmit = object.getClass().getAnnotation(UISubmit.class);
 				field = new br.com.enginer.domain.ui.schema.field.Field();
-				button = new Button(Button.SUBMIT);
+				button = new Button(TypeButton.SUBMIT);
 				Method[] methods = uiSubmit.annotationType().getDeclaredMethods();
 				for (Method method : methods) {
 					Object submitObject = ReflectionUtils.get(method.getName(), uiSubmit);
@@ -224,7 +225,7 @@ public class FormTemplate {
 				for (UIButton uiButton : uiButtons) {
 					Method[] methods = uiButton.annotationType().getDeclaredMethods();
 					field = new br.com.enginer.domain.ui.schema.field.Field();
-					button = new Button(Button.BUTTON);
+					button = new Button(TypeButton.BUTTON);
 					for (Method method : methods) {
 						Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 						if (buttonObject instanceof UIAction uiAction) {

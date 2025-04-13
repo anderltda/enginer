@@ -1,7 +1,17 @@
 package br.com.enginer.domain.data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.entitys.EntityStatus;
+import br.com.enginer.domain.ui.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.annotation.field.UIDate;
+import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.UITime;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -9,29 +19,80 @@ public class DataB implements Domain<Long> {
 
 	private Id<Long> id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIValidation(required = true)
+	@UIFilter(label = "Entity Status", field = "name", readonly = true)
+	private EntityStatus entityStatus;
+
+	@UIPosition(x = 2, y = 1)
+	@UICheckbox(label = "Accept - By clicking the 'Get Started!' button, you are creating a Pages account, and you agree to Pages's Terms of Use and Privacy Policy.", enableSwitch = false)
+	private Boolean accept = true;
+
+	@UIPosition(x = 1, y = 2)
+	@UIText(label = "CPF", mask = "000.000.000-00")
+	@UIValidation(required = true)
+	private String cpf;
+
+	@UIPosition(x = 2, y = 2)
+	@UIText(label = "Product Name")
 	private String productName;
 
+	@UIPosition(x = 3, y = 2)
 	private String codeName;
 
+	@UIPosition(x = 1, y = 3)
+	@UIText(label = "Zip Code", mask = "00000-000")
+	@UIValidation(required = true)
+	private String zipCode;
+
+	@UIPosition(x = 2, y = 3)
+	@UIText(label = "Address")
+	@UIValidation(required = true)
 	private String address;
 
-	private Integer fibonacy;
+	@UIPosition(x = 1, y = 4)
+	@UIText(label = "Number")
+	@UIValidation(required = true)
+	private String number;
 
-	private LocalDateTime dateStart;
+	@UIPosition(x = 2, y = 4)
+	@UIText(label = "Neighborhood")
+	@UIValidation(required = true)
+	private String neighborhood;
 
-	private LocalDateTime dateEnd;
+	@UIPosition(x = 1, y = 5)
+	@UIDate(label = "Date Start")
+	@UIValidation(required = true)
+	private LocalDate dateStart;
 
+	@UIPosition(x = 2, y = 5)
+	@UIDate(label = "Date End")
+	@UIValidation(required = true)
+	private LocalDate dateEnd;
+
+	@UIPosition(x = 3, y = 5)
+	@UITime(label = "Time Start")
+	@UIValidation(required = true)
 	private LocalDateTime timeStart;
 
+	@UIPosition(x = 1, y = 6)
+	@UITime(label = "Time End")
+	@UIValidation(required = true)
 	private LocalDateTime timeEnd;
 
+	@UIPosition(x = 2, y = 6)
+	@UIDate(label = "Date Time Start", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIValidation(required = true)
 	private LocalDateTime dateTimeStart;
 
+	@UIPosition(x = 3, y = 6)
+	@UIDate(label = "Date Time End", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIValidation(required = true)
 	private LocalDateTime dateTimeEnd;
 
+	@UIPosition(x = 1, y = 7)
+	@UICheckbox(enableSwitch = true, label = "Other - By clicking the 'Get Started!' button, you are creating a Pages account, and you agree to Pages's Terms of Use and Privacy Policy.")
 	private Boolean other;
-
-	private String specemail;
 
 	private DataC dataC;
 
@@ -43,6 +104,30 @@ public class DataB implements Domain<Long> {
 	@Override
 	public void setId(Id<Long> id) {
 		this.id = id;
+	}
+
+	public EntityStatus getEntityStatus() {
+		return entityStatus;
+	}
+
+	public void setEntityStatus(EntityStatus entityStatus) {
+		this.entityStatus = entityStatus;
+	}
+
+	public Boolean getAccept() {
+		return accept;
+	}
+
+	public void setAccept(Boolean accept) {
+		this.accept = accept;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getProductName() {
@@ -61,6 +146,14 @@ public class DataB implements Domain<Long> {
 		this.codeName = codeName;
 	}
 
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -69,27 +162,35 @@ public class DataB implements Domain<Long> {
 		this.address = address;
 	}
 
-	public Integer getFibonacy() {
-		return fibonacy;
+	public String getNumber() {
+		return number;
 	}
 
-	public void setFibonacy(Integer fibonacy) {
-		this.fibonacy = fibonacy;
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
-	public LocalDateTime getDateStart() {
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
+	public LocalDate getDateStart() {
 		return dateStart;
 	}
 
-	public void setDateStart(LocalDateTime dateStart) {
+	public void setDateStart(LocalDate dateStart) {
 		this.dateStart = dateStart;
 	}
 
-	public LocalDateTime getDateEnd() {
+	public LocalDate getDateEnd() {
 		return dateEnd;
 	}
 
-	public void setDateEnd(LocalDateTime dateEnd) {
+	public void setDateEnd(LocalDate dateEnd) {
 		this.dateEnd = dateEnd;
 	}
 
@@ -131,14 +232,6 @@ public class DataB implements Domain<Long> {
 
 	public void setOther(Boolean other) {
 		this.other = other;
-	}
-
-	public String getSpecemail() {
-		return specemail;
-	}
-
-	public void setSpecemail(String specemail) {
-		this.specemail = specemail;
 	}
 
 	public DataC getDataC() {

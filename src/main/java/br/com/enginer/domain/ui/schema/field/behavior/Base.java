@@ -2,8 +2,8 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
-import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
-import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
+import br.com.enginer.domain.ui.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.behavior.validation.Validation;
 
 /**
@@ -35,7 +35,7 @@ public abstract class Base {
 	private Boolean select;
 	private Object value;
 
-	private TypeDateFormat format;
+	private String format;
 	private TypeFileUpload mode;
 
 	private Position position;
@@ -231,12 +231,12 @@ public abstract class Base {
 		this.value = value;
 	}
 
-	public TypeDateFormat getFormat() {
+	public String getFormat() {
 		return format;
 	}
 
 	public void setFormat(TypeDateFormat format) {
-		this.format = format;
+		this.format = format.getValue();
 	}
 
 	public TypeFileUpload getMode() {

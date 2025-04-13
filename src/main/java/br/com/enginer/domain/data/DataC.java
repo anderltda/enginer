@@ -1,7 +1,21 @@
 package br.com.enginer.domain.data;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import br.com.enginer.domain.entitys.EntityStatus;
+import br.com.enginer.domain.ui.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.annotation.field.UIDate;
+import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UINumber;
+import br.com.enginer.domain.ui.annotation.field.UIRadio;
+import br.com.enginer.domain.ui.annotation.field.UISelect;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.helper.ComboHelper;
+import br.com.enginer.domain.ui.schema.field.behavior.Option;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -9,29 +23,67 @@ public class DataC implements Domain<Long> {
 
 	private Id<Long> id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIText(label = "Product Name")
+	@UIValidation(required = true)
 	private String page;
 
+	@UIPosition(x = 1, y = 1)
+	@UIEmail(label = "E-mail")
+	@UIValidation(required = true)
 	private String email;
 
+	@UIPosition(x = 1, y = 3)
+	@UIValidation(required = true)
+	@UIFilter(label = "Entity Status", field = "name", select = true)
+	private EntityStatus entityStatus;
+
+	@UIPosition(x = 1, y = 4)
+	@UIDate(label = "Date Insert")
+	@UIValidation(required = true)
 	private LocalDate dateInsert;
 
-	private LocalDate dateUpdate;
-
+	@UIPosition(x = 2, y = 4)
+	@UINumber(label = "Number Access", min = 3, max = 20)
+	@UIValidation(required = true)
 	private Integer numberAccess;
 
-	private String mobile;
+	@UIPosition(x = 3, y = 4)
+	@UIDate(label = "Date Update")
+	@UIValidation(required = true)
+	private LocalDate dateUpdate;
 
-	private String whatsStatement;
+	@UIPosition(x = 1, y = 5)
+	@UISelect(label = "Mobiles", multi = true, provider = ComboHelper.class, method = "mobiles")
+	@UIValidation(required = true)
+	private List<Option> mobiles;
 
+	@UIPosition(x = 2, y = 5)
+	@UISelect(label = "Cloud Utilization", provider = ComboHelper.class, method = "clouds")
+	@UIValidation(required = true)
+	private String cloud;
+
+	@UIPosition(x = 3, y = 5)
+	@UISelect(label = "System Operational", provider = ComboHelper.class, method = "osDesktops")
+	@UIValidation(required = true)
 	private String systemOperational;
 
-	private Double variavel;
+	@UIPosition(x = 4, y = 5)
+	@UISelect(label = "Whats OS Mobile?", provider = ComboHelper.class, method = "osMobiles")
+	@UIValidation(required = true)
+	private String whatsStatement;
 
+	@UIPosition(x = 1, y = 6)
+	@UICheckbox(label = "Car - The most common way of upload control. Use any custom button and style you wish?")
 	private Boolean car;
 
+	@UIPosition(x = 2, y = 6)
+	@UICheckbox(label = "Bus - The most common way of upload control. Use any custom button and style you wish?")
 	private Boolean bus;
-
-	private String cloud;
+	
+	@UIPosition(x = 3, y = 6)
+	@UIRadio(label = "Have SO desktop?", provider = ComboHelper.class, method = "confirm")
+	private Double variavel;
 
 	private DataD dataD;
 
@@ -61,6 +113,14 @@ public class DataC implements Domain<Long> {
 		this.email = email;
 	}
 
+	public EntityStatus getEntityStatus() {
+		return entityStatus;
+	}
+
+	public void setEntityStatus(EntityStatus entityStatus) {
+		this.entityStatus = entityStatus;
+	}
+
 	public LocalDate getDateInsert() {
 		return dateInsert;
 	}
@@ -85,12 +145,12 @@ public class DataC implements Domain<Long> {
 		this.numberAccess = numberAccess;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public List<Option> getMobiles() {
+		return mobiles;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setMobiles(List<Option> mobiles) {
+		this.mobiles = mobiles;
 	}
 
 	public String getWhatsStatement() {

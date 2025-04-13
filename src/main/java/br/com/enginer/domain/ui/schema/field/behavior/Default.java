@@ -2,8 +2,8 @@ package br.com.enginer.domain.ui.schema.field.behavior;
 
 import java.util.List;
 
-import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
-import br.com.enginer.domain.ui.annotation.field.file.TypeFileUpload;
+import br.com.enginer.domain.ui.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.type.Area;
 import br.com.enginer.domain.ui.schema.field.type.Checkbox;
 import br.com.enginer.domain.ui.schema.field.type.Date;

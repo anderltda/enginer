@@ -2,6 +2,13 @@ package br.com.enginer.domain.data;
 
 import java.math.BigInteger;
 
+import br.com.enginer.domain.ui.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UINumber;
+import br.com.enginer.domain.ui.annotation.field.UISelect;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.helper.ComboHelper;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -9,31 +16,69 @@ public class DataD implements Domain<Long> {
 
 	private Id<Long> id;
 
+	@UIPosition(x = 1, y = 1)
+	@UINumber(label = "Code Protocoll")
+	@UIValidation(required = true)
 	private String codeProtocoll;
 
+	@UIPosition(x = 2, y = 1)
+	@UISelect(label = "Number Protocoll", provider = ComboHelper.class, method = "numbers")
+	@UIValidation(required = true)
 	private Long numberProtocoll;
 
+	@UIPosition(x = 3, y = 1)
+	@UINumber(label = "Number Ascii")
+	@UIValidation(required = true)
 	private Short numberAscii;
 
+	@UIPosition(x = 4, y = 1)
+	@UISelect(label = "Number Agent", provider = ComboHelper.class, method = "numbers")
+	@UIValidation(required = true)
 	private Integer numberAgent;
 
+	@UIPosition(x = 1, y = 2)
+	@UINumber(label = "numberChip")
+	@UIValidation(required = true)
 	private BigInteger numberChip;
 
+	@UIPosition(x = 3, y = 2)
+	@UINumber(label = "leadAccess")
+	@UIValidation(required = true)
 	private BigInteger leadAccess;
 
+	@UIPosition(x = 1, y = 3)
+	@UIValidation(required = true)
 	private String possibly;
 
+	@UIPosition(x = 2, y = 3)
+	@UIEmail(label = "Owner E-mail")
+	@UIValidation(required = true)
 	private String emailOwner;
 
-	private Boolean privacy;
+	@UIPosition(x = 1, y = 4)
+	@UICheckbox(label = "Privacy Policy - By clicking the 'Get Started!' button, you are creating a Pages account.")
+	private Boolean privacy = true;
 
-	private Boolean approved;
+	@UIPosition(x = 2, y = 4)
+	@UICheckbox(label = "Approved - By clicking the 'Get Started!' button, you are creating a Pages account.")
+	private Boolean approved = true;
 
-	private Boolean success;
-
+	@UIPosition(x = 1, y = 5)
+	@UISelect(label = "Choose console?", provider = ComboHelper.class, method = "consoles")
+	@UIValidation(required = true)
 	private String console;
 
+	@UIPosition(x = 2, y = 5)
+	@UIValidation(required = true)
 	private String animal;
+
+	@UIPosition(x = 1, y = 6)
+	@UICheckbox(label = "Success - By clicking the 'Get Started!' button, you are creating a Pages account.")
+	private Boolean success;
+
+	@UIPosition(x = 2, y = 6)
+	@UICheckbox(label = "Policy - By clicking the 'Get Started!' button, you are creating a Pages account.")
+	private Boolean policy;
 
 	private DataE dataE;
 
@@ -127,14 +172,6 @@ public class DataD implements Domain<Long> {
 		this.approved = approved;
 	}
 
-	public Boolean getSuccess() {
-		return success;
-	}
-
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-
 	public String getConsole() {
 		return console;
 	}
@@ -149,6 +186,22 @@ public class DataD implements Domain<Long> {
 
 	public void setAnimal(String animal) {
 		this.animal = animal;
+	}
+
+	public Boolean getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(Boolean success) {
+		this.success = success;
+	}
+
+	public Boolean getPolicy() {
+		return policy;
+	}
+
+	public void setPolicy(Boolean policy) {
+		this.policy = policy;
 	}
 
 	public DataE getDataE() {

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
@@ -15,14 +16,11 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
-import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
-import br.com.enginer.domain.ui.annotation.field.date.UIDate;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
-import br.com.enginer.domain.ui.annotation.instance.validate.conditional.TypeOperator;
 import br.com.enginer.domain.ui.annotation.instance.validate.conditional.UIConditional;
 import br.com.enginer.domain.ui.annotation.instance.validate.conditional.UIConditionalOn;
 import br.com.enginer.domain.ui.annotation.instance.validate.custom.UICustom;
@@ -31,6 +29,8 @@ import br.com.enginer.domain.ui.annotation.instance.validate.dependency.UIDepend
 import br.com.enginer.domain.ui.annotation.instance.validate.dependency.UIDependsOn;
 import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobalOn;
+import br.com.enginer.domain.ui.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.enums.TypeOperator;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -39,9 +39,9 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
  */
 @UITitle("Entity One -> Stream")
 @UIButtonAction({
-	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", confirm = true, needsValidation = true, state = "btn-primary", action = @UIAction(method = "onSubmit"))
+	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", confirm = true, needsValidation = true, action = @UIAction(method = "onSubmit"))
 })
-@UISubmit(label = "Editar", method = "backendJavaSubmit", state = "btn-default", icon = "edit", needsValidation = true)
+@UISubmit(label = "Editar", method = "backendJavaSubmit", icon = "edit", needsValidation = true)
 @UIGlobal({ @UIGlobalOn(function = "customEntitySumValuesValidator",       message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!")})
 @UICustom({ @UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = {	"entityOne.entityTwo.cost", "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.amount", "entityOne.entityTwo.entityTree.entityFour.attribute", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor"} )})
 @UIConditional({
@@ -92,7 +92,7 @@ public class EntityOne implements Domain<Long> {
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
-	@UIDate(label = "Birth Date", format = TypeDateFormat.DATE_FORMAT, showtime = false)
+	@UIDate(label = "Birth Date")
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)

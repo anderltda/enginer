@@ -1,4 +1,4 @@
-package br.com.enginer.domain.ui.annotation.field.file;
+package br.com.enginer.domain.ui.enums;
 
 public enum TypeFileUpload {
 

@@ -2,6 +2,7 @@ package br.com.enginer.domain.data;
 
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
@@ -10,7 +11,6 @@ import br.com.enginer.domain.ui.annotation.field.UIRadio;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.UITime;
-import br.com.enginer.domain.ui.annotation.field.behavior.Combo;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
@@ -18,8 +18,8 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
-import br.com.enginer.domain.ui.annotation.field.date.TypeDateFormat;
-import br.com.enginer.domain.ui.annotation.field.date.UIDate;
+import br.com.enginer.domain.ui.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.helper.ComboHelper;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -91,19 +91,18 @@ public class DataA implements Domain<Long> {
 	private String phone;
 
 	@UIPosition(x = 2, y = 5)
-	@UIText(label = "Zip Code", mask = "00000-000")
+	@UINumber(label = "Fibonacy")
 	@UIValidation(required = true)
-	private String zipCode;
+	private Integer fibonacy;
 
 	@UIPosition(x = 3, y = 5)
-	@UIText(label = "CPF", mask = "000.000.000-00")
-	@UIValidation(required = true)
-	private String cpf;
-
-	@UIPosition(x = 4, y = 5)
 	@UIText(label = "CNPJ", mask = "000.000.000/0000-00")
 	@UIValidation(required = true)
 	private String cnpj;
+
+	@UIPosition(x = 4, y = 5)
+	@UIEmail(label = "Spec E-mail")
+	private String specemail;
 
 	@UIPosition(x = 1, y = 6)
 	@UIDecimal(label = "Money", placeholder = "Ex. 1,00", icon = "keyboard")
@@ -116,19 +115,19 @@ public class DataA implements Domain<Long> {
 	private Double cost;
 
 	@UIPosition(x = 1, y = 7)
-	@UISelect(label = "Drinks", multi = false, provider = Combo.class, method = "drinks")
+	@UISelect(label = "Drinks", multi = false, provider = ComboHelper.class, method = "drinks")
 	@UIValidation(required = true)
 	private String drink;
 
 	@UIPosition(x = 2, y = 7)
-	@UISelect(label = "Color", multi = false, provider = Combo.class, method = "colors")
+	@UISelect(label = "Color", multi = false, provider = ComboHelper.class, method = "colors")
 	@UIValidation(required = true)
 	private String color;
 
 	@UIPosition(x = 3, y = 7)
-	@UIRadio(label = "This statement is correct?", provider = Combo.class, method = "question")
+	@UIRadio(label = "This statement is correct?", provider = ComboHelper.class, method = "question")
 	@UIValidation(required = true)
-	private String accept;
+	private String statement;
 
 	private DataB dataB;
 
@@ -230,20 +229,12 @@ public class DataA implements Domain<Long> {
 		this.phone = phone;
 	}
 
-	public String getZipCode() {
-		return zipCode;
+	public Integer getFibonacy() {
+		return fibonacy;
 	}
 
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setFibonacy(Integer fibonacy) {
+		this.fibonacy = fibonacy;
 	}
 
 	public String getCnpj() {
@@ -252,6 +243,14 @@ public class DataA implements Domain<Long> {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+
+	public String getSpecemail() {
+		return specemail;
+	}
+
+	public void setSpecemail(String specemail) {
+		this.specemail = specemail;
 	}
 
 	public Double getMoney() {
@@ -286,12 +285,12 @@ public class DataA implements Domain<Long> {
 		this.color = color;
 	}
 
-	public String getAccept() {
-		return accept;
+	public String getStatement() {
+		return statement;
 	}
 
-	public void setAccept(String accept) {
-		this.accept = accept;
+	public void setStatement(String statement) {
+		this.statement = statement;
 	}
 
 	public DataB getDataB() {
@@ -301,5 +300,4 @@ public class DataA implements Domain<Long> {
 	public void setDataB(DataB dataB) {
 		this.dataB = dataB;
 	}
-
 }

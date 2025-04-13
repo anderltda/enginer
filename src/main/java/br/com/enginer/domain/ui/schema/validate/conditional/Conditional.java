@@ -1,5 +1,7 @@
 package br.com.enginer.domain.ui.schema.validate.conditional;
 
+import br.com.enginer.domain.ui.enums.TypeOperator;
+
 /**
  * 
  */
@@ -7,7 +9,7 @@ public class Conditional {
 
 	private String label;
 	private String field;
-	private String operator; // '>' | '<' | '>=' | '<=' | '===' | '!==';
+	private String operator;
 	private String[] matchs;
 
 	public String getLabel() {
@@ -30,8 +32,8 @@ public class Conditional {
 		return operator;
 	}
 
-	public void setOperator(String operator) {
-		this.operator = operator;
+	public void setOperator(TypeOperator operator) {
+		this.operator = operator.getValue();
 	}
 
 	public String[] getMatchs() {

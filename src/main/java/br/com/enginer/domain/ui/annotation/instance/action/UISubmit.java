@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.enginer.domain.ui.enums.TypeButtonState;
+
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -13,7 +15,7 @@ public @interface UISubmit {
 	String label();
 	String method();
 	String icon() default "";
-	String state() default "btn-primary"; //'btn-primary' | 'btn-complete' | 'btn-success' | 'btn-danger' | 'btn-warning' | 'btn-default';
+	TypeButtonState state() default TypeButtonState.BTN_STATE_PRIMARY; 
 	boolean disabled() default false;
 	boolean highlight() default false;
 	boolean confirm() default false;

@@ -1,9 +1,11 @@
-package br.com.enginer.domain.ui.annotation.field.file;
+package br.com.enginer.domain.ui.annotation.field;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import br.com.enginer.domain.ui.enums.TypeFileUpload;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

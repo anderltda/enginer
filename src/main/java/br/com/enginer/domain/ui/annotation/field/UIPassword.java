@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UIPassword {
 	String label();
-	String icon() default "";
+	String icon() default "shield_lock";
 	String placeholder() default "";
 	int min() default 4;
 	int max() default 20;

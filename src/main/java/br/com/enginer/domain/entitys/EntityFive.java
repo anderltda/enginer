@@ -10,6 +10,7 @@ import br.com.enginer.domain.ui.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.enums.TypeButtonState;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
 
@@ -18,7 +19,7 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
  */
 @UITitle("Entity Five -> Stream")
 @UIButtonAction({
-	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", needsValidation = true, state = "btn-complete", action = @UIAction(method = "onSubmit"))
+	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", needsValidation = true, state = TypeButtonState.BTN_STATE_COMPLETE, action = @UIAction(method = "onSubmit"))
 })
 @UISubmit(label = "Editar", method = "submitBackEnd()", icon = "edit", needsValidation = true)
 public class EntityFive implements Domain<String> {
