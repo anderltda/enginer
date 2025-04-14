@@ -1,29 +1,51 @@
 package br.com.enginer.domain.data;
 
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UIId;
+import br.com.enginer.domain.ui.annotation.field.UITextArea;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataG implements Domain<Long> {
+public class DataG extends DomainAbstract<DataG, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
+	@UIPosition(x = 1, y = 1)
 	private String nickName;
 
+	@UIPosition(x = 2, y = 1)
+	@UIEmail(label = "User loging")
+	@UIValidation(required = true)
 	private String userLogin;
 
+	@UIPosition(x = 3, y = 1)
+	@UIValidation(required = true)
 	private Integer age;
 
+	@UIPosition(x = 4, y = 1)
+	@UIValidation(required = true)
 	private Integer numberCode;
+	
+	@UIPosition(x = 1, y = 3)
+	@UITextArea(label = "Area Edit", editor = true)
+	@UIValidation(required = true)
+	private String areaEdit;
 
 	private DataH dataH;
+	
+	public DataG() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

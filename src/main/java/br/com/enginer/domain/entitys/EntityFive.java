@@ -1,6 +1,7 @@
 package br.com.enginer.domain.entitys;
 
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
@@ -11,8 +12,7 @@ import br.com.enginer.domain.ui.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.enums.TypeButtonState;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
 /**
  * 
@@ -22,9 +22,10 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
 	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", needsValidation = true, state = TypeButtonState.BTN_STATE_COMPLETE, action = @UIAction(method = "onSubmit"))
 })
 @UISubmit(label = "Editar", method = "submitBackEnd()", icon = "edit", needsValidation = true)
-public class EntityFive implements Domain<String> {
+public class EntityFive extends DomainAbstract<EntityFive, String> {
 
-	private Id<String> id;
+	@UIId
+	private String id;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100)
@@ -39,13 +40,17 @@ public class EntityFive implements Domain<String> {
 	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
 
+	public EntityFive() {
+		this.setDomain(this);
+	}
+	
 	@Override
-	public Id<String> getId() {
+	public String getId() {
 		return id;
 	}
 	
 	@Override
-	public void setId(Id<String> id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

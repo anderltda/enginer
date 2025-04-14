@@ -2,9 +2,12 @@ package br.com.enginer.domain.data;
 
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.entitys.EntityOne;
 import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIPassword;
 import br.com.enginer.domain.ui.annotation.field.UIRadio;
@@ -20,12 +23,12 @@ import br.com.enginer.domain.ui.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.helper.ComboHelper;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataA implements Domain<Long> {
+public class DataA extends DomainAbstract<DataA, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "First Name")
@@ -120,6 +123,10 @@ public class DataA implements Domain<Long> {
 	private String drink;
 
 	@UIPosition(x = 2, y = 7)
+	@UIFilter(label = "Entity One", field = "name")
+	private EntityOne entityOne;
+	
+	@UIPosition(x = 1, y = 8)
 	@UISelect(label = "Color", multi = false, provider = ComboHelper.class, method = "colors")
 	@UIValidation(required = true)
 	private String color;
@@ -130,14 +137,18 @@ public class DataA implements Domain<Long> {
 	private String statement;
 
 	private DataB dataB;
+	
+	public DataA() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -300,4 +311,14 @@ public class DataA implements Domain<Long> {
 	public void setDataB(DataB dataB) {
 		this.dataB = dataB;
 	}
+
+	public EntityOne getEntityOne() {
+		return entityOne;
+	}
+
+	public void setEntityOne(EntityOne entityOne) {
+		this.entityOne = entityOne;
+	}
+	
+	
 }

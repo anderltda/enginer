@@ -45,7 +45,7 @@ public abstract class Base {
 	private Class<?> provider;
 
 	private List<UploadFile> files;
-	private List<Object> options;
+	private List<?> options;
 
 	public String getType() {
 		return type;
@@ -287,11 +287,11 @@ public abstract class Base {
 		this.files = files;
 	}
 
-	public List<Object> getOptions() {
+	public List<?> getOptions() {
 		return options;
 	}
 
-	public void setOptions(List<Object> options) {
+	public void setOptions(List<?> options) {
 		this.options = options;
 	}
 

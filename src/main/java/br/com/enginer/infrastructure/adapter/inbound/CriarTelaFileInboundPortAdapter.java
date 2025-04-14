@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.enginer.domain.rule.port.RuleInboundPort;
+import br.com.enginer.domain.ui.execute.port.ExecuteInboundPort;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
@@ -31,13 +31,13 @@ public class CriarTelaFileInboundPortAdapter {
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
 
 	private final ObjectMapper objectMapper;
-	private final RuleInboundPort ruleInboundPort;
+	private final ExecuteInboundPort ruleInboundPort;
 	private final TrackingProvider trackingProvider;
 
 	// Caminho base no macOS
 	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, RuleInboundPort ruleInboundPort,
+	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, ExecuteInboundPort ruleInboundPort,
 			TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
 		this.ruleInboundPort = ruleInboundPort;
@@ -59,8 +59,6 @@ public class CriarTelaFileInboundPortAdapter {
 
 		try {
 			Thread.sleep(1000);
-			ruleInboundPort.executeRuleAcaoCivil(null);
-			ruleInboundPort.executeRuleFraude(null);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			LOGGER.error("Erro ao executar regras", e);
@@ -93,8 +91,6 @@ public class CriarTelaFileInboundPortAdapter {
 
 		try {
 			Thread.sleep(0);
-			ruleInboundPort.executeRuleAcaoCivil(null);
-			ruleInboundPort.executeRuleFraude(null);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			LOGGER.error("Erro ao executar regras", e);

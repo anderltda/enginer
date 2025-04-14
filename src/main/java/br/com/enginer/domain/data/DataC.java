@@ -8,6 +8,7 @@ import br.com.enginer.domain.ui.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UIRadio;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
@@ -16,12 +17,12 @@ import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.helper.ComboHelper;
 import br.com.enginer.domain.ui.schema.field.behavior.Option;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataC implements Domain<Long> {
+public class DataC extends DomainAbstract<DataC, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Product Name")
@@ -86,14 +87,18 @@ public class DataC implements Domain<Long> {
 	private Double variavel;
 
 	private DataD dataD;
+	
+	public DataC() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

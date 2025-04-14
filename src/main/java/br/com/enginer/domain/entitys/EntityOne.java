@@ -31,8 +31,7 @@ import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.enums.TypeOperator;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
 /**
  * 
@@ -57,10 +56,10 @@ import br.com.enginer.domain.ui.schema.instance.Domain;
 	@UIDependsOn(label = "Fruit",  field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
 	@UIDependsOn(label = "Status", field = "entityOne.entityStatus", 						  depends = { "entityOne.entityTwo.entityStatus" }) 
 })
-public class EntityOne implements Domain<Long> {
+public class EntityOne extends DomainAbstract<EntityOne, Long> {
 
 	@UIId
-	private Id<Long> id;
+	private Long id;
 
 	@UIText(label = "Name")
 	@UIAutoCompleteSuggestion(suggestions = { "anderson", "pedro" })
@@ -100,14 +99,18 @@ public class EntityOne implements Domain<Long> {
 	private LocalDateTime prohibitedDateTime;
 
 	private EntityTwo entityTwo;
+	
+	public EntityOne() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

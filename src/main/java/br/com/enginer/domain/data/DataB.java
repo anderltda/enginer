@@ -3,21 +3,23 @@ package br.com.enginer.domain.data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.entitys.EntityOne;
 import br.com.enginer.domain.entitys.EntityStatus;
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UIText;
 import br.com.enginer.domain.ui.annotation.field.UITime;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.enums.TypeDateFormat;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataB implements Domain<Long> {
+public class DataB extends DomainAbstract<DataB, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIValidation(required = true)
@@ -39,13 +41,17 @@ public class DataB implements Domain<Long> {
 
 	@UIPosition(x = 3, y = 2)
 	private String codeName;
-
+	
 	@UIPosition(x = 1, y = 3)
+	@UIFilter(label = "Entity One", field = "name")
+	private EntityOne entityOne;
+
+	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Zip Code", mask = "00000-000")
 	@UIValidation(required = true)
 	private String zipCode;
 
-	@UIPosition(x = 2, y = 3)
+	@UIPosition(x = 1, y = 4)
 	@UIText(label = "Address")
 	@UIValidation(required = true)
 	private String address;
@@ -95,14 +101,19 @@ public class DataB implements Domain<Long> {
 	private Boolean other;
 
 	private DataC dataC;
+	
+	public DataB() {
+		this.setDomain(this);
+	}
+
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -240,6 +251,14 @@ public class DataB implements Domain<Long> {
 
 	public void setDataC(DataC dataC) {
 		this.dataC = dataC;
+	}
+
+	public EntityOne getEntityOne() {
+		return entityOne;
+	}
+
+	public void setEntityOne(EntityOne entityOne) {
+		this.entityOne = entityOne;
 	}
 
 }

@@ -1,7 +1,10 @@
 package br.com.enginer.infrastructure.configuration;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.UUID;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -12,9 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.annotation.instance.UIDomain;
-import br.com.enginer.domain.ui.schema.field.type.Id;
 import br.com.enginer.domain.ui.schema.instance.Domain;
-import br.com.enginer.domain.utils.ReflectionUtils;
 import br.com.enginer.domain.utils.StringsUtils;
 import br.com.enginer.infrastructure.helper.PackageScannerHelper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,47 +38,64 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 	 *
 	 */
 	@Override
-    @SuppressWarnings("unchecked")
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-	    HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
-	    String domainName = request.getHeader("X-UIDomain");
-	    String rawId = extractIdFromUri(request.getRequestURI());
+		String domainName = request.getHeader("X-UIDomain");
+		String rawId = extractIdFromUri(request.getRequestURI());
 
-	    if (domainName != null) {
-	        // Buscar classe pelo nome
-	        Class<?> clazz = PackageScannerHelper.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
-	        if (clazz != null) {
-	            // Criar instância
-	            Domain<?> domainInstance = (Domain<?>) clazz.getDeclaredConstructor().newInstance();
-	            if (rawId != null) {
-	                // Descobre o tipo genérico do ID
-	                Field idField = clazz.getDeclaredField("id");
-	                ParameterizedType genericType = (ParameterizedType) idField.getGenericType();
-	                Class<?> expectedType = (Class<?>) genericType.getActualTypeArguments()[0];
-	                // Converte rawId para o tipo esperado (ex: Long, UUID, etc...)
-	                Id<?> typedId = ReflectionUtils.convertIdToExpectedType(Id.of(rawId), expectedType);
-	                // Cast seguro e atribuição
-	                Domain<Object> casted = (Domain<Object>) domainInstance;
-	                casted.setId((Id<Object>) typedId);
-	            }
-	            return domainInstance;
-	        }
-	    }
-	    return null;
+		if (domainName != null) {
+			Class<?> clazz = PackageScannerHelper.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
+
+			if (clazz != null) {
+				
+				if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+				    throw new IllegalArgumentException("Classe " + clazz.getName() + " não pode ser instanciada diretamente.");
+				}
+
+				Constructor<?> constructor = clazz.getDeclaredConstructor();
+				constructor.setAccessible(true); // só se for necessário
+				Domain<?> domainInstance = (Domain<?>) constructor.newInstance();
+				
+				if (rawId != null && !rawId.isEmpty()) {
+					Field idField = clazz.getDeclaredField("id");
+					Class<?> idType = idField.getType();
+					Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), idType);
+					Object typedId = convertId(rawId, idType);
+					setIdMethod.invoke(domainInstance, typedId);
+				}
+
+				return domainInstance;
+			}
+		}
+		return null;
 	}
-	
+
 	/**
 	 * @param uri
 	 * @return
 	 */
 	private String extractIdFromUri(String uri) {
-	    String[] parts = uri.split("/");
-	    if (parts.length >= 1) {
-	        String last = parts[parts.length - 1];
-	        return last.matches("[a-zA-Z0-9\\-]+") && !last.equalsIgnoreCase("form") ? last : null;
-	    }
-	    return null;
+		String[] parts = uri.split("/");
+		if (parts.length >= 1) {
+			String last = parts[parts.length - 1];
+			return last.matches("[a-zA-Z0-9\\-]+") && !last.equalsIgnoreCase("form") ? last : null;
+		}
+		return null;
+	}
+	
+	/**
+	 * @param rawId
+	 * @param targetType
+	 * @return
+	 */
+	private Object convertId(String rawId, Class<?> targetType) {
+		if (targetType == Long.class) return Long.valueOf(rawId);
+		if (targetType == Integer.class) return Integer.valueOf(rawId);
+		if (targetType == String.class) return rawId;
+		if (targetType == UUID.class) return UUID.fromString(rawId);
+		throw new IllegalArgumentException("Tipo de ID não suportado: " + targetType);
 	}
 }

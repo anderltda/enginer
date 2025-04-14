@@ -5,21 +5,22 @@ import java.util.List;
 
 import br.com.enginer.domain.ui.annotation.field.UIDate;
 import br.com.enginer.domain.ui.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.helper.ComboHelper;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
 /**
  * 
  */
 @UITitle("Entity Two -> Stream")
-public class EntityTwo implements Domain<String> {
+public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 
-	private Id<String> id;
+	@UIId
+	private String id;
 
 	@UISelect(label = "Colors", multi = true, provider = ComboHelper.class, method = "colors")
 	private List<String> color;
@@ -32,18 +33,22 @@ public class EntityTwo implements Domain<String> {
 	private Double cost;
 
 	@UIValidation(required = true)
-	@UIFilter(label = "Entity Status", field = "name", select = false)
+	@UIFilter(label = "Entity Status", field = "name", select = true)
 	private EntityStatus entityStatus;
 
 	private EntityTree entityTree;
+	
+	public EntityTwo() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<String> getId() {
+	public String getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<String> id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

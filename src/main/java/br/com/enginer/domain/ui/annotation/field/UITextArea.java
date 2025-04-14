@@ -9,8 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface UITextArea {
 	String label();
-	String icon();
-	String placeholder();
-	boolean disabled();
-	boolean editor();
+	String placeholder() default "";
+	boolean disabled() default false;
+	boolean editor() default false;
 }

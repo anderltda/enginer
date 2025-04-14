@@ -4,17 +4,18 @@ import java.math.BigInteger;
 
 import br.com.enginer.domain.ui.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.UINumber;
 import br.com.enginer.domain.ui.annotation.field.UISelect;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.helper.ComboHelper;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataD implements Domain<Long> {
+public class DataD extends DomainAbstract<DataD, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
 	@UIPosition(x = 1, y = 1)
 	@UINumber(label = "Code Protocoll")
@@ -81,14 +82,18 @@ public class DataD implements Domain<Long> {
 	private Boolean policy;
 
 	private DataE dataE;
+	
+	public DataD() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

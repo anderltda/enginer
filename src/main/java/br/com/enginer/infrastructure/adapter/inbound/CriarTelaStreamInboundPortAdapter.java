@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.enginer.domain.ui.annotation.instance.UIDomain;
+import br.com.enginer.domain.ui.execute.usercase.ExecuteUserCase;
 import br.com.enginer.domain.ui.schema.Form;
 import br.com.enginer.domain.ui.schema.instance.Domain;
-import br.com.enginer.domain.ui.template.form.FormTemplate;
 
 /**
  * 
@@ -21,6 +21,12 @@ import br.com.enginer.domain.ui.template.form.FormTemplate;
 public class CriarTelaStreamInboundPortAdapter {
 
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaStreamInboundPortAdapter.class);
+	
+	private final ExecuteUserCase ruleUserCase;
+
+	public CriarTelaStreamInboundPortAdapter(ExecuteUserCase ruleUserCase) {
+		this.ruleUserCase = ruleUserCase;
+	}
 
 	/**
 	 * @param domain
@@ -33,7 +39,7 @@ public class CriarTelaStreamInboundPortAdapter {
 
 			LOGGER.info("Executando domínio: {}", domain);
 
-			Form form = FormTemplate.create(domain);
+			Form form = ruleUserCase.form(domain);
 
 			return ResponseEntity.ok(form);
 

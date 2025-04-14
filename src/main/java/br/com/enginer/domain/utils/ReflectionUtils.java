@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.schema.field.type.Id;
 
 public class ReflectionUtils {
@@ -81,7 +82,7 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static boolean extractIsJavaLangType(Class<?> clazz) {
-		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class)
+		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class) || clazz.equals(RepositoryOutboundPort.class)
 				|| clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
 	}
 

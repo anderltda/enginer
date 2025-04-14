@@ -1,32 +1,39 @@
 package br.com.enginer.domain.entitys;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.instance.UITitle;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
 /**
  * 
  */
 @UITitle("Entity Status -> Stream")
-public class EntityStatus implements Domain<String> {
+public class EntityStatus extends DomainAbstract<EntityStatus, String> {
 
-	private Id<String> id;
+	@UIId
+	private String id;
+	
 	private String name;
+	
 	private Integer status;
+	
 	private Boolean ativo;
+	
 	private LocalDateTime startDateTime;
+	
+	public EntityStatus() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<String> getId() {
+	public String getId() {
 		return id;
 	}
-	
+
 	@Override
-	public void setId(Id<String> id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -60,25 +67,6 @@ public class EntityStatus implements Domain<String> {
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = startDateTime;
-	}
-	
-	public List<Object> options() {
-		
-		List<Object> options = new ArrayList<>();
-		
-		EntityStatus entityStatus = null;
-		
-		for (int i = 0; i < 10; i++) {
-			 entityStatus = new EntityStatus();
-			 entityStatus.setAtivo(true);
-			 entityStatus.setId(Id.of(String.valueOf(i)));
-			 entityStatus.setName("Entity Status " + i);
-			 entityStatus.setStartDateTime(LocalDateTime.now());
-			 entityStatus.setStatus(1);
-			 options.add(entityStatus);
-		}
-		
-		return options;
 	}
 
 }

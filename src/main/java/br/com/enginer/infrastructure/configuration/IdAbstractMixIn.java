@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * 
  */
-public abstract class IdAbstract {
+public abstract class IdAbstractMixIn {
 
 	@JsonValue
 	abstract Object getValue();

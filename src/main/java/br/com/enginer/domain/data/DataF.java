@@ -1,39 +1,71 @@
 package br.com.enginer.domain.data;
 
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.annotation.field.UIId;
+import br.com.enginer.domain.ui.annotation.field.UISelect;
+import br.com.enginer.domain.ui.annotation.field.UIText;
+import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.annotation.field.behavior.autocomplete.UIAutoComplete;
+import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.helper.ComboHelper;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
-public class DataF implements Domain<Long> {
+public class DataF extends DomainAbstract<DataF, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIText(label = "Animal Name", min = 4, max = 50)
+	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIValidation(required = true)
 	private String computer;
 
+	@UIPosition(x = 2, y = 1)
+	@UISelect(label = "Whats desktop?", provider = ComboHelper.class, method = "osDesktops")
+	@UIValidation(required = true)
 	private String desktop;
 
+	@UIPosition(x = 3, y = 1)
+	@UIValidation(required = true)
 	private Integer cell;
 
+	@UIPosition(x = 4, y = 1)
+	@UIValidation(required = true)
 	private Short row;
 
+	@UIPosition(x = 1, y = 2)
+	@UIValidation(required = true)
 	private String system;
 
+	@UIPosition(x = 2, y = 2)
+	@UIValidation(required = true)
 	private String middleName;
 
+	@UIPosition(x = 3, y = 2)
+	@UIValidation(required = true)
 	private String brand;
 
-	private StringBuilder area;
-
+	@UIPosition(x = 3, y = 2)
+	@UIValidation(required = true)
 	private String motocycle;
 
+	@UIPosition(x = 1, y = 3)
+	@UIValidation(required = true)
+	private StringBuilder area;
+
 	private DataG dataG;
+	
+	public DataF() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

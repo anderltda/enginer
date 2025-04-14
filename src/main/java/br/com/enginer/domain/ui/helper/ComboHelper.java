@@ -146,6 +146,15 @@ public class ComboHelper {
 		options.add(new Option("0", 0));
 		return options;
 	}
+	
+	public List<Option> indicadores() {
+		List<Option> options = new ArrayList<>();
+		options.add(new Option("Indicador 11", 11));
+		options.add(new Option("Indicador 22", 22));
+		options.add(new Option("Indicador 33", 33));
+		options.add(new Option("Indicador 44", 44));
+		return options;
+	}
 
 	public List<Option> question() {
 		List<Option> options = new ArrayList<>();

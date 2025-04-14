@@ -3,38 +3,54 @@ package br.com.enginer.domain.data;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.enginer.domain.ui.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.annotation.field.UIFile;
+import br.com.enginer.domain.ui.annotation.field.UIId;
 import br.com.enginer.domain.ui.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.schema.field.behavior.UploadFile;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.Domain;
+import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
 
 @UISubmit(label = "Salvar", method = "salvandoDataH", icon = "save")
-public class DataH implements Domain<Long> {
+public class DataH extends DomainAbstract<DataH, Long> {
 
-	private Id<Long> id;
+	@UIId
+	private Long id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIValidation(required = true)
+	@UICheckbox(label = "<span>Check</span> - yourname.pages.com (this can be changed later)?")
 	private Boolean check;
 
+	@UIPosition(x = 2, y = 1)
+	@UIValidation(required = true)
 	private String medium;
 
+	@UIPosition(x = 3, y = 1)
+	@UIValidation(required = true)
 	private String loss;
 
+	@UIValidation(required = true)
 	private Integer control;
 
+	@UIValidation(required = true)
 	private Integer option;
 
+	@UIValidation(required = true)
 	private Integer command;
 
+	@UIValidation(required = true)
 	private Integer shift;
 
+	@UIValidation(required = true)
 	private Double capsValue;
 
+	@UIValidation(required = true)
 	private Double tabValue;
 
+	@UIValidation(required = true)
 	private LocalDate dateMemory;
 
 	@UIPosition(x = 1, y = 12)
@@ -49,18 +65,17 @@ public class DataH implements Domain<Long> {
 	@UIFile(label = "Image <span class='semi-bold'>List</span>", title = "Have a horizontal list of image uploader as you need, you can limit the type and size of the files you wish by using <code>Limit = 2</code> and <code>FileType = 'image/png'</code>.", mode = TypeFileUpload.LIST)
 	private List<UploadFile> lists;
 
-	@UIValidation(required = true)
-	@UIPosition(x = 2, y = 13)
-	@UIFile(label = "Drag n' drop uploader", mode = TypeFileUpload.DRAG_DROP)
-	private List<UploadFile> dragdrops;
+	public DataH() {
+		this.setDomain(this);
+	}
 
 	@Override
-	public Id<Long> getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(Id<Long> id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -166,13 +181,5 @@ public class DataH implements Domain<Long> {
 
 	public void setLists(List<UploadFile> lists) {
 		this.lists = lists;
-	}
-
-	public List<UploadFile> getDragdrops() {
-		return dragdrops;
-	}
-
-	public void setDragdrops(List<UploadFile> dragdrops) {
-		this.dragdrops = dragdrops;
 	}
 }
