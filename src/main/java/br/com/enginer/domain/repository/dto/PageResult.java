@@ -9,9 +9,27 @@ import br.com.enginer.domain.repository.dto.page.Page;
  */
 public class PageResult<T> {
 
-	public Page page;
+	private Page page;
+
+	//private List<Link> links;
 
 	private List<T> content;
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	//public List<Link> getLinks() {
+	//	return links;
+	//}
+
+	//public void setLinks(List<Link> links) {
+	//	this.links = links;
+	//}
 
 	public List<T> getContent() {
 		return content;
@@ -21,11 +39,4 @@ public class PageResult<T> {
 		this.content = content;
 	}
 
-	public Page getPage() {
-		return page;
-	}
-
-	public void setPage(Page page) {
-		this.page = page;
-	}
 }

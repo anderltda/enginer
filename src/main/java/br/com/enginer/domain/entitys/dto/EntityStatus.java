@@ -10,10 +10,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity Status -> Stream")
-public class EntityStatus extends DomainAbstract<EntityStatus, String> {
+public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
 
 	@UIId
-	private String id;
+	private Long id;
 	
 	private String name;
 	
@@ -28,12 +28,12 @@ public class EntityStatus extends DomainAbstract<EntityStatus, String> {
 	}
 
 	@Override
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

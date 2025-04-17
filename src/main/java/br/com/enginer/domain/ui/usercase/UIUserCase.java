@@ -63,7 +63,9 @@ public class UIUserCase implements UIInboundPort {
 	@Override
 	public Domain<?> post(Domain<?> domain) throws CheckedException {
 		
-		return null;
+		System.out.println(domain);
+		
+		return domain;
 	}
 
 }

@@ -1,4 +1,4 @@
-package br.com.enginer.domain.repository.utils;
+package br.com.enginer.infrastructure.utils;
 
 import java.net.URI;
 import java.util.List;

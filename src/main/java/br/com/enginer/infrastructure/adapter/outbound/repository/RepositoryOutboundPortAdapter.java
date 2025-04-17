@@ -16,8 +16,8 @@ import br.com.enginer.domain.exception.CheckedException;
 import br.com.enginer.domain.exception.UncheckedException;
 import br.com.enginer.domain.repository.dto.PageResult;
 import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
-import br.com.enginer.domain.repository.utils.UriUtils;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.utils.UriUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

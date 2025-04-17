@@ -1,17 +1,27 @@
 package br.com.enginer.infrastructure.configuration;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.port.UIInboundPort;
@@ -21,28 +31,47 @@ import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @Configuration
 public class BeanConfiguration {
-	
-    /**
-     * @return
-     */
+
+	/**
+	 * @return
+	 */
 	@Primary
-    @Bean
-    ObjectMapper objectMapper() {
+	@Bean
+	ObjectMapper objectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+
+		// Módulo de suporte a datas Java 8
+		JavaTimeModule module = new JavaTimeModule();
+
+		// Formatações desejadas
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+		// Serializers e Deserializers
+		module.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
+		module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
+
+		module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
+		module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
 		
-        ObjectMapper mapper = new ObjectMapper();
+		module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter));
+		module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
 
-        JavaTimeModule module = new JavaTimeModule();
-        module.addSerializer(LocalDateTime.class, new com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-        mapper.registerModule(module);
+		mapper.registerModule(module);
 
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        
-        mapper.addMixIn(Id.class, IdAbstractMixIn.class);
-        
-        return mapper;
-    }
+		// Evita serializar datas como arrays
+		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+		// Ignora campos nulos ou vazios
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+		// MixIn personalizado (se necessário para Id)
+		mapper.addMixIn(Id.class, IdAbstractMixIn.class);
+
+		return mapper;
+	}
 
 	/**
 	 * @return
@@ -57,8 +86,11 @@ public class BeanConfiguration {
 	 * @return
 	 */
 	@Bean
-	WebClient webClient(WebClient.Builder builder) {
-		return builder.build();
+	WebClient webClient(ObjectMapper objectMapper) {
+	    ExchangeStrategies strategies = ExchangeStrategies.builder().codecs(configurer -> configurer .defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper))).build();
+	    return WebClient.builder()
+	        .exchangeStrategies(strategies)
+	        .build();
 	}
 
 	@Bean

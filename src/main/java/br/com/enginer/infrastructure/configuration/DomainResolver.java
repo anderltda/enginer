@@ -18,7 +18,7 @@ import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
-import br.com.enginer.infrastructure.helper.PackageScannerHelper;
+import br.com.enginer.infrastructure.utils.PackageScannerUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -47,7 +47,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		String rawId = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
-			Class<?> clazz = PackageScannerHelper.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
+			Class<?> clazz = PackageScannerUtils.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
 
 			if (clazz != null) {
 

@@ -1,8 +1,5 @@
 package br.com.enginer.domain.repository.dto.page;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Link {
 
 	private String rel;

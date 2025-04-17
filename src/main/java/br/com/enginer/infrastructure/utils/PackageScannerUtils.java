@@ -1,4 +1,4 @@
-package br.com.enginer.infrastructure.helper;
+package br.com.enginer.infrastructure.utils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +10,7 @@ import org.springframework.util.ClassUtils;
 /**
  *  PACKAGE SCANNER
  */
-public class PackageScannerHelper {
+public class PackageScannerUtils {
 	
 	
 	/**

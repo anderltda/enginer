@@ -33,7 +33,7 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 	private Double cost;
 
 	@UIValidation(required = true)
-	@UIFilter(label = "Entity Status", field = "name", select = true)
+	@UIFilter(label = "Entity Status", field = "name", select = false)
 	private EntityStatus entityStatus;
 
 	private EntityTree entityTree;

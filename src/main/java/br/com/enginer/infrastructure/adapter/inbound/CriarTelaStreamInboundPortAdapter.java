@@ -20,6 +20,7 @@ import br.com.enginer.domain.ui.usercase.UIUserCase;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.utils.NormalizeUtils;
 
 /**
  * 
@@ -91,7 +92,13 @@ public class CriarTelaStreamInboundPortAdapter {
 
 			LOGGER.info("Executando domínio no save: {}", domain);
 			LOGGER.info("Payload recebido: \r {} \r", json.toPrettyString());
+			
+			NormalizeUtils.normalize(json, domain);
+			
+			domain = ruleUserCase.post(domain);
 
+			LOGGER.info("Normalizado: {}", domain);
+			
 			return ResponseEntity.ok(domain);
 
 		} catch (Exception ex) {

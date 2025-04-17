@@ -75,7 +75,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 
 	@UIPosition(x = 1, y = 2)
 	@UIValidation(required = true)
-	@UIFilter(label = "Entity Status", field = "name", readonly = true)
+	@UIFilter(label = "Entity Status", field = "name", readonly = false)
 	private EntityStatus entityStatus;
 
 	@UIPosition(x = 2, y = 2)
