@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.enginer.domain.ui.execute.port.ExecuteInboundPort;
+import br.com.enginer.domain.ui.port.UIInboundPort;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
@@ -31,13 +31,13 @@ public class CriarTelaFileInboundPortAdapter {
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
 
 	private final ObjectMapper objectMapper;
-	private final ExecuteInboundPort ruleInboundPort;
+	private final UIInboundPort ruleInboundPort;
 	private final TrackingProvider trackingProvider;
 
 	// Caminho base no macOS
 	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, ExecuteInboundPort ruleInboundPort,
+	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, UIInboundPort ruleInboundPort,
 			TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
 		this.ruleInboundPort = ruleInboundPort;

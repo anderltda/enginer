@@ -14,10 +14,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
-import br.com.enginer.domain.ui.execute.port.ExecuteInboundPort;
-import br.com.enginer.domain.ui.execute.usercase.ExecuteUserCase;
-import br.com.enginer.domain.ui.schema.field.type.Id;
-import br.com.enginer.domain.ui.schema.instance.DomainAbstract;
+import br.com.enginer.domain.ui.port.UIInboundPort;
+import br.com.enginer.domain.ui.usercase.UIUserCase;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @Configuration
@@ -40,7 +39,6 @@ public class BeanConfiguration {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         
-        mapper.addMixIn(DomainAbstract.class, DomainAbstractMixIn.class);
         mapper.addMixIn(Id.class, IdAbstractMixIn.class);
         
         return mapper;
@@ -64,8 +62,8 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	ExecuteInboundPort ruleInboundPort(RepositoryOutboundPort repositoryOutboundPort) {
-		return new ExecuteUserCase(repositoryOutboundPort);
+	UIInboundPort ruleInboundPort(RepositoryOutboundPort repositoryOutboundPort) {
+		return new UIUserCase(repositoryOutboundPort);
 	}
 
 }
