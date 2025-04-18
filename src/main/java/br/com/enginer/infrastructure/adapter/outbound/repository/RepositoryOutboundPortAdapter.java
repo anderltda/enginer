@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.enginer.domain.exception.CheckedException;
 import br.com.enginer.domain.exception.UncheckedException;
 import br.com.enginer.domain.repository.dto.PageResult;
@@ -23,6 +25,8 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
+	
+	private final ObjectMapper objectMapper;
 
 	private String basePath = "http://localhost:8080/v1/database";
 
@@ -32,6 +36,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 				.baseUrl(basePath)
 				.defaultHeader("Authorization", "SECRET_TOKEN", "Content-Type", MediaType.APPLICATION_JSON_VALUE, "Accept", MediaType.APPLICATION_JSON_VALUE)
 				.build();
+	}
+	
+	/**
+	 * @param objectMapper
+	 */
+	public RepositoryOutboundPortAdapter(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 
 	/**
@@ -142,11 +153,14 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 		try {
 			
 			String uri = File.separator + domain.getClass().getSimpleName();
+			
+			String json = objectMapper.writeValueAsString(domain);
 
 			Mono<?> mono = getWebClient()
 					.post()
 					.uri(uri)
-					.body(Mono.just(domain), domain.getClass())
+					.contentType(MediaType.APPLICATION_JSON)
+					.bodyValue(json)
 					.retrieve()
 					.bodyToMono(domain.getClass());
 

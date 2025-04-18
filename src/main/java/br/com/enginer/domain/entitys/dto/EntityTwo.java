@@ -1,7 +1,6 @@
 package br.com.enginer.domain.entitys.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
@@ -22,8 +21,8 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 	@UIId
 	private String id;
 
-	@UISelect(label = "Colors", multi = true, provider = ComboHelper.class, method = "colors")
-	private List<String> color;
+	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
+	private String color;
 
 	@UIDate(label = "Date Inclusion", showtime = false, format = TypeDateFormat.DATE_FORMAT)
 	private LocalDate inclusionDate;
@@ -52,11 +51,11 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 		this.id = id;
 	}
 
-	public List<String> getColor() {
+	public String getColor() {
 		return color;
 	}
 
-	public void setColor(List<String> color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
 

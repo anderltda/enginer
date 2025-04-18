@@ -33,7 +33,7 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	private String reference;
 	
 	@UIPosition(x = 1, y = 1)
-	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "ativo=false", "status=2" })
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "ativo=true" })
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 2, y = 1)

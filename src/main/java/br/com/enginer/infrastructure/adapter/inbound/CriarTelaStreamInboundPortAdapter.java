@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.enginer.domain.repository.dto.PageResult;
 import br.com.enginer.domain.ui.usercase.UIUserCase;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
-import br.com.enginer.infrastructure.utils.NormalizeUtils;
 
 /**
  * 
@@ -32,9 +32,12 @@ public class CriarTelaStreamInboundPortAdapter {
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaStreamInboundPortAdapter.class);
 	
 	private final UIUserCase ruleUserCase;
+	
+	private final ObjectMapper objectMapper;
 
-	public CriarTelaStreamInboundPortAdapter(UIUserCase ruleUserCase) {
+	public CriarTelaStreamInboundPortAdapter(UIUserCase ruleUserCase, ObjectMapper objectMapper) {
 		this.ruleUserCase = ruleUserCase;
+		this.objectMapper = objectMapper;
 	}
 
 	/**
@@ -93,11 +96,9 @@ public class CriarTelaStreamInboundPortAdapter {
 			LOGGER.info("Executando domínio no save: {}", domain);
 			LOGGER.info("Payload recebido: \r {} \r", json.toPrettyString());
 			
-			NormalizeUtils.normalize(json, domain);
+			domain = (Domain<?>) objectMapper.convertValue(json, domain.getClass());
 			
-			domain = ruleUserCase.post(domain);
-
-			LOGGER.info("Normalizado: {}", domain);
+			ruleUserCase.post(domain);
 			
 			return ResponseEntity.ok(domain);
 

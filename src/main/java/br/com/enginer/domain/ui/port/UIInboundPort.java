@@ -13,6 +13,6 @@ public interface UIInboundPort {
 
 	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter) throws CheckedException;
 	
-	Domain<?> post(Domain<?> domain) throws CheckedException;
+	void post(Domain<?> domain) throws CheckedException;
 	
 }
