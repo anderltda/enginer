@@ -44,9 +44,11 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
 		String domainName = request.getHeader("X-UIDomain");
+		
 		String rawId = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
+			
 			Class<?> clazz = PackageScannerUtils.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
 
 			if (clazz != null) {
@@ -86,7 +88,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		if (parts.length > 2) {
 			String last = parts[parts.length - 1];
 			// Palavras reservadas que nunca são ID
-			String[] reserved = { "form", "paginator", "filter" };
+			String[] reserved = { "form", "action", "search", "filter" };
 
 			for (String keyword : reserved) {
 				if (keyword.equalsIgnoreCase(last)) {

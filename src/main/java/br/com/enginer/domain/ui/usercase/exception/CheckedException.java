@@ -1,4 +1,4 @@
-package br.com.enginer.domain.exception;
+package br.com.enginer.domain.ui.usercase.exception;
 
 /**
  * Exceção Verificada (Checked Exception) 
@@ -16,6 +16,11 @@ public class CheckedException extends RuntimeException {
 	public CheckedException(String message, String customMessage, Throwable cause) {
 		super(message, cause);
 		this.customMessage = customMessage;
+	}
+	
+	public CheckedException(String message) {
+		super(message);
+		this.customMessage = "";
 	}
 	
 	public CheckedException(String message, Throwable cause) {

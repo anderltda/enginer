@@ -100,10 +100,6 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 
 	private EntityTwo entityTwo;
 	
-	public EntityOne() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public Long getId() {
 		return id;

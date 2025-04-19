@@ -138,10 +138,6 @@ public class DataA extends DomainAbstract<DataA, Long> {
 
 	private DataB dataB;
 	
-	public DataA() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public Long getId() {
 		return id;

@@ -4,6 +4,9 @@ server:
 logging:
   config: classpath:logback-spring.xml
 
+datasource:
+  api: http://localhost:8080/v1/database	
+
 spring:
   profiles:
     default: local

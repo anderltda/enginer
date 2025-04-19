@@ -12,7 +12,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
 public @interface UIFile {
 	String label() default "";
 	String title() default "";
-	String action() default "http://localhost:8081/api/upload";
+	String action() default "http://localhost:8081/v1/enginer/action/upload";
 	TypeFileUpload mode();
 	int limit() default 3;
 	boolean disabled() default false;

@@ -65,10 +65,6 @@ public class DataH extends DomainAbstract<DataH, Long> {
 	@UIFile(label = "Image <span class='semi-bold'>List</span>", title = "Have a horizontal list of image uploader as you need, you can limit the type and size of the files you wish by using <code>Limit = 2</code> and <code>FileType = 'image/png'</code>.", mode = TypeFileUpload.LIST)
 	private List<UploadFile> lists;
 
-	public DataH() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public Long getId() {
 		return id;

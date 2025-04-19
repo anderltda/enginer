@@ -21,9 +21,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
-import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
-import br.com.enginer.domain.ui.port.UIInboundPort;
-import br.com.enginer.domain.ui.usercase.UIUserCase;
+import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
+import br.com.enginer.domain.ui.port.inbound.UIInboundPort;
+import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
+import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
+import br.com.enginer.domain.ui.usercase.ActionInboundUserCase;
+import br.com.enginer.domain.ui.usercase.UIInboundUserCase;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.infrastructure.configuration.deserializer.SafeLocalDateDeserializer;
 import br.com.enginer.infrastructure.configuration.deserializer.SafeLocalDateTimeDeserializer;
@@ -97,9 +100,21 @@ public class BeanConfiguration {
 	        .build();
 	}
 
+	/**
+	 * @param actionInboundPort
+	 * @return <UIInboundUserCase>
+	 */
 	@Bean
-	UIInboundPort ruleInboundPort(RepositoryOutboundPort repositoryOutboundPort) {
-		return new UIUserCase(repositoryOutboundPort);
+	UIInboundPort uIInboundPort(ActionInboundPort actionInboundPort, LoggerOutboundPort logger) {
+		return new UIInboundUserCase(actionInboundPort, logger);
 	}
-
+	
+	/**
+	 * @param repositoryOutboundPort
+	 * @return <ActionInboundUserCase>
+	 */
+	@Bean
+	ActionInboundPort actionInboundPort(RepositoryOutboundPort repositoryOutboundPort, LoggerOutboundPort logger) {
+		return new ActionInboundUserCase(repositoryOutboundPort, logger);
+	}
 }

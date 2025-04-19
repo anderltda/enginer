@@ -1,11 +1,14 @@
 package br.com.enginer.infrastructure.utils;
 
+import java.io.File;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.web.util.UriBuilder;
+
+import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 
 /**
  * 
@@ -47,6 +50,48 @@ public class UriUtils {
 
 			return builder.build();
 		};
+	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param method
+	 * @return
+	 */
+	public static String buildUriPaginator(Domain<?> domain, Map<String, Object> filter, String... method) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append("paginator").append(File.separator).append(domain.getClass().getSimpleName());
+
+		if(method != null && method.length > 0) {
+			StringBuilder uriJpql = new StringBuilder();
+			uriJpql.append(File.separator).append("jpql").append(uri.toString()).append(File.separator).append(method[0]);
+			filter.entrySet().removeIf(entry -> entry.getKey().endsWith("_op"));
+			return uriJpql.toString();
+		}
+		
+		return uri.toString();
+	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param method
+	 * @return
+	 */
+	public static String buildUriFindAll(Domain<?> domain, Map<String, Object> filter, String... method) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append(domain.getClass().getSimpleName());
+
+		if(method != null && method.length > 0) {
+			StringBuilder uriJpql = new StringBuilder();
+			uriJpql.append(File.separator).append("jpql").append(uri.toString()).append(File.separator).append(method[0]);
+			filter.entrySet().removeIf(entry -> entry.getKey().endsWith("_op"));
+			return uriJpql.toString();
+		}
+		
+		return uri.toString();
 	}
 
 	/**

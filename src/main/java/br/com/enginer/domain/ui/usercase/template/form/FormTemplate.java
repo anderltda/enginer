@@ -594,9 +594,21 @@ public final class FormTemplate {
 					field.setSelect(select);
 
 				} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
-
+					
+					Object id = null;
+					
 					Join join = default_.getJoin(f.getType().getSimpleName());
+					
+					Object object = ReflectionUtils.get(StringsUtils.getMethod(f.getType().getSimpleName()), domain);
+					
+					if(object != null) {
+						id = ReflectionUtils.get(StringsUtils.getMethod("id"), object);
+					}
+					
+					join.setValue(id);
+					
 					addBehaviorAnnotation(join, f, annotations);
+					
 					field.setJoin(join);
 
 					count--;
@@ -660,9 +672,10 @@ public final class FormTemplate {
 					Method[] methods = annotation.annotationType().getDeclaredMethods();
 
 					for (Method method : methods) {
+						
 						Object object = ReflectionUtils.get(method.getName(), annotation);
-						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()),
-								new Class<?>[] { object.getClass() }, new Object[] { object });
+						
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
 					}
 
 				}

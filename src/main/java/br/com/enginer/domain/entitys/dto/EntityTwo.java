@@ -37,10 +37,6 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 
 	private EntityTree entityTree;
 	
-	public EntityTwo() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public String getId() {
 		return id;

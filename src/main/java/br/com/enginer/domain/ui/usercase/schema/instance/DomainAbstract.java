@@ -3,36 +3,24 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.enginer.domain.logger.dto.ActionLogger;
-import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
+import br.com.enginer.domain.ui.dto.logger.ActionLogger;
+import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
  * @param <T>
  */
 public abstract class DomainAbstract<T, I> implements Domain<I> {
 	
-	private T domain;
-	
-	private I id;
-	
 	private ActionLogger actionLogger;
 	
-	protected RepositoryOutboundPort repositoryOutboundPort;
-	
-	public void setDomain(T domain) {
-		this.domain = domain;
-	}
-
-	public void setId(I id) {
-		this.id = id;
-	}
+	protected ActionInboundPort actionInboundPort;
 
 	/**
 	 *
 	 */
 	@Override
-	public void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort) {
-		this.repositoryOutboundPort = repositoryOutboundPort;
+	public void setActionInboundPort(ActionInboundPort actionInboundPort) {
+		this.actionInboundPort = actionInboundPort;
 	}
 
 	/**
@@ -41,12 +29,13 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	 * @return
 	 */
 	public List<Domain<?>> options(Domain<?> domain, HashMap<String, Object> filter) {
-		return repositoryOutboundPort.get(domain, filter);
+		return actionInboundPort.findAll(domain, filter);
 	}
 
 	/**
 	 * @return
 	 */
+	@Override
 	public ActionLogger getActionLogger() {
 		return actionLogger;
 	}

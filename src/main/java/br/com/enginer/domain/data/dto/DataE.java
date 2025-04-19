@@ -85,11 +85,6 @@ public class DataE extends DomainAbstract<DataE, Long> {
 
 	private DataF dataF;
 	
-	public DataE() {
-		this.setDomain(this);
-	}
-
-
 	@Override
 	public Long getId() {
 		return id;

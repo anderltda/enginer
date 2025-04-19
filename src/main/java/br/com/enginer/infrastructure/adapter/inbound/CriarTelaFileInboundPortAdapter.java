@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.enginer.domain.ui.port.UIInboundPort;
+import br.com.enginer.domain.ui.port.inbound.UIInboundPort;
 import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
@@ -31,16 +29,15 @@ public class CriarTelaFileInboundPortAdapter {
 	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
 
 	private final ObjectMapper objectMapper;
-	private final UIInboundPort ruleInboundPort;
+	private final UIInboundPort uIInboundPort;
 	private final TrackingProvider trackingProvider;
 
 	// Caminho base no macOS
 	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, UIInboundPort ruleInboundPort,
-			TrackingProvider trackingProvider) {
+	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, UIInboundPort uIInboundPort, TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
-		this.ruleInboundPort = ruleInboundPort;
+		this.uIInboundPort = uIInboundPort;
 		this.trackingProvider = trackingProvider;
 	}
 
@@ -67,37 +64,6 @@ public class CriarTelaFileInboundPortAdapter {
 		return ResponseEntity.status(HttpStatus.CREATED).body(json.toPrettyString());
 	}
 
-	@PostMapping("/{method}/validatorsAsync")
-	public ResponseEntity<Map<String, Boolean>> validatorsAsync(@PathVariable String method, @RequestBody String value) throws Exception {
-
-		System.out.println("Executando method: " + method);
-		System.out.println("Valor recebido: " + value);
-
-		String[] array = new String[] { "johndoe", "admin", "user123" };
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("validators", false);
-
-		for (String string : array) {
-			if (value.equals(string)) {
-			    response.put("validators", true);
-			}
-		}
-
-		boolean error = false;
-
-		if (error) {
-			throw new Exception("ENGINER MESSAGE: Erro interno no servidor: Operação não pode continuar.");
-		}
-
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			LOGGER.error("Erro ao executar regras", e);
-		}
-
-	    return ResponseEntity.ok(response);
-	}
 
 	@GetMapping("/{type}/{domain}")
 	public ResponseEntity<JsonNode> getJsonFile(@PathVariable String type, @PathVariable String domain) {

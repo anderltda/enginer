@@ -4,22 +4,21 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import br.com.enginer.domain.logger.dto.LoggerDto;
-import br.com.enginer.domain.logger.port.LoggerOutboundPort;
+import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 
 @Component
 public class LoggerOutboundPortAdapter implements LoggerOutboundPort {
 
 	@Override
-	public void info(LoggerDto logger) {
-		Logger logger_ = LogManager.getLogger(logger.getClazz());
-		logger_.info(logger.getMessage());
+	public void info(Class<?> clazz, String message) {
+		Logger logger_ = LogManager.getLogger(clazz);
+		logger_.info(message);
 	}
 
 	@Override
-	public void error(LoggerDto logger) {
-		Logger logger_ = LogManager.getLogger(logger.getClazz());
-		logger_.error(logger.getClazz(), logger.getThrowable());
+	public void error(Class<?> clazz, String message, Throwable throwable) {
+		Logger logger_ = LogManager.getLogger(clazz);
+		logger_.error(message, throwable);
 	}
 
 }

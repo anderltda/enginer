@@ -23,10 +23,6 @@ public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
 	
 	private LocalDateTime startDateTime;
 	
-	public EntityStatus() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public Long getId() {
 		return id;

@@ -50,10 +50,6 @@ public class EntityTree extends DomainAbstract<EntityTree, String> {
 	
 	private EntityFour entityFour;
 	
-	public EntityTree() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public String getId() {
 		return id;

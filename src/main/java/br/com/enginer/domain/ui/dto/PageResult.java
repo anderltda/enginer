@@ -1,8 +1,8 @@
-package br.com.enginer.domain.repository.dto;
+package br.com.enginer.domain.ui.dto;
 
 import java.util.List;
 
-import br.com.enginer.domain.repository.dto.page.Page;
+import br.com.enginer.domain.ui.dto.page.Page;
 
 /**
  * @param <T>

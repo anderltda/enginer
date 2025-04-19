@@ -1,6 +1,7 @@
 package br.com.enginer.domain.ui.usercase.schema.instance;
 
-import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
+import br.com.enginer.domain.ui.dto.logger.ActionLogger;
+import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
  * @param <T>
@@ -16,11 +17,16 @@ public interface Domain<I> {
 	 * @param id
 	 */
 	public void setId(I id);
+
+	/**
+	 * @param actionInboundPort
+	 */
+	public void setActionInboundPort(ActionInboundPort actionInboundPort);
 	
 	/**
-	 * @param repositoryOutboundPort
+	 * @return
 	 */
-	public void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort);
+	public ActionLogger getActionLogger();
 
 }
 

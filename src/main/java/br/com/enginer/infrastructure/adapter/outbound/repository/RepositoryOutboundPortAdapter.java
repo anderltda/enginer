@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -14,42 +15,55 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.enginer.domain.exception.CheckedException;
-import br.com.enginer.domain.exception.UncheckedException;
-import br.com.enginer.domain.repository.dto.PageResult;
-import br.com.enginer.domain.repository.port.RepositoryOutboundPort;
+import br.com.enginer.domain.ui.dto.PageResult;
+import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
+import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
+import br.com.enginer.domain.ui.usercase.exception.CheckedException;
+import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.infrastructure.utils.UriUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ */
 @Component
 public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	
+	private final String dataSourceBasePath;
+
+	private final LoggerOutboundPort logger; 
+
 	private final ObjectMapper objectMapper;
 
-	private String basePath = "http://localhost:8080/v1/database";
-
+	/**
+	 * @return
+	 */
 	private WebClient getWebClient() {
 		return WebClient
 				.builder()
-				.baseUrl(basePath)
+				.baseUrl(dataSourceBasePath)
 				.defaultHeader("Authorization", "SECRET_TOKEN", "Content-Type", MediaType.APPLICATION_JSON_VALUE, "Accept", MediaType.APPLICATION_JSON_VALUE)
 				.build();
 	}
 	
 	/**
+	 * @param dataSourceBasePath
+	 * @param logger
 	 * @param objectMapper
 	 */
-	public RepositoryOutboundPortAdapter(ObjectMapper objectMapper) {
+	public RepositoryOutboundPortAdapter(@Value("${datasource.api}") String dataSourceBasePath, LoggerOutboundPort logger, ObjectMapper objectMapper) {
+		this.logger = logger;
 		this.objectMapper = objectMapper;
+		this.dataSourceBasePath = dataSourceBasePath;
 	}
 
 	/**
 	 *
 	 */
 	@Override
-	public Domain<?> get(Domain<?> domain, Object id) throws UncheckedException {
+	public Domain<?> findById(Domain<?> domain, Object id) throws UncheckedException {
 
 		Object object = null;
 
@@ -57,19 +71,23 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 			String uri = File.separator + domain.getClass().getSimpleName() + File.separator + "{id}";
 
-			Mono<?> mono = getWebClient()
-					.get()
-					.uri(uri, id)
-					.retrieve()
-					.bodyToMono(ParameterizedTypeReference.forType(domain.getClass()));
+	        Mono<?> mono = getWebClient()
+	            .get()
+	            .uri(uri, id)
+	            .retrieve()
+	            .bodyToMono(ParameterizedTypeReference.forType(domain.getClass()))
+	            .switchIfEmpty(Mono.error(new CheckedException("Nenhum registro encontrado para ID: " + id)));
 
-			object = mono.block();
+	        object = mono.block();
 
-		} catch (WebClientResponseException ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
-		} catch (Exception ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
-		}
+		} catch (CheckedException ex) {
+			logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
+			return domain;
+	    } catch (WebClientResponseException ex) {
+	        throw new UncheckedException("Erro ao buscar entidade: " + ex.getStatusCode(), ex);
+	    } catch (Exception ex) {
+	        throw new UncheckedException("Erro inesperado ao buscar entidade", ex);
+	    }
 
 		return (Domain<?>) object;
 
@@ -80,17 +98,17 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Domain<?>> get(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
+	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
 
 		List<Domain<?>> list = new ArrayList<>();
 
 		try {
-
-			String uri = File.separator + domain.getClass().getSimpleName();
+			
+			String uri = UriUtils.buildUriFindAll(domain, filter, method);
 
 			Flux<?> flux = getWebClient()
 					.get()
-					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
+					.uri(UriUtils.buildUriWithQueryParams(uri.toString(), filter))
 					.retrieve()
 					.bodyToFlux(ParameterizedTypeReference.forType(domain.getClass()))
 					.buffer();
@@ -116,13 +134,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
+	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
 
 		PageResult<?> pageResult = null;
 
 		try {
-
-			String uri = File.separator + "paginator" + File.separator + domain.getClass().getSimpleName();
+			
+			String uri = UriUtils.buildUriPaginator(domain, filter, method);
 
 			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() { };
 
@@ -146,7 +164,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public Domain<?> post(Domain<?> domain) throws CheckedException {
+	public Domain<?> save(Domain<?> domain) throws UncheckedException {
 		
 		Object object = null;
 

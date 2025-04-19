@@ -1,4 +1,4 @@
-package br.com.enginer.domain.exception;
+package br.com.enginer.domain.ui.usercase.exception;
 
 /**
  * Exceção Não Verificada (Unchecked Exception)

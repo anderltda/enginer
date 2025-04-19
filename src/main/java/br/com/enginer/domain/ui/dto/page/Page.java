@@ -1,4 +1,4 @@
-package br.com.enginer.domain.repository.dto.page;
+package br.com.enginer.domain.ui.dto.page;
 
 public class Page {
 

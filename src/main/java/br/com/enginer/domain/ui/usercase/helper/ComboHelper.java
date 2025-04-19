@@ -114,21 +114,21 @@ public class ComboHelper {
 
 	public List<Option> colors() {
 		List<Option> options = new ArrayList<>();
-		options.add(new Option("Vermelho", "vermelho"));
-		options.add(new Option("Azul", "azul"));
-		options.add(new Option("Verde", "verde"));
-		options.add(new Option("Amarelo", "amarelo"));
-		options.add(new Option("Roxo", "roxo"));
-		options.add(new Option("Laranja", "laranja"));
-		options.add(new Option("Rosa", "rosa"));
-		options.add(new Option("Preto", "preto"));
-		options.add(new Option("Branco", "branco"));
-		options.add(new Option("Cinza", "cinza"));
-		options.add(new Option("Marrom", "marrom"));
-		options.add(new Option("Bege", "bege"));
-		options.add(new Option("Turquesa", "turquesa"));
-		options.add(new Option("Dourado", "dourado"));
-		options.add(new Option("Prata", "prata"));
+		options.add(new Option("Vermelho", "Vermelho"));
+		options.add(new Option("Azul", "Azul"));
+		options.add(new Option("Verde", "Verde"));
+		options.add(new Option("Amarelo", "Amarelo"));
+		options.add(new Option("Roxo", "Roxo"));
+		options.add(new Option("Laranja", "Laranja"));
+		options.add(new Option("Rosa", "Rosa"));
+		options.add(new Option("Preto", "Preto"));
+		options.add(new Option("Branco", "Branco"));
+		options.add(new Option("Cinza", "Cinza"));
+		options.add(new Option("Marrom", "Marrom"));
+		options.add(new Option("Bege", "Bege"));
+		options.add(new Option("Turquesa", "Turquesa"));
+		options.add(new Option("Dourado", "Dourado"));
+		options.add(new Option("Prata", "Prata"));
 		return options;
 	}
 

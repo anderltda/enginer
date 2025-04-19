@@ -33,17 +33,13 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	private String reference;
 	
 	@UIPosition(x = 1, y = 1)
-	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "ativo=true" })
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" })
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 2, y = 1)
 	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
 
-	public EntityFive() {
-		this.setDomain(this);
-	}
-	
 	@Override
 	public String getId() {
 		return id;

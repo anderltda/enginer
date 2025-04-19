@@ -44,10 +44,6 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 
 	private EntityFive entityFive;
 	
-	public EntityFour() {
-		this.setDomain(this);
-	}
-
 	@Override
 	public String getId() {
 		return id;
