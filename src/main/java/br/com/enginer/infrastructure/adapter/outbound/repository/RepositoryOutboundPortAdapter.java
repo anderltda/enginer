@@ -433,11 +433,11 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Domain<?>> saveAll(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
-		
-		List<Domain<?>> savedList = new ArrayList<>();
+	public void save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
 
 		try {
+
+			List<Domain<?>> savedList = new ArrayList<>();
 			
 			String uri = UriUtils.buildUriSaveAll(domain, flush);
 
@@ -457,9 +457,14 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			Iterator<List<?>> iterator = (Iterator<List<?>>) flux.toIterable().iterator();
 
 			while (iterator.hasNext()) {
-				for (Object obj : iterator.next()) {
-					savedList.add((Domain<?>) obj);
+				for (Object object : iterator.next()) {
+					savedList.add((Domain<?>) object);
 				}
+			}
+			
+			if(savedList.size() > 0) {
+				entities.clear();
+				entities.addAll(savedList);
 			}
 
 		} catch (CheckedException ex) {
@@ -472,8 +477,5 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
-
-		return savedList;
 	}
-
 }
