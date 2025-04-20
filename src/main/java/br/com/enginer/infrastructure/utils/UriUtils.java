@@ -93,6 +93,89 @@ public class UriUtils {
 		
 		return uri.toString();
 	}
+	
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param method
+	 * @return
+	 */
+	public static String buildUriSingle(Domain<?> domain, Map<String, Object> filter, String... method) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append("single").append(File.separator).append(domain.getClass().getSimpleName());
+		
+		if(method != null && method.length > 0) {
+			StringBuilder uriJpql = new StringBuilder();
+			uriJpql.append(File.separator).append("jpql").append(uri.toString()).append(File.separator).append(method[0]);
+			filter.entrySet().removeIf(entry -> entry.getKey().endsWith("_op"));
+			return uriJpql.toString();
+		}
+		
+		return uri.toString();
+	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param method
+	 * @return
+	 */
+	public static String buildUriCount(Domain<?> domain, Map<String, Object> filter, String... method) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append("count").append(File.separator).append(domain.getClass().getSimpleName());
+		
+		if(method != null && method.length > 0) {
+			StringBuilder uriJpql = new StringBuilder();
+			uriJpql.append(File.separator).append("jpql").append(uri.toString()).append(File.separator).append(method[0]);
+			filter.entrySet().removeIf(entry -> entry.getKey().endsWith("_op"));
+			return uriJpql.toString();
+		}
+		
+		return uri.toString();
+	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param flush
+	 * @return
+	 */
+	public static String buildUriSave(Domain<?> domain, Boolean... flush) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append(domain.getClass().getSimpleName());
+		
+		if(flush != null && flush.length > 0 && flush[0]) {
+			StringBuilder uriFlush = new StringBuilder();
+			uriFlush.append(File.separator).append("flush").append(File.separator).append(domain.getClass().getSimpleName());
+			return uriFlush.toString();
+		}
+		
+		return uri.toString();
+	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @param flush
+	 * @return
+	 */
+	public static String buildUriSaveAll(Domain<?> domain, Boolean... flush) {
+		
+		StringBuilder uri = new StringBuilder();
+		uri.append(File.separator).append("all").append(File.separator).append(domain.getClass().getSimpleName());
+		
+		if(flush != null && flush.length > 0 && flush[0]) {
+			StringBuilder uriFlush = new StringBuilder();
+			uriFlush.append(File.separator).append("all").append(File.separator).append("flush").append(File.separator).append(domain.getClass().getSimpleName());
+			return uriFlush.toString();
+		}
+		
+		return uri.toString();
+	}
 
 	/**
 	 * @param params

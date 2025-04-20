@@ -53,7 +53,7 @@ public class CriarTelaStreamInboundPortAdapter {
 			trackingProvider.setInnerId(UUIDGenerator.generate());
 			
 			logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
-			logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(objectMapper));
+			logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
 
 			Form form = uIInboundPort.form(domain);
 

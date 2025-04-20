@@ -21,4 +21,10 @@ public class LoggerOutboundPortAdapter implements LoggerOutboundPort {
 		logger_.error(message, throwable);
 	}
 
+	@Override
+	public void error(Class<?> clazz, Throwable throwable) {
+		Logger logger_ = LogManager.getLogger(clazz);
+		logger_.error(throwable);
+	}
+
 }

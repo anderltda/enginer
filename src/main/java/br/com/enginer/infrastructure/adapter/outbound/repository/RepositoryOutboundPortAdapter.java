@@ -2,12 +2,15 @@ package br.com.enginer.infrastructure.adapter.outbound.repository;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,6 +24,7 @@ import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.exception.GlobalWebClientErrorHandler;
 import br.com.enginer.infrastructure.utils.UriUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,10 +34,10 @@ import reactor.core.publisher.Mono;
  */
 @Component
 public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
-	
+
 	private final String dataSourceBasePath;
 
-	private final LoggerOutboundPort logger; 
+	private final LoggerOutboundPort logger;
 
 	private final ObjectMapper objectMapper;
 
@@ -47,7 +51,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 				.defaultHeader("Authorization", "SECRET_TOKEN", "Content-Type", MediaType.APPLICATION_JSON_VALUE, "Accept", MediaType.APPLICATION_JSON_VALUE)
 				.build();
 	}
-	
+
 	/**
 	 * @param dataSourceBasePath
 	 * @param logger
@@ -71,26 +75,71 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 			String uri = File.separator + domain.getClass().getSimpleName() + File.separator + "{id}";
 
-	        Mono<?> mono = getWebClient()
-	            .get()
-	            .uri(uri, id)
-	            .retrieve()
-	            .bodyToMono(ParameterizedTypeReference.forType(domain.getClass()))
-	            .switchIfEmpty(Mono.error(new CheckedException("Nenhum registro encontrado para ID: " + id)));
+			Mono<?> mono = getWebClient()
+					.get()
+					.uri(uri, id)
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(ParameterizedTypeReference.forType(domain.getClass()))
+					.switchIfEmpty(Mono.error(new CheckedException("Nenhum registro encontrado para ID: " + id)));
 
-	        object = mono.block();
+			object = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
-			return domain;
-	    } catch (WebClientResponseException ex) {
-	        throw new UncheckedException("Erro ao buscar entidade: " + ex.getStatusCode(), ex);
-	    } catch (Exception ex) {
-	        throw new UncheckedException("Erro inesperado ao buscar entidade", ex);
-	    }
+			if (ex.getMessage().contains("Nenhum registro encontrado")) {
+				logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
+				return domain;
+			} else {
+				logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+				throw ex;
+			}
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
 
 		return (Domain<?>) object;
 
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
+
+		Object object = null;
+
+		try {
+
+			String uri = UriUtils.buildUriSingle(domain, filter, method);
+
+			Mono<?> mono = getWebClient()
+					.get()
+					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(ParameterizedTypeReference.forType(domain.getClass()));
+
+			object = mono.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return (Domain<?>) object;
 	}
 
 	/**
@@ -103,13 +152,15 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 		List<Domain<?>> list = new ArrayList<>();
 
 		try {
-			
+
 			String uri = UriUtils.buildUriFindAll(domain, filter, method);
 
 			Flux<?> flux = getWebClient()
 					.get()
 					.uri(UriUtils.buildUriWithQueryParams(uri.toString(), filter))
 					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
 					.bodyToFlux(ParameterizedTypeReference.forType(domain.getClass()))
 					.buffer();
 
@@ -121,10 +172,70 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 				}
 			}
 
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
 		} catch (WebClientResponseException ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return (List<Domain<?>>) list;
+	}
+	
+	/**
+	 *
+	 */
+	public List<Domain<?>> findAllById(Domain<?> domain, List<?> ids) throws UncheckedException {
+		return findAllById(domain, ids.toArray());
+	}
+
+	/**
+	 *
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Domain<?>> findAllById(Domain<?> domain, Object... id) throws UncheckedException {
+
+		List<Domain<?>> list = new ArrayList<>();
+
+		try {
+			
+			String idsString = Arrays.stream(id)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(","));
+
+			String uri = File.separator + domain.getClass().getSimpleName() + File.separator + "ids" + File.separator + idsString;
+
+			Flux<?> flux = getWebClient()
+					.get()
+					.uri(uri)
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToFlux(ParameterizedTypeReference.forType(domain.getClass()))
+					.buffer();
+
+			Iterator<List<?>> iterator = (Iterator<List<?>>) flux.toIterable().iterator();
+
+			while (iterator.hasNext()) {
+				for (Object object : iterator.next()) {
+					list.add((Domain<?>) object);
+				}
+			}
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
 		return (List<Domain<?>>) list;
@@ -139,39 +250,157 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 		PageResult<?> pageResult = null;
 
 		try {
-			
+
 			String uri = UriUtils.buildUriPaginator(domain, filter, method);
 
-			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() { };
+			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() {};
 
 			pageResult = getWebClient()
 					.get()
 					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
 					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
 					.bodyToMono(typeRef)
 					.block();
 
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
 		} catch (WebClientResponseException ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
 		return pageResult;
+	}
+	
+	/**
+	 *
+	 */
+	@Override
+	public Integer count(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
+
+		Integer count = 0;
+
+		try {
+
+			String uri = UriUtils.buildUriCount(domain, filter, method);
+
+			Mono<Integer> mono = getWebClient()
+					.get()
+					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(Integer.class);
+
+			count = mono.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return count;
 	}
 
 	/**
 	 *
 	 */
 	@Override
-	public Domain<?> save(Domain<?> domain) throws UncheckedException {
-		
-		Object object = null;
+	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException {
+
+		Boolean exist = false;
 
 		try {
 			
-			String uri = File.separator + domain.getClass().getSimpleName();
+			String uri = File.separator + "exist" + File.separator + domain.getClass().getSimpleName() + File.separator + "{id}";
+
+			Mono<Boolean> mono = getWebClient()
+					.get()
+					.uri(uri, id)
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(Boolean.class);
+
+			exist = mono.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return exist;
+	}
+	
+	/**
+	 *
+	 */
+	@Override
+	public void delete(Domain<?> domain, List<?> ids) throws UncheckedException {
+		delete(domain, ids.toArray());
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public void delete(Domain<?> domain, Object... ids) throws UncheckedException {
+		
+		try {
 			
+			String uri = File.separator + domain.getClass().getSimpleName();
+
+			WebClient.RequestHeadersUriSpec<?> request = getWebClient().delete();
+
+			WebClient.RequestHeadersSpec<?> requestSpec = (ids == null || ids.length == 0) ? request.uri(uri) : request.uri(builder -> builder.path(uri).queryParam("id", ids).build());
+
+			requestSpec
+				.retrieve()
+				.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+				.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+				.toBodilessEntity()
+				.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[CheckedException] " + ex.getMessage(), ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}		
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public void save(Domain<?> domain, Boolean... flush) throws UncheckedException {
+
+		try {
+
+			String uri = UriUtils.buildUriSave(domain, flush);
+
 			String json = objectMapper.writeValueAsString(domain);
 
 			Mono<?> mono = getWebClient()
@@ -180,16 +409,71 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 					.contentType(MediaType.APPLICATION_JSON)
 					.bodyValue(json)
 					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
 					.bodyToMono(domain.getClass());
 
-			object = mono.block();
+			domain = (Domain<?>) mono.block();
 
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
 		} catch (WebClientResponseException ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			throw new UncheckedException(ex.getMessage(), ex);
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
-		return (Domain<?>) object;
 	}
+
+	/**
+	 *
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Domain<?>> saveAll(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
+		
+		List<Domain<?>> savedList = new ArrayList<>();
+
+		try {
+			
+			String uri = UriUtils.buildUriSaveAll(domain, flush);
+
+			String json = objectMapper.writeValueAsString(entities);
+
+			Flux<?> flux = getWebClient()
+				.post()
+				.uri(uri)
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(json)
+				.retrieve()
+				.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+				.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+				.bodyToFlux(ParameterizedTypeReference.forType(domain.getClass()))
+				.buffer();
+
+			Iterator<List<?>> iterator = (Iterator<List<?>>) flux.toIterable().iterator();
+
+			while (iterator.hasNext()) {
+				for (Object obj : iterator.next()) {
+					savedList.add((Domain<?>) obj);
+				}
+			}
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[CheckedException] " + ex.getMessage(), ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return savedList;
+	}
+
 }

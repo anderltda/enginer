@@ -14,12 +14,28 @@ public interface RepositoryOutboundPort {
 
 	public Domain<?> findById(Domain<?> domain, Object id) throws UncheckedException;
 	
+	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
+	
 	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
+	
+	public List<Domain<?>> findAllById(Domain<?> domain, Object... id) throws UncheckedException;
+	
+	public List<Domain<?>> findAllById(Domain<?> domain, List<?> ids) throws UncheckedException;
 	
 	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	Domain<?> save(Domain<?> domain) throws UncheckedException;
+	public Integer count(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
+	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException;
+	
+	public void delete(Domain<?> domain, List<?> ids) throws UncheckedException;
+	
+	public void delete(Domain<?> domain, Object... ids) throws UncheckedException;
+	
+	public void save(Domain<?> domain, Boolean... flush) throws UncheckedException;
+	
+	public List<Domain<?>> saveAll(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException;
+
 }
 
 

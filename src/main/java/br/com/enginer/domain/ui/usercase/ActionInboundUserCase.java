@@ -121,7 +121,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			repositoryOutboundPort.save(domain);
 
 		} catch (Exception ex) {
-			logger.error(ActionInboundUserCase.class, ex.getMessage(), ex);
+			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getMessage(), ex);
 		}
 	}
