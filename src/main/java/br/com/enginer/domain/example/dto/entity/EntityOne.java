@@ -1,4 +1,4 @@
-package br.com.enginer.domain.entitys.dto;
+package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,7 +38,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Entity One -> Stream")
 @UIButtonAction({
-	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", confirm = true, needsValidation = true, action = @UIAction(method = "onSubmit"))
+	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", confirm = false, needsValidation = true, action = @UIAction(method = "onSubmit"))
 })
 @UISubmit(label = "Editar", method = "backendJavaSubmit", icon = "edit", needsValidation = true)
 @UIGlobal({ @UIGlobalOn(function = "customEntitySumValuesValidator",       message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!")})

@@ -1,9 +1,12 @@
 package br.com.enginer.domain.ui.usercase;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.enginer.domain.example.dto.view.EntityOneView;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
@@ -117,8 +120,20 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			ActionLogger actionLogger = domain.getActionLogger();
 			
 			System.out.println(actionLogger.getAction());
+			
+			LocalDateTime dateTime = LocalDateTime.of(1983, 3, 29, 0, 0, 0);
+			LocalDate date = LocalDate.of(1983, 3, 29);
+			
+			Map<String, Object> filter = new HashMap<>();
+			//filter.put("birthDate", date);
+			//filter.put("birthDate_op", "ge");
+			//filter.put("name", "Anderson");
+			//filter.put("name_op", "eq");
 
-			repositoryOutboundPort.save(domain);
+			PageResult<?> pageResult = repositoryOutboundPort.paginator(new EntityOneView(), filter, "teste_busca_com_condicoes_diversars");
+			
+			System.out.println(pageResult.getPage().getTotalPages());
+			System.out.println(pageResult.getContent().size());
 
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);

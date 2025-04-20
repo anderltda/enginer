@@ -3,8 +3,8 @@ package br.com.enginer.domain.data.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import br.com.enginer.domain.entitys.dto.EntityOne;
-import br.com.enginer.domain.entitys.dto.EntityStatus;
+import br.com.enginer.domain.example.dto.entity.EntityOne;
+import br.com.enginer.domain.example.dto.entity.EntityStatus;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;

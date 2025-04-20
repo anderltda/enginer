@@ -1,4 +1,4 @@
-package br.com.enginer.domain.entitys.dto;
+package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 
