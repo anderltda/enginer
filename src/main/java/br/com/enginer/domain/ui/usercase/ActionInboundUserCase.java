@@ -130,11 +130,8 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			//filter.put("name", "Anderson");
 			//filter.put("name_op", "eq");
 
-			PageResult<?> pageResult = repositoryOutboundPort.paginator(new EntityOneView(), filter, "teste_busca_com_condicoes_diversars");
+			repositoryOutboundPort.count(new EntityOneView(), filter, "teste_busca_com_condicoes_diversars");
 			
-			System.out.println(pageResult.getPage().getTotalPages());
-			System.out.println(pageResult.getContent().size());
-
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getMessage(), ex);

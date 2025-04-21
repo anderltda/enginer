@@ -471,6 +471,42 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
+	public Integer count(Domain<?> domain, Map<String, Object> filter, CharSequence method) throws UncheckedException {
+		
+		Integer count = 0;
+
+		try {
+			
+			String uri = File.separator + "mapper" + File.separator + File.separator + "count" + File.separator + domain.getClass().getSimpleName() + File.separator + method;
+
+			Mono<Integer> mono = getWebClient()
+					.get()
+					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(Integer.class);
+
+			count = mono.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return count;
+	}
+
+	/**
+	 *
+	 */
+	@Override
 	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException {
 
 		Boolean exist = false;

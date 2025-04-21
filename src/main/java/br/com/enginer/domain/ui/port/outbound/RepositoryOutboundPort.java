@@ -33,6 +33,8 @@ public interface RepositoryOutboundPort {
 	public Integer count(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
 	public Integer count(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException;
+	
+	public Integer count(Domain<?> domain, Map<String, Object> filter, CharSequence method) throws UncheckedException;
 
 	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException;
 	
