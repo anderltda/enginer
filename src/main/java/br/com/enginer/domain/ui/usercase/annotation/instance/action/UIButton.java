@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -15,10 +16,11 @@ public @interface UIButton {
 	String label();
 	String method();
 	String icon() default "";
-	TypeButtonState state() default TypeButtonState.BTN_STATE_DEFAULT; 
 	boolean disabled() default false;
 	boolean highlight() default false;
 	boolean confirm() default false;
 	boolean needsValidation() default true;
+	TypeTemplate[] template() default { TypeTemplate.FILTER };
+	TypeButtonState state() default TypeButtonState.BTN_STATE_DEFAULT; 
 	UIAction action() default @UIAction;
 }

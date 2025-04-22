@@ -2,6 +2,7 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeButton;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 /**
  * 
@@ -17,6 +18,7 @@ public class Button {
 	private Boolean confirm;
 	private Boolean needsValidation;
 	private String state;
+	private TypeTemplate[] template;
 	private Action action;
 
 	public Button() {
@@ -98,6 +100,22 @@ public class Button {
 
 	public void setState(TypeButtonState state) {
 		this.state = state.getValue();
+	}
+
+	public TypeTemplate[] getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(TypeTemplate[] template) {
+		this.template = template;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public Action getAction() {

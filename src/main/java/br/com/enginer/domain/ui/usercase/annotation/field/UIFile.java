@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -16,4 +17,5 @@ public @interface UIFile {
 	TypeFileUpload mode();
 	int limit() default 3;
 	boolean disabled() default false;
+	TypeTemplate[] template() default { TypeTemplate.FORM };
 }

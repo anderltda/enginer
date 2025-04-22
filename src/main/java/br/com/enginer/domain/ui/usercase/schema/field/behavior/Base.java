@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.validation.Validation;
 
 /**
@@ -37,6 +38,7 @@ public abstract class Base {
 
 	private String format;
 	private TypeFileUpload mode;
+	private TypeTemplate[] template;
 
 	private Position position;
 	private Validation validation;
@@ -304,4 +306,13 @@ public abstract class Base {
 	public void setFilter(String[] filter) {
 		this.filter = filter;
 	}
+
+	public TypeTemplate[] getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(TypeTemplate[] template) {
+		this.template = template;
+	}
+	
 }

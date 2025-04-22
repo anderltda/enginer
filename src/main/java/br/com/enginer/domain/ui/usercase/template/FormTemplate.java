@@ -1,0 +1,848 @@
+package br.com.enginer.domain.ui.usercase.template;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIEmail;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFile;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIPassword;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRadio;
+import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
+import br.com.enginer.domain.ui.usercase.annotation.field.UITextArea;
+import br.com.enginer.domain.ui.usercase.annotation.field.UITime;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UITag;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustomOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependency;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
+import br.com.enginer.domain.ui.usercase.enums.TypeButton;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
+import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
+import br.com.enginer.domain.ui.usercase.schema.Form;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.Autocomplete;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.Base;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.Default;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.Pattern;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.Position;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.UploadFile;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.validation.Async;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.validation.Sync;
+import br.com.enginer.domain.ui.usercase.schema.field.behavior.validation.Validation;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Area;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Checkbox;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Date;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Decimal;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Email;
+import br.com.enginer.domain.ui.usercase.schema.field.type.File;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Filter;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Hidden;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Join;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Number;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Password;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Radio;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Select;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Tag;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Text;
+import br.com.enginer.domain.ui.usercase.schema.field.type.Time;
+import br.com.enginer.domain.ui.usercase.schema.instance.Action;
+import br.com.enginer.domain.ui.usercase.schema.instance.Button;
+import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.validate.Validate;
+import br.com.enginer.domain.ui.usercase.schema.validate.conditional.Conditional;
+import br.com.enginer.domain.ui.usercase.schema.validate.custom.Custom;
+import br.com.enginer.domain.ui.usercase.schema.validate.dependency.Dependency;
+import br.com.enginer.domain.ui.usercase.schema.validate.global.Global;
+import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
+import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
+
+/**
+ * 
+ */
+public final class FormTemplate {
+
+	private static final Map<Class<? extends Annotation>, Class<? extends Annotation>> annotationMap = new HashMap<>();
+
+	private static TypeTemplate TYPE_TEMPLATE;
+
+	private FormTemplate() {
+	}
+
+	static {
+
+		annotationMap.put(UIId.class, UIId.class);
+		annotationMap.put(UIText.class, UIText.class);
+		annotationMap.put(UIEmail.class, UIEmail.class);
+		annotationMap.put(UIPassword.class, UIPassword.class);
+		annotationMap.put(UINumber.class, UINumber.class);
+		annotationMap.put(UIDecimal.class, UIDecimal.class);
+		annotationMap.put(UICheckbox.class, UICheckbox.class);
+		annotationMap.put(UIDate.class, UIDate.class);
+		annotationMap.put(UITime.class, UITime.class);
+		annotationMap.put(UIRadio.class, UIRadio.class);
+		annotationMap.put(UISelect.class, UISelect.class);
+		annotationMap.put(UITextArea.class, UITextArea.class);
+		annotationMap.put(UITag.class, UITag.class);
+		annotationMap.put(UIFile.class, UIFile.class);
+		annotationMap.put(UIFilter.class, UIFilter.class);
+		annotationMap.put(UIJoin.class, UIJoin.class);
+		annotationMap.put(UIHidden.class, UIHidden.class);
+
+		annotationMap.put(UIPosition.class, UIPosition.class);
+		annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
+		annotationMap.put(UIAutoCompleteSuggestion.class, UIAutoCompleteSuggestion.class);
+		annotationMap.put(UIValidation.class, UIValidation.class);
+		annotationMap.put(UIDependency.class, UIDependency.class);
+
+	}
+
+	/**
+	 * @param domain
+	 * @return
+	 */
+	public static Form create(Domain<?> domain, TypeTemplate typeTemplate) throws Exception {
+
+		Form form = null;
+
+		try {
+
+			TYPE_TEMPLATE = typeTemplate;
+
+			List<br.com.enginer.domain.ui.usercase.schema.field.Field> fields = new ArrayList<>();
+
+			br.com.enginer.domain.ui.usercase.schema.field.Field field = null;
+
+			Validate validate = new Validate();
+
+			String title = getTitle(domain);
+
+			form = new Form();
+			form.setFields(fields);
+			form.setValidate(validate);
+			form.setTitle(title != null ? title : StringsUtils.normalizeLabelToLowercaseCamelization(domain.getClass().getSimpleName().toString()));
+
+			Button submit = getSubmit(domain, typeTemplate);
+
+			if (submit != null) {
+				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+				field.setButton(submit);
+				fields.add(field);
+			}
+
+			List<Button> buttons = getButton(domain, typeTemplate);
+
+			if (buttons != null) {
+				buttons.forEach(button -> {
+					br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+					fieldButton.setButton(button);
+					fields.add(fieldButton);
+				});
+			}
+
+			validate.setGlobal(getGlobal(domain));
+			validate.setCustom(getCustom(domain));
+			validate.setConditional(getConditional(domain));
+			validate.setDependency(getDependecys(domain));
+
+			List<Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
+
+			int count = 1;
+
+			for (Field f : fs) {
+
+				int x = count;
+				int y = count % 2 == 0 ? count - 1 : count;
+
+				Default default_ = new Default(x, y, f.getName(), false, domain);
+
+				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+				fields.add(field);
+
+				Annotation[] annotations = f.getAnnotations();
+
+				boolean identity = false;
+
+				for (Annotation annotation : annotations) {
+
+					Class<? extends Annotation> annotationType = annotation.annotationType();
+
+					if (annotationMap.containsKey(annotationType)) {
+
+						if (annotation instanceof UIId uiId) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiId);
+							
+							if(containsTemplate) {
+								field.setHidden(getHidden(f, default_, annotations));
+							}
+							
+							identity = true;
+
+						} else if (annotation instanceof UIHidden uiHidden) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiHidden);
+							
+							if(containsTemplate) {
+								field.setHidden(getHidden(f, default_, annotations));
+							}
+							
+							identity = true;
+
+						} else if (annotation instanceof UIJoin uiJoin) {
+							
+							boolean containsTemplate = checkTemplate(typeTemplate, uiJoin);
+							
+							if(containsTemplate) {
+								field.setJoin(getJoin(domain, f, default_, annotations));
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIText uiText) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiText);
+							
+							if(containsTemplate) {
+								field.setText(getText(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIEmail uiEmail) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiEmail);
+							
+							if(containsTemplate) {
+								field.setEmail(getEmail(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIPassword uiPassword) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiPassword);
+							
+							if(containsTemplate) {
+								field.setPassword(getPassword(f, default_, annotations));
+								count++;
+							}
+							
+							identity = true;
+
+						} else if (annotation instanceof UINumber uiNumber) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiNumber);
+							
+							if(containsTemplate) {
+								field.setNumber(getNumber(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIDecimal uiDecimal) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiDecimal);
+							
+							if(containsTemplate) {
+								field.setDecimal(getDecimal(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UICheckbox uiCheckbox) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiCheckbox);
+							
+							if(containsTemplate) {
+								field.setCheckbox(getCheckbox(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIDate uiDate) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiDate);
+							
+							if(containsTemplate) {
+								field.setDate(getDate(f, default_, annotations, uiDate.showtime()));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UITime uiTime) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiTime);
+							
+							if(containsTemplate) {
+								field.setTime(getTime(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIRadio uiRadio) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiRadio);
+							
+							if(containsTemplate) {
+								field.setRadio(getRadio(f, default_, annotations, uiRadio));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UISelect uiSelect) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiSelect);
+							
+							if(containsTemplate) {
+								field.setSelect(getSelect(f, default_, annotations, uiSelect));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UITag uiTag) {
+							
+							boolean containsTemplate = checkTemplate(typeTemplate, uiTag);
+							
+							if(containsTemplate) {
+								field.setTag(getTag(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIFile uiFilter) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiFilter);
+							
+							if(containsTemplate) {
+								field.setFile(getFiles(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UITextArea uiTextArea) {
+							
+							boolean containsTemplate = checkTemplate(typeTemplate, uiTextArea);
+							
+							if(containsTemplate) {
+								field.setTextarea(getTextArea(f, default_, annotations));
+								count++;
+							}
+
+							identity = true;
+
+						} else if (annotation instanceof UIFilter uiFilter) {
+
+							boolean containsTemplate = checkTemplate(typeTemplate, uiFilter);
+							
+							if(containsTemplate) {
+								field.setFilter(getFilter(domain, f, default_, annotations, uiFilter));
+								count++;
+							}
+
+							identity = true;
+
+						}
+					}
+				}
+
+				if (identity)
+					continue;
+
+				if (f.getType() == Id.class) {
+
+					field.setHidden(getHidden(f, default_, annotations));
+
+					count--;
+
+				}  else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
+
+					field.setJoin(getJoin(domain, f, default_, annotations));
+
+					count--;
+
+				} else if (f.getType().equals(Integer.class) || f.getType().equals(Short.class) || f.getType().equals(Long.class) || f.getType().equals(Byte.class) || f.getType().equals(BigInteger.class)) {
+
+					field.setNumber(getNumber(f, default_, annotations));
+
+				} else if (f.getType().equals(Float.class) || f.getType().equals(Double.class) || f.getType().equals(BigDecimal.class)) {
+
+					field.setDecimal(getDecimal(f, default_, annotations));
+
+				} else if (f.getType().equals(String.class)) {
+
+					field.setText(getText(f, default_, annotations));
+
+				} else if (f.getType().equals(StringBuilder.class) || f.getType().equals(StringBuffer.class)) {
+
+					field.setTextarea(getTextArea(f, default_, annotations));
+
+				} else if (f.getType().equals(LocalDate.class)) {
+
+					field.setDate(getDate(f, default_, annotations, false));
+
+				} else if (f.getType().equals(LocalDateTime.class)) {
+
+					field.setDate(getDate(f, default_, annotations, true));
+
+				} else if (f.getType().equals(Boolean.class)) {
+
+					field.setCheckbox(getCheckbox(f, default_, annotations));
+
+				} else if (Collection.class.isAssignableFrom(f.getType())) {
+
+					Type genericType = f.getGenericType();
+
+					if (genericType instanceof ParameterizedType parameterizedType) {
+						Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+						if (actualTypeArguments.length == 1) {
+							field.setFile(getFiles(f, default_, annotations));
+						}
+						continue;
+					}
+
+					field.setSelect(getSelect(f, default_, annotations, null));
+				}
+
+				count++;
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return form;
+	}
+
+	private static Filter getFilter(Domain<?> domain, Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
+		
+		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
+
+		Filter filter = default_.getFilter(f.getType().getSimpleName());
+
+		if (uiFilter.select()) {
+			Object provider = f.getType().getDeclaredConstructor().newInstance();
+			List<?> options = (List<?>) ReflectionUtils.executeMethod(domain, "options", provider, filters);
+			filter.setOptions(options);
+		}
+
+		addBehaviorAnnotation(filter, f, annotations);
+		
+		return filter;
+	}
+
+	private static Area getTextArea(Field f, Default default_, Annotation[] annotations) {
+		Area textarea = default_.getTextarea();
+		addBehaviorAnnotation(textarea, f, annotations);
+		return textarea;
+	}
+
+	private static File getFiles(Field f, Default default_, Annotation[] annotations) {
+		
+		List<UploadFile> files = new ArrayList<>();
+
+		UploadFile uploadFile = new UploadFile();
+		uploadFile.setUid("550e8400-e29b-41d4-a716-44ar5wq00");
+		uploadFile.setName("avatar_small2x.jpg");
+		uploadFile.setStatus("done");
+		uploadFile.setUrl("https://cdn.awsli.com.br/2500x2500/1063/1063988/produto/240150477/bp3121s---002-2370yhtkq3.jpg");
+
+		files.add(uploadFile);
+
+		uploadFile = new UploadFile();
+		uploadFile.setUid("110e8400-e29b-41d4-a716-44ar5wq00");
+		uploadFile.setName("avatar_small2x.jpg");
+		uploadFile.setStatus("done");
+		uploadFile.setUrl("https://beefpoint.com.br/wp-content/uploads/2022/02/Foto-1440px-x-960px-2022-02-03T104828.205-1200x675.png");
+
+		files.add(uploadFile);
+
+		File file = default_.getFile(files);
+		addBehaviorAnnotation(file, f, annotations);
+		return file;
+	}
+
+	private static Tag getTag(Field f, Default default_, Annotation[] annotations) {
+		Tag tag = default_.getTag();
+		addBehaviorAnnotation(tag, f, annotations);
+		return tag;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Select getSelect(Field f, Default default_, Annotation[] annotations, UISelect uiSelect) throws Exception {
+		
+		List<Object> options = null;
+		
+		if(uiSelect != null) {
+			Object provider = uiSelect.provider().getDeclaredConstructor().newInstance();
+			options = (List<Object>) ReflectionUtils.executeMethod(provider, uiSelect.method());
+		} else {
+			options = new ComboHelper().values();
+		}
+
+		Select select = default_.getSelect(options);
+
+		addBehaviorAnnotation(select, f, annotations);
+
+		return select;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Radio getRadio(Field f, Default default_, Annotation[] annotations, UIRadio uiRadio) throws Exception {
+		
+		Object provider = uiRadio.provider().getDeclaredConstructor().newInstance();
+
+		List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiRadio.method());
+
+		Radio radio = default_.getRadio(options);
+
+		addBehaviorAnnotation(radio, f, annotations);
+		
+		return radio;
+	}
+
+	private static Time getTime(Field f, Default default_, Annotation[] annotations) {
+		Time time = default_.getTime();
+		addBehaviorAnnotation(time, f, annotations);
+		return time;
+	}
+	
+	private static Date getDate(Field f, Default default_, Annotation[] annotations, Boolean showtime) {
+		Date date = default_.getDate(showtime);
+		addBehaviorAnnotation(date, f, annotations);
+		return date;
+	}
+
+	private static Checkbox getCheckbox(Field f, Default default_, Annotation[] annotations) {
+		Checkbox checkbox = default_.getCheckbox();
+		addBehaviorAnnotation(checkbox, f, annotations);
+		return checkbox;
+	}
+	
+	private static Number getNumber(Field f, Default default_, Annotation[] annotations) {
+		Number number = default_.getNumber();
+		addBehaviorAnnotation(number, f, annotations);
+		return number;
+	}
+
+	private static Decimal getDecimal(Field f, Default default_, Annotation[] annotations) {
+		Decimal decimal = default_.getDecimal();
+		addBehaviorAnnotation(decimal, f, annotations);
+		return decimal;
+	}
+
+	private static Password getPassword(Field f, Default default_, Annotation[] annotations) {
+		Password password = default_.getPassword();
+		addBehaviorAnnotation(password, f, annotations);
+		return password;
+	}
+
+	private static Email getEmail(Field f, Default default_, Annotation[] annotations) {
+		Email email = default_.getEmail();
+		addBehaviorAnnotation(email, f, annotations);
+		return email;
+	}
+
+	private static Text getText(Field f, Default default_, Annotation[] annotations) {
+		Text text = default_.getText();
+		addBehaviorAnnotation(text, f, annotations);
+		return text;
+	}
+
+	private static Hidden getHidden(Field f, Default default_, Annotation[] annotations) {
+		Hidden hidden = default_.getHidden();
+		addBehaviorAnnotation(hidden, f, annotations);
+		return hidden;
+	}
+
+	private static Join getJoin(Domain<?> domain, Field f, Default default_, Annotation[] annotations) {
+
+		Object id = null;
+
+		Join join = default_.getJoin(f.getType().getSimpleName());
+
+		Object object = ReflectionUtils.get(StringsUtils.getMethod(f.getType().getSimpleName()), domain);
+
+		if (object != null) {
+			id = ReflectionUtils.get(StringsUtils.getMethod("id"), object);
+		}
+
+		join.setValue(id);
+
+		addBehaviorAnnotation(join, f, annotations);
+
+		return join;
+	}
+
+	private static void addBehaviorAnnotation(Base base, Field field, Annotation[] annotations) {
+
+		for (Annotation annotation : annotations) {
+
+			Class<? extends Annotation> annotationType = annotation.annotationType();
+
+			if (annotationMap.containsKey(annotationType)) {
+
+				if (annotation instanceof UIAutoComplete uiAutoComplete) {
+
+					Autocomplete autocomplete = new Autocomplete();
+					autocomplete.setDomain(uiAutoComplete.domain());
+					autocomplete.setAttribute(uiAutoComplete.attribute());
+					base.setAutocomplete(autocomplete);
+
+				} else if (annotation instanceof UIAutoCompleteSuggestion uiAutoCompleteSuggestion) {
+
+					Autocomplete autocomplete = new Autocomplete();
+					autocomplete.setSuggestions(uiAutoCompleteSuggestion.suggestions());
+					base.setAutocomplete(autocomplete);
+
+				} else if (annotation instanceof UIPosition uiPosition) {
+
+					Position position = new Position(uiPosition.x(), uiPosition.y());
+					base.setPosition(position);
+
+				} else if (annotation instanceof UIValidation uiValidation) {
+
+					UIPattern uiPattern = uiValidation.pattern();
+					UIAsync uiAsync = uiValidation.async();
+					UISync uiSync = uiValidation.sync();
+
+					Pattern pattern = new Pattern(uiPattern.pattern(), uiPattern.patternError());
+					Async async = new Async(uiAsync.asyncFunc(), uiAsync.asyncError(), uiAsync.method());
+					Sync sync = new Sync(uiSync.syncFunc(), uiSync.syncError());
+
+					Validation validation = createValidationIfNotNull(pattern, async, sync);
+					
+					boolean containsTemplate = checkTemplate(TYPE_TEMPLATE, uiValidation);
+					
+					if (containsTemplate) {
+						base.setRequired(uiValidation.required());
+					} else {
+						base.setRequired(!uiValidation.required());
+					}
+					
+					base.setValidation(validation);
+
+				} else {
+
+					Method[] methods = annotation.annotationType().getDeclaredMethods();
+					for (Method method : methods) {
+						if (method.getName().equals("template")) {
+							TypeTemplate[] typeTemplate = (TypeTemplate[]) ReflectionUtils.get(method.getName(), annotation);
+							boolean containsFilter = Arrays.stream(typeTemplate).anyMatch(t -> t == TYPE_TEMPLATE);
+							if (containsFilter) {
+								continue;
+							}
+						}
+
+						Object object = ReflectionUtils.get(method.getName(), annotation);
+
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
+					}
+
+				}
+			}
+		}
+
+	}
+
+	private static Validation createValidationIfNotNull(Pattern pattern, Async async, Sync sync) {
+		if (pattern.getRegex() != null || async.getFunction() != null || sync.getFunctions() != null) {
+			Validation validation = new Validation();
+			validation.setPattern(pattern.getRegex() != null ? pattern : null);
+			validation.setAsync(async.getFunction() != null ? async : null);
+			validation.setSync(sync.getFunctions() != null ? sync : null);
+			return validation;
+		}
+		return null;
+	}
+
+	private static List<Button> getButton(Domain<?> domain, TypeTemplate typeTemplate) {
+
+		List<Button> buttons = null;
+
+		if (domain.getClass().isAnnotationPresent(UIButtonAction.class)) {
+
+			UIButton[] uiButtons = domain.getClass().getAnnotationsByType(UIButton.class);
+
+			if (uiButtons.length > 0) {
+
+				buttons = new ArrayList<>();
+
+				for (UIButton uiButton : uiButtons) {
+					boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
+					if (containsTemplate) {
+						Method[] methods = uiButton.annotationType().getDeclaredMethods();
+						Button button = new Button(TypeButton.BUTTON);
+						for (Method method : methods) {
+							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
+							if (buttonObject instanceof UIAction uiAction) {
+								Action action = new Action();
+								action.setMethod(uiAction.method());
+								action.setRedirect(uiAction.redirect());
+								// action.setDomain(uiAction.actionObject());
+								button.setAction(action);
+								continue;
+							}
+							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+						}
+						buttons.add(button);
+					}
+				}
+
+			}
+		}
+
+		return buttons;
+	}
+
+	private static Button getSubmit(Domain<?> domain, TypeTemplate typeTemplate) {
+
+		Button button = null;
+
+		if (domain.getClass().isAnnotationPresent(UISubmit.class)) {
+			UISubmit uiSubmit = domain.getClass().getAnnotation(UISubmit.class);
+			boolean containsTemplate = checkTemplate(typeTemplate, uiSubmit);
+			if (containsTemplate) {
+				button = new Button(TypeButton.SUBMIT);
+				Method[] methods = uiSubmit.annotationType().getDeclaredMethods();
+				for (Method method : methods) {
+					Object submitObject = ReflectionUtils.get(method.getName(), uiSubmit);
+					ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+							new Class<?>[] { submitObject.getClass() }, new Object[] { submitObject });
+				}
+			}
+		}
+
+		return button;
+	}
+
+	private static boolean checkTemplate(TypeTemplate typeTemplate, Annotation annotation) {
+		TypeTemplate[] type = (TypeTemplate[]) ReflectionUtils.get("template", annotation);
+		boolean containsFilter = Arrays.stream(type).anyMatch(t -> t == typeTemplate);
+		return containsFilter;
+	}
+
+	private static String getTitle(Domain<?> domain) {
+		String title = null;
+		if (domain.getClass().isAnnotationPresent(UITitle.class)) {
+			UITitle uiTitle = domain.getClass().getAnnotation(UITitle.class);
+			title = uiTitle.value();
+		}
+		return title;
+	}
+
+	private static List<Dependency> getDependecys(Domain<?> domain) {
+		List<Dependency> dependencys = new ArrayList<>();
+		if (domain.getClass().isAnnotationPresent(UIDependency.class)) {
+			UIDependsOn[] uiDependsOns = domain.getClass().getAnnotationsByType(UIDependsOn.class);
+			Dependency dependency = null;
+			for (UIDependsOn uiDependsOn : uiDependsOns) {
+				dependency = new Dependency();
+				dependency.setLabel(uiDependsOn.label());
+				dependency.setField(uiDependsOn.field());
+				dependency.setDepends(uiDependsOn.depends());
+				dependencys.add(dependency);
+			}
+		}
+		return dependencys;
+	}
+
+	private static List<Conditional> getConditional(Domain<?> domain) {
+		List<Conditional> conditionals = new ArrayList<>();
+		if (domain.getClass().isAnnotationPresent(UIConditional.class)) {
+			UIConditionalOn[] uiConditionalOns = domain.getClass().getAnnotationsByType(UIConditionalOn.class);
+			Conditional conditional = null;
+			for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
+				conditional = new Conditional();
+				conditional.setLabel(uiConditionalOn.label());
+				conditional.setField(uiConditionalOn.field());
+				conditional.setOperator(uiConditionalOn.operator());
+				conditional.setMatchs(uiConditionalOn.matchs());
+				conditionals.add(conditional);
+			}
+		}
+		return conditionals;
+	}
+
+	private static List<Custom> getCustom(Domain<?> domain) {
+		List<Custom> custons = new ArrayList<>();
+		if (domain.getClass().isAnnotationPresent(UICustom.class)) {
+			UICustomOn[] uiCustomOns = domain.getClass().getAnnotationsByType(UICustomOn.class);
+			Custom custom = null;
+			for (UICustomOn uiCustomOn : uiCustomOns) {
+				custom = new Custom();
+				custom.setFunction(uiCustomOn.function());
+				custom.setMessage(uiCustomOn.message());
+				custom.setFields(uiCustomOn.fields());
+				custons.add(custom);
+			}
+		}
+		return custons;
+	}
+
+	private static List<Global> getGlobal(Domain<?> domain) {
+		List<Global> globals = new ArrayList<>();
+		if (domain.getClass().isAnnotationPresent(UIGlobal.class)) {
+			UIGlobalOn[] uiGlobalOns = domain.getClass().getAnnotationsByType(UIGlobalOn.class);
+			Global global = null;
+			for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
+				global = new Global();
+				global.setFunction(uiGlobalOn.function());
+				global.setMessage(uiGlobalOn.message());
+				globals.add(global);
+			}
+		}
+		return globals;
+	}
+
+}

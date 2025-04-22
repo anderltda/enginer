@@ -3,6 +3,7 @@ package br.com.enginer.domain.ui.usercase.annotation.instance.validate.condition
 import java.lang.annotation.*;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -12,4 +13,5 @@ public @interface UIConditionalOn {
 	String field();
 	TypeOperator operator();
 	String[] matchs();
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
 }

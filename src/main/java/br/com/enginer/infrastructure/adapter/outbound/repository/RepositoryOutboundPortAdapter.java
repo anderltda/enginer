@@ -146,13 +146,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException {
+	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 
 		Object object = null;
 
 		try {
 
-			String uri = File.separator + "query" + File.separator + File.separator + "single" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
+			String uri = File.separator + typeRepository.getValue() + File.separator + File.separator + "single" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
 
 			Mono<?> mono = getWebClient()
 					.get()
@@ -227,13 +227,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException {
+	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 
 		List<Domain<?>> list = new ArrayList<>();
 
 		try {
 
-			String uri = File.separator + "query" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
+			String uri = File.separator + typeRepository.getValue() + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
 
 			Flux<?> flux = getWebClient()
 					.get()
@@ -362,13 +362,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException {
+	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 
 		PageResult<?> pageResult = null;
 
 		try {
 
-			String uri = File.separator + "query" + File.separator + File.separator + "paginator" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
+			String uri = File.separator + typeRepository.getValue() + File.separator + File.separator + "paginator" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
 
 			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() {};
 
@@ -435,13 +435,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public Integer count(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException {
+	public Integer count(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 		
 		Integer count = 0;
 
 		try {
 			
-			String uri = File.separator + "query" + File.separator + File.separator + "count" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
+			String uri = File.separator + typeRepository.getValue() + File.separator + File.separator + "count" + File.separator + domain.getClass().getSimpleName() + File.separator + queryName;
 
 			Mono<Integer> mono = getWebClient()
 					.get()
@@ -467,42 +467,6 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 		return count;
 	}
 	
-	/**
-	 *
-	 */
-	@Override
-	public Integer count(Domain<?> domain, Map<String, Object> filter, CharSequence method) throws UncheckedException {
-		
-		Integer count = 0;
-
-		try {
-			
-			String uri = File.separator + "mapper" + File.separator + File.separator + "count" + File.separator + domain.getClass().getSimpleName() + File.separator + method;
-
-			Mono<Integer> mono = getWebClient()
-					.get()
-					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
-					.retrieve()
-					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
-					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
-					.bodyToMono(Integer.class);
-
-			count = mono.block();
-
-		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
-			throw ex;
-		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
-			throw new UncheckedException("[WebClientResponseException]", ex);
-		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
-			throw new UncheckedException("[Erro inesperado]", ex);
-		}
-
-		return count;
-	}
-
 	/**
 	 *
 	 */

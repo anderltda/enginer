@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
@@ -13,6 +14,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UI
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 /**
@@ -26,9 +28,7 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
-	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
-			"dogMel", "dogMagrela" }, syncError = { "message1",
-					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
+	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = { "dogMel", "dogMagrela" }, syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	private String fruit;
 
 	@UIPosition(x = 1, y = 2)
@@ -42,6 +42,8 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
+	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.FILTER })
 	private EntityFive entityFive;
 	
 	@Override

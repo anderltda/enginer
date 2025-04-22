@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.enginer.domain.example.dto.view.EntityOneView;
+import br.com.enginer.domain.example.dto.data.EntityOneData;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
@@ -14,6 +14,7 @@ import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
 /**
  * 
@@ -127,10 +128,12 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			Map<String, Object> filter = new HashMap<>();
 			//filter.put("birthDate", date);
 			//filter.put("birthDate_op", "ge");
-			//filter.put("name", "Anderson");
+			filter.put("name", "Anderson");
 			//filter.put("name_op", "eq");
 
-			repositoryOutboundPort.count(new EntityOneView(), filter, "teste_busca_com_condicoes_diversars");
+			int i = repositoryOutboundPort.count(new EntityOneData(), filter, TypeRepository.MAPPER, "countEntitiesByName");
+			
+			System.out.println(i);
 			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);

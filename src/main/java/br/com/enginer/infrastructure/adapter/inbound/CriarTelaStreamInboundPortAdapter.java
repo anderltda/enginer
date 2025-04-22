@@ -64,5 +64,29 @@ public class CriarTelaStreamInboundPortAdapter {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
+	/**
+	 * @param domain
+	 * @return
+	 */
+	@GetMapping({ "/filter", "/filter/{id}" })
+	public ResponseEntity<Form> filter(@UIDomain Domain<?> domain) {
+
+		try {
+
+			trackingProvider.setInnerId(UUIDGenerator.generate());
+			
+			logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
+
+			Form form = uIInboundPort.filter(domain);
+
+			return ResponseEntity.ok(form);
+
+		} catch (Exception ex) {
+			logger.error(CriarTelaStreamInboundPortAdapter.class, "Erro ao criar entidade", ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
 }

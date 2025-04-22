@@ -8,6 +8,16 @@ public class Constants {
 	public static final String PACKAGE_NAME_DOMAIN = "br.com.enginer.domain";
 	
 	/**
+	 *  Pattern para aplicar no JSON mapper @JsonFormat - Date Time
+	 */
+	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	
+	/**
+	 *  Pattern para aplicar no JSON mapper @JsonFormat - Date
+	 */
+	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	
+	/**
 	 * Operador Ordenacao
 	 */
 	public static final String ASC = "asc";

@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,6 +16,7 @@ public @interface UISubmit {
 	String label();
 	String method();
 	String icon() default "";
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_PRIMARY; 
 	boolean disabled() default false;
 	boolean highlight() default false;

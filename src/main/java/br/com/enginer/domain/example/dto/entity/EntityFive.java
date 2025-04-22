@@ -12,6 +12,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 /**
@@ -32,13 +33,13 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	private String reference;
 	
-	@UIPosition(x = 1, y = 1)
-	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" })
-	private EntityStatus entityStatus;
-	
 	@UIPosition(x = 2, y = 1)
 	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
+
+	@UIPosition(x = 1, y = 1)
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" }, template = { TypeTemplate.FORM })
+	private EntityStatus entityStatus;
 
 	@Override
 	public String getId() {

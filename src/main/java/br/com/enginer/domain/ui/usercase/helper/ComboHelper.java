@@ -9,6 +9,16 @@ import br.com.enginer.domain.ui.usercase.schema.field.behavior.Option;
  * 
  */
 public class ComboHelper {
+	
+	public List<Object> values() {
+		List<Object> options = new ArrayList<>();
+		options.add(new Option("Value_1", 1));
+		options.add(new Option("Value_2", 2));
+		options.add(new Option("Value_3", 3));
+		options.add(new Option("Value_4", 4));
+		options.add(new Option("Value_5", 5));
+		return options;
+	}
 
 	public List<Option> consoles() {
 		List<Option> options = new ArrayList<>();

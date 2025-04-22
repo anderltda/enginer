@@ -7,6 +7,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -31,16 +32,22 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIG
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 /**
  * 
  */
 @UITitle("Entity One -> Stream")
+
+
 @UIButtonAction({
-	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", confirm = false, needsValidation = true, action = @UIAction(method = "onSubmit"))
+	@UIButton(template = { TypeTemplate.FORM }, label = "Save", method = "methodJavaSave()", icon = "save", confirm = false, needsValidation = true, action = @UIAction(method = "onSubmit")),
+	@UIButton(template = { TypeTemplate.FORM }, label = "Clear", method = "methodJavaSave()", icon = "save", confirm = false, needsValidation = false, action = @UIAction(method = "onClearForm"))
 })
-@UISubmit(label = "Editar", method = "backendJavaSubmit", icon = "edit", needsValidation = true)
+@UISubmit(template = { TypeTemplate.FILTER }, label = "Search", method = "backendJavaSubmit", icon = "edit", needsValidation = false)
+
+
 @UIGlobal({ @UIGlobalOn(function = "customEntitySumValuesValidator",       message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!")})
 @UICustom({ @UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = {	"entityOne.entityTwo.cost", "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.amount", "entityOne.entityTwo.entityTree.entityFour.attribute", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor"} )})
 @UIConditional({
@@ -61,20 +68,20 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIId
 	private Long id;
 
-	@UIText(label = "Name")
+	@UIText(template = { TypeTemplate.FORM }, label = "Name")
 	@UIAutoCompleteSuggestion(suggestions = { "anderson", "pedro" })
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)
 	@UIValidation(
 		required = true,
 	    pattern  = @UIPattern(pattern = "^[^wW]*$",                   patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"),
-	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne",   asyncError = "Validação direto no field 'ASYNC'"),
-	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },      syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
+	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"),
+	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },   syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
 	)
 	private String name;
 
 	@UIPosition(x = 1, y = 2)
-	@UIValidation(required = true)
+	@UIValidation(required = true, template = { TypeTemplate.FORM })
 	@UIFilter(label = "Entity Status", field = "name", readonly = false)
 	private EntityStatus entityStatus;
 
@@ -98,6 +105,8 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime prohibitedDateTime;
 
+	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 	
 	@Override

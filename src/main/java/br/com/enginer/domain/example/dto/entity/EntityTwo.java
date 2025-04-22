@@ -5,10 +5,12 @@ import java.time.LocalDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -35,6 +37,8 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 	@UIFilter(label = "Entity Status", field = "name", select = false)
 	private EntityStatus entityStatus;
 
+	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER })
 	private EntityTree entityTree;
 	
 	@Override

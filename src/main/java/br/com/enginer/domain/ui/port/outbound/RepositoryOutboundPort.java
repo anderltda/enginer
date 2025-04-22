@@ -6,6 +6,7 @@ import java.util.Map;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
 /**
  * 
@@ -16,11 +17,11 @@ public interface RepositoryOutboundPort {
 	
 	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException;
+	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
 	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException;
+	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
 	public List<Domain<?>> findAllById(Domain<?> domain, Object... id) throws UncheckedException;
 	
@@ -28,13 +29,11 @@ public interface RepositoryOutboundPort {
 	
 	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException;
+	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
 	public Integer count(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	public Integer count(Domain<?> domain, Map<String, Object> filter, String queryName) throws UncheckedException;
-	
-	public Integer count(Domain<?> domain, Map<String, Object> filter, CharSequence method) throws UncheckedException;
+	public Integer count(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 
 	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException;
 	
