@@ -6,7 +6,8 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 public class Action {
 
 	private String redirect;
-	private String method;
+	private String clientMethod;
+	private String serverMethod;
 	private ActionObject domain;
 
 	public String getRedirect() {
@@ -17,12 +18,20 @@ public class Action {
 		this.redirect = redirect;
 	}
 
-	public String getMethod() {
-		return method;
+	public String getClientMethod() {
+		return clientMethod;
 	}
 
-	public void setMethod(String method) {
-		this.method = method;
+	public void setClientMethod(String clientMethod) {
+		this.clientMethod = clientMethod;
+	}
+
+	public String getServerMethod() {
+		return serverMethod;
+	}
+
+	public void setServerMethod(String serverMethod) {
+		this.serverMethod = serverMethod;
 	}
 
 	public ActionObject getDomain() {

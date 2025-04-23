@@ -1,7 +1,6 @@
 package br.com.enginer.domain.ui.usercase.template;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -42,9 +41,15 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UI
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
@@ -57,6 +62,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeButton;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.Form;
+import br.com.enginer.domain.ui.usercase.schema.field.Field;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.Autocomplete;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.Base;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.Default;
@@ -84,8 +90,12 @@ import br.com.enginer.domain.ui.usercase.schema.field.type.Tag;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Text;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Time;
 import br.com.enginer.domain.ui.usercase.schema.instance.Action;
+import br.com.enginer.domain.ui.usercase.schema.instance.ActionObject;
 import br.com.enginer.domain.ui.usercase.schema.instance.Button;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.paginator.Paginator;
+import br.com.enginer.domain.ui.usercase.schema.paginator.column.Column;
+import br.com.enginer.domain.ui.usercase.schema.paginator.config.Config;
 import br.com.enginer.domain.ui.usercase.schema.validate.Validate;
 import br.com.enginer.domain.ui.usercase.schema.validate.conditional.Conditional;
 import br.com.enginer.domain.ui.usercase.schema.validate.custom.Custom;
@@ -143,57 +153,97 @@ public final class FormTemplate {
 		Form form = null;
 
 		try {
-
-			TYPE_TEMPLATE = typeTemplate;
-
-			List<br.com.enginer.domain.ui.usercase.schema.field.Field> fields = new ArrayList<>();
-
-			br.com.enginer.domain.ui.usercase.schema.field.Field field = null;
-
-			Validate validate = new Validate();
-
 			String title = getTitle(domain);
 
+			TYPE_TEMPLATE = typeTemplate;
+			Validate validate = new Validate();
+		
+			List<Field> fields = new ArrayList<>();
+			Field field = null;
+
+			Paginator paginator = new Paginator();
+			Config config = new Config();
+			Column column = new Column();
+			List<Field> actions = new ArrayList<>();
+			
+			paginator.setConfig(config);
+			paginator.setColumn(column);
+			paginator.setActions(actions);
+			
+			
+			if (domain.getClass().isAnnotationPresent(UIPaginator.class)) {		
+				
+				UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
+				
+				UIConfig uiConfig = uiPaginator.config();
+				config.setEditable(uiConfig.editable());
+				config.setMultiSelection(uiConfig.multiSelection());
+				config.setExpandable(uiConfig.expandable());
+				
+				UIColumn uiColumn = uiPaginator.column();
+				column.setInitial(Arrays.asList(uiColumn.initial()));
+				column.setHidden(Arrays.asList(uiColumn.hidden()));
+				
+				
+				UIButtonAction uiButtonAction = uiPaginator.actions();
+				UIButton[] uiButtons = uiButtonAction.value();
+				
+				if (uiButtons.length > 0) {
+					List<Button> buttons = new ArrayList<>();
+					for (UIButton uiButton : uiButtons) {
+						boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
+						if (containsTemplate) {
+							Method[] methods = uiButton.annotationType().getDeclaredMethods();
+							Button button = new Button(TypeButton.BUTTON);
+							for (Method method : methods) {
+								Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
+								if (buttonObject instanceof UIAction uiAction) {
+									button.setAction(getButtonAction(typeTemplate, uiAction));
+									continue;
+								}
+								if (method.getName().equals("template"))
+									continue;
+								ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+							}
+							buttons.add(button);
+						}
+					}
+					
+					if (buttons != null) {
+						buttons.forEach(button -> {
+							br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+							fieldButton.setButton(button);
+							actions.add(fieldButton);
+						});
+					}
+
+				}
+			}
+			
 			form = new Form();
-			form.setFields(fields);
-			form.setValidate(validate);
 			form.setTitle(title != null ? title : StringsUtils.normalizeLabelToLowercaseCamelization(domain.getClass().getSimpleName().toString()));
-
-			Button submit = getSubmit(domain, typeTemplate);
-
-			if (submit != null) {
-				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
-				field.setButton(submit);
-				fields.add(field);
-			}
-
-			List<Button> buttons = getButton(domain, typeTemplate);
-
-			if (buttons != null) {
-				buttons.forEach(button -> {
-					br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
-					fieldButton.setButton(button);
-					fields.add(fieldButton);
-				});
-			}
+			form.setPaginator(paginator);
+			form.setValidate(validate);
+			form.setFields(fields);
 
 			validate.setGlobal(getGlobal(domain));
 			validate.setCustom(getCustom(domain));
 			validate.setConditional(getConditional(domain));
 			validate.setDependency(getDependecys(domain));
 
-			List<Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
+			List<java.lang.reflect.Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
 
+			
 			int count = 1;
 
-			for (Field f : fs) {
+			for (java.lang.reflect.Field f : fs) {
 
 				int x = count;
 				int y = count % 2 == 0 ? count - 1 : count;
 
 				Default default_ = new Default(x, y, f.getName(), false, domain);
 
-				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+				field = new Field();
 				fields.add(field);
 
 				Annotation[] annotations = f.getAnnotations();
@@ -209,28 +259,28 @@ public final class FormTemplate {
 						if (annotation instanceof UIId uiId) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiId);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setHidden(getHidden(f, default_, annotations));
 							}
-							
+
 							identity = true;
 
 						} else if (annotation instanceof UIHidden uiHidden) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiHidden);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setHidden(getHidden(f, default_, annotations));
 							}
-							
+
 							identity = true;
 
 						} else if (annotation instanceof UIJoin uiJoin) {
-							
+
 							boolean containsTemplate = checkTemplate(typeTemplate, uiJoin);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setJoin(getJoin(domain, f, default_, annotations));
 							}
 
@@ -239,8 +289,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIText uiText) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiText);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setText(getText(f, default_, annotations));
 								count++;
 							}
@@ -250,8 +300,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIEmail uiEmail) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiEmail);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setEmail(getEmail(f, default_, annotations));
 								count++;
 							}
@@ -261,19 +311,19 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIPassword uiPassword) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiPassword);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setPassword(getPassword(f, default_, annotations));
 								count++;
 							}
-							
+
 							identity = true;
 
 						} else if (annotation instanceof UINumber uiNumber) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiNumber);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setNumber(getNumber(f, default_, annotations));
 								count++;
 							}
@@ -283,8 +333,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIDecimal uiDecimal) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiDecimal);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setDecimal(getDecimal(f, default_, annotations));
 								count++;
 							}
@@ -294,8 +344,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UICheckbox uiCheckbox) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiCheckbox);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setCheckbox(getCheckbox(f, default_, annotations));
 								count++;
 							}
@@ -305,8 +355,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIDate uiDate) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiDate);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setDate(getDate(f, default_, annotations, uiDate.showtime()));
 								count++;
 							}
@@ -316,8 +366,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UITime uiTime) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiTime);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setTime(getTime(f, default_, annotations));
 								count++;
 							}
@@ -327,8 +377,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIRadio uiRadio) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiRadio);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setRadio(getRadio(f, default_, annotations, uiRadio));
 								count++;
 							}
@@ -338,8 +388,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UISelect uiSelect) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiSelect);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setSelect(getSelect(f, default_, annotations, uiSelect));
 								count++;
 							}
@@ -347,10 +397,10 @@ public final class FormTemplate {
 							identity = true;
 
 						} else if (annotation instanceof UITag uiTag) {
-							
+
 							boolean containsTemplate = checkTemplate(typeTemplate, uiTag);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setTag(getTag(f, default_, annotations));
 								count++;
 							}
@@ -360,8 +410,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIFile uiFilter) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiFilter);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setFile(getFiles(f, default_, annotations));
 								count++;
 							}
@@ -369,10 +419,10 @@ public final class FormTemplate {
 							identity = true;
 
 						} else if (annotation instanceof UITextArea uiTextArea) {
-							
+
 							boolean containsTemplate = checkTemplate(typeTemplate, uiTextArea);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setTextarea(getTextArea(f, default_, annotations));
 								count++;
 							}
@@ -382,8 +432,8 @@ public final class FormTemplate {
 						} else if (annotation instanceof UIFilter uiFilter) {
 
 							boolean containsTemplate = checkTemplate(typeTemplate, uiFilter);
-							
-							if(containsTemplate) {
+
+							if (containsTemplate) {
 								field.setFilter(getFilter(domain, f, default_, annotations, uiFilter));
 								count++;
 							}
@@ -403,17 +453,20 @@ public final class FormTemplate {
 
 					count--;
 
-				}  else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
+				} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
 
 					field.setJoin(getJoin(domain, f, default_, annotations));
 
 					count--;
 
-				} else if (f.getType().equals(Integer.class) || f.getType().equals(Short.class) || f.getType().equals(Long.class) || f.getType().equals(Byte.class) || f.getType().equals(BigInteger.class)) {
+				} else if (f.getType().equals(Integer.class) || f.getType().equals(Short.class)
+						|| f.getType().equals(Long.class) || f.getType().equals(Byte.class)
+						|| f.getType().equals(BigInteger.class)) {
 
 					field.setNumber(getNumber(f, default_, annotations));
 
-				} else if (f.getType().equals(Float.class) || f.getType().equals(Double.class) || f.getType().equals(BigDecimal.class)) {
+				} else if (f.getType().equals(Float.class) || f.getType().equals(Double.class)
+						|| f.getType().equals(BigDecimal.class)) {
 
 					field.setDecimal(getDecimal(f, default_, annotations));
 
@@ -454,6 +507,25 @@ public final class FormTemplate {
 
 				count++;
 			}
+			
+			List<Button> buttons = getButton(domain, typeTemplate);
+			
+			if (buttons != null) {
+				buttons.forEach(button -> {
+					br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+					fieldButton.setButton(button);
+					fields.add(fieldButton);
+				});
+			}
+
+			Button submit = getSubmit(domain, typeTemplate);
+
+			if (submit != null) {
+				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+				field.setButton(submit);
+				fields.add(field);
+			}
+
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -463,8 +535,9 @@ public final class FormTemplate {
 		return form;
 	}
 
-	private static Filter getFilter(Domain<?> domain, Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
-		
+	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations,
+			UIFilter uiFilter) throws Exception {
+
 		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
 
 		Filter filter = default_.getFilter(f.getType().getSimpleName());
@@ -476,25 +549,26 @@ public final class FormTemplate {
 		}
 
 		addBehaviorAnnotation(filter, f, annotations);
-		
+
 		return filter;
 	}
 
-	private static Area getTextArea(Field f, Default default_, Annotation[] annotations) {
+	private static Area getTextArea(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Area textarea = default_.getTextarea();
 		addBehaviorAnnotation(textarea, f, annotations);
 		return textarea;
 	}
 
-	private static File getFiles(Field f, Default default_, Annotation[] annotations) {
-		
+	private static File getFiles(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
+
 		List<UploadFile> files = new ArrayList<>();
 
 		UploadFile uploadFile = new UploadFile();
 		uploadFile.setUid("550e8400-e29b-41d4-a716-44ar5wq00");
 		uploadFile.setName("avatar_small2x.jpg");
 		uploadFile.setStatus("done");
-		uploadFile.setUrl("https://cdn.awsli.com.br/2500x2500/1063/1063988/produto/240150477/bp3121s---002-2370yhtkq3.jpg");
+		uploadFile.setUrl(
+				"https://cdn.awsli.com.br/2500x2500/1063/1063988/produto/240150477/bp3121s---002-2370yhtkq3.jpg");
 
 		files.add(uploadFile);
 
@@ -502,7 +576,8 @@ public final class FormTemplate {
 		uploadFile.setUid("110e8400-e29b-41d4-a716-44ar5wq00");
 		uploadFile.setName("avatar_small2x.jpg");
 		uploadFile.setStatus("done");
-		uploadFile.setUrl("https://beefpoint.com.br/wp-content/uploads/2022/02/Foto-1440px-x-960px-2022-02-03T104828.205-1200x675.png");
+		uploadFile.setUrl(
+				"https://beefpoint.com.br/wp-content/uploads/2022/02/Foto-1440px-x-960px-2022-02-03T104828.205-1200x675.png");
 
 		files.add(uploadFile);
 
@@ -511,18 +586,19 @@ public final class FormTemplate {
 		return file;
 	}
 
-	private static Tag getTag(Field f, Default default_, Annotation[] annotations) {
+	private static Tag getTag(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Tag tag = default_.getTag();
 		addBehaviorAnnotation(tag, f, annotations);
 		return tag;
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Select getSelect(Field f, Default default_, Annotation[] annotations, UISelect uiSelect) throws Exception {
-		
+	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UISelect uiSelect)
+			throws Exception {
+
 		List<Object> options = null;
-		
-		if(uiSelect != null) {
+
+		if (uiSelect != null) {
 			Object provider = uiSelect.provider().getDeclaredConstructor().newInstance();
 			options = (List<Object>) ReflectionUtils.executeMethod(provider, uiSelect.method());
 		} else {
@@ -537,8 +613,8 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Radio getRadio(Field f, Default default_, Annotation[] annotations, UIRadio uiRadio) throws Exception {
-		
+	private static Radio getRadio(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIRadio uiRadio) throws Exception {
+
 		Object provider = uiRadio.provider().getDeclaredConstructor().newInstance();
 
 		List<Object> options = (List<Object>) ReflectionUtils.executeMethod(provider, uiRadio.method());
@@ -546,65 +622,65 @@ public final class FormTemplate {
 		Radio radio = default_.getRadio(options);
 
 		addBehaviorAnnotation(radio, f, annotations);
-		
+
 		return radio;
 	}
 
-	private static Time getTime(Field f, Default default_, Annotation[] annotations) {
+	private static Time getTime(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Time time = default_.getTime();
 		addBehaviorAnnotation(time, f, annotations);
 		return time;
 	}
-	
-	private static Date getDate(Field f, Default default_, Annotation[] annotations, Boolean showtime) {
+
+	private static Date getDate(java.lang.reflect.Field f, Default default_, Annotation[] annotations, Boolean showtime) {
 		Date date = default_.getDate(showtime);
 		addBehaviorAnnotation(date, f, annotations);
 		return date;
 	}
 
-	private static Checkbox getCheckbox(Field f, Default default_, Annotation[] annotations) {
+	private static Checkbox getCheckbox(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Checkbox checkbox = default_.getCheckbox();
 		addBehaviorAnnotation(checkbox, f, annotations);
 		return checkbox;
 	}
-	
-	private static Number getNumber(Field f, Default default_, Annotation[] annotations) {
+
+	private static Number getNumber(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Number number = default_.getNumber();
 		addBehaviorAnnotation(number, f, annotations);
 		return number;
 	}
 
-	private static Decimal getDecimal(Field f, Default default_, Annotation[] annotations) {
+	private static Decimal getDecimal(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Decimal decimal = default_.getDecimal();
 		addBehaviorAnnotation(decimal, f, annotations);
 		return decimal;
 	}
 
-	private static Password getPassword(Field f, Default default_, Annotation[] annotations) {
+	private static Password getPassword(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Password password = default_.getPassword();
 		addBehaviorAnnotation(password, f, annotations);
 		return password;
 	}
 
-	private static Email getEmail(Field f, Default default_, Annotation[] annotations) {
+	private static Email getEmail(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Email email = default_.getEmail();
 		addBehaviorAnnotation(email, f, annotations);
 		return email;
 	}
 
-	private static Text getText(Field f, Default default_, Annotation[] annotations) {
+	private static Text getText(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Text text = default_.getText();
 		addBehaviorAnnotation(text, f, annotations);
 		return text;
 	}
 
-	private static Hidden getHidden(Field f, Default default_, Annotation[] annotations) {
+	private static Hidden getHidden(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Hidden hidden = default_.getHidden();
 		addBehaviorAnnotation(hidden, f, annotations);
 		return hidden;
 	}
 
-	private static Join getJoin(Domain<?> domain, Field f, Default default_, Annotation[] annotations) {
+	private static Join getJoin(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 
 		Object id = null;
 
@@ -623,7 +699,7 @@ public final class FormTemplate {
 		return join;
 	}
 
-	private static void addBehaviorAnnotation(Base base, Field field, Annotation[] annotations) {
+	private static void addBehaviorAnnotation(Base base, java.lang.reflect.Field field, Annotation[] annotations) {
 
 		for (Annotation annotation : annotations) {
 
@@ -660,15 +736,15 @@ public final class FormTemplate {
 					Sync sync = new Sync(uiSync.syncFunc(), uiSync.syncError());
 
 					Validation validation = createValidationIfNotNull(pattern, async, sync);
-					
+
 					boolean containsTemplate = checkTemplate(TYPE_TEMPLATE, uiValidation);
-					
+
 					if (containsTemplate) {
 						base.setRequired(uiValidation.required());
 					} else {
 						base.setRequired(!uiValidation.required());
 					}
-					
+
 					base.setValidation(validation);
 
 				} else {
@@ -676,7 +752,8 @@ public final class FormTemplate {
 					Method[] methods = annotation.annotationType().getDeclaredMethods();
 					for (Method method : methods) {
 						if (method.getName().equals("template")) {
-							TypeTemplate[] typeTemplate = (TypeTemplate[]) ReflectionUtils.get(method.getName(), annotation);
+							TypeTemplate[] typeTemplate = (TypeTemplate[]) ReflectionUtils.get(method.getName(),
+									annotation);
 							boolean containsFilter = Arrays.stream(typeTemplate).anyMatch(t -> t == TYPE_TEMPLATE);
 							if (containsFilter) {
 								continue;
@@ -685,7 +762,8 @@ public final class FormTemplate {
 
 						Object object = ReflectionUtils.get(method.getName(), annotation);
 
-						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()),
+								new Class<?>[] { object.getClass() }, new Object[] { object });
 					}
 
 				}
@@ -706,18 +784,18 @@ public final class FormTemplate {
 	}
 
 	private static List<Button> getButton(Domain<?> domain, TypeTemplate typeTemplate) {
-
 		List<Button> buttons = null;
-
+		List<UIButton> uIButtons = new ArrayList<>();
 		if (domain.getClass().isAnnotationPresent(UIButtonAction.class)) {
-
+			UIButtonAction uiButtonAction = domain.getClass().getAnnotation(UIButtonAction.class);
 			UIButton[] uiButtons = domain.getClass().getAnnotationsByType(UIButton.class);
-
+            uIButtons.addAll(Arrays.asList(uiButtons));
+            for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
+            	uIButtons.add(custom.getAnnotation(UIButton.class));
+            }
 			if (uiButtons.length > 0) {
-
 				buttons = new ArrayList<>();
-
-				for (UIButton uiButton : uiButtons) {
+				for (UIButton uiButton : uIButtons) {
 					boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
 					if (containsTemplate) {
 						Method[] methods = uiButton.annotationType().getDeclaredMethods();
@@ -725,13 +803,11 @@ public final class FormTemplate {
 						for (Method method : methods) {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 							if (buttonObject instanceof UIAction uiAction) {
-								Action action = new Action();
-								action.setMethod(uiAction.method());
-								action.setRedirect(uiAction.redirect());
-								// action.setDomain(uiAction.actionObject());
-								button.setAction(action);
+								button.setAction(getButtonAction(typeTemplate, uiAction));
 								continue;
 							}
+							if (method.getName().equals("template"))
+								continue;
 							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
 									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
 						}
@@ -741,8 +817,39 @@ public final class FormTemplate {
 
 			}
 		}
-
 		return buttons;
+	}
+
+	private static Action getButtonAction(TypeTemplate typeTemplate, UIAction uiAction) {
+		boolean containsTemplate = false;
+		Action action = new Action();
+		if (uiAction.method() instanceof UIActionMethod uiActionMethod) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionMethod);
+			if (containsTemplate) {
+				action.setClientMethod(uiActionMethod.clientMethod());
+				action.setServerMethod(uiActionMethod.serverMethod());
+			}
+		}
+
+		if (uiAction.redirect() instanceof UIActionRedirect uiActionRedirect) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionRedirect);
+			if (containsTemplate) {
+				action.setRedirect(uiActionRedirect.redirect());
+			}
+		}
+
+		if (uiAction.domain() instanceof UIActionDomain uiActionDomain) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionDomain);
+			if (containsTemplate) {
+				ActionObject actionObject = new ActionObject();
+				actionObject.setObject(uiActionDomain.object());
+				actionObject.setParam(uiActionDomain.param());
+				if (!actionObject.getObject().isEmpty() && !actionObject.getParam().isEmpty()) {
+					action.setDomain(actionObject);
+				}
+			}
+		}
+		return action;
 	}
 
 	private static Button getSubmit(Domain<?> domain, TypeTemplate typeTemplate) {

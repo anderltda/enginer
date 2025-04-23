@@ -120,20 +120,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			ActionLogger actionLogger = domain.getActionLogger();
 			
-			System.out.println(actionLogger.getAction());
-			
-			LocalDateTime dateTime = LocalDateTime.of(1983, 3, 29, 0, 0, 0);
-			LocalDate date = LocalDate.of(1983, 3, 29);
-			
-			Map<String, Object> filter = new HashMap<>();
-			//filter.put("birthDate", date);
-			//filter.put("birthDate_op", "ge");
-			filter.put("name", "Anderson");
-			//filter.put("name_op", "eq");
-
-			int i = repositoryOutboundPort.count(new EntityOneData(), filter, TypeRepository.MAPPER, "countEntitiesByName");
-			
-			System.out.println(i);
+			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
 			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);

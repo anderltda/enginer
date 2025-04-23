@@ -2,7 +2,7 @@ package br.com.enginer.domain.ui.usercase.schema.paginator;
 
 import java.util.List;
 
-import br.com.enginer.domain.ui.usercase.schema.instance.Button;
+import br.com.enginer.domain.ui.usercase.schema.field.Field;
 import br.com.enginer.domain.ui.usercase.schema.paginator.column.Column;
 import br.com.enginer.domain.ui.usercase.schema.paginator.config.Config;
 
@@ -13,7 +13,7 @@ public class Paginator {
 
 	private Column column;
 	private Config config;
-	private List<Button> actions;
+	private List<Field> actions;
 
 	public Column getColumn() {
 		return column;
@@ -31,11 +31,11 @@ public class Paginator {
 		this.config = config;
 	}
 
-	public List<Button> getActions() {
+	public List<Field> getActions() {
 		return actions;
 	}
 
-	public void setActions(List<Button> actions) {
+	public void setActions(List<Field> actions) {
 		this.actions = actions;
 	}
 }

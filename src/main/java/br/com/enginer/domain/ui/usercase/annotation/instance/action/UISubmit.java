@@ -14,7 +14,6 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Target(ElementType.TYPE)
 public @interface UISubmit {
 	String label();
-	String method();
 	String icon() default "";
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_PRIMARY; 

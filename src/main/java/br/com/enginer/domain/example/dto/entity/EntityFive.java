@@ -8,9 +8,9 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -20,9 +20,8 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Entity Five -> Stream")
 @UIButtonAction({
-	@UIButton(label = "Salvar", method = "methodJavaSave()", icon = "save", needsValidation = true, state = TypeButtonState.BTN_STATE_COMPLETE, action = @UIAction(method = "onSubmit"))
+	@UIButton(label = "Salvar", icon = "save", needsValidation = true, state = TypeButtonState.BTN_STATE_COMPLETE, action = @UIAction(method = @UIActionMethod(clientMethod = "onSubmit")))
 })
-@UISubmit(label = "Editar", method = "submitBackEnd()", icon = "edit", needsValidation = true)
 public class EntityFive extends DomainAbstract<EntityFive, String> {
 
 	@UIId

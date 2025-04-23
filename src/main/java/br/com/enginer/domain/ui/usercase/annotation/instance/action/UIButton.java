@@ -14,13 +14,12 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Repeatable(UIButtonAction.class)
 public @interface UIButton {
 	String label();
-	String method();
 	String icon() default "";
 	boolean disabled() default false;
 	boolean highlight() default false;
 	boolean confirm() default false;
 	boolean needsValidation() default true;
-	TypeTemplate[] template() default { TypeTemplate.FILTER };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_DEFAULT; 
 	UIAction action() default @UIAction;
 }

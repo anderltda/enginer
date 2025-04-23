@@ -39,8 +39,8 @@ public class BeanConfiguration {
 	/**
 	 * @return
 	 */
-	@Primary
 	@Bean
+	@Primary
 	ObjectMapper objectMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-@UISubmit(label = "Salvar", method = "salvandoDataH", icon = "save")
+@UISubmit(label = "Salvar", icon = "save")
 public class Data extends DomainAbstract<Data, Long> {
 
 	private Long id;

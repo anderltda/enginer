@@ -13,7 +13,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.UploadFile;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-@UISubmit(label = "Salvar", method = "salvandoDataH", icon = "save")
+@UISubmit(label = "Salvar", icon = "save")
 public class DataH extends DomainAbstract<DataH, Long> {
 
 	@UIId

@@ -11,7 +11,6 @@ public class Button {
 
 	private String type;
 	private String label;
-	private String method;
 	private String icon;
 	private Boolean disabled;
 	private Boolean highlight;
@@ -44,14 +43,6 @@ public class Button {
 
 	public void setLabel(String label) {
 		this.label = label;
-	}
-
-	public String getMethod() {
-		return method;
-	}
-
-	public void setMethod(String method) {
-		this.method = method;
 	}
 
 	public String getIcon() {
