@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
@@ -14,10 +15,11 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(
-    label = "Excluir",
+    label = Constants.LABEL_DELETE,
     icon = "close_ circle",
     state = TypeButtonState.BTN_STATE_DANGER,
-    template = TypeTemplate.FORM,
+    confirm = true,
+    template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
         method = @UIActionMethod(serverMethod = "delete")
     )

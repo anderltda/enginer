@@ -118,7 +118,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
 			
-			domain = repositoryOutboundPort.save(domain, true);
+			repositoryOutboundPort.save(domain, true);
 			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);

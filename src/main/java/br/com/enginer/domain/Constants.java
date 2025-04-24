@@ -35,4 +35,23 @@ public class Constants {
 	public static final String LIKE = "lk";
 	public static final String IN = "in";
 	public static final String BETWEEN = "bt";
+	
+	/**
+	 * URL(s) dinamicas
+	 */
+	public static final String PATH_FIND_BY_ID = "/dynamics/form/true/$domain/$id";
+	public static final String PATH_ADD_NEW = "/dynamics/form/true/$domain";
+	
+	/**
+	 * Label dos buttons estaticos
+	 */
+	public static final String LABEL_DELETE = "Excluir";
+	public static final String LABEL_SAVE = "Salvar";
+	public static final String LABEL_BACK = "Voltar";
+	public static final String LABEL_CLEAR = "Limpar";
+	public static final String LABEL_NEW = "Novo";
+	public static final String LABEL_SEARCH = "Buscar";
+	public static final String LABEL_ACTION_FIND_ID = "Exibir detalhes do registro";
+	public static final String LABEL_ACTION_DELETE	 = "Realizar exclusão do registro";
+	
 }

@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
@@ -18,7 +19,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(
-    label = "Salvar",
+    label = Constants.LABEL_SAVE,
     icon = "save",
     state = TypeButtonState.BTN_STATE_PRIMARY,
     template = TypeTemplate.FORM,
@@ -26,7 +27,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
         method = @UIActionMethod(serverMethod = "save"),
         response = @UIActionResponse(
     		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
-    		success = @UIActionResponseSuccess(redirect = @UIActionRedirect("/dynamics/form/true/$domain/$id"))
+    		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
         )
     )
 )

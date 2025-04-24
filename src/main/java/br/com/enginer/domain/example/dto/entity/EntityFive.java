@@ -22,16 +22,20 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	@UIId
 	private String id;
 	
+	@UIPosition(x = 1, y = 1)
+	@UIFilter(label = "Entity Status", field = "name", template = { TypeTemplate.FORM })
+	private EntityOne entityOne;
+	
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	private String reference;
 	
-	@UIPosition(x = 2, y = 1)
+	@UIPosition(x = 2, y = 2)
 	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
 
-	@UIPosition(x = 1, y = 1)
+	@UIPosition(x = 1, y = 3)
 	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" }, template = { TypeTemplate.FORM })
 	private EntityStatus entityStatus;
 

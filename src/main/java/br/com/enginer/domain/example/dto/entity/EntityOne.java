@@ -27,6 +27,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonActi
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFindId;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
@@ -51,19 +52,17 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity One -> Stream")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonDelete.class, UIButtonNew.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 	value = {
-		@UIButton(template = { TypeTemplate.FILTER }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+		@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 	}
 )
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = true, editable = true),
     column = @UIColumn( initial = { "entityOne.height", "entityOne.age", "entityOne.name" }, hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }),
-    actions = @UIButtonAction(
+    actions = @UIButtonAction(includes = { UIButtonFindId.class, UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  },
         value = { 
-            @UIButton(label = "Redirect Action", action = @UIAction(redirect = @UIActionRedirect("/dynamics/form/true/entityOne/$id"))),
             @UIButton(label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
-            @UIButton(label = "Something Delete Here", confirm = true, action = @UIAction(method = @UIActionMethod(clientMethod = "delete"))),
             @UIButton(label = "Five domain link", highlight = true, action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id"))),
             @UIButton(label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
             @UIButton(label = "Tree domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
@@ -97,7 +96,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIId
 	private Long id;
 
-	@UIText(template = { TypeTemplate.FILTER }, label = "Name")
+	@UIText(label = "Name")
 	@UIAutoCompleteSuggestion(suggestions = { "anderson", "pedro" })
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)

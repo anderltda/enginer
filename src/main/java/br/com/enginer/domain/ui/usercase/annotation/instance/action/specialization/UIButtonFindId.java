@@ -9,15 +9,14 @@ import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(
-    label = Constants.LABEL_NEW,
-    icon = "add_circle",
-    needsValidation = false,
-    action = @UIAction(
-        redirect = @UIActionRedirect(Constants.PATH_ADD_NEW)
-    )
+		label = Constants.LABEL_ACTION_FIND_ID, 
+		template = TypeTemplate.PAGINATOR, 
+		highlight = false, 
+		action = @UIAction(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
 )
-public @interface UIButtonNew {}
+public @interface UIButtonFindId {}

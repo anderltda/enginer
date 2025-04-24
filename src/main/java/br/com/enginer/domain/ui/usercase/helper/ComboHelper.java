@@ -10,6 +10,16 @@ import br.com.enginer.domain.ui.usercase.schema.field.behavior.Option;
  */
 public class ComboHelper {
 	
+	public List<Object> status() {
+		List<Object> options = new ArrayList<>();
+		options.add(new Option("Andamento", 1));
+		options.add(new Option("Processando", 2));
+		options.add(new Option("Finalizado", 3));
+		options.add(new Option("Aguardando", 4));
+		options.add(new Option("Enviado", 5));
+		return options;
+	}
+	
 	public List<Object> values() {
 		List<Object> options = new ArrayList<>();
 		options.add(new Option("Value_1", 1));
