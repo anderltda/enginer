@@ -20,7 +20,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -33,7 +33,7 @@ public class DataA extends DomainAbstract<DataA, Long> {
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "First Name")
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
-	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
+	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
 			"dogMel", "dogMagrela" }, syncError = {
 					"Validação direto no field 'SYNC' - O campo não pode conter apenas números.",
 					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
@@ -42,7 +42,7 @@ public class DataA extends DomainAbstract<DataA, Long> {
 	@UIPosition(x = 2, y = 1)
 	@UIText(label = "Last Name")
 	@UIAutoCompleteSuggestion(suggestions = { "johndoe", "admin", "user123" })
-	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
+	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
 			"dogMel", "dogMagrela" }, syncError = {
 					"Validação direto no field 'SYNC' - O campo não pode conter apenas números.",
 					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
@@ -51,7 +51,7 @@ public class DataA extends DomainAbstract<DataA, Long> {
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "User Name", icon = "user")
 	@UIAutoCompleteSuggestion(suggestions = { "johndoe", "admin", "user123" })
-	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"))
+	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"))
 	private String userName;
 
 	@UIPosition(x = 2, y = 2)
@@ -61,17 +61,17 @@ public class DataA extends DomainAbstract<DataA, Long> {
 
 	@UIPosition(x = 1, y = 3)
 	@UIPassword(label = "Password", icon = "shield_lock")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String password;
 
 	@UIPosition(x = 2, y = 3)
 	@UIPassword(label = "Confirm Password", icon = "shield_lock")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String confirmPassword;
 
 	@UIPosition(x = 1, y = 4)
 	@UINumber(label = "Count in Animal", icon = "animal")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer countAnimal;
 
 	@UIPosition(x = 2, y = 4)
@@ -80,27 +80,27 @@ public class DataA extends DomainAbstract<DataA, Long> {
 
 	@UIPosition(x = 3, y = 4)
 	@UITime(label = "Time 2")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime timeTwo;
 
 	@UIPosition(x = 4, y = 4)
 	@UIDate(label = "Date Time Start", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime dateTimeStart;
 
 	@UIPosition(x = 1, y = 5)
 	@UIText(label = "Phone", mask = "(00) 0000-0000")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String phone;
 
 	@UIPosition(x = 2, y = 5)
 	@UINumber(label = "Fibonacy")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer fibonacy;
 
 	@UIPosition(x = 3, y = 5)
 	@UIText(label = "CNPJ", mask = "000.000.000/0000-00")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String cnpj;
 
 	@UIPosition(x = 4, y = 5)
@@ -109,17 +109,17 @@ public class DataA extends DomainAbstract<DataA, Long> {
 
 	@UIPosition(x = 1, y = 6)
 	@UIDecimal(label = "Money", placeholder = "Ex. 1,00", icon = "keyboard")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Double money;
 
 	@UIPosition(x = 2, y = 6)
 	@UIDecimal(label = "Cost", placeholder = "Ex. 1,00", icon = "keyboard")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Double cost;
 
 	@UIPosition(x = 1, y = 7)
 	@UISelect(label = "Drinks", multi = false, provider = ComboHelper.class, method = "drinks")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String drink;
 
 	@UIPosition(x = 2, y = 7)
@@ -128,12 +128,12 @@ public class DataA extends DomainAbstract<DataA, Long> {
 	
 	@UIPosition(x = 1, y = 8)
 	@UISelect(label = "Color", multi = false, provider = ComboHelper.class, method = "colors")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String color;
 
 	@UIPosition(x = 3, y = 7)
 	@UIRadio(label = "This statement is correct?", provider = ComboHelper.class, method = "question")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String statement;
 
 	private DataB dataB;

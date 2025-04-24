@@ -8,7 +8,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -19,41 +19,41 @@ public class DataD extends DomainAbstract<DataD, Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UINumber(label = "Code Protocoll")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String codeProtocoll;
 
 	@UIPosition(x = 2, y = 1)
 	@UISelect(label = "Number Protocoll", provider = ComboHelper.class, method = "numbers")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Long numberProtocoll;
 
 	@UIPosition(x = 3, y = 1)
 	@UINumber(label = "Number Ascii")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Short numberAscii;
 
 	@UIPosition(x = 4, y = 1)
 	@UISelect(label = "Number Agent", provider = ComboHelper.class, method = "numbers")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer numberAgent;
 
 	@UIPosition(x = 1, y = 2)
 	@UINumber(label = "numberChip")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private BigInteger numberChip;
 
 	@UIPosition(x = 3, y = 2)
 	@UINumber(label = "leadAccess")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private BigInteger leadAccess;
 
 	@UIPosition(x = 1, y = 3)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String possibly;
 
 	@UIPosition(x = 2, y = 3)
 	@UIEmail(label = "Owner E-mail")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String emailOwner;
 
 	@UIPosition(x = 1, y = 4)
@@ -66,11 +66,11 @@ public class DataD extends DomainAbstract<DataD, Long> {
 
 	@UIPosition(x = 1, y = 5)
 	@UISelect(label = "Choose console?", provider = ComboHelper.class, method = "consoles")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String console;
 
 	@UIPosition(x = 2, y = 5)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String animal;
 
 	@UIPosition(x = 1, y = 6)

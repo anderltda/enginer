@@ -4,7 +4,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIEmail;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UITextArea;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 public class DataG extends DomainAbstract<DataG, Long> {
@@ -17,20 +17,20 @@ public class DataG extends DomainAbstract<DataG, Long> {
 
 	@UIPosition(x = 2, y = 1)
 	@UIEmail(label = "User loging")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String userLogin;
 
 	@UIPosition(x = 3, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer age;
 
 	@UIPosition(x = 4, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer numberCode;
 	
 	@UIPosition(x = 1, y = 3)
 	@UITextArea(label = "Area Edit", editor = true)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String areaEdit;
 
 	private DataH dataH;

@@ -1,12 +1,9 @@
 package br.com.enginer.domain.ui.usercase;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.enginer.domain.example.dto.data.EntityOneData;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
@@ -14,7 +11,6 @@ import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
-import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
 /**
  * 
@@ -114,7 +110,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 *
 	 */
 	@Override
-	public void action(Domain<?> domain) throws CheckedException {
+	public Domain<?> action(Domain<?> domain) throws CheckedException {
 
 		try {
 			
@@ -122,9 +118,13 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
 			
+			domain = repositoryOutboundPort.save(domain, true);
+			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getMessage(), ex);
 		}
+		
+		return domain;
 	}
 }

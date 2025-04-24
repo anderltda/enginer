@@ -548,7 +548,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public void save(Domain<?> domain, Boolean... flush) throws UncheckedException {
+	public Domain<?> save(Domain<?> domain, Boolean... flush) throws UncheckedException {
 
 		try {
 
@@ -579,6 +579,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
+		return domain;
 	}
 
 	/**
@@ -586,7 +587,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public void save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
+	public List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
 
 		try {
 
@@ -630,5 +631,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
+		
+		return entities;
 	}
 }

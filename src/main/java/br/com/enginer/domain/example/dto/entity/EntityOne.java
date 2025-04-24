@@ -14,11 +14,12 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
@@ -32,6 +33,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
@@ -40,7 +42,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
-import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -50,66 +51,46 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity One -> Stream")
-
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonDelete.class, UIButtonNew.class, UIButtonSearch.class, UIButtonSave.class  }, 
-value = {
-	@UIButton(template = { TypeTemplate.FILTER }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-})
-
-
-@UIGlobal({ 
-	@UIGlobalOn(function = "customEntitySumValuesValidator",       message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!")
-})
-
-@UICustom({ 
-	@UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = {	"entityOne.entityTwo.cost", "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.amount", "entityOne.entityTwo.entityTree.entityFour.attribute", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor"} )
-})
-
-@UIConditional({
-	@UIConditionalOn(label = "Age",       					field = "entityOne.age", 											   operator = TypeOperator.LESS_THAN, 			   matchs = { "entityOne.entityTwo.hex" }),
-	@UIConditionalOn(label = "Hex",       					field = "entityOne.entityTwo.hex", 									   operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.entityTwo.entityTree.indicator" }),
-	@UIConditionalOn(label = "Indicator", 					field = "entityOne.entityTwo.entityTree.indicator", 				   operator = TypeOperator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
-	@UIConditionalOn(label = "Attribute", 					field = "entityOne.entityTwo.entityTree.entityFour.attribute", 		   operator = TypeOperator.EQUALS,                 matchs = { "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
-	@UIConditionalOn(label = "Factor",                      field = "entityOne.entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.age" }),
-	@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", 									   operator = TypeOperator.NOT_EQUALS,             matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" })
-})
-
-@UIDependency({ 
-	@UIDependsOn(label = "Age",    field = "entityOne.age", 								  depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
-	@UIDependsOn(label = "Fruit",  field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
-	@UIDependsOn(label = "Status", field = "entityOne.entityStatus", 						  depends = { "entityOne.entityTwo.entityStatus" }) 
-})
-
+	value = {
+		@UIButton(template = { TypeTemplate.FILTER }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+	}
+)
 @UIPaginator(
-    config = @UIConfig(
-        expandable = true,
-        multiSelection = true,
-        editable = false
-    ),
-    column = @UIColumn(
-        initial = { "entityOne.height", "entityOne.age", "entityOne.name" },
-        hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }
-    ),
+    config = @UIConfig(expandable = true, multiSelection = true, editable = true),
+    column = @UIColumn( initial = { "entityOne.height", "entityOne.age", "entityOne.name" }, hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }),
     actions = @UIButtonAction(
-        value = {
-            @UIButton(
-                label = "Another Method Action",
-                icon = "save",
-                state = TypeButtonState.BTN_STATE_PRIMARY,
-                confirm = true,
-                action = @UIAction(
-                    method = @UIActionMethod(clientMethod = "salvar")
-                )
-            ),
-            @UIButton(
-                label = "Redirect Action",
-                icon = "trash",
-                action = @UIAction(
-                    redirect = @UIActionRedirect(redirect = "/dynamics/form/true/entityOne/$id")
-                )
-            )
+        value = { 
+            @UIButton(label = "Redirect Action", action = @UIAction(redirect = @UIActionRedirect("/dynamics/form/true/entityOne/$id"))),
+            @UIButton(label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
+            @UIButton(label = "Something Delete Here", confirm = true, action = @UIAction(method = @UIActionMethod(clientMethod = "delete"))),
+            @UIButton(label = "Five domain link", highlight = true, action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id"))),
+            @UIButton(label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
+            @UIButton(label = "Tree domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
+            @UIButton(label = "Four domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id")))            
         }
     )
+)
+@UIValidate(
+	global = @UIGlobal({ 
+		@UIGlobalOn(function = "customEntitySumValuesValidator", message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!") 
+	}), 
+	custom = @UICustom({
+		@UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = { "entityOne.entityTwo.cost", "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.amount", "entityOne.entityTwo.entityTree.entityFour.attribute", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }) 
+	}), 
+	conditional = @UIConditional({
+		@UIConditionalOn(label = "Age", field = "entityOne.age", operator = TypeOperator.LESS_THAN, matchs = { "entityOne.entityTwo.hex" }),
+		@UIConditionalOn(label = "Hex", field = "entityOne.entityTwo.hex", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.entityTwo.entityTree.indicator" }),
+		@UIConditionalOn(label = "Indicator", field = "entityOne.entityTwo.entityTree.indicator", operator = TypeOperator.NOT_EQUALS, matchs = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
+		@UIConditionalOn(label = "Attribute", field = "entityOne.entityTwo.entityTree.entityFour.attribute", operator = TypeOperator.EQUALS, matchs = { "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
+		@UIConditionalOn(label = "Factor", field = "entityOne.entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.age" }),
+		@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" }) 
+	}), 
+	dependency = @UIDependency({
+		@UIDependsOn(label = "Age", field = "entityOne.age", depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
+		@UIDependsOn(label = "Fruit", field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
+		@UIDependsOn(label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
+	})
 )
 public class EntityOne extends DomainAbstract<EntityOne, Long> {
 
@@ -120,7 +101,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIAutoCompleteSuggestion(suggestions = { "anderson", "pedro" })
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)
-	@UIValidation(
+	@UIFieldValidation(
 		required = false,
 		template = TypeTemplate.FILTER,
 	    pattern  = @UIPattern(pattern = "^[^wW]*$",                   patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"),
@@ -130,7 +111,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	private String name;
 
 	@UIPosition(x = 1, y = 2)
-	@UIValidation(required = true, template = { TypeTemplate.FORM })
+	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	@UIFilter(label = "Entity Status", field = "name", readonly = false)
 	private EntityStatus entityStatus;
 

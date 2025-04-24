@@ -9,7 +9,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface UIValidation {
+public @interface UIFieldValidation {
 	boolean required();
     UIPattern pattern() default @UIPattern;
     UIAsync async() default @UIAsync;

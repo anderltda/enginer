@@ -10,7 +10,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.UploadFile;
@@ -23,17 +23,17 @@ public class DataE extends DomainAbstract<DataE, Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIAutoComplete(domain = "entityTree", attribute = "animal")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String fruit;
 
 	@UIPosition(x = 2, y = 1)
 	@UIAutoComplete(domain = "entityFour", attribute = "fruit")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String read;
 
 	@UIPosition(x = 3, y = 1)
 	@UIAutoComplete(domain = "entityFour", attribute = "reference")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String object;
 
 	@UIPosition(x = 1, y = 2)
@@ -78,7 +78,7 @@ public class DataE extends DomainAbstract<DataE, Long> {
 	@UICheckbox(label = "Apple Boy?", enableSwitch = true)
 	private String appleboy;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	@UIPosition(x = 1, y = 5)
 	@UIFile(label = "Drag n' drop uploader", mode = TypeFileUpload.DRAG_DROP)
 	private List<UploadFile> dragdrops;

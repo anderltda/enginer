@@ -18,6 +18,6 @@ public interface ActionInboundPort {
 	
 	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String method) throws CheckedException;
 
-	void action(Domain<?> domain) throws CheckedException;
+	Domain<?> action(Domain<?> domain) throws CheckedException;
 	
 }

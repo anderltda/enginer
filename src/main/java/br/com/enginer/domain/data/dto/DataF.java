@@ -5,7 +5,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -17,40 +17,40 @@ public class DataF extends DomainAbstract<DataF, Long> {
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String computer;
 
 	@UIPosition(x = 2, y = 1)
 	@UISelect(label = "Whats desktop?", provider = ComboHelper.class, method = "osDesktops")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String desktop;
 
 	@UIPosition(x = 3, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer cell;
 
 	@UIPosition(x = 4, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Short row;
 
 	@UIPosition(x = 1, y = 2)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String system;
 
 	@UIPosition(x = 2, y = 2)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String middleName;
 
 	@UIPosition(x = 3, y = 2)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String brand;
 
 	@UIPosition(x = 3, y = 2)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String motocycle;
 
 	@UIPosition(x = 1, y = 3)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private StringBuilder area;
 
 	private DataG dataG;

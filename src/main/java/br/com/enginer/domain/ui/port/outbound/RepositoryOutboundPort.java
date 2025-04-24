@@ -41,9 +41,9 @@ public interface RepositoryOutboundPort {
 	
 	public void delete(Domain<?> domain, Object... ids) throws UncheckedException;
 	
-	public void save(Domain<?> domain, Boolean... flush) throws UncheckedException;
+	public Domain<?> save(Domain<?> domain, Boolean... flush) throws UncheckedException;
 	
-	public void save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException;
+	public List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException;
 
 }
 

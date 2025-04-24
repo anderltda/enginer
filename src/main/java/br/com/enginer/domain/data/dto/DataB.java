@@ -12,7 +12,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.UITime;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -22,7 +22,7 @@ public class DataB extends DomainAbstract<DataB, Long> {
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	@UIFilter(label = "Entity Status", field = "name", readonly = true)
 	private EntityStatus entityStatus;
 
@@ -32,7 +32,7 @@ public class DataB extends DomainAbstract<DataB, Long> {
 
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "CPF", mask = "000.000.000-00")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String cpf;
 
 	@UIPosition(x = 2, y = 2)
@@ -48,52 +48,52 @@ public class DataB extends DomainAbstract<DataB, Long> {
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Zip Code", mask = "00000-000")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String zipCode;
 
 	@UIPosition(x = 1, y = 4)
 	@UIText(label = "Address")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String address;
 
 	@UIPosition(x = 1, y = 4)
 	@UIText(label = "Number")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String number;
 
 	@UIPosition(x = 2, y = 4)
 	@UIText(label = "Neighborhood")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String neighborhood;
 
 	@UIPosition(x = 1, y = 5)
 	@UIDate(label = "Date Start")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDate dateStart;
 
 	@UIPosition(x = 2, y = 5)
 	@UIDate(label = "Date End")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDate dateEnd;
 
 	@UIPosition(x = 3, y = 5)
 	@UITime(label = "Time Start")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime timeStart;
 
 	@UIPosition(x = 1, y = 6)
 	@UITime(label = "Time End")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime timeEnd;
 
 	@UIPosition(x = 2, y = 6)
 	@UIDate(label = "Date Time Start", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime dateTimeStart;
 
 	@UIPosition(x = 3, y = 6)
 	@UIDate(label = "Date Time End", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDateTime dateTimeEnd;
 
 	@UIPosition(x = 1, y = 7)

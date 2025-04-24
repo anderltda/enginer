@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
-import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -16,9 +15,8 @@ import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
     label = "Novo",
     icon = "add_circle",
     needsValidation = false,
-    state = TypeButtonState.BTN_STATE_SUCCESS,
     action = @UIAction(
-        redirect = @UIActionRedirect(redirect = "/dynamics/form/true/entityOne")
+        redirect = @UIActionRedirect("/dynamics/form/true/entityOne")
     )
 )
 public @interface UIButtonNew {}

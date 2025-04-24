@@ -8,10 +8,8 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface UIAction {
+public @interface UIActionResponseError {
     UIActionMethod method() default @UIActionMethod();
     UIActionRedirect redirect() default @UIActionRedirect();
-	UIActionDomain domain() default @UIActionDomain;
-	UIActionResponse response() default @UIActionResponse();
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+    TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.FILTER };
 }

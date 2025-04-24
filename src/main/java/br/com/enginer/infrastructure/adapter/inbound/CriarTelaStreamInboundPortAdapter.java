@@ -52,8 +52,8 @@ public class CriarTelaStreamInboundPortAdapter {
 
 			trackingProvider.setInnerId(UUIDGenerator.generate());
 			
-			logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
-			logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
 
 			Form form = uIInboundPort.form(domain);
 
@@ -76,8 +76,8 @@ public class CriarTelaStreamInboundPortAdapter {
 
 			trackingProvider.setInnerId(UUIDGenerator.generate());
 			
-			logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
-			logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
 
 			Form form = uIInboundPort.filter(domain);
 

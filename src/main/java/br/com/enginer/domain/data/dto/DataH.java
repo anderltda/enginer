@@ -7,7 +7,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFile;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.UploadFile;
@@ -20,37 +20,37 @@ public class DataH extends DomainAbstract<DataH, Long> {
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	@UICheckbox(label = "<span>Check</span> - yourname.pages.com (this can be changed later)?")
 	private Boolean check;
 
 	@UIPosition(x = 2, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String medium;
 
 	@UIPosition(x = 3, y = 1)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String loss;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer control;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer option;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer command;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer shift;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Double capsValue;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Double tabValue;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDate dateMemory;
 
 	@UIPosition(x = 1, y = 12)

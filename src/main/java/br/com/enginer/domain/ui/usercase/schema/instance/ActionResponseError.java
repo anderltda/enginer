@@ -3,13 +3,11 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 /**
  * 
  */
-public class Action {
+public class ActionResponseError {
 
 	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
-	private ActionObject domain;
-	private ActionResponse response;
 
 	public String getRedirect() {
 		return redirect;
@@ -35,19 +33,4 @@ public class Action {
 		this.serverMethod = serverMethod;
 	}
 
-	public ActionObject getDomain() {
-		return domain;
-	}
-
-	public void setDomain(ActionObject domain) {
-		this.domain = domain;
-	}
-
-	public ActionResponse getResponse() {
-		return response;
-	}
-
-	public void setResponse(ActionResponse response) {
-		this.response = response;
-	}
 }

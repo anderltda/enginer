@@ -11,7 +11,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -28,7 +28,7 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
-	@UIValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = { "dogMel", "dogMagrela" }, syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
+	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = { "dogMel", "dogMagrela" }, syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	private String fruit;
 
 	@UIPosition(x = 1, y = 2)

@@ -7,7 +7,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -33,7 +33,7 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 	
 	private Double cost;
 
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	@UIFilter(label = "Entity Status", field = "name", select = false)
 	private EntityStatus entityStatus;
 

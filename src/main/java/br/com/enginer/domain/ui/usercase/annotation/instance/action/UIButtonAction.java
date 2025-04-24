@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface UIButtonAction {
-	UIButton[] value();
+	UIButton[] value() default {};
 	Class<? extends Annotation>[] includes() default {};
 }

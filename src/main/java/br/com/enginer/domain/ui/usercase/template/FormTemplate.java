@@ -36,27 +36,28 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UITag;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponse;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseError;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
-import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
-import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustomOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependency;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
-import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.usercase.enums.TypeButton;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -91,6 +92,9 @@ import br.com.enginer.domain.ui.usercase.schema.field.type.Text;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Time;
 import br.com.enginer.domain.ui.usercase.schema.instance.Action;
 import br.com.enginer.domain.ui.usercase.schema.instance.ActionObject;
+import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponse;
+import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseError;
+import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.schema.instance.Button;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.paginator.Paginator;
@@ -139,7 +143,7 @@ public final class FormTemplate {
 		annotationMap.put(UIPosition.class, UIPosition.class);
 		annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
 		annotationMap.put(UIAutoCompleteSuggestion.class, UIAutoCompleteSuggestion.class);
-		annotationMap.put(UIValidation.class, UIValidation.class);
+		annotationMap.put(UIFieldValidation.class, UIFieldValidation.class);
 		annotationMap.put(UIDependency.class, UIDependency.class);
 
 	}
@@ -153,87 +157,20 @@ public final class FormTemplate {
 		Form form = null;
 
 		try {
-			String title = getTitle(domain);
 
 			TYPE_TEMPLATE = typeTemplate;
-			Validate validate = new Validate();
-		
+
 			List<Field> fields = new ArrayList<>();
 			Field field = null;
 
-			Paginator paginator = new Paginator();
-			Config config = new Config();
-			Column column = new Column();
-			List<Field> actions = new ArrayList<>();
-			
-			paginator.setConfig(config);
-			paginator.setColumn(column);
-			paginator.setActions(actions);
-			
-			
-			if (domain.getClass().isAnnotationPresent(UIPaginator.class)) {		
-				
-				UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
-				
-				UIConfig uiConfig = uiPaginator.config();
-				config.setEditable(uiConfig.editable());
-				config.setMultiSelection(uiConfig.multiSelection());
-				config.setExpandable(uiConfig.expandable());
-				
-				UIColumn uiColumn = uiPaginator.column();
-				column.setInitial(Arrays.asList(uiColumn.initial()));
-				column.setHidden(Arrays.asList(uiColumn.hidden()));
-				
-				
-				UIButtonAction uiButtonAction = uiPaginator.actions();
-				UIButton[] uiButtons = uiButtonAction.value();
-				
-				if (uiButtons.length > 0) {
-					List<Button> buttons = new ArrayList<>();
-					for (UIButton uiButton : uiButtons) {
-						boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
-						if (containsTemplate) {
-							Method[] methods = uiButton.annotationType().getDeclaredMethods();
-							Button button = new Button(TypeButton.BUTTON);
-							for (Method method : methods) {
-								Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
-								if (buttonObject instanceof UIAction uiAction) {
-									button.setAction(getButtonAction(typeTemplate, uiAction));
-									continue;
-								}
-								if (method.getName().equals("template"))
-									continue;
-								ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
-							}
-							buttons.add(button);
-						}
-					}
-					
-					if (buttons != null) {
-						buttons.forEach(button -> {
-							br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
-							fieldButton.setButton(button);
-							actions.add(fieldButton);
-						});
-					}
-
-				}
-			}
-			
 			form = new Form();
-			form.setTitle(title != null ? title : StringsUtils.normalizeLabelToLowercaseCamelization(domain.getClass().getSimpleName().toString()));
-			form.setPaginator(paginator);
-			form.setValidate(validate);
+			form.setTitle(getTitle(domain));
+			form.setPaginator(getPaginator(domain, typeTemplate));
+			form.setValidate(getValidate(domain));
 			form.setFields(fields);
-
-			validate.setGlobal(getGlobal(domain));
-			validate.setCustom(getCustom(domain));
-			validate.setConditional(getConditional(domain));
-			validate.setDependency(getDependecys(domain));
 
 			List<java.lang.reflect.Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
 
-			
 			int count = 1;
 
 			for (java.lang.reflect.Field f : fs) {
@@ -507,12 +444,12 @@ public final class FormTemplate {
 
 				count++;
 			}
-			
+
 			List<Button> buttons = getButton(domain, typeTemplate);
-			
+
 			if (buttons != null) {
 				buttons.forEach(button -> {
-					br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+					Field fieldButton = new Field();
 					fieldButton.setButton(button);
 					fields.add(fieldButton);
 				});
@@ -521,11 +458,10 @@ public final class FormTemplate {
 			Button submit = getSubmit(domain, typeTemplate);
 
 			if (submit != null) {
-				field = new br.com.enginer.domain.ui.usercase.schema.field.Field();
-				field.setButton(submit);
-				fields.add(field);
+				Field fieldSubmit = new Field();
+				fieldSubmit.setButton(submit);
+				fields.add(fieldSubmit);
 			}
-
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -535,8 +471,70 @@ public final class FormTemplate {
 		return form;
 	}
 
-	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations,
-			UIFilter uiFilter) throws Exception {
+	private static Paginator getPaginator(Domain<?> domain, TypeTemplate typeTemplate) {
+		Paginator paginator = new Paginator();
+		Config config = new Config();
+		Column column = new Column();
+		List<Field> actions = new ArrayList<>();
+
+		paginator.setConfig(config);
+		paginator.setColumn(column);
+		paginator.setActions(actions);
+
+		if (domain.getClass().isAnnotationPresent(UIPaginator.class)) {
+
+			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
+
+			UIConfig uiConfig = uiPaginator.config();
+			config.setEditable(uiConfig.editable());
+			config.setMultiSelection(uiConfig.multiSelection());
+			config.setExpandable(uiConfig.expandable());
+
+			UIColumn uiColumn = uiPaginator.column();
+			column.setInitial(Arrays.asList(uiColumn.initial()));
+			column.setHidden(Arrays.asList(uiColumn.hidden()));
+
+			UIButtonAction uiButtonAction = uiPaginator.actions();
+			UIButton[] uiButtons = uiButtonAction.value();
+
+			if (uiButtons.length > 0) {
+				List<Button> buttons = new ArrayList<>();
+				for (UIButton uiButton : uiButtons) {
+					boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
+					if (containsTemplate) {
+						Method[] methods = uiButton.annotationType().getDeclaredMethods();
+						Button button = new Button(TypeButton.BUTTON);
+						for (Method method : methods) {
+							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
+							if (buttonObject instanceof UIAction uiAction) {
+								button.setAction(getButtonAction(typeTemplate, uiAction));
+								continue;
+							}
+							if (method.getName().equals("template"))
+								continue;
+							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+						}
+						buttons.add(button);
+					}
+				}
+
+				if (buttons != null) {
+					buttons.forEach(button -> {
+						br.com.enginer.domain.ui.usercase.schema.field.Field fieldButton = new br.com.enginer.domain.ui.usercase.schema.field.Field();
+						fieldButton.setButton(button);
+						actions.add(fieldButton);
+					});
+				}
+
+			}
+		}
+
+		return paginator;
+	}
+
+	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_,
+			Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
 		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
 
@@ -593,8 +591,8 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UISelect uiSelect)
-			throws Exception {
+	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
+			UISelect uiSelect) throws Exception {
 
 		List<Object> options = null;
 
@@ -613,7 +611,8 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Radio getRadio(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIRadio uiRadio) throws Exception {
+	private static Radio getRadio(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
+			UIRadio uiRadio) throws Exception {
 
 		Object provider = uiRadio.provider().getDeclaredConstructor().newInstance();
 
@@ -632,7 +631,8 @@ public final class FormTemplate {
 		return time;
 	}
 
-	private static Date getDate(java.lang.reflect.Field f, Default default_, Annotation[] annotations, Boolean showtime) {
+	private static Date getDate(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
+			Boolean showtime) {
 		Date date = default_.getDate(showtime);
 		addBehaviorAnnotation(date, f, annotations);
 		return date;
@@ -680,7 +680,8 @@ public final class FormTemplate {
 		return hidden;
 	}
 
-	private static Join getJoin(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
+	private static Join getJoin(Domain<?> domain, java.lang.reflect.Field f, Default default_,
+			Annotation[] annotations) {
 
 		Object id = null;
 
@@ -725,7 +726,7 @@ public final class FormTemplate {
 					Position position = new Position(uiPosition.x(), uiPosition.y());
 					base.setPosition(position);
 
-				} else if (annotation instanceof UIValidation uiValidation) {
+				} else if (annotation instanceof UIFieldValidation uiValidation) {
 
 					UIPattern uiPattern = uiValidation.pattern();
 					UIAsync uiAsync = uiValidation.async();
@@ -783,75 +784,6 @@ public final class FormTemplate {
 		return null;
 	}
 
-	private static List<Button> getButton(Domain<?> domain, TypeTemplate typeTemplate) {
-		List<Button> buttons = null;
-		List<UIButton> uIButtons = new ArrayList<>();
-		if (domain.getClass().isAnnotationPresent(UIButtonAction.class)) {
-			UIButtonAction uiButtonAction = domain.getClass().getAnnotation(UIButtonAction.class);
-			UIButton[] uiButtons = domain.getClass().getAnnotationsByType(UIButton.class);
-            uIButtons.addAll(Arrays.asList(uiButtons));
-            for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
-            	uIButtons.add(custom.getAnnotation(UIButton.class));
-            }
-			if (uiButtons.length > 0) {
-				buttons = new ArrayList<>();
-				for (UIButton uiButton : uIButtons) {
-					boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
-					if (containsTemplate) {
-						Method[] methods = uiButton.annotationType().getDeclaredMethods();
-						Button button = new Button(TypeButton.BUTTON);
-						for (Method method : methods) {
-							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
-							if (buttonObject instanceof UIAction uiAction) {
-								button.setAction(getButtonAction(typeTemplate, uiAction));
-								continue;
-							}
-							if (method.getName().equals("template"))
-								continue;
-							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
-									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
-						}
-						buttons.add(button);
-					}
-				}
-
-			}
-		}
-		return buttons;
-	}
-
-	private static Action getButtonAction(TypeTemplate typeTemplate, UIAction uiAction) {
-		boolean containsTemplate = false;
-		Action action = new Action();
-		if (uiAction.method() instanceof UIActionMethod uiActionMethod) {
-			containsTemplate = checkTemplate(typeTemplate, uiActionMethod);
-			if (containsTemplate) {
-				action.setClientMethod(uiActionMethod.clientMethod());
-				action.setServerMethod(uiActionMethod.serverMethod());
-			}
-		}
-
-		if (uiAction.redirect() instanceof UIActionRedirect uiActionRedirect) {
-			containsTemplate = checkTemplate(typeTemplate, uiActionRedirect);
-			if (containsTemplate) {
-				action.setRedirect(uiActionRedirect.redirect());
-			}
-		}
-
-		if (uiAction.domain() instanceof UIActionDomain uiActionDomain) {
-			containsTemplate = checkTemplate(typeTemplate, uiActionDomain);
-			if (containsTemplate) {
-				ActionObject actionObject = new ActionObject();
-				actionObject.setObject(uiActionDomain.object());
-				actionObject.setParam(uiActionDomain.param());
-				if (!actionObject.getObject().isEmpty() && !actionObject.getParam().isEmpty()) {
-					action.setDomain(actionObject);
-				}
-			}
-		}
-		return action;
-	}
-
 	private static Button getSubmit(Domain<?> domain, TypeTemplate typeTemplate) {
 
 		Button button = null;
@@ -880,7 +812,7 @@ public final class FormTemplate {
 	}
 
 	private static String getTitle(Domain<?> domain) {
-		String title = null;
+		String title = StringsUtils.normalizeLabelToLowercaseCamelization(domain.getClass().getSimpleName().toString());
 		if (domain.getClass().isAnnotationPresent(UITitle.class)) {
 			UITitle uiTitle = domain.getClass().getAnnotation(UITitle.class);
 			title = uiTitle.value();
@@ -888,66 +820,208 @@ public final class FormTemplate {
 		return title;
 	}
 
-	private static List<Dependency> getDependecys(Domain<?> domain) {
-		List<Dependency> dependencys = new ArrayList<>();
-		if (domain.getClass().isAnnotationPresent(UIDependency.class)) {
-			UIDependsOn[] uiDependsOns = domain.getClass().getAnnotationsByType(UIDependsOn.class);
-			Dependency dependency = null;
-			for (UIDependsOn uiDependsOn : uiDependsOns) {
-				dependency = new Dependency();
-				dependency.setLabel(uiDependsOn.label());
-				dependency.setField(uiDependsOn.field());
-				dependency.setDepends(uiDependsOn.depends());
-				dependencys.add(dependency);
+	private static List<Button> getButton(Domain<?> domain, TypeTemplate typeTemplate) {
+
+		List<Button> buttons = null;
+
+		List<UIButton> uiListButtons = new ArrayList<>();
+
+		if (domain.getClass().isAnnotationPresent(UIButtonAction.class)) {
+
+			UIButtonAction uiButtonAction = domain.getClass().getAnnotation(UIButtonAction.class);
+			UIButton[] uiButtons = domain.getClass().getAnnotationsByType(UIButton.class);
+
+			uiListButtons.addAll(Arrays.asList(uiButtons));
+
+			for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
+				uiListButtons.add(custom.getAnnotation(UIButton.class));
 			}
+
+			if (uiListButtons.size() > 0) {
+
+				buttons = new ArrayList<>();
+
+				for (UIButton uiButton : uiListButtons) {
+
+					boolean containsTemplate = checkTemplate(typeTemplate, uiButton);
+
+					if (containsTemplate) {
+
+						Method[] methods = uiButton.annotationType().getDeclaredMethods();
+
+						Button button = new Button(TypeButton.BUTTON);
+
+						for (Method method : methods) {
+
+							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
+
+							if (buttonObject instanceof UIAction uiAction) {
+								button.setAction(getButtonAction(typeTemplate, uiAction));
+								continue;
+							}
+
+							if (method.getName().equals("template"))
+								continue;
+
+							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+						}
+						buttons.add(button);
+					}
+				}
+
+			}
+		}
+		return buttons;
+	}
+
+	private static Action getButtonAction(TypeTemplate typeTemplate, UIAction uiAction) {
+		boolean containsTemplate = false;
+		Action action = new Action();
+		if (uiAction.method() instanceof UIActionMethod uiActionMethod) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionMethod);
+			if (containsTemplate) {
+				action.setClientMethod(uiActionMethod.clientMethod());
+				action.setServerMethod(uiActionMethod.serverMethod());
+			}
+		}
+
+		if (uiAction.redirect() instanceof UIActionRedirect uiActionRedirect) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionRedirect);
+			if (containsTemplate) {
+				action.setRedirect(uiActionRedirect.value());
+			}
+		}
+
+		if (uiAction.domain() instanceof UIActionDomain uiActionDomain) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionDomain);
+			if (containsTemplate) {
+				ActionObject actionObject = new ActionObject();
+				actionObject.setObject(uiActionDomain.object());
+				actionObject.setParam(uiActionDomain.param());
+				if (!actionObject.getObject().isEmpty() && !actionObject.getParam().isEmpty()) {
+					action.setDomain(actionObject);
+				}
+			}
+		}
+		
+		if (uiAction.response() instanceof UIActionResponse uiActionResponse) {
+			containsTemplate = checkTemplate(typeTemplate, uiActionResponse);
+			if (containsTemplate) {
+				UIActionResponseSuccess uiActionResponseSuccess = uiActionResponse.success();
+				UIActionResponseError uiActionResponseError = uiActionResponse.error();
+				
+				ActionResponse response = new ActionResponse();
+				ActionResponseSuccess success = new ActionResponseSuccess();
+				ActionResponseError error = new ActionResponseError();
+				
+				if (uiActionResponseSuccess.method() instanceof UIActionMethod uiActionMethod) {
+					containsTemplate = checkTemplate(typeTemplate, uiActionResponseSuccess);
+					if (containsTemplate) {
+						success.setClientMethod(uiActionMethod.clientMethod());
+						success.setServerMethod(uiActionMethod.serverMethod());
+					}
+				}
+				
+				if (uiActionResponseSuccess.redirect() instanceof UIActionRedirect uiActionRedirect) {
+					containsTemplate = checkTemplate(typeTemplate, uiActionResponseSuccess);
+					if (containsTemplate) {
+						success.setRedirect(uiActionRedirect.value());
+					}
+				}
+				
+				if (uiActionResponseError.method() instanceof UIActionMethod uiActionMethod) {
+					containsTemplate = checkTemplate(typeTemplate, uiActionResponseError);
+					if (containsTemplate) {
+						error.setClientMethod(uiActionMethod.clientMethod());
+						error.setServerMethod(uiActionMethod.serverMethod());
+					}
+				}
+				
+				if (uiActionResponseError.redirect() instanceof UIActionRedirect uiActionRedirect) {
+					containsTemplate = checkTemplate(typeTemplate, uiActionResponseError);
+					if (containsTemplate) {
+						error.setRedirect(uiActionRedirect.value());
+					}
+				}
+				
+				response.setSuccess(success);
+				response.setError(error);
+				
+				action.setResponse(response);
+				
+			}
+		}
+		
+		return action;
+	}
+
+	private static Validate getValidate(Domain<?> domain) {
+		Validate validate = null;
+		if (domain.getClass().isAnnotationPresent(UIValidate.class)) {
+			validate = new Validate();
+			UIValidate uiValidate = domain.getClass().getAnnotation(UIValidate.class);
+			validate.setGlobal(getGlobal(domain, uiValidate.global().value()));
+			validate.setCustom(getCustom(domain, uiValidate.custom().value()));
+			validate.setConditional(getConditional(domain, uiValidate.conditional().value()));
+			validate.setDependency(getDependecy(domain, uiValidate.dependency().value()));
+			if (validate.getGlobal().size() == 0 && validate.getCustom().size() == 0
+					&& validate.getConditional().size() == 0 && validate.getDependency().size() == 0) {
+				validate = null;
+			}
+		}
+
+		return validate;
+	}
+
+	private static List<Dependency> getDependecy(Domain<?> domain, UIDependsOn[] uiDependsOns) {
+		List<Dependency> dependencys = new ArrayList<>();
+		Dependency dependency = null;
+		for (UIDependsOn uiDependsOn : uiDependsOns) {
+			dependency = new Dependency();
+			dependency.setLabel(uiDependsOn.label());
+			dependency.setField(uiDependsOn.field());
+			dependency.setDepends(uiDependsOn.depends());
+			dependencys.add(dependency);
 		}
 		return dependencys;
 	}
 
-	private static List<Conditional> getConditional(Domain<?> domain) {
+	private static List<Conditional> getConditional(Domain<?> domain, UIConditionalOn[] uiConditionalOns) {
 		List<Conditional> conditionals = new ArrayList<>();
-		if (domain.getClass().isAnnotationPresent(UIConditional.class)) {
-			UIConditionalOn[] uiConditionalOns = domain.getClass().getAnnotationsByType(UIConditionalOn.class);
-			Conditional conditional = null;
-			for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
-				conditional = new Conditional();
-				conditional.setLabel(uiConditionalOn.label());
-				conditional.setField(uiConditionalOn.field());
-				conditional.setOperator(uiConditionalOn.operator());
-				conditional.setMatchs(uiConditionalOn.matchs());
-				conditionals.add(conditional);
-			}
+		Conditional conditional = null;
+		for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
+			conditional = new Conditional();
+			conditional.setLabel(uiConditionalOn.label());
+			conditional.setField(uiConditionalOn.field());
+			conditional.setOperator(uiConditionalOn.operator());
+			conditional.setMatchs(uiConditionalOn.matchs());
+			conditionals.add(conditional);
 		}
 		return conditionals;
 	}
 
-	private static List<Custom> getCustom(Domain<?> domain) {
+	private static List<Custom> getCustom(Domain<?> domain, UICustomOn[] uiCustomOns) {
 		List<Custom> custons = new ArrayList<>();
-		if (domain.getClass().isAnnotationPresent(UICustom.class)) {
-			UICustomOn[] uiCustomOns = domain.getClass().getAnnotationsByType(UICustomOn.class);
-			Custom custom = null;
-			for (UICustomOn uiCustomOn : uiCustomOns) {
-				custom = new Custom();
-				custom.setFunction(uiCustomOn.function());
-				custom.setMessage(uiCustomOn.message());
-				custom.setFields(uiCustomOn.fields());
-				custons.add(custom);
-			}
+		Custom custom = null;
+		for (UICustomOn uiCustomOn : uiCustomOns) {
+			custom = new Custom();
+			custom.setFunction(uiCustomOn.function());
+			custom.setMessage(uiCustomOn.message());
+			custom.setFields(uiCustomOn.fields());
+			custons.add(custom);
 		}
 		return custons;
 	}
 
-	private static List<Global> getGlobal(Domain<?> domain) {
+	private static List<Global> getGlobal(Domain<?> domain, UIGlobalOn[] uiGlobalOns) {
 		List<Global> globals = new ArrayList<>();
-		if (domain.getClass().isAnnotationPresent(UIGlobal.class)) {
-			UIGlobalOn[] uiGlobalOns = domain.getClass().getAnnotationsByType(UIGlobalOn.class);
-			Global global = null;
-			for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
-				global = new Global();
-				global.setFunction(uiGlobalOn.function());
-				global.setMessage(uiGlobalOn.message());
-				globals.add(global);
-			}
+		Global global = null;
+		for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
+			global = new Global();
+			global.setFunction(uiGlobalOn.function());
+			global.setMessage(uiGlobalOn.message());
+			globals.add(global);
 		}
 		return globals;
 	}

@@ -14,7 +14,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIRadio;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIValidation;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.Option;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -26,52 +26,52 @@ public class DataC extends DomainAbstract<DataC, Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Product Name")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String pagee;
 
 	@UIPosition(x = 1, y = 1)
 	@UIEmail(label = "E-mail")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String email;
 
 	@UIPosition(x = 1, y = 3)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	@UIFilter(label = "Entity Status", field = "name", select = true)
 	private EntityStatus entityStatus;
 
 	@UIPosition(x = 1, y = 4)
 	@UIDate(label = "Date Insert")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDate dateInsert;
 
 	@UIPosition(x = 2, y = 4)
 	@UINumber(label = "Number Access", min = 3, max = 20)
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private Integer numberAccess;
 
 	@UIPosition(x = 3, y = 4)
 	@UIDate(label = "Date Update")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private LocalDate dateUpdate;
 
 	@UIPosition(x = 1, y = 5)
 	@UISelect(label = "Mobiles", multi = true, provider = ComboHelper.class, method = "mobiles")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private List<Option> mobiles;
 
 	@UIPosition(x = 2, y = 5)
 	@UISelect(label = "Cloud Utilization", provider = ComboHelper.class, method = "clouds")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String cloud;
 
 	@UIPosition(x = 3, y = 5)
 	@UISelect(label = "System Operational", provider = ComboHelper.class, method = "osDesktops")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String systemOperational;
 
 	@UIPosition(x = 4, y = 5)
 	@UISelect(label = "Whats OS Mobile?", provider = ComboHelper.class, method = "osMobiles")
-	@UIValidation(required = true)
+	@UIFieldValidation(required = true)
 	private String whatsStatement;
 
 	@UIPosition(x = 1, y = 6)
