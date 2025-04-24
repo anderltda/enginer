@@ -19,7 +19,7 @@ public @interface UIButton {
 	boolean highlight() default false;
 	boolean confirm() default false;
 	boolean needsValidation() default true;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_DEFAULT; 
 	UIAction action() default @UIAction;
 }

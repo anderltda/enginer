@@ -54,7 +54,7 @@ public class CriarTelaStreamInboundPortAdapter {
 			
 			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
 			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
-
+			
 			Form form = uIInboundPort.form(domain);
 
 			return ResponseEntity.ok(form);

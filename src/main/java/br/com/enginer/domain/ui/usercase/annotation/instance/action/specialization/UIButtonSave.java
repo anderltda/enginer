@@ -22,10 +22,11 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     label = Constants.LABEL_SAVE,
     icon = "save",
     state = TypeButtonState.BTN_STATE_PRIMARY,
-    template = TypeTemplate.FORM,
+    template = { TypeTemplate.FORM, TypeTemplate.MODAL },
     action = @UIAction(
         method = @UIActionMethod(serverMethod = "save"),
         response = @UIActionResponse(
+        	template = { TypeTemplate.FORM },
     		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
     		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
         )

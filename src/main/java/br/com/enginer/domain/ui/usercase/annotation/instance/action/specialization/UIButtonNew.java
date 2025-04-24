@@ -9,6 +9,7 @@ import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -16,6 +17,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
     label = Constants.LABEL_NEW,
     icon = "add_circle",
     needsValidation = false,
+    template = { TypeTemplate.FILTER, TypeTemplate.FORM },
     action = @UIAction(method = @UIActionMethod(clientMethod = "onShowFieldModal"))
     //action = @UIAction(redirect = @UIActionRedirect("Constants.PATH_ADD_NEW"))
 )

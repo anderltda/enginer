@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.dto.entity;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
@@ -40,6 +41,10 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	@UINumber(label = "Factor", min = 1, max = 60)
 	private Integer factor;
 
+	@UIPosition(x = 1, y = 3)
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" })
+	private EntityStatus entityStatus;
+
 	@Override
 	public String getId() {
 		return id;
@@ -66,4 +71,11 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 		this.factor = factor;
 	}
 
+	public EntityStatus getEntityStatus() {
+		return entityStatus;
+	}
+
+	public void setEntityStatus(EntityStatus entityStatus) {
+		this.entityStatus = entityStatus;
+	}
 }

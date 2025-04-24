@@ -3,7 +3,6 @@ package br.com.enginer.domain.example.dto.entity;
 import java.time.LocalDateTime;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -27,9 +26,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Entity Status -> Stream")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  })
-@UIPaginator(
-	    actions = @UIButtonAction(includes = { UIButtonFindId.class, UIButtonDelete.class } )
-	)
+@UIPaginator(actions = @UIButtonAction(includes = { UIButtonFindId.class } ) )
 public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
 
 	@UIId
@@ -51,10 +48,6 @@ public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
 	@UIPosition(x = 2, y = 2)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	private LocalDateTime startDateTime;
-	
-	@UIPosition(x = 1, y = 3)
-	@UIFilter(label = "Entity One", field = "name")
-	private EntityOne entityOne;
 	
 	@Override
 	public Long getId() {
@@ -98,11 +91,4 @@ public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
 		this.startDateTime = startDateTime;
 	}
 
-	public EntityOne getEntityOne() {
-		return entityOne;
-	}
-
-	public void setEntityOne(EntityOne entityOne) {
-		this.entityOne = entityOne;
-	}
 }

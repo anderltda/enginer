@@ -12,5 +12,5 @@ public @interface UIAsync {
 	String asyncFunc() default "asyncValidatorField";
 	String method() default "";
 	String asyncError() default "";
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

@@ -1,5 +1,7 @@
 package br.com.enginer.domain;
 
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
+
 public class Constants {
 
 	/**
@@ -53,5 +55,10 @@ public class Constants {
 	public static final String LABEL_SEARCH = "Buscar";
 	public static final String LABEL_ACTION_FIND_ID = "Exibir detalhes do registro";
 	public static final String LABEL_ACTION_DELETE	 = "Realizar exclusão do registro";
+	
+	/**
+	 * Templates default
+	 */
+	public static final TypeTemplate[] DEFAULT_TEMPLATE = { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 	
 }

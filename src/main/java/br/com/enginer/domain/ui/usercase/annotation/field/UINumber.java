@@ -16,5 +16,5 @@ public @interface UINumber {
 	int min() default 1;
 	int max() default 10;
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL } ;
 }

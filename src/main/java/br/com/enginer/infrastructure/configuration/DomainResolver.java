@@ -46,13 +46,12 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		String domainName = request.getHeader("X-UIDomain");
 		String modal = request.getHeader("X-UIModal");
 		
-		
 		String rawId = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
 
-			System.out.println(domainName +" -> "+ modal);
-			
+			Boolean isModal = modal != null && !modal.isEmpty() ? Boolean.valueOf(modal) : Boolean.FALSE;
+
 			Class<?> clazz = PackageScannerUtils.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
 
 			if (clazz != null) {
@@ -72,6 +71,9 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 					Object typedId = convertId(rawId, idType);
 					setIdMethod.invoke(domainInstance, typedId);
 				}
+
+				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), boolean.class);
+				setModalMethod.invoke(domainInstance, isModal);
 
 				return domainInstance;
 			}

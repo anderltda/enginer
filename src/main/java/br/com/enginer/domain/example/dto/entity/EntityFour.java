@@ -5,13 +5,12 @@ import java.time.LocalDateTime;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
@@ -57,8 +56,7 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
-	//@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
-	@UIFilter(label = "Entity Five", field = "reference")
+	@UIFilter(label = "Entity Five", field = "reference", readonly = true)
 	private EntityFive entityFive;
 	
 	@Override

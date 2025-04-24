@@ -14,5 +14,5 @@ public @interface UIRadio {
 	Class<?> provider();
 	String method();
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL } ;
 }

@@ -14,5 +14,5 @@ public @interface UITag {
 	int order() default -1;
 	int group() default -1;
 	boolean disabled();
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

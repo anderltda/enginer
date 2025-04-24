@@ -15,7 +15,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UISubmit {
 	String label();
 	String icon() default "";
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_PRIMARY; 
 	boolean disabled() default false;
 	boolean highlight() default false;

@@ -11,6 +11,8 @@ import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
  */
 public abstract class DomainAbstract<T, I> implements Domain<I> {
 	
+	private boolean modal = false;
+	
 	private ActionLogger actionLogger;
 	
 	protected ActionInboundPort actionInboundPort;
@@ -45,5 +47,21 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	 */
 	public void setActionLogger(ActionLogger actionLogger) {
 		this.actionLogger = actionLogger;
+	}
+
+    /**
+     * Indica se o domínio é um modal.
+     */
+	@Override
+	public boolean isModal() {
+		return modal;
+	}
+
+    /**
+     * Define se o domínio é um modal.
+     */
+	@Override
+	public void setModal(boolean modal) {
+		this.modal = modal;
 	}
 }

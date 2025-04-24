@@ -17,5 +17,5 @@ public @interface UIFile {
 	TypeFileUpload mode();
 	int limit() default 3;
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.MODAL };
 }

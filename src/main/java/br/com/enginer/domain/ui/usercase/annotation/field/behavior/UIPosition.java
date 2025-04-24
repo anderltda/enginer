@@ -12,5 +12,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIPosition {
 	int x();
 	int y();
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

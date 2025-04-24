@@ -159,8 +159,10 @@ public class ActionInboundAdapterPort {
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
+			
+			Domain<?> newDomain = objectMapper.convertValue(json, domain.getClass());
 
-			domain = actionInboundPort.action(domain);
+			domain = actionInboundPort.action(newDomain);
 			
 			logger.info(ActionInboundAdapterPort.class, "Payload enviado: \r " + domain);
 

@@ -9,7 +9,7 @@ import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 public interface Domain<I> {
 	
 	/**
-	 * @return
+	 * @return id
 	 */
 	public I getId();
 	
@@ -17,6 +17,16 @@ public interface Domain<I> {
 	 * @param id
 	 */
 	public void setId(I id);
+	
+    /**
+     * Indica se o domínio é um modal.
+     */
+    boolean isModal();
+
+    /**
+     * Define se o domínio é um modal.
+     */
+    void setModal(boolean modal);
 
 	/**
 	 * @param actionInboundPort

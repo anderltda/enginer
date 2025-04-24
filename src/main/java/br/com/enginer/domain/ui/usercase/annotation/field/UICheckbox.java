@@ -13,5 +13,5 @@ public @interface UICheckbox {
 	String label();
 	boolean enableSwitch() default false;
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

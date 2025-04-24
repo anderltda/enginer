@@ -14,5 +14,5 @@ public @interface UITime {
 	String icon() default "time";
 	String placeholder() default "";
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.MODAL } ;
 }

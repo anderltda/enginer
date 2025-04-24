@@ -14,5 +14,5 @@ public @interface UITextArea {
 	String placeholder() default "";
 	boolean disabled() default false;
 	boolean editor() default false;
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.MODAL } ;
 }
