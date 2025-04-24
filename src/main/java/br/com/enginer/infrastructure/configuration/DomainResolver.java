@@ -44,10 +44,14 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
 		String domainName = request.getHeader("X-UIDomain");
+		String modal = request.getHeader("X-UIModal");
+		
 		
 		String rawId = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
+
+			System.out.println(domainName +" -> "+ modal);
 			
 			Class<?> clazz = PackageScannerUtils.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
 

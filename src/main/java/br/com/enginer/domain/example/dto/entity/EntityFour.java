@@ -13,6 +13,16 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UI
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UISync;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -21,6 +31,11 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity Four -> Stream")
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+value = {
+	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+}
+)
 public class EntityFour extends DomainAbstract<EntityFour, String> {
 
 	@UIId
@@ -42,8 +57,8 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
-	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
-	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.FILTER })
+	//@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIFilter(label = "Entity Five", field = "reference")
 	private EntityFive entityFive;
 	
 	@Override

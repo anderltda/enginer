@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -16,8 +16,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
     label = Constants.LABEL_NEW,
     icon = "add_circle",
     needsValidation = false,
-    action = @UIAction(
-        redirect = @UIActionRedirect(Constants.PATH_ADD_NEW)
-    )
+    action = @UIAction(method = @UIActionMethod(clientMethod = "onShowFieldModal"))
+    //action = @UIAction(redirect = @UIActionRedirect("Constants.PATH_ADD_NEW"))
 )
 public @interface UIButtonNew {}
