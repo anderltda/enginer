@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
@@ -17,8 +17,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     label = Constants.LABEL_NEW,
     icon = "add_circle",
     needsValidation = false,
-    template = { TypeTemplate.FILTER, TypeTemplate.FORM },
-    action = @UIAction(method = @UIActionMethod(clientMethod = "onShowFieldModal"))
-    //action = @UIAction(redirect = @UIActionRedirect("Constants.PATH_ADD_NEW"))
+    template = { TypeTemplate.FILTER, TypeTemplate.MODAL },
+    action = @UIAction(redirect = @UIActionRedirect(Constants.PATH_ADD_NEW))
 )
 public @interface UIButtonNew {}

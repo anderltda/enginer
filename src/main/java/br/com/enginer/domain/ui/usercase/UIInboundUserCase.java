@@ -61,8 +61,10 @@ public class UIInboundUserCase implements UIInboundPort {
 		try {
 			
 			domain.setActionInboundPort(actionInboundPort);
+			
+			System.out.println(domain.getClass() +" -> "+ domain.isModal());
 
-			return FormTemplate.create(domain, TypeTemplate.FILTER);
+			return FormTemplate.create(domain, domain.isModal() ? TypeTemplate.MODAL : TypeTemplate.FILTER);
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);

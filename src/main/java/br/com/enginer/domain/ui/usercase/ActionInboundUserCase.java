@@ -111,6 +111,8 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 */
 	@Override
 	public Domain<?> action(Domain<?> domain) throws CheckedException {
+		
+		Domain<?> newDomain = null;
 
 		try {
 			
@@ -118,13 +120,13 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
 			
-			repositoryOutboundPort.save(domain, true);
+			newDomain = repositoryOutboundPort.save(domain, true);
 			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getMessage(), ex);
 		}
 		
-		return domain;
+		return newDomain;
 	}
 }

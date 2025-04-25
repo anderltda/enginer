@@ -57,8 +57,8 @@ public class Constants {
 	public static final String LABEL_ACTION_DELETE	 = "Realizar exclusão do registro";
 	
 	/**
-	 * Templates default
+	 * Function, javascript para abrir um modal para criacao um novo dominio
 	 */
-	public static final TypeTemplate[] DEFAULT_TEMPLATE = { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
+	public static final String METHOD_OPEN_MODAL_CREATE = "onShowFieldModal";
 	
 }

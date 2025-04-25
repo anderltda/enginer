@@ -481,15 +481,13 @@ public final class FormTemplate {
 		paginator.setConfig(config);
 		paginator.setColumn(column);
 		paginator.setActions(actions);
-		
-		
 
 		if (domain.getClass().isAnnotationPresent(UIPaginator.class)) {
-			
+
 			TypeTemplate copyTypeTemplate = TYPE_TEMPLATE;
-			
+
 			TYPE_TEMPLATE = TypeTemplate.PAGINATOR;
-			
+
 			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
 
 			UIConfig uiConfig = uiPaginator.config();
@@ -503,13 +501,13 @@ public final class FormTemplate {
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
-			
+
 			List<UIButton> uiListButtons = new ArrayList<>(Arrays.asList(uiButtons));
 
 			for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
 				uiListButtons.add(custom.getAnnotation(UIButton.class));
 			}
-			
+
 			if (uiListButtons.size() > 0) {
 				List<Button> buttons = new ArrayList<>();
 				for (UIButton uiButton : uiListButtons) {
@@ -526,13 +524,17 @@ public final class FormTemplate {
 							if (method.getName().equals("template")) {
 								continue;
 							}
-							
-					        if (method.getName().equalsIgnoreCase("label") && uiButton.label().equals(Constants.LABEL_DELETE)) {
-					        	ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { Constants.LABEL_ACTION_DELETE });
-					        	continue;
-					        }
-					        
-							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+
+							if (method.getName().equalsIgnoreCase("label")
+									&& uiButton.label().equals(Constants.LABEL_DELETE)) {
+								ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+										new Class<?>[] { buttonObject.getClass() },
+										new Object[] { Constants.LABEL_ACTION_DELETE });
+								continue;
+							}
+
+							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
+									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
 						}
 						buttons.add(button);
 					}
@@ -547,14 +549,15 @@ public final class FormTemplate {
 				}
 
 			}
-			
+
 			TYPE_TEMPLATE = copyTypeTemplate;
 		}
 
 		return paginator;
 	}
 
-	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
+	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_,
+			Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
 		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
 
@@ -611,7 +614,8 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UISelect uiSelect) throws Exception {
+	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
+			UISelect uiSelect) throws Exception {
 
 		List<Object> options = null;
 
@@ -780,7 +784,8 @@ public final class FormTemplate {
 
 						Object object = ReflectionUtils.get(method.getName(), annotation);
 
-						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()),
+								new Class<?>[] { object.getClass() }, new Object[] { object });
 					}
 
 				}
@@ -826,7 +831,7 @@ public final class FormTemplate {
 		boolean containsFilter = Arrays.stream(type).anyMatch(t -> t == TYPE_TEMPLATE);
 		return containsFilter;
 	}
-	
+
 	private static String getTitle(Domain<?> domain) {
 		String title = StringsUtils.normalizeLabelToLowercaseCamelization(domain.getClass().getSimpleName().toString());
 		if (domain.getClass().isAnnotationPresent(UITitle.class)) {
@@ -872,6 +877,16 @@ public final class FormTemplate {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 
 							if (buttonObject instanceof UIAction uiAction) {
+								if (uiButton.label().equals(Constants.LABEL_NEW) && TYPE_TEMPLATE.equals(TypeTemplate.MODAL)) {
+									Action action = getButtonAction(uiAction);
+									action.setClientMethod(Constants.METHOD_OPEN_MODAL_CREATE);
+									action.setServerMethod(null);
+									action.setRedirect(null);
+									action.setResponse(null);
+									action.setDomain(null);
+									button.setAction(action);
+									continue;
+								}
 								button.setAction(getButtonAction(uiAction));
 								continue;
 							}
@@ -919,17 +934,17 @@ public final class FormTemplate {
 				}
 			}
 		}
-		
+
 		if (uiAction.response() instanceof UIActionResponse uiActionResponse) {
 			containsTemplate = checkTemplate(uiActionResponse);
 			if (containsTemplate) {
 				UIActionResponseSuccess uiActionResponseSuccess = uiActionResponse.success();
 				UIActionResponseError uiActionResponseError = uiActionResponse.error();
-				
+
 				ActionResponse response = new ActionResponse();
 				ActionResponseSuccess success = new ActionResponseSuccess();
 				ActionResponseError error = new ActionResponseError();
-				
+
 				if (uiActionResponseSuccess.method() instanceof UIActionMethod uiActionMethod) {
 					containsTemplate = checkTemplate(uiActionResponseSuccess);
 					if (containsTemplate) {
@@ -937,14 +952,14 @@ public final class FormTemplate {
 						success.setServerMethod(uiActionMethod.serverMethod());
 					}
 				}
-				
+
 				if (uiActionResponseSuccess.redirect() instanceof UIActionRedirect uiActionRedirect) {
 					containsTemplate = checkTemplate(uiActionResponseSuccess);
 					if (containsTemplate) {
 						success.setRedirect(uiActionRedirect.value());
 					}
 				}
-				
+
 				if (uiActionResponseError.method() instanceof UIActionMethod uiActionMethod) {
 					containsTemplate = checkTemplate(uiActionResponseError);
 					if (containsTemplate) {
@@ -952,22 +967,22 @@ public final class FormTemplate {
 						error.setServerMethod(uiActionMethod.serverMethod());
 					}
 				}
-				
+
 				if (uiActionResponseError.redirect() instanceof UIActionRedirect uiActionRedirect) {
 					containsTemplate = checkTemplate(uiActionResponseError);
 					if (containsTemplate) {
 						error.setRedirect(uiActionRedirect.value());
 					}
 				}
-				
+
 				response.setSuccess(success);
 				response.setError(error);
-				
+
 				action.setResponse(response);
-				
+
 			}
 		}
-		
+
 		return action;
 	}
 
@@ -1055,5 +1070,4 @@ public final class FormTemplate {
 		}
 		return globals;
 	}
-
 }
