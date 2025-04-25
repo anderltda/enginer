@@ -13,5 +13,5 @@ public @interface UIConditionalOn {
 	String field();
 	TypeOperator operator();
 	String[] matchs();
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
+	TypeTemplate[] template() default { TypeTemplate.FORM };
 }

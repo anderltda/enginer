@@ -53,11 +53,11 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Entity One -> Stream")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 	value = {
-		@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+		@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 	}
 )
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelection = true, editable = true),
+    config = @UIConfig(expandable = true, multiSelection = false, editable = true),
     column = @UIColumn( initial = { "entityOne.height", "entityOne.age", "entityOne.name" }, hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }),
     actions = @UIButtonAction(includes = { UIButtonFindId.class, UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  },
         value = { 
@@ -70,6 +70,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     )
 )
 @UIValidate(
+		
 	global = @UIGlobal({ 
 		@UIGlobalOn(function = "customEntitySumValuesValidator", message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!") 
 	}), 
@@ -85,9 +86,9 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" }) 
 	}), 
 	dependency = @UIDependency({
-		@UIDependsOn(label = "Age", field = "entityOne.age", depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
-		@UIDependsOn(label = "Fruit", field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
-		@UIDependsOn(label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
+		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Age", field = "entityOne.age", depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
+		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Fruit", field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
+		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
 	})
 )
 public class EntityOne extends DomainAbstract<EntityOne, Long> {
@@ -109,7 +110,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	private String name;
 
 	@UIPosition(x = 1, y = 2)
-	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
+	@UIFieldValidation(required = false)
 	@UIFilter(label = "Entity Status", field = "name", readonly = false)
 	private EntityStatus entityStatus;
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
@@ -56,7 +57,8 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
-	@UIFilter(label = "Entity Five", field = "reference", readonly = true)
+	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIFilter(label = "Entity Five", field = "reference")
 	private EntityFive entityFive;
 	
 	@Override

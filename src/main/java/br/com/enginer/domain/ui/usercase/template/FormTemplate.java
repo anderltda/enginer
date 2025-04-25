@@ -976,13 +976,16 @@ public final class FormTemplate {
 		if (domain.getClass().isAnnotationPresent(UIValidate.class)) {
 			validate = new Validate();
 			UIValidate uiValidate = domain.getClass().getAnnotation(UIValidate.class);
-			validate.setGlobal(getGlobal(domain, uiValidate.global().value()));
-			validate.setCustom(getCustom(domain, uiValidate.custom().value()));
-			validate.setConditional(getConditional(domain, uiValidate.conditional().value()));
-			validate.setDependency(getDependecy(domain, uiValidate.dependency().value()));
-			if (validate.getGlobal().size() == 0 && validate.getCustom().size() == 0
-					&& validate.getConditional().size() == 0 && validate.getDependency().size() == 0) {
-				validate = null;
+			boolean containsTemplate = checkTemplate(uiValidate);
+			if (containsTemplate) {
+				validate.setGlobal(getGlobal(domain, uiValidate.global().value()));
+				validate.setCustom(getCustom(domain, uiValidate.custom().value()));
+				validate.setConditional(getConditional(domain, uiValidate.conditional().value()));
+				validate.setDependency(getDependecy(domain, uiValidate.dependency().value()));
+				if (validate.getGlobal().size() == 0 && validate.getCustom().size() == 0
+						&& validate.getConditional().size() == 0 && validate.getDependency().size() == 0) {
+					validate = null;
+				}
 			}
 		}
 
@@ -993,11 +996,14 @@ public final class FormTemplate {
 		List<Dependency> dependencys = new ArrayList<>();
 		Dependency dependency = null;
 		for (UIDependsOn uiDependsOn : uiDependsOns) {
-			dependency = new Dependency();
-			dependency.setLabel(uiDependsOn.label());
-			dependency.setField(uiDependsOn.field());
-			dependency.setDepends(uiDependsOn.depends());
-			dependencys.add(dependency);
+			boolean containsTemplate = checkTemplate(uiDependsOn);
+			if (containsTemplate) {
+				dependency = new Dependency();
+				dependency.setLabel(uiDependsOn.label());
+				dependency.setField(uiDependsOn.field());
+				dependency.setDepends(uiDependsOn.depends());
+				dependencys.add(dependency);
+			}
 		}
 		return dependencys;
 	}
@@ -1006,12 +1012,15 @@ public final class FormTemplate {
 		List<Conditional> conditionals = new ArrayList<>();
 		Conditional conditional = null;
 		for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
-			conditional = new Conditional();
-			conditional.setLabel(uiConditionalOn.label());
-			conditional.setField(uiConditionalOn.field());
-			conditional.setOperator(uiConditionalOn.operator());
-			conditional.setMatchs(uiConditionalOn.matchs());
-			conditionals.add(conditional);
+			boolean containsTemplate = checkTemplate(uiConditionalOn);
+			if (containsTemplate) {
+				conditional = new Conditional();
+				conditional.setLabel(uiConditionalOn.label());
+				conditional.setField(uiConditionalOn.field());
+				conditional.setOperator(uiConditionalOn.operator());
+				conditional.setMatchs(uiConditionalOn.matchs());
+				conditionals.add(conditional);
+			}
 		}
 		return conditionals;
 	}
@@ -1020,11 +1029,14 @@ public final class FormTemplate {
 		List<Custom> custons = new ArrayList<>();
 		Custom custom = null;
 		for (UICustomOn uiCustomOn : uiCustomOns) {
-			custom = new Custom();
-			custom.setFunction(uiCustomOn.function());
-			custom.setMessage(uiCustomOn.message());
-			custom.setFields(uiCustomOn.fields());
-			custons.add(custom);
+			boolean containsTemplate = checkTemplate(uiCustomOn);
+			if (containsTemplate) {
+				custom = new Custom();
+				custom.setFunction(uiCustomOn.function());
+				custom.setMessage(uiCustomOn.message());
+				custom.setFields(uiCustomOn.fields());
+				custons.add(custom);
+			}
 		}
 		return custons;
 	}
@@ -1033,10 +1045,13 @@ public final class FormTemplate {
 		List<Global> globals = new ArrayList<>();
 		Global global = null;
 		for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
-			global = new Global();
-			global.setFunction(uiGlobalOn.function());
-			global.setMessage(uiGlobalOn.message());
-			globals.add(global);
+			boolean containsTemplate = checkTemplate(uiGlobalOn);
+			if (containsTemplate) {
+				global = new Global();
+				global.setFunction(uiGlobalOn.function());
+				global.setMessage(uiGlobalOn.message());
+				globals.add(global);
+			}
 		}
 		return globals;
 	}

@@ -19,6 +19,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     icon = "search",
     state = TypeButtonState.BTN_STATE_PRIMARY,
     template = TypeTemplate.FILTER,
+    needsValidation = true,
     action = @UIAction(
         method = @UIActionMethod(serverMethod = "search")
     )
