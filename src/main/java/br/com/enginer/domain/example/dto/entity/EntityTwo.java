@@ -52,8 +52,8 @@ public class EntityTwo extends DomainAbstract<EntityTwo, String> {
 	@UIFilter(label = "Entity Status", field = "name", select = false)
 	private EntityStatus entityStatus;
 
-	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
-	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER })
+	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
+	@UIJoin(layoutTarget = "form")
 	private EntityTree entityTree;
 	
 	@Override

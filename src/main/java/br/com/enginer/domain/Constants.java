@@ -41,8 +41,8 @@ public class Constants {
 	/**
 	 * URL(s) dinamicas
 	 */
-	public static final String PATH_FIND_BY_ID = "/dynamics/form/true/$domain/$id";
-	public static final String PATH_ADD_NEW = "/dynamics/form/true/$domain";
+	public static final String PATH_FIND_BY_ID = "/dynamics/form/$domain/$id";
+	public static final String PATH_ADD_NEW = "/dynamics/form/$domain";
 	
 	/**
 	 * Label dos buttons estaticos

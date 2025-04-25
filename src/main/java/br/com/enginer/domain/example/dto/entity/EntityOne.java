@@ -134,7 +134,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime prohibitedDateTime;
 
-	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
+	@UIJoin(layoutTarget = "form")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 	

@@ -43,8 +43,10 @@ public class UIInboundUserCase implements UIInboundPort {
 			domain.setActionInboundPort(actionInboundPort);
 			
 			System.out.println(domain.getClass() +" -> "+ domain.isModal());
+			
+			TypeTemplate template = (domain.isModal() ? TypeTemplate.MODAL : TypeTemplate.FORM);
 
-			return FormTemplate.create(domain, domain.isModal() ? TypeTemplate.MODAL : TypeTemplate.FORM);
+			return FormTemplate.create(domain, template);
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
@@ -63,14 +65,14 @@ public class UIInboundUserCase implements UIInboundPort {
 			domain.setActionInboundPort(actionInboundPort);
 			
 			System.out.println(domain.getClass() +" -> "+ domain.isModal());
+			
+			TypeTemplate template = (domain.isModal() ? TypeTemplate.MODAL : TypeTemplate.FILTER);
 
-			return FormTemplate.create(domain, domain.isModal() ? TypeTemplate.MODAL : TypeTemplate.FILTER);
+			return FormTemplate.create(domain, template);
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
 			throw new CheckedException("Erro ao montar o formulário: " + ex.getMessage(), ex);
 		}
 	}
-	
-	
 }
