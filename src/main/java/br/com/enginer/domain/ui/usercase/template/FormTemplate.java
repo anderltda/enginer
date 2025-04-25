@@ -867,9 +867,12 @@ public final class FormTemplate {
 
 				for (UIButton uiButton : uiListButtons) {
 					
+					if (uiButton.label().equals(Constants.LABEL_DELETE) && domain.getId() == null) {
+						continue;
+					}
+					
 					if (TYPE_TEMPLATE_MAPS.get(TypeTemplate.MODAL)) {
-						if (uiButton.label().equals(Constants.LABEL_DELETE)
-								|| uiButton.label().equals(Constants.LABEL_BACK))
+						if (uiButton.label().equals(Constants.LABEL_DELETE) || uiButton.label().equals(Constants.LABEL_BACK))
 							continue;
 					}
 

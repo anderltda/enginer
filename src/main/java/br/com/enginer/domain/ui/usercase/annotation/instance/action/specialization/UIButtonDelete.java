@@ -19,6 +19,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     icon = "close_ circle",
     state = TypeButtonState.BTN_STATE_DANGER,
     confirm = true,
+    needsValidation = false,
     template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
         method = @UIActionMethod(serverMethod = "delete")
