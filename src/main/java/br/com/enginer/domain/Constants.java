@@ -1,7 +1,5 @@
 package br.com.enginer.domain;
 
-import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
-
 public class Constants {
 
 	/**
@@ -60,5 +58,11 @@ public class Constants {
 	 * Function, javascript para abrir um modal para criacao um novo dominio
 	 */
 	public static final String METHOD_OPEN_MODAL_CREATE = "onShowFieldModal";
+	public static final String METHOD_CLEAR_FORM = "onClearForm";
+	
+	/**
+	 * Palavras reservadas, utilizadas no DominioResolver, essa palavras serao ignoradas devido a compor a url
+	 */
+	public static final String[] WORDS_RESERVED = { "form", "action", "search", "filter", "autocomplete", "validator", "async" };
 	
 }

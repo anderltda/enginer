@@ -86,16 +86,11 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 	 * @return
 	 */
 	private String extractIdFromUri(String uri) {
-		
-		String[] parts = Arrays.stream(uri.split("/"))
-                .filter(s -> !s.isEmpty())
-                .toArray(String[]::new);
-
+		String[] parts = Arrays.stream(uri.split("/")).filter(s -> !s.isEmpty()).toArray(String[]::new);
 		if (parts.length > 2) {
 			String last = parts[parts.length - 1];
 			// Palavras reservadas que nunca são ID
-			String[] reserved = { "form", "action", "search", "filter" };
-
+			String[] reserved = Constants.WORDS_RESERVED;
 			for (String keyword : reserved) {
 				if (keyword.equalsIgnoreCase(last)) {
 					return null;

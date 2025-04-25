@@ -19,7 +19,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
     needsValidation = false,
     state = TypeButtonState.BTN_STATE_DEFAULT,
     action = @UIAction(
-        method = @UIActionMethod(clientMethod = "onClearForm")
+        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
     )
 )
 public @interface UIButtonClear {}

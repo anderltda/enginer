@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,7 @@ public class ActionInboundAdapterPort {
 	/**
 	 * @param file
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@PostMapping("/upload")
 	public ResponseEntity<Map<String, Object>> upload(@RequestParam MultipartFile file) throws Exception {
@@ -91,16 +92,18 @@ public class ActionInboundAdapterPort {
 	 * @param method
 	 * @param value
 	 * @return
+	 * @throws CheckedException
 	 */
-	@PostMapping("/{method}/validatorsAsync")
-	public ResponseEntity<Map<String, Boolean>> validate(@PathVariable String method, @RequestBody String value) throws CheckedException {
+	@PostMapping("/validate/{method}/async")
+	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method, @RequestBody String value) throws CheckedException {
 
 		try {
 
 			trackingProvider.setInnerId(UUIDGenerator.generate());
 
-			// System.out.println("Executando method: " + method);
-			// System.out.println("Valor recebido: " + value);
+			logger.info(ActionInboundAdapterPort.class, "Executando domínio no validate: " + domain);
+			logger.info(ActionInboundAdapterPort.class, "Executando method: " + method);
+			logger.info(ActionInboundAdapterPort.class, "Valor recebido: " + value);
 
 			String[] array = new String[] { "johndoe", "admin", "user123" };
 			Map<String, Boolean> response = new HashMap<>();
@@ -119,11 +122,37 @@ public class ActionInboundAdapterPort {
 			throw ex;
 		}
 	}
+	
+	/**
+	 * @param domain
+	 * @param filter
+	 * @return
+	 * @throws CheckedException
+	 */
+	@GetMapping({ "/autocomplete" })
+	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
+
+		try {
+
+			trackingProvider.setInnerId(UUIDGenerator.generate());
+
+			logger.info(ActionInboundAdapterPort.class, "Executando domínio no autocomplete: " + domain);
+
+			List<Domain<?>> list = actionInboundPort.findAll(domain, filter);
+
+			return ResponseEntity.ok(list);
+
+		} catch (Exception ex) {
+			logger.error(ActionInboundAdapterPort.class, ex);
+			throw ex;
+		}
+	}	
 
 	/**
 	 * @param domain
 	 * @param filter
 	 * @return
+	 * @throws CheckedException
 	 */
 	@GetMapping({ "/search" })
 	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
@@ -146,7 +175,9 @@ public class ActionInboundAdapterPort {
 
 	/**
 	 * @param domain
+	 * @param json
 	 * @return
+	 * @throws CheckedException
 	 */
 	@PostMapping
 	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json) throws CheckedException {
@@ -155,8 +186,6 @@ public class ActionInboundAdapterPort {
 
 			trackingProvider.setInnerId(UUIDGenerator.generate());
 			
-			//int i = 1/0;
-
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
 			

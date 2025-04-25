@@ -66,7 +66,7 @@ public class EntityTree extends DomainAbstract<EntityTree, String> {
 	private LocalDateTime localDateTime;
 	
 	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
-	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER })
+	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	private EntityFour entityFour;
 	
 	@Override

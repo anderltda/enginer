@@ -117,6 +117,8 @@ public final class FormTemplate {
 	private static final Map<Class<? extends Annotation>, Class<? extends Annotation>> annotationMap = new HashMap<>();
 
 	private static TypeTemplate TYPE_TEMPLATE;
+	
+	private static Map<TypeTemplate, Boolean> TYPE_TEMPLATE_MAPS;
 
 	private FormTemplate() {
 	}
@@ -153,13 +155,15 @@ public final class FormTemplate {
 	 * @param domain
 	 * @return
 	 */
-	public static Form create(Domain<?> domain, TypeTemplate typeTemplate) throws Exception {
+	public static Form create(Domain<?> domain, Map<TypeTemplate, Boolean> maps) throws Exception {
 
 		Form form = null;
 
 		try {
+			
+			TYPE_TEMPLATE_MAPS = maps;
 
-			TYPE_TEMPLATE = typeTemplate;
+			TYPE_TEMPLATE = TYPE_TEMPLATE_MAPS.entrySet().iterator().next().getKey();
 
 			List<Field> fields = new ArrayList<>();
 			Field field = null;
@@ -703,8 +707,7 @@ public final class FormTemplate {
 		return hidden;
 	}
 
-	private static Join getJoin(Domain<?> domain, java.lang.reflect.Field f, Default default_,
-			Annotation[] annotations) {
+	private static Join getJoin(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 
 		Object id = null;
 
@@ -863,6 +866,12 @@ public final class FormTemplate {
 				buttons = new ArrayList<>();
 
 				for (UIButton uiButton : uiListButtons) {
+					
+					if (TYPE_TEMPLATE_MAPS.get(TypeTemplate.MODAL)) {
+						if (uiButton.label().equals(Constants.LABEL_DELETE)
+								|| uiButton.label().equals(Constants.LABEL_BACK))
+							continue;
+					}
 
 					boolean containsTemplate = checkTemplate(uiButton);
 
@@ -877,13 +886,10 @@ public final class FormTemplate {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 
 							if (buttonObject instanceof UIAction uiAction) {
-								if (uiButton.label().equals(Constants.LABEL_NEW) && TYPE_TEMPLATE.equals(TypeTemplate.MODAL)) {
+								if (uiButton.label().equals(Constants.LABEL_NEW) && TYPE_TEMPLATE_MAPS.get(TypeTemplate.MODAL)) {
 									Action action = getButtonAction(uiAction);
 									action.setClientMethod(Constants.METHOD_OPEN_MODAL_CREATE);
-									action.setServerMethod(null);
 									action.setRedirect(null);
-									action.setResponse(null);
-									action.setDomain(null);
 									button.setAction(action);
 									continue;
 								}

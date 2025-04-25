@@ -1,6 +1,5 @@
 package br.com.enginer.domain.ui.usercase;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +52,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 *
 	 */
 	@Override
-	public List<Domain<?>> findAll(Domain<?> domain, HashMap<String, Object> filter) throws CheckedException {
+	public List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter) throws CheckedException {
 		
 		try {
 			
