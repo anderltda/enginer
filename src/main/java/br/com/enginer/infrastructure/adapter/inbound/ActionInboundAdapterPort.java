@@ -27,8 +27,6 @@ import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
-import br.com.enginer.domain.ui.usercase.utils.UUIDGenerator;
-import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 /**
  * 
@@ -37,24 +35,19 @@ import br.com.enginer.infrastructure.tracking.TrackingProvider;
 @RequestMapping("/v1/enginer/action")
 public class ActionInboundAdapterPort {
 
-	private static final String UPLOAD_DIR = "/Users/anderson/Downloads/uploads/";
-
 	private final ActionInboundPort actionInboundPort;
 	private final ObjectMapper objectMapper;
 	private final LoggerOutboundPort logger;
-	private final TrackingProvider trackingProvider;
-	
+
 	/**
 	 * @param actionInboundPort
 	 * @param objectMapper
 	 * @param logger
-	 * @param trackingProvider
 	 */
-	public ActionInboundAdapterPort(ActionInboundPort actionInboundPort, ObjectMapper objectMapper, LoggerOutboundPort logger, TrackingProvider trackingProvider) {
+	public ActionInboundAdapterPort(ActionInboundPort actionInboundPort, ObjectMapper objectMapper, LoggerOutboundPort logger) {
 		this.actionInboundPort = actionInboundPort;
 		this.objectMapper = objectMapper;
 		this.logger = logger;
-		this.trackingProvider = trackingProvider;
 	}
 
 	/**
@@ -67,13 +60,11 @@ public class ActionInboundAdapterPort {
 
 		try {
 
-			trackingProvider.setInnerId(UUIDGenerator.generate());
-
 			if (file.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("error", "Arquivo está vazio."));
 			}
-
-			Path uploadPath = Path.of(UPLOAD_DIR);
+			
+			Path uploadPath = Path.of("/Users/anderson/Downloads/uploads/");
 			Files.createDirectories(uploadPath);
 
 			String filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -95,11 +86,10 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping("/validate/{method}/async")
-	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method, @RequestBody String value) throws CheckedException {
+	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method,
+			@RequestBody String value) throws CheckedException {
 
 		try {
-
-			trackingProvider.setInnerId(UUIDGenerator.generate());
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no validate: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Executando method: " + method);
@@ -122,7 +112,7 @@ public class ActionInboundAdapterPort {
 			throw ex;
 		}
 	}
-	
+
 	/**
 	 * @param domain
 	 * @param filter
@@ -130,11 +120,10 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/autocomplete" })
-	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
+	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain,
+			@RequestParam Map<String, Object> filter) throws CheckedException {
 
 		try {
-
-			trackingProvider.setInnerId(UUIDGenerator.generate());
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no autocomplete: " + domain);
 
@@ -146,7 +135,7 @@ public class ActionInboundAdapterPort {
 			logger.error(ActionInboundAdapterPort.class, ex);
 			throw ex;
 		}
-	}	
+	}
 
 	/**
 	 * @param domain
@@ -155,11 +144,10 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/search" })
-	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
+	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter)
+			throws CheckedException {
 
 		try {
-
-			trackingProvider.setInnerId(UUIDGenerator.generate());
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no paginator: " + domain);
 
@@ -180,19 +168,18 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping
-	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json) throws CheckedException {
+	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json)
+			throws CheckedException {
 
 		try {
 
-			trackingProvider.setInnerId(UUIDGenerator.generate());
-			
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
-			
+
 			Domain<?> newDomain = objectMapper.convertValue(json, domain.getClass());
 
 			domain = actionInboundPort.action(newDomain);
-			
+
 			logger.info(ActionInboundAdapterPort.class, "Payload enviado: \r " + domain);
 
 			return ResponseEntity.ok(domain);

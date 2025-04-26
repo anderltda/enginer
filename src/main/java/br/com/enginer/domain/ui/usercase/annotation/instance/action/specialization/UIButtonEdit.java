@@ -14,9 +14,9 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(
-		label = Constants.LABEL_ACTION_FIND_ID, 
+		label = Constants.LABEL_ACTION_EDIT, 
 		template = TypeTemplate.PAGINATOR, 
-		highlight = false, 
-		action = @UIAction(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
+		highlight = true, 
+		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, param = "{ disabled=false }"))
 )
-public @interface UIButtonFindId {}
+public @interface UIButtonEdit {}

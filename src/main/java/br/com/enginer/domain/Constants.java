@@ -46,12 +46,14 @@ public class Constants {
 	 * Label dos buttons estaticos
 	 */
 	public static final String LABEL_DELETE = "Excluir";
+	public static final String LABEL_EDIT = "Alterar";
 	public static final String LABEL_SAVE = "Salvar";
 	public static final String LABEL_BACK = "Voltar";
 	public static final String LABEL_CLEAR = "Limpar";
 	public static final String LABEL_NEW = "Novo";
 	public static final String LABEL_SEARCH = "Buscar";
-	public static final String LABEL_ACTION_FIND_ID = "Exibir detalhes do registro";
+	public static final String LABEL_ACTION_VIEW = "Exibir detalhes do registro";
+	public static final String LABEL_ACTION_EDIT = "Alterar detalhes do registro";
 	public static final String LABEL_ACTION_DELETE	 = "Realizar exclusão do registro";
 	
 	/**
@@ -64,5 +66,11 @@ public class Constants {
 	 * Palavras reservadas, utilizadas no DominioResolver, essa palavras serao ignoradas devido a compor a url
 	 */
 	public static final String[] WORDS_RESERVED = { "form", "action", "search", "filter", "autocomplete", "validator", "async" };
+	
+	/**
+	 * hash1 = Readonly e hash2 = Editable
+	 */
+	public static final String HASH1 = "6f6vf44ecb8265a7c47vbfda065c25b79c6592u9c0ed912055e294d21953c695";
+	public static final String HASH2 = "6f6ef44ecb8265a7c47ubfda065c25o79c6592u9c0ed912055e294d21953c695";
 	
 }

@@ -41,6 +41,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			map.put(TypeTemplate.FORM, true);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
 			Domain<?> loadedDomain = actionInboundPort.findById(domain);
 
@@ -70,6 +71,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			map.put(TypeTemplate.FILTER, true);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
 			domain.setActionInboundPort(actionInboundPort);
 			

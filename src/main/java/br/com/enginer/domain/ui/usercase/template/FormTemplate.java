@@ -118,6 +118,8 @@ public final class FormTemplate {
 
 	private static TypeTemplate TYPE_TEMPLATE;
 	
+	private static Boolean DISABLED = Boolean.FALSE;
+	
 	private static Map<TypeTemplate, Boolean> TYPE_TEMPLATE_MAPS;
 
 	private FormTemplate() {
@@ -165,6 +167,10 @@ public final class FormTemplate {
 
 			TYPE_TEMPLATE = TYPE_TEMPLATE_MAPS.entrySet().iterator().next().getKey();
 
+			DISABLED = TYPE_TEMPLATE_MAPS.get(TypeTemplate.DISABLED);
+			
+			System.out.println(DISABLED);
+
 			List<Field> fields = new ArrayList<>();
 			Field field = null;
 
@@ -183,7 +189,7 @@ public final class FormTemplate {
 				int x = count;
 				int y = count % 2 == 0 ? count - 1 : count;
 
-				Default default_ = new Default(x, y, f.getName(), false, domain);
+				Default default_ = new Default(x, y, f.getName(), DISABLED, domain);
 
 				field = new Field();
 				fields.add(field);
@@ -472,6 +478,7 @@ public final class FormTemplate {
 			ex.printStackTrace();
 			throw ex;
 		}
+		
 
 		return form;
 	}
@@ -529,11 +536,8 @@ public final class FormTemplate {
 								continue;
 							}
 
-							if (method.getName().equalsIgnoreCase("label")
-									&& uiButton.label().equals(Constants.LABEL_DELETE)) {
-								ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
-										new Class<?>[] { buttonObject.getClass() },
-										new Object[] { Constants.LABEL_ACTION_DELETE });
+							if (method.getName().equalsIgnoreCase("label") && uiButton.label().equals(Constants.LABEL_DELETE)) {
+								ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { Constants.LABEL_ACTION_DELETE });
 								continue;
 							}
 
@@ -778,7 +782,7 @@ public final class FormTemplate {
 
 					Method[] methods = annotation.annotationType().getDeclaredMethods();
 					for (Method method : methods) {
-						if (method.getName().equals("template")) {
+						if (method.getName().equals("template") || method.getName().equals("disabled")) {
 							boolean containsTemplate = checkTemplate(annotation);
 							if (containsTemplate) {
 								continue;
@@ -787,8 +791,7 @@ public final class FormTemplate {
 
 						Object object = ReflectionUtils.get(method.getName(), annotation);
 
-						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()),
-								new Class<?>[] { object.getClass() }, new Object[] { object });
+						ReflectionUtils.set(base, StringsUtils.setMethod(method.getName()), new Class<?>[] { object.getClass() }, new Object[] { object });
 					}
 
 				}
@@ -866,6 +869,10 @@ public final class FormTemplate {
 				buttons = new ArrayList<>();
 
 				for (UIButton uiButton : uiListButtons) {
+							
+					if (!uiButton.label().equals(Constants.LABEL_BACK) && DISABLED) {
+						continue;
+					}
 					
 					if (uiButton.label().equals(Constants.LABEL_DELETE) && domain.getId() == null) {
 						continue;
@@ -929,6 +936,7 @@ public final class FormTemplate {
 			containsTemplate = checkTemplate(uiActionRedirect);
 			if (containsTemplate) {
 				action.setRedirect(uiActionRedirect.value());
+				action.setParam(uiActionRedirect.param());
 			}
 		}
 

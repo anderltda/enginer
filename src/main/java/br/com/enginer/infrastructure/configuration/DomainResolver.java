@@ -18,6 +18,8 @@ import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
+import br.com.enginer.domain.ui.usercase.utils.UUIDGenerator;
+import br.com.enginer.infrastructure.tracking.TrackingLogConfigurer;
 import br.com.enginer.infrastructure.utils.PackageScannerUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -26,6 +28,12 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 @Component
 public class DomainResolver implements HandlerMethodArgumentResolver {
+
+    private final TrackingLogConfigurer trackingLogConfigurer;
+
+    DomainResolver(TrackingLogConfigurer trackingLogConfigurer) {
+        this.trackingLogConfigurer = trackingLogConfigurer;
+    }
 
 	/**
 	 *
@@ -40,17 +48,21 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 	 */
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+		
+		trackingLogConfigurer.setInnerId(UUIDGenerator.generate());
 
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
 		String domainName = request.getHeader("X-UIDomain");
 		String modal = request.getHeader("X-UIModal");
+		String disabled = request.getHeader("X-UI-Mode");
 		
 		String rawId = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
-
+			
 			Boolean isModal = modal != null && !modal.isEmpty() ? Boolean.valueOf(modal) : Boolean.FALSE;
+			Boolean isDisabled = disabled.equals(Constants.HASH1) ? disabled.equals(Constants.HASH1) : !disabled.equals(Constants.HASH2);
 
 			Class<?> clazz = PackageScannerUtils.findClassBySimpleName(Constants.PACKAGE_NAME_DOMAIN, StringsUtils.firstUpper(domainName));
 
@@ -74,6 +86,9 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), boolean.class);
 				setModalMethod.invoke(domainInstance, isModal);
+				
+				Method setDisabledMethod = clazz.getMethod(StringsUtils.setMethod("disabled"), boolean.class);
+				setDisabledMethod.invoke(domainInstance, isDisabled);
 
 				return domainInstance;
 			}

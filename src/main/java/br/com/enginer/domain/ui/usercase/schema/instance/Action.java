@@ -8,6 +8,7 @@ public class Action {
 	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
+	private String param;
 	private ActionObject domain;
 	private ActionResponse response;
 
@@ -33,6 +34,14 @@ public class Action {
 
 	public void setServerMethod(String serverMethod) {
 		this.serverMethod = serverMethod;
+	}
+	
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
 	}
 
 	public ActionObject getDomain() {

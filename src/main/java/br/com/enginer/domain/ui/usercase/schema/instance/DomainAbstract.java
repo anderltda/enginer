@@ -13,6 +13,8 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	
 	private boolean modal = false;
 	
+	private boolean disabled = false;
+	
 	private ActionLogger actionLogger;
 	
 	protected ActionInboundPort actionInboundPort;
@@ -63,5 +65,21 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	@Override
 	public void setModal(boolean modal) {
 		this.modal = modal;
+	}
+
+    /**
+     * Informa se os campos estao disabled, porém apenas visualmente.
+     */
+	@Override
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+    /**
+     * Define se o disabled está habilitado.
+     */
+	@Override
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 }

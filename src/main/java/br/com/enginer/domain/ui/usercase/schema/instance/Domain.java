@@ -27,6 +27,16 @@ public interface Domain<I> {
      * Define se o domínio é um modal.
      */
     void setModal(boolean modal);
+	
+    /**
+     * Informa se os campos estao disabled, porém apenas visualmente.
+     */
+    boolean isDisabled();
+
+    /**
+     * Define se o disabled está habilitado.
+     */
+    void setDisabled(boolean disabled);
 
 	/**
 	 * @param actionInboundPort
