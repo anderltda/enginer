@@ -513,11 +513,13 @@ public final class FormTemplate {
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
 
-			List<UIButton> uiListButtons = new ArrayList<>(Arrays.asList(uiButtons));
+			List<UIButton> uiListButtons = new ArrayList<>();
 
 			for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
 				uiListButtons.add(custom.getAnnotation(UIButton.class));
 			}
+			
+			uiListButtons.addAll(Arrays.asList(uiButtons));
 
 			if (uiListButtons.size() > 0) {
 				List<Button> buttons = new ArrayList<>();
@@ -564,8 +566,7 @@ public final class FormTemplate {
 		return paginator;
 	}
 
-	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_,
-			Annotation[] annotations, UIFilter uiFilter) throws Exception {
+	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
 		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
 

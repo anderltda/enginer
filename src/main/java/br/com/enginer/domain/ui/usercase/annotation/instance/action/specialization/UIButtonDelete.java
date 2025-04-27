@@ -20,6 +20,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     state = TypeButtonState.BTN_STATE_DANGER,
     confirm = true,
     needsValidation = false,
+    highlight = true,
     template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
         method = @UIActionMethod(serverMethod = "delete")

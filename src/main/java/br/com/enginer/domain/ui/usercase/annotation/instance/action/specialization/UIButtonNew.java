@@ -18,6 +18,6 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     icon = "add_circle",
     needsValidation = false,
     template = { TypeTemplate.FILTER, TypeTemplate.MODAL },
-    action = @UIAction(redirect = @UIActionRedirect(Constants.PATH_ADD_NEW))
+	action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_ADD_NEW, param = "{ disabled=false }"))
 )
 public @interface UIButtonNew {}

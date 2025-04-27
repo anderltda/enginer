@@ -54,7 +54,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Entity One -> Stream")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 	value = {
-		@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+		@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 	}
 )
 @UIPaginator(
@@ -63,10 +63,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = { 
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", highlight = true, action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id")))            
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id"))),            
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
         }
     )
 )
