@@ -17,5 +17,5 @@ public @interface UIDate {
 	boolean showtime() default false;
 	boolean disabled() default false;
 	TypeDateFormat format() default TypeDateFormat.DATE_FORMAT;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.MODAL };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL };
 }

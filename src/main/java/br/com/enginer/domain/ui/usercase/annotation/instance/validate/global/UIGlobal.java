@@ -11,5 +11,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Target(ElementType.TYPE)
 public @interface UIGlobal {
 	UIGlobalOn[] value() default {};
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
 }

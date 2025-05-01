@@ -9,6 +9,11 @@ public class Tab {
 
 	private Config config;
 
+	public Tab(Boolean standaloneStep) {
+		config = new Config();
+		config.setStandaloneStep(standaloneStep);
+	}
+
 	public Config getConfig() {
 		return config;
 	}

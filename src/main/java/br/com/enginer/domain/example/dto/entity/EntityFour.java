@@ -18,9 +18,12 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
@@ -30,8 +33,8 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity Four -> Stream")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UITitle("Entity Four")
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonNext.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 value = {
 	@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }
@@ -57,8 +60,8 @@ public class EntityFour extends DomainAbstract<EntityFour, String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
-	@UIJoin(layoutTarget = "form", template = {TypeTemplate.FORM})
-	@UIFilter(label = "Entity Five", field = "reference")
+	@UIJoin(layoutTarget = "tab", icon = "cloud")
+	//@UIFilter(label = "Entity Five", field = "reference")
 	private EntityFive entityFive;
 	
 	@Override

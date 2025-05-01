@@ -14,5 +14,5 @@ public @interface UIDecimal {
 	String icon() default "";
 	String placeholder() default "";
 	boolean disabled() default false;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM };
 }

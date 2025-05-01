@@ -15,13 +15,13 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(
-    label = Constants.LABEL_BACK,
-    icon = "undo",
+    label = Constants.LABEL_BEFORE,
+    icon = "chevron_left",
+    state = TypeButtonState.BTN_STATE_PRIMARY,
     needsValidation = false,
-    state = TypeButtonState.BTN_STATE_DEFAULT,
-    template = { TypeTemplate.FORM, TypeTemplate.TAB },
+    template = { TypeTemplate.TAB, TypeTemplate.MODAL },
     action = @UIAction(
-        method = @UIActionMethod(clientMethod = "onBack")
+        method = @UIActionMethod(clientMethod = "onPrevious")
     )
 )
-public @interface UIButtonBack {}
+public @interface UIButtonBefore {}

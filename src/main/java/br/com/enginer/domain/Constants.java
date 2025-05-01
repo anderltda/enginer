@@ -41,6 +41,9 @@ public class Constants {
 	 */
 	public static final String PATH_FIND_BY_ID = "/dynamics/form/$domain/$id";
 	public static final String PATH_ADD_NEW = "/dynamics/form/$domain";
+	public static final String PATH_TAB_ADD_NEW = "/dynamics/tab/$domain";
+	public static final String PATH_TAB_FIND_BY_ID = "/dynamics/tab/$domain/$id";
+	
 	
 	/**
 	 * Label dos buttons estaticos
@@ -52,6 +55,11 @@ public class Constants {
 	public static final String LABEL_CLEAR = "Limpar";
 	public static final String LABEL_NEW = "Novo";
 	public static final String LABEL_SEARCH = "Buscar";
+	
+	public static final String LABEL_NEXT = "Proximo";
+	public static final String LABEL_BEFORE = "Anterior";
+	public static final String LABEL_FINISH = "Finalizar";
+	
 	public static final String LABEL_ACTION_VIEW = "Exibir detalhes do registro";
 	public static final String LABEL_ACTION_EDIT = "Alterar detalhes do registro";
 	public static final String LABEL_ACTION_DELETE	 = "Realizar exclusão do registro";
@@ -65,7 +73,7 @@ public class Constants {
 	/**
 	 * Palavras reservadas, utilizadas no DominioResolver, essa palavras serao ignoradas devido a compor a url
 	 */
-	public static final String[] WORDS_RESERVED = { "form", "action", "search", "filter", "autocomplete", "validator", "async" };
+	public static final String[] WORDS_RESERVED = { "form", "filter", "tab", "action", "search", "autocomplete", "validator", "async" };
 	
 	/**
 	 * hash1 = Readonly e hash2 = Editable

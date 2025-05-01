@@ -11,9 +11,12 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -22,8 +25,8 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity Five -> Stream")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UITitle("Entity Five")
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 value = {
 	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }

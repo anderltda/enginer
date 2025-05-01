@@ -40,6 +40,30 @@ public class CriarTelaStreamInboundPortAdapter {
 		this.logger = logger;
 		this.trackingProvider = trackingProvider;
 	}
+	
+	/**
+	 * @param domain
+	 * @return
+	 */
+	@GetMapping({ "/tab", "/tab/{id}" })
+	public ResponseEntity<Form> tab(@UIDomain Domain<?> domain) {
+
+		try {
+
+			trackingProvider.setInnerId(UUIDGenerator.generate());
+			
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			//logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
+			
+			Form form = uIInboundPort.tab(domain);
+
+			return ResponseEntity.ok(form);
+
+		} catch (Exception ex) {
+			logger.error(CriarTelaStreamInboundPortAdapter.class, "Erro ao criar entidade", ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
 	/**
 	 * @param domain

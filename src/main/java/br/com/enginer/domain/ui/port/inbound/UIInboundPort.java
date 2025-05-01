@@ -22,5 +22,12 @@ public interface UIInboundPort {
 	 * @throws CheckedException
 	 */
 	Form filter(Domain<?> domain) throws CheckedException;
+	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws CheckedException
+	 */
+	Form tab(Domain<?> domain) throws CheckedException;
 
 }

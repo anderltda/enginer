@@ -3,6 +3,7 @@ package br.com.enginer.domain.example.dto.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
@@ -21,16 +22,20 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
@@ -51,17 +56,29 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity One -> Stream")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UITitle("Entity One")
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNext.class, UIButtonNew.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 	value = {
-		@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-	}
-)
+			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false,     action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_ADD_NEW, param = "{ disabled=false }"))),
+			@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+		})
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
     column = @UIColumn( initial = { "entityOne.height", "entityOne.age", "entityOne.name" }, hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
-        value = { 
+        value = {
+    		@UIButton(
+    				label = "Visualizar detalhes do registro", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = false, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_FIND_BY_ID, param = "{ disabled=true }"))
+    		),	
+    		@UIButton(
+    				label = "Editar detalhes do registro", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = true, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_FIND_BY_ID, param = "{ disabled=false }"))
+    		),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
@@ -135,7 +152,7 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime prohibitedDateTime;
 
-	@UIJoin(layoutTarget = "form")
+	@UIJoin(layoutTarget = "tab", icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 	

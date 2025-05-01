@@ -15,5 +15,5 @@ public @interface UICustomOn {
 	String function();
 	String message();
 	String[] fields();
-	TypeTemplate[] template() default { TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
 }

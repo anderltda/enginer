@@ -101,6 +101,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.paginator.Paginator;
 import br.com.enginer.domain.ui.usercase.schema.paginator.column.Column;
 import br.com.enginer.domain.ui.usercase.schema.paginator.config.Config;
+import br.com.enginer.domain.ui.usercase.schema.tab.Tab;
 import br.com.enginer.domain.ui.usercase.schema.validate.Validate;
 import br.com.enginer.domain.ui.usercase.schema.validate.conditional.Conditional;
 import br.com.enginer.domain.ui.usercase.schema.validate.custom.Custom;
@@ -176,6 +177,7 @@ public final class FormTemplate {
 
 			form = new Form();
 			form.setTitle(getTitle(domain));
+			form.setTab(getTab(domain));
 			form.setPaginator(getPaginator(domain));
 			form.setValidate(getValidate(domain));
 			form.setFields(fields);
@@ -204,17 +206,17 @@ public final class FormTemplate {
 
 					if (annotationMap.containsKey(annotationType)) {
 
-						if (annotation instanceof UIId uiId) {
+						if (annotation instanceof UIId) {
 
-							boolean containsTemplate = checkTemplate(uiId);
+							boolean isId = domain.getId() != null;
 
-							if (containsTemplate) {
+							if (isId) {
 								field.setHidden(getHidden(f, default_, annotations));
 							}
 
 							identity = true;
 
-						} else if (annotation instanceof UIHidden uiHidden) {
+						} else if (domain.getId() != null && annotation instanceof UIHidden uiHidden) {
 
 							boolean containsTemplate = checkTemplate(uiHidden);
 
@@ -481,6 +483,11 @@ public final class FormTemplate {
 		
 
 		return form;
+	}
+
+	private static Tab getTab(Domain<?> domain) {
+		Tab tab = new Tab(true);
+		return tab;
 	}
 
 	private static Paginator getPaginator(Domain<?> domain) {
