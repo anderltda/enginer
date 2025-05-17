@@ -73,7 +73,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 		try {
 
-			String uri = File.separator + domain.getClass().getSimpleName() + File.separator + "{id}";
+			String uri = UriUtils.buildUriId(domain);
 
 			Mono<?> mono = getWebClient()
 					.get()
@@ -104,6 +104,48 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 		return (Domain<?>) object;
 
+	}
+	
+	/**
+	 *
+	 */
+	@Override
+	public Domain<?> findByIdComposite(Domain<?> domain, Map<String, Object> ids) throws UncheckedException {
+		
+		Object object = null;
+
+		try {
+
+			String uri = UriUtils.buildUriIdComposite(domain);
+
+			Mono<?> mono = getWebClient()
+					.get()
+					.uri(UriUtils.buildUriWithQueryParams(uri, ids))
+					.retrieve()
+					.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+					.bodyToMono(ParameterizedTypeReference.forType(domain.getClass()))
+					.switchIfEmpty(Mono.error(new CheckedException("Nenhum registro encontrado para esses ID(s): " + ids)));
+
+			object = mono.block();
+
+		} catch (CheckedException ex) {
+			if (ex.getMessage().contains("Nenhum registro encontrado")) {
+				logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
+				return domain;
+			} else {
+				logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+				throw ex;
+			}
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+
+		return (Domain<?>) object;
 	}
 
 	/**

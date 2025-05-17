@@ -15,6 +15,8 @@ public interface RepositoryOutboundPort {
 
 	public Domain<?> findById(Domain<?> domain, Object id) throws UncheckedException;
 	
+	public Domain<?> findByIdComposite(Domain<?> domain, Map<String, Object> ids) throws UncheckedException;
+	
 	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
 	public Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;

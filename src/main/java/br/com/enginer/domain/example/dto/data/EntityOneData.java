@@ -111,4 +111,10 @@ public class EntityOneData extends DomainAbstract<EntityOneData, Long> {
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "EntityOneData [id=" + id + ", name=" + name + ", age=" + age + ", code=" + code + ", height=" + height
+				+ ", birthDate=" + birthDate + ", prohibitedDateTime=" + prohibitedDateTime + ", entityStatusData="
+				+ entityStatusData + ", entityTwoData=" + entityTwoData + "]";
+	}
 }

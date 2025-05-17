@@ -1,8 +1,13 @@
 package br.com.enginer.domain.ui.usercase;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.enginer.domain.example.dto.data.EntityNineData;
+import br.com.enginer.domain.example.dto.data.EntityOneData;
+import br.com.enginer.domain.example.dto.entity.EntityNine;
+import br.com.enginer.domain.example.dto.entity.EntityOne;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
@@ -118,6 +123,32 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			ActionLogger actionLogger = domain.getActionLogger();
 			
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
+			
+			Map<String, Object> ids = new HashMap<>();
+			ids.put("idEntityEight", 2);
+			ids.put("idEntitySeven", 2);
+			ids.put("idEntitySix", 2);
+			
+			newDomain = repositoryOutboundPort.findByIdComposite(new EntityNine(), ids);
+			
+			System.out.println(newDomain);
+			
+			ids = new HashMap<>();
+			ids.put("idEntityEight", 1);
+			ids.put("idEntitySeven", 1);
+			ids.put("idEntitySix", 1);
+			
+			newDomain = repositoryOutboundPort.findByIdComposite(new EntityNineData(), ids);
+			
+			System.out.println(newDomain);
+			
+			newDomain = repositoryOutboundPort.findById(new EntityOne(), 1l);
+			
+			System.out.println(newDomain);
+			
+			newDomain = repositoryOutboundPort.findById(new EntityOneData(), 1l);
+			
+			System.out.println(newDomain);
 			
 			newDomain = repositoryOutboundPort.save(domain, true);
 			

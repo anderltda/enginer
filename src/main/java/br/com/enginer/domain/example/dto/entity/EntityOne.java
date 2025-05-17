@@ -26,11 +26,9 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedi
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
@@ -228,5 +226,12 @@ public class EntityOne extends DomainAbstract<EntityOne, Long> {
 
 	public void setEntityTwo(EntityTwo entityTwo) {
 		this.entityTwo = entityTwo;
+	}
+
+	@Override
+	public String toString() {
+		return "EntityOne [id=" + id + ", name=" + name + ", entityStatus=" + entityStatus + ", code=" + code + ", age="
+				+ age + ", height=" + height + ", birthDate=" + birthDate + ", prohibitedDateTime=" + prohibitedDateTime
+				+ ", entityTwo=" + entityTwo + "]";
 	}
 }

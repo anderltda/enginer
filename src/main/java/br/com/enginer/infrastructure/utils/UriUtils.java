@@ -93,7 +93,40 @@ public class UriUtils {
 		
 		return uri.toString();
 	}
+
+	/**
+	 * @param domain
+	 * @return
+	 */
+	public static String buildUriId(Domain<?> domain) {
+		
+		StringBuilder uri = new StringBuilder();
+		
+		if(domain.getClass().getSimpleName().endsWith("Data")) {
+			uri.append(File.separator).append("mapper").append(File.separator).append("by-id").append(File.separator).append(domain.getClass().getSimpleName()).append(File.separator).append("{id}");
+		} else {
+			uri.append(File.separator).append(domain.getClass().getSimpleName()).append(File.separator).append("{id}");
+		}
+		
+		return uri.toString();
+	}
 	
+	/**
+	 * @param domain
+	 * @return
+	 */
+	public static String buildUriIdComposite(Domain<?> domain) {
+		
+		StringBuilder uri = new StringBuilder();
+		
+		if(domain.getClass().getSimpleName().endsWith("Data")) {
+			uri.append(File.separator).append("mapper").append(File.separator).append("by-ids").append(File.separator).append(domain.getClass().getSimpleName());
+		} else {
+			uri.append(File.separator).append(domain.getClass().getSimpleName()).append(File.separator).append("ids");
+		}
+		
+		return uri.toString();
+	}	
 	
 	/**
 	 * @param domain
