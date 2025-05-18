@@ -33,7 +33,7 @@ import reactor.core.publisher.Mono;
  * 
  */
 @Component
-public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
+public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 
 	private final String dataSourceBasePath;
 
@@ -57,7 +57,7 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 	 * @param logger
 	 * @param objectMapper
 	 */
-	public RepositoryOutboundPortAdapter(@Value("${datasource.api}") String dataSourceBasePath, LoggerOutboundPort logger, ObjectMapper objectMapper) {
+	public RepositoryOutboundAdapterPort(@Value("${datasource.api}") String dataSourceBasePath, LoggerOutboundPort logger, ObjectMapper objectMapper) {
 		this.logger = logger;
 		this.objectMapper = objectMapper;
 		this.dataSourceBasePath = dataSourceBasePath;
@@ -88,17 +88,17 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 		} catch (CheckedException ex) {
 			if (ex.getMessage().contains("Nenhum registro encontrado")) {
-				logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
+				logger.info(RepositoryOutboundAdapterPort.class, ex.getMessage());
 				return domain;
 			} else {
-				logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+				logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 				throw ex;
 			}
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -131,17 +131,17 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 
 		} catch (CheckedException ex) {
 			if (ex.getMessage().contains("Nenhum registro encontrado")) {
-				logger.info(RepositoryOutboundPortAdapter.class, ex.getMessage());
+				logger.info(RepositoryOutboundAdapterPort.class, ex.getMessage());
 				return domain;
 			} else {
-				logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+				logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 				throw ex;
 			}
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -171,13 +171,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			object = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -207,13 +207,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			object = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -251,13 +251,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			}
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -295,13 +295,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			}
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -350,13 +350,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			}
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -387,13 +387,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 					.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -424,13 +424,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 					.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -460,13 +460,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			count = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -496,13 +496,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			count = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -532,13 +532,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			exist = mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -575,13 +575,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 				.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[CheckedException] " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[CheckedException] " + ex.getMessage(), ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}		
 	}
@@ -611,13 +611,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			domain = (Domain<?>) mono.block();
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[4XX or 5XX ERROR]", ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - Status: " + ex.getStatusText() + ", Body: " + ex.getResponseBodyAsString(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
@@ -664,13 +664,13 @@ public class RepositoryOutboundPortAdapter implements RepositoryOutboundPort {
 			}
 
 		} catch (CheckedException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[CheckedException] " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[CheckedException] " + ex.getMessage(), ex);
 			throw ex;
 		} catch (WebClientResponseException ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - " + ex.getStatusText(), ex);
 			throw new UncheckedException("[WebClientResponseException]", ex);
 		} catch (Exception ex) {
-			logger.error(RepositoryOutboundPortAdapter.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 		

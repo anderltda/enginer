@@ -1,4 +1,4 @@
-package br.com.enginer.infrastructure.adapter.inbound;
+package br.com.enginer.infrastructure.adapter.inbound.api;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,8 +86,7 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping("/validate/{method}/async")
-	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method,
-			@RequestBody String value) throws CheckedException {
+	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method, @RequestBody String value) throws CheckedException {
 
 		try {
 
@@ -120,14 +119,13 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/autocomplete" })
-	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain,
-			@RequestParam Map<String, Object> filter) throws CheckedException {
+	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
 
 		try {
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no autocomplete: " + domain);
 
-			List<Domain<?>> list = actionInboundPort.findAll(domain, filter);
+			List<Domain<?>> list = actionInboundPort.searchByConditions(domain, filter);
 
 			return ResponseEntity.ok(list);
 
@@ -144,14 +142,13 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/search" })
-	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter)
-			throws CheckedException {
+	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
 
 		try {
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no paginator: " + domain);
 
-			PageResult<?> pageResult = actionInboundPort.paginator(domain, filter);
+			PageResult<?> pageResult = actionInboundPort.searchPaginated(domain, filter);
 
 			return ResponseEntity.ok(pageResult);
 
@@ -168,8 +165,7 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping
-	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json)
-			throws CheckedException {
+	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json) throws CheckedException {
 
 		try {
 
@@ -178,7 +174,7 @@ public class ActionInboundAdapterPort {
 
 			Domain<?> newDomain = objectMapper.convertValue(json, domain.getClass());
 
-			domain = actionInboundPort.action(newDomain);
+			domain = actionInboundPort.methodName(newDomain);
 
 			logger.info(ActionInboundAdapterPort.class, "Payload enviado: \r " + domain);
 

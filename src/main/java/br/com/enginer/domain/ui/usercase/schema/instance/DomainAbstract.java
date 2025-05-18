@@ -18,7 +18,7 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	private ActionLogger actionLogger;
 	
 	protected ActionInboundPort actionInboundPort;
-
+	
 	/**
 	 *
 	 */
@@ -33,9 +33,9 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
 	 * @return
 	 */
 	public List<Domain<?>> options(Domain<?> domain, HashMap<String, Object> filter) {
-		return actionInboundPort.findAll(domain, filter);
+		return actionInboundPort.searchByConditions(domain, filter);
 	}
-
+	
 	/**
 	 * @return
 	 */

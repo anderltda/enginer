@@ -49,5 +49,3 @@ public interface Domain<I> {
 	public ActionLogger getActionLogger();
 
 }
-
-

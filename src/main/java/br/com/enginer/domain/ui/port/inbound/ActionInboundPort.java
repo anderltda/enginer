@@ -9,14 +9,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 
 public interface ActionInboundPort {
 	
-	Domain<?> findById(Domain<?> domain) throws CheckedException;
+	Domain<?> searchWithById(Domain<?> domain) throws CheckedException;
 	
-	List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter) throws CheckedException;
+	List<Domain<?>> searchByConditions(Domain<?> domain, Map<String, Object> filter) throws CheckedException;
 
-	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter) throws CheckedException;
+	PageResult<?> searchPaginated(Domain<?> domain, Map<String, Object> filter) throws CheckedException;
 	
-	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String method) throws CheckedException;
+	PageResult<?> searchPaginatedByMethod(Domain<?> domain, Map<String, Object> filter, String method) throws CheckedException;
 
-	Domain<?> action(Domain<?> domain) throws CheckedException;
+	Domain<?> methodName(Domain<?> domain) throws CheckedException;
 	
 }

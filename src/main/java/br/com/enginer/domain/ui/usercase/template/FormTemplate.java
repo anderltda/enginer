@@ -630,8 +630,7 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
-			UISelect uiSelect) throws Exception {
+	private static Select getSelect(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UISelect uiSelect) throws Exception {
 
 		List<Object> options = null;
 
@@ -650,8 +649,7 @@ public final class FormTemplate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Radio getRadio(java.lang.reflect.Field f, Default default_, Annotation[] annotations,
-			UIRadio uiRadio) throws Exception {
+	private static Radio getRadio(java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIRadio uiRadio) throws Exception {
 
 		Object provider = uiRadio.provider().getDeclaredConstructor().newInstance();
 

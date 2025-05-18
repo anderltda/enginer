@@ -1,4 +1,4 @@
-package br.com.enginer.infrastructure.adapter.inbound;
+package br.com.enginer.infrastructure.adapter.inbound.api;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,9 +24,9 @@ import br.com.enginer.infrastructure.tracking.TrackingProvider;
 
 @RestController
 @RequestMapping("/v1/enginer")
-public class CriarTelaFileInboundPortAdapter {
+public class CriarTelaFileInboundAdapterPort {
 
-	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundPortAdapter.class);
+	private static final Logger LOGGER = LogManager.getLogger(CriarTelaFileInboundAdapterPort.class);
 
 	private final ObjectMapper objectMapper;
 	private final UIInboundPort uIInboundPort;
@@ -35,7 +35,7 @@ public class CriarTelaFileInboundPortAdapter {
 	// Caminho base no macOS
 	private static final String BASE_PATH = "/Users/anderson/Developer/angular/pages/src/assets/data/payloads/";
 
-	public CriarTelaFileInboundPortAdapter(ObjectMapper objectMapper, UIInboundPort uIInboundPort, TrackingProvider trackingProvider) {
+	public CriarTelaFileInboundAdapterPort(ObjectMapper objectMapper, UIInboundPort uIInboundPort, TrackingProvider trackingProvider) {
 		this.objectMapper = objectMapper;
 		this.uIInboundPort = uIInboundPort;
 		this.trackingProvider = trackingProvider;

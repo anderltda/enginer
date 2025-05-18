@@ -1,44 +1,60 @@
 package br.com.enginer.infrastructure.exception;
 
+import java.nio.file.AccessDeniedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
+import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	@ExceptionHandler(CheckedException.class)
-	public ResponseEntity<ErrorResponse> handleCustomCheckedException(CheckedException ccex) {
-		ErrorResponse errorResponse = new ErrorResponse(ccex.getMessage(), ccex.getCustomMessage(), HttpStatus.BAD_REQUEST);
-	    if (LOGGER.isErrorEnabled()) {
-	        LOGGER.error(String.format("Failed code: '%s'", HttpStatus.BAD_REQUEST), ccex);
-	    }
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}
-	
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
-		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
-	    if (LOGGER.isErrorEnabled()) {
-	        LOGGER.error(String.format("Failed code: '%s'", HttpStatus.NOT_FOUND), ex);
-	    }
-		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    // 400 - Validação (Bean Validation)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        String message = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        return buildError(HttpStatus.BAD_REQUEST, message, req.getRequestURI(), ex);
     }
-    
+
+    // 422 - Regras de negócio
+    @ExceptionHandler(CheckedException.class)
+    public ResponseEntity<ApiError> handleCheckedException(CheckedException ex, HttpServletRequest req) {
+        return buildError(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), req.getRequestURI(), ex);
+    }
+
+    // 403 - Acesso negado
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex, HttpServletRequest req) {
+        return buildError(HttpStatus.FORBIDDEN, ex.getMessage(), req.getRequestURI(), ex);
+    }
+
+    // 500 - Erro genérico
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-    	ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    	if (LOGGER.isErrorEnabled()) {
-    		LOGGER.error(String.format("Failed code: '%s'", HttpStatus.INTERNAL_SERVER_ERROR), ex);
-    	}
-    	return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ApiError> handleGenericException(Exception ex, HttpServletRequest req) {
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado no servidor", req.getRequestURI(), ex);
+    }
+
+    private ResponseEntity<ApiError> buildError(HttpStatus status, String message, String path, Exception ex) {
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("Erro capturado: {} - {}", status, message, ex);
+        }
+
+        ApiError error = new ApiError(
+                status.value(),
+                status.getReasonPhrase(),
+                message,
+                path
+        );
+
+        return ResponseEntity.status(status).body(error);
     }
 }

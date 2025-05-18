@@ -44,7 +44,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
-			Domain<?> loadedDomain = actionInboundPort.findById(domain);
+			Domain<?> loadedDomain = actionInboundPort.searchWithById(domain);
 
 			if (loadedDomain != null) {
 				domain = loadedDomain;
@@ -56,7 +56,7 @@ public class UIInboundUserCase implements UIInboundPort {
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o formulário: " + ex.getMessage(), ex);
+			throw new CheckedException("Erro ao montar o formulário com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ")" + ex.getMessage(), ex);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class UIInboundUserCase implements UIInboundPort {
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o formulário: " + ex.getMessage(), ex);
+			throw new CheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
-			Domain<?> loadedDomain = actionInboundPort.findById(domain);
+			Domain<?> loadedDomain = actionInboundPort.searchWithById(domain);
 
 			if (loadedDomain != null) {
 				domain = loadedDomain;
@@ -112,7 +112,7 @@ public class UIInboundUserCase implements UIInboundPort {
 
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o formulário: " + ex.getMessage(), ex);
+			throw new CheckedException("Erro ao montar o tab com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
 	}
 }

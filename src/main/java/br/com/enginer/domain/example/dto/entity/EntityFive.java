@@ -16,7 +16,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -45,7 +44,7 @@ public class EntityFive extends DomainAbstract<EntityFive, String> {
 	private Integer factor;
 
 	@UIPosition(x = 1, y = 3)
-	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=15", "status_op=ne" })
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ne" })
 	private EntityStatus entityStatus;
 
 	@Override

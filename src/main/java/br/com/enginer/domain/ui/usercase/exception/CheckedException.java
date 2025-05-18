@@ -23,6 +23,11 @@ public class CheckedException extends RuntimeException {
 		this.customMessage = "";
 	}
 	
+	public CheckedException(String message, String customMessage) {
+		super(message);
+		this.customMessage = customMessage;
+	}
+	
 	public CheckedException(String message, Throwable cause) {
 		super(message, cause);
 		this.customMessage = "";

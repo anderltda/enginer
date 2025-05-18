@@ -86,7 +86,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     )
 )
 @UIValidate(
-		
 	global = @UIGlobal({ 
 		@UIGlobalOn(function = "customEntitySumValuesValidator", message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!") 
 	}), 

@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
+import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
+import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 
 public class ReflectionUtils {
@@ -97,7 +100,7 @@ public class ReflectionUtils {
 		extractFieldsRecursively(clazz.getSuperclass(), classLimit, visited, result);
 
 	}
-
+	
 	/**
 	 * @param clazz
 	 * @return
@@ -194,7 +197,48 @@ public class ReflectionUtils {
 			ex.printStackTrace();
 		}
 	}
-
+	
+	
+	/**
+	 * @param newClassName
+	 * @return
+	 */
+	public static Object newInstance(String newClassName) {
+		Object instance = null;
+		try {
+		    Class<?> usercaseClass = Class.forName(newClassName);
+		    instance = usercaseClass.getDeclaredConstructor().newInstance();
+		} catch (Exception ex) {
+		    ex.printStackTrace();
+		    throw new RuntimeException("Erro ao instanciar classe: " + newClassName, ex);
+		}
+		
+		return instance;
+	}
+	
+	/**
+	 * EXECUTE METHOD REFLECTION USERCASE
+	 */
+	
+	
+	/**
+	 * Metodo responsavel por encontrar a classe UserCase do domain e injetar as dependencias necessarias
+	 * @param clazz                  - Classe domain
+	 * @param methodName             - Metodo a ser executado
+	 * @param repositoryOutboundPort - Repository: acesso a banco de dados
+	 * @param publisherOutboundPort  - Publisher: producer de uma mensageria
+	 * @param subscriberInboundPort  - Subscriber: consumer de uma mensageria
+	 * @return                       - Retorna a classe instaciada do UserCase
+	 * @throws Exception
+	 */
+	public static Object executeInjectedDependencyUserCase(Class<?> clazz, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort, SubscriberInboundPort subscriberInboundPort) throws Exception {
+		Object newInstanceUserCase = newInstance(StringsUtils.convertDtoToUsercasePackage(clazz));
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(RepositoryOutboundPort.class.getSimpleName()), repositoryOutboundPort);
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(PublisherOutboundPort.class.getSimpleName()), publisherOutboundPort);
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(SubscriberInboundPort.class.getSimpleName()), subscriberInboundPort);
+		return newInstanceUserCase;
+	}
+	
 	/**
 	 * GET REFLECTION
 	 */
@@ -257,6 +301,12 @@ public class ReflectionUtils {
 		if (param instanceof List) {
 			return List.class;
 		}
+		if (param instanceof String[]) {
+			return String[].class;
+		}
+		if (param != null && param.getClass().isArray()) {
+			return param.getClass();
+		}
 		return param.getClass();
 	}
 
@@ -268,17 +318,17 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	@SafeVarargs
-	private static <T> Method getMethod(Class<T> clazz, String methodName, Class<T>... paramClass) {
+	private static Method getMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
 		Method m = null;
 		try {
-			m = clazz.getDeclaredMethod(methodName, paramClass);
+			m = clazz.getDeclaredMethod(methodName, paramTypes);
 		} catch (Exception e) {
 			try {
-				m = clazz.getMethod(methodName, paramClass);
+				m = clazz.getMethod(methodName, paramTypes);
 			} catch (Exception e1) {
-				Method[] ms = clazz.getMethods();
-				for (Method mtmp : ms) {
-					if (mtmp.getName().equals(methodName)) {
+				for (Method mtmp : clazz.getMethods()) {
+					Class<?>[] methodParams = mtmp.getParameterTypes();
+					if (mtmp.getName().equals(methodName) && methodParams.length == paramTypes.length) {
 						m = mtmp;
 						break;
 					}
