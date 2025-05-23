@@ -2,9 +2,9 @@ package br.com.enginer.domain.example.dto.data;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-public class EntityNineData extends DomainAbstract<EntityNineData, EntityNineId>  {
+public class EntityNineData extends DomainAbstract<EntityNineDataId>  {
 
-	private EntityNineId id;
+	private EntityNineDataId id;
 
 	private String keyNine;
 
@@ -12,11 +12,11 @@ public class EntityNineData extends DomainAbstract<EntityNineData, EntityNineId>
 
 	private String variable;
 
-	public EntityNineId getId() {
+	public EntityNineDataId getId() {
 		return this.id;
 	}
 
-	public void setId(EntityNineId id) {
+	public void setId(EntityNineDataId id) {
 		this.id = id;
 	}
 

@@ -1,11 +1,22 @@
 package br.com.enginer.domain.example.dto.entity;
 
-public class EntityNineId {
+import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
+public class EntityNineId extends DomainAbstract<Object> implements DomainId {
+
+	@UIId
+	@UIText(label = "Eight")
 	private Long idEntityEight;
 
+	@UIId
+	@UIText(label = "Seven")
 	private Long idEntitySeven;
 
+	@UIId
+	@UIText(label = "Six")
 	private Long idEntitySix;
 
 	public Long getIdEntityEight() {
@@ -47,5 +58,17 @@ public class EntityNineId {
 	@Override
 	public int hashCode() {
 		return java.util.Objects.hash(idEntitySeven, idEntitySix, idEntityEight);
+	}
+
+	@Override
+	public Object getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setId(Object id) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,7 +20,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
@@ -39,7 +38,7 @@ value = {
 	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }
 )
-public class EntityTree extends DomainAbstract<EntityTree, String> {
+public class EntityTree extends DomainAbstract<String> {
 
 	@UIId
 	private String id;

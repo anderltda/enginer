@@ -38,7 +38,7 @@ value = {
 	@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }
 )
-public class EntityFour extends DomainAbstract<EntityFour, String> {
+public class EntityFour extends DomainAbstract<String> {
 
 	@UIId
 	private String id;

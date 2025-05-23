@@ -23,7 +23,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     highlight = true,
     template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
-        method = @UIActionMethod(serverMethod = "delete")
+        method = @UIActionMethod(serverMethod = "excluir")
     )
 )
 public @interface UIButtonDelete {}

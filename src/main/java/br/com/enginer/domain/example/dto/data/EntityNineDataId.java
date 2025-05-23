@@ -1,6 +1,6 @@
 package br.com.enginer.domain.example.dto.data;
 
-public class EntityNineId {
+public class EntityNineDataId {
 
 	private Long idEntityEight;
 

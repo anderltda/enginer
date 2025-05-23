@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
@@ -156,4 +158,23 @@ public class NormalizeUtils {
 		}
 	}
 
+	/**
+	 * @param originalNode
+	 * @return
+	 */
+	public static JsonNode normalizeIdFieldNames(JsonNode originalNode) {
+	    ObjectNode result = JsonNodeFactory.instance.objectNode();
+	    originalNode.fields().forEachRemaining(entry -> {
+	        String fieldName = entry.getKey();
+	        JsonNode value = entry.getValue();
+	        String newFieldName = fieldName.endsWith("Id") && fieldName.length() > 2 ? "id" : fieldName;
+	        if (value.isObject()) {
+	            result.set(newFieldName, normalizeIdFieldNames(value));
+	        } else {
+	            result.set(newFieldName, value);
+	        }
+	    });
+
+	    return result;
+	}
 }

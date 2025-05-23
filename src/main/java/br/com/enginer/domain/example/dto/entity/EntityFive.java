@@ -27,10 +27,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Entity Five")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 value = {
-	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(serverMethod = "atireiopaunogato")))
 }
 )
-public class EntityFive extends DomainAbstract<EntityFive, String> {
+public class EntityFive extends DomainAbstract<String> {
 
 	@UIId
 	private String id;

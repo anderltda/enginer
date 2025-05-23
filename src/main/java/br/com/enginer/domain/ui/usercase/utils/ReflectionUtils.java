@@ -3,11 +3,13 @@ package br.com.enginer.domain.ui.usercase.utils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +34,8 @@ public class ReflectionUtils {
 			extractFieldsRecursively(object.getClass(), Object.class, visited, fields);
 		} else {
 			extractFields(object.getClass(), Object.class, fields, ".*");
-			//extractFieldsWithClassAbstract(object.getClass(), Object.class, fields, ".*");
+			// extractFieldsWithClassAbstract(object.getClass(), Object.class, fields,
+			// ".*");
 		}
 		return fields;
 	}
@@ -56,14 +59,15 @@ public class ReflectionUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param clazz
 	 * @param classLimit
 	 * @param visited
 	 * @param pattern
 	 */
-	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited, String pattern) {
+	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited,
+			String pattern) {
 		if (clazz != null && !clazz.equals(classLimit)) {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (!visited.contains(field) && field.getName().matches(pattern)) {
@@ -81,7 +85,8 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param result
 	 */
-	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited, List<Field> result) {
+	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited,
+			List<Field> result) {
 
 		if (clazz == null || clazz.equals(classLimit) || visited.contains(clazz))
 			return;
@@ -100,19 +105,98 @@ public class ReflectionUtils {
 		extractFieldsRecursively(clazz.getSuperclass(), classLimit, visited, result);
 
 	}
-	
+
 	/**
 	 * @param clazz
 	 * @return
 	 */
 	public static boolean extractIsJavaLangType(Class<?> clazz) {
-		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class) || clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
+		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class)
+				|| clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
 	}
 	
 	/**
+	 * @param clazz
+	 * @return
+	 */
+	public static boolean isIdComposedType(Class<?> clazz) {
+		return (!clazz.isPrimitive() || !clazz.getName().startsWith("java.lang") || !clazz.equals(LocalDate.class)
+				|| !clazz.equals(LocalDateTime.class)) || clazz.equals(Id.class);
+	}
+
+	/**
+	 * @param clazz
+	 * @return
+	 */
+	public static boolean classIsIdType(Class<?> clazz) {
+		return clazz.getSimpleName().endsWith("Id");
+	}
+
+	/**
+	 * @param className
+	 * @return
+	 */
+	public static boolean classIsIdType(String className) {
+		return className.endsWith("Id");
+	}
+
+	/**
+	 * @param input
+	 * @return
+	 */
+	public static Map<String, Object> normalizeIdFieldNames(Map<String, Object> input) {
+		
+		Map<String, Object> result = new LinkedHashMap<>();
+
+		for (Map.Entry<String, Object> entry : input.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+
+			// Renomeia campo terminado com "Id" para "id"
+			String newKey = key.endsWith("Id") && key.length() > 2 ? "id" : key;
+
+			if (value instanceof Map) {
+				// Recurse para valores aninhados
+				@SuppressWarnings("unchecked")
+				Map<String, Object> nested = (Map<String, Object>) value;
+				result.put(newKey, normalizeIdFieldNames(nested));
+			} else {
+				result.put(newKey, value);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> getCompositedKeyFields(Object entity) throws Exception {
+
+		Map<String, Object> keyFields = new LinkedHashMap<>();
+
+		Object embeddedId = get(StringsUtils.getMethod("id"), entity);
+
+		if (embeddedId == null) {
+			return keyFields;
+		}
+
+		Class<?> embeddedIdClass = embeddedId.getClass();
+		for (Field field : embeddedIdClass.getDeclaredFields()) {
+			field.setAccessible(true);
+			Object value = field.get(embeddedId);
+			keyFields.put(field.getName(), value);
+		}
+
+		return keyFields;
+	}
+
+	/**
 	 * CONVERTE array[] em HashMap
 	 */
-	
+
 	/**
 	 * @param filterArray
 	 * @return
@@ -197,8 +281,7 @@ public class ReflectionUtils {
 			ex.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * @param newClassName
 	 * @return
@@ -206,39 +289,45 @@ public class ReflectionUtils {
 	public static Object newInstance(String newClassName) {
 		Object instance = null;
 		try {
-		    Class<?> usercaseClass = Class.forName(newClassName);
-		    instance = usercaseClass.getDeclaredConstructor().newInstance();
+			Class<?> usercaseClass = Class.forName(newClassName);
+			instance = usercaseClass.getDeclaredConstructor().newInstance();
 		} catch (Exception ex) {
-		    ex.printStackTrace();
-		    throw new RuntimeException("Erro ao instanciar classe: " + newClassName, ex);
+			ex.printStackTrace();
+			throw new RuntimeException("Erro ao instanciar classe: " + newClassName, ex);
 		}
-		
+
 		return instance;
 	}
-	
+
 	/**
 	 * EXECUTE METHOD REFLECTION USERCASE
 	 */
-	
-	
+
 	/**
-	 * Metodo responsavel por encontrar a classe UserCase do domain e injetar as dependencias necessarias
+	 * Metodo responsavel por encontrar a classe UserCase do domain e injetar as
+	 * dependencias necessarias
+	 * 
 	 * @param clazz                  - Classe domain
 	 * @param methodName             - Metodo a ser executado
 	 * @param repositoryOutboundPort - Repository: acesso a banco de dados
 	 * @param publisherOutboundPort  - Publisher: producer de uma mensageria
 	 * @param subscriberInboundPort  - Subscriber: consumer de uma mensageria
-	 * @return                       - Retorna a classe instaciada do UserCase
+	 * @return - Retorna a classe instaciada do UserCase
 	 * @throws Exception
 	 */
-	public static Object executeInjectedDependencyUserCase(Class<?> clazz, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort, SubscriberInboundPort subscriberInboundPort) throws Exception {
+	public static Object executeInjectedDependencyUserCase(Class<?> clazz,
+			RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort,
+			SubscriberInboundPort subscriberInboundPort) throws Exception {
 		Object newInstanceUserCase = newInstance(StringsUtils.convertDtoToUsercasePackage(clazz));
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(RepositoryOutboundPort.class.getSimpleName()), repositoryOutboundPort);
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(PublisherOutboundPort.class.getSimpleName()), publisherOutboundPort);
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(SubscriberInboundPort.class.getSimpleName()), subscriberInboundPort);
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(RepositoryOutboundPort.class.getSimpleName()),
+				repositoryOutboundPort);
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(PublisherOutboundPort.class.getSimpleName()),
+				publisherOutboundPort);
+		executeMethod(newInstanceUserCase, StringsUtils.setMethod(SubscriberInboundPort.class.getSimpleName()),
+				subscriberInboundPort);
 		return newInstanceUserCase;
 	}
-	
+
 	/**
 	 * GET REFLECTION
 	 */
@@ -257,7 +346,7 @@ public class ReflectionUtils {
 	/**
 	 * EXECUTE METHOD REFLECTION
 	 */
-	
+
 	/**
 	 * @param object
 	 * @param methodName
@@ -265,7 +354,7 @@ public class ReflectionUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	public static Object executeMethod(Object object, String methodName, Object... paramValue) throws Exception {
 		Class[] paramTypes = transformParametersTypes(paramValue);
 		Method method = getMethod(object.getClass(), methodName, paramTypes);
@@ -336,5 +425,48 @@ public class ReflectionUtils {
 			}
 		}
 		return m;
+	}
+	
+	/**
+	 * @param query
+	 * @return
+	 */
+	public static Map<String, Object> parseQueryParams(String query) {
+	    Map<String, Object> result = new LinkedHashMap<>();
+
+	    String[] pairs = query.split("&");
+	    for (String pair : pairs) {
+	        String[] keyValue = pair.split("=", 2);
+	        if (keyValue.length == 2) {
+	            result.put(keyValue[0], keyValue[1]);
+	        }
+	    }
+
+	    return result;
+	}
+	
+	/**
+	 * @param type
+	 * @param value
+	 * @return
+	 */
+	public static Object extractedTypeValue(Class<?> type, Object value) {
+		
+		if (type.equals(Integer.class)) {
+	    	return Integer.valueOf(value.toString());
+	    } else if (type.equals(Short.class)) {
+	    	return Short.valueOf(value.toString());
+	    } else if (type.equals(Long.class)) {
+	    	return Long.valueOf(value.toString());
+	    } else if (type.equals(Byte.class)) {
+	    	return Byte.valueOf(value.toString());    
+	    } else if (type.equals(BigInteger.class)) {
+	    	return new BigInteger(value.toString());	        
+		} else if (type.equals(UUID.class)) {
+			return UUID.fromString(value.toString());	
+		} else if (type.equals(String.class)) {
+	        return value.toString();
+	    }
+		throw new IllegalArgumentException("Tipo de ID não suportado: " + type);
 	}
 }

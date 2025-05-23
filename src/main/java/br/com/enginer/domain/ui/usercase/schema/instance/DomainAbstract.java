@@ -7,13 +7,13 @@ import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
- * @param <T>
+ * 
  */
-public abstract class DomainAbstract<T, I> implements Domain<I> {
+public abstract class DomainAbstract<I> implements Domain<I> {
 	
-	private boolean modal = false;
+	private Boolean modal;
 	
-	private boolean disabled = false;
+	private Boolean disabled;
 	
 	private ActionLogger actionLogger;
 	
@@ -55,7 +55,7 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
      * Indica se o domínio é um modal.
      */
 	@Override
-	public boolean isModal() {
+	public Boolean isModal() {
 		return modal;
 	}
 
@@ -63,7 +63,7 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
      * Define se o domínio é um modal.
      */
 	@Override
-	public void setModal(boolean modal) {
+	public void setModal(Boolean modal) {
 		this.modal = modal;
 	}
 
@@ -71,7 +71,7 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
      * Informa se os campos estao disabled, porém apenas visualmente.
      */
 	@Override
-	public boolean isDisabled() {
+	public Boolean isDisabled() {
 		return disabled;
 	}
 
@@ -79,7 +79,7 @@ public abstract class DomainAbstract<T, I> implements Domain<I> {
      * Define se o disabled está habilitado.
      */
 	@Override
-	public void setDisabled(boolean disabled) {
+	public void setDisabled(Boolean disabled) {
 		this.disabled = disabled;
 	}
 }

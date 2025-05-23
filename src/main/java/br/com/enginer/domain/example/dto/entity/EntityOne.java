@@ -106,7 +106,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
 	})
 )
-public class EntityOne extends DomainAbstract<EntityOne, Long> {
+public class EntityOne extends DomainAbstract<Long> {
 
 	@UIId
 	private Long id;

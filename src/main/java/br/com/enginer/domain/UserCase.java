@@ -18,52 +18,50 @@ public interface UserCase {
 	void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort);
 	void setSubscriberInboundPort(SubscriberInboundPort subscriberInboundPort);
 	
-	Domain<?> findById(Domain<?> domain) throws CheckedException;
+	Domain<?> buscarPorId(Domain<?> domain) throws CheckedException;
 	
-	Domain<?> findByIdComposite(Domain<?> domain, Map<String, Object> ids) throws UncheckedException;
+	Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
 	
-	Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
+	Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
 	
-	Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
+	Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
-	Domain<?> findBySingle(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
+	List<Domain<?>> buscarTodos(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
 	
-	List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
+	List<Domain<?>> buscarTodos(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
 	
-	List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
+	List<Domain<?>> buscarTodos(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
-	List<Domain<?>> findAll(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
+	List<Domain<?>> buscarPorIds(Domain<?> domain, Object... id) throws UncheckedException;
 	
-	List<Domain<?>> findAllById(Domain<?> domain, Object... id) throws UncheckedException;
+	List<Domain<?>> buscarPorIds(Domain<?> domain, List<?> ids) throws UncheckedException;
 	
-	List<Domain<?>> findAllById(Domain<?> domain, List<?> ids) throws UncheckedException;
+	PageResult<?> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
 	
-	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
+	PageResult<?> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
 	
-	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
+	PageResult<?> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
-	PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
+	Integer buscarTotal(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
 	
-	Integer count(Domain<?> domain, Map<String, Object> filter) throws UncheckedException;
+	Integer buscarTotal(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
 	
-	Integer count(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException;
-	
-	Integer count(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
+	Integer buscarTotal(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 
-	boolean existsById(Domain<?> domain, Object id) throws UncheckedException;
+	boolean existePorId(Domain<?> domain, Object id) throws UncheckedException;
 	
-	void delete(Domain<?> domain) throws UncheckedException;
+	void excluir(Domain<?> domain) throws UncheckedException;
 	
-	void delete(Domain<?> domain, List<?> ids) throws UncheckedException;
+	void excluir(Domain<?> domain, List<?> ids) throws UncheckedException;
 	
-	void delete(Domain<?> domain, Object id) throws UncheckedException;
+	void excluir(Domain<?> domain, Object id) throws UncheckedException;
 	
-	Domain<?> save(Domain<?> domain) throws UncheckedException;
+	Domain<?> salvar(Domain<?> domain) throws UncheckedException;
 	
-	Domain<?> save(Domain<?> domain, Boolean flush) throws UncheckedException;
+	Domain<?> salvar(Domain<?> domain, Boolean flush) throws UncheckedException;
 	
-	List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities) throws UncheckedException;
+	List<Domain<?>> salvar(Domain<?> domain, List<Domain<?>> entities) throws UncheckedException;
 	
-	List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities, Boolean flush) throws UncheckedException;
+	List<Domain<?>> salvar(Domain<?> domain, List<Domain<?>> entities, Boolean flush) throws UncheckedException;
 
 }

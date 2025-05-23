@@ -27,6 +27,7 @@ import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.infrastructure.utils.NormalizeUtils;
 
 /**
  * 
@@ -171,8 +172,12 @@ public class ActionInboundAdapterPort {
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
+			
+			JsonNode normalizedNode = NormalizeUtils.normalizeIdFieldNames(json);
+			
+			logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
 
-			Domain<?> newDomain = objectMapper.convertValue(json, domain.getClass());
+			Domain<?> newDomain = objectMapper.convertValue(normalizedNode, domain.getClass());
 
 			domain = actionInboundPort.methodName(newDomain);
 

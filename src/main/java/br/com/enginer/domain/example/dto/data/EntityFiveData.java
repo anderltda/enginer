@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-public class EntityFiveData extends DomainAbstract<EntityFiveData, String> {
+public class EntityFiveData extends DomainAbstract<String> {
 
 	private String id;
 	private String reference;

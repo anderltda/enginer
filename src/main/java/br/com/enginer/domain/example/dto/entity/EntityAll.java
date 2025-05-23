@@ -25,7 +25,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 	}
 )
-public class EntityAll extends DomainAbstract<EntityAll, Long> {
+public class EntityAll extends DomainAbstract<Long> {
 
 	@UIId
 	private Long id;

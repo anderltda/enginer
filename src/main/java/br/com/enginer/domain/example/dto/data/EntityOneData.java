@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-public class EntityOneData extends DomainAbstract<EntityOneData, Long> {
+public class EntityOneData extends DomainAbstract<Long> {
 
 	private Long id;
 	private String name;

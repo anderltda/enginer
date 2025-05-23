@@ -56,11 +56,11 @@ public class ActionInboundUserCase implements ActionInboundPort {
 
 			Object object = injectedDependency(domain);
 			
-			return (Domain<?>) ReflectionUtils.executeMethod(object, "findById", domain);
+			return (Domain<?>) ReflectionUtils.executeMethod(object, "buscarPorId", domain);
 
 		} catch (Exception ex) {
-			logger.error(ActionInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException(ex.getMessage(), ex);
+			logger.error(ActionInboundUserCase.class, ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 
 	}
@@ -77,11 +77,11 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			Object object = injectedDependency(domain);
 			
-			return (List<Domain<?>>) ReflectionUtils.executeMethod(object, "findAll", domain, filter);
+			return (List<Domain<?>>) ReflectionUtils.executeMethod(object, "buscarTodos", domain, filter);
 
 		} catch (Exception ex) {
-			logger.error(ActionInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException(ex.getMessage(), ex);
+			logger.error(ActionInboundUserCase.class, ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 	}
 
@@ -97,11 +97,11 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			Object object = injectedDependency(domain);
 
-			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "paginator", domain, filter);
+			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "buscarTodosPaginado", domain, filter);
 
 		} catch (Exception ex) {
-			logger.error(ActionInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException(ex.getMessage(), ex);
+			logger.error(ActionInboundUserCase.class, ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 
 		return pageResult;
@@ -119,11 +119,11 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			
 			Object object = injectedDependency(domain);
 
-			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "paginator", filter, method);
+			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "buscarTodosPaginado", filter, method);
 
 		} catch (Exception ex) {
-			logger.error(ActionInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException(ex.getMessage(), ex);
+			logger.error(ActionInboundUserCase.class, ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 
 		return pageResult;
@@ -146,10 +146,10 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
 			
 			newDomain =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getAction(), domain);
-
+			
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
-			throw new CheckedException(ex.getMessage(), ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 
 		return newDomain;

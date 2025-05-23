@@ -11,6 +11,7 @@ import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.template.FormTemplate;
+import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 
 /**
  * 
@@ -44,7 +45,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
-			Domain<?> loadedDomain = actionInboundPort.searchWithById(domain);
+			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? actionInboundPort.searchWithById(domain) : null;
 
 			if (loadedDomain != null) {
 				domain = loadedDomain;
@@ -59,32 +60,7 @@ public class UIInboundUserCase implements UIInboundPort {
 			throw new CheckedException("Erro ao montar o formulário com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ")" + ex.getMessage(), ex);
 		}
 	}
-
-	/**
-	 *
-	 */
-	@Override
-	public Form filter(Domain<?> domain) throws CheckedException {
-		
-		try {
-			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
-			map.put(TypeTemplate.FILTER, true);
-			map.put(TypeTemplate.FORM, false);
-			map.put(TypeTemplate.TAB, false);
-			map.put(TypeTemplate.MODAL, domain.isModal());
-			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-			
-			domain.setActionInboundPort(actionInboundPort);
-			
-			return FormTemplate.create(domain, map);
-
-		} catch (Exception ex) {
-			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
-		}
-	}
-
+	
 	/**
 	 *
 	 */
@@ -113,6 +89,31 @@ public class UIInboundUserCase implements UIInboundPort {
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
 			throw new CheckedException("Erro ao montar o tab com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public Form filter(Domain<?> domain) throws CheckedException {
+		
+		try {
+			
+			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			map.put(TypeTemplate.FILTER, true);
+			map.put(TypeTemplate.FORM, false);
+			map.put(TypeTemplate.TAB, false);
+			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			
+			domain.setActionInboundPort(actionInboundPort);
+			
+			return FormTemplate.create(domain, map);
+
+		} catch (Exception ex) {
+			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
+			throw new CheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
 	}
 }

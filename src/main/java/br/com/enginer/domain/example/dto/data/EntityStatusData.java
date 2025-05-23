@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-public class EntityStatusData extends DomainAbstract<EntityStatusData, Long> {
+public class EntityStatusData extends DomainAbstract<Long> {
 
 	private Long id;
 	private String name;

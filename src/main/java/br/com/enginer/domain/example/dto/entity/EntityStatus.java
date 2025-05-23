@@ -27,7 +27,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Entity Status -> Stream")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  })
 @UIPaginator(actions = @UIButtonAction(includes = { UIButtonView.class } ) )
-public class EntityStatus extends DomainAbstract<EntityStatus, Long> {
+public class EntityStatus extends DomainAbstract<Long> {
 
 	@UIId
 	private Long id;

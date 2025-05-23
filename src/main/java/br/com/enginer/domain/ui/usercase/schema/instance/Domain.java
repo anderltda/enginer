@@ -4,7 +4,7 @@ import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
- * @param <T>
+ * @param <I>
  */
 public interface Domain<I> {
 	
@@ -21,22 +21,22 @@ public interface Domain<I> {
     /**
      * Indica se o domínio é um modal.
      */
-    boolean isModal();
+	Boolean isModal();
 
     /**
      * Define se o domínio é um modal.
      */
-    void setModal(boolean modal);
+    void setModal(Boolean modal);
 	
     /**
      * Informa se os campos estao disabled, porém apenas visualmente.
      */
-    boolean isDisabled();
+    Boolean isDisabled();
 
     /**
      * Define se o disabled está habilitado.
      */
-    void setDisabled(boolean disabled);
+    void setDisabled(Boolean disabled);
 
 	/**
 	 * @param actionInboundPort

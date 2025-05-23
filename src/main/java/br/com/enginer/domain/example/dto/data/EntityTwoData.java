@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EntityTwoData extends DomainAbstract<EntityTwoData, String> {
+public class EntityTwoData extends DomainAbstract<String> {
 
 	private String id;
 	private String color;

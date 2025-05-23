@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-public class EntityTreeData extends DomainAbstract<EntityTwoData, String> {
+public class EntityTreeData extends DomainAbstract<String> {
 
 	private String id;
 	private String animal;

@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.UUID;
+import java.util.Map;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
+import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
 import br.com.enginer.domain.ui.usercase.utils.UUIDGenerator;
 import br.com.enginer.infrastructure.tracking.TrackingLogConfigurer;
@@ -31,7 +33,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
     private final TrackingLogConfigurer trackingLogConfigurer;
 
-    DomainResolver(TrackingLogConfigurer trackingLogConfigurer) {
+    public DomainResolver(TrackingLogConfigurer trackingLogConfigurer) {
         this.trackingLogConfigurer = trackingLogConfigurer;
     }
 
@@ -77,25 +79,60 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 				Constructor<?> constructor = clazz.getDeclaredConstructor();
 				constructor.setAccessible(true);
 				Domain<?> domainInstance = (Domain<?>) constructor.newInstance();
-
+				
 				if (rawId != null && !rawId.isEmpty()) {
-					Field idField = clazz.getDeclaredField("id");
-					Class<?> idType = idField.getType();
-					Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), idType);
-					Object typedId = convertId(rawId, idType);
-					setIdMethod.invoke(domainInstance, typedId);
+					if (domainInstance instanceof DomainId) {
+						extractedCompositedKey(rawId, domainInstance);
+					} else {
+						Field idField = clazz.getDeclaredField("id");
+						Class<?> idType = idField.getType();
+						if (ReflectionUtils.extractIsJavaLangType(idType)) {
+							Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), idType);
+							Object typedId = ReflectionUtils.extractedTypeValue(idType, rawId);
+							setIdMethod.invoke(domainInstance, typedId);
+							
+						} else {
+							Domain<?> domainId = (Domain<?>) idType.getDeclaredConstructor().newInstance();
+							if (domainId instanceof DomainId) {
+								ReflectionUtils.set(domainInstance, StringsUtils.setMethod("id"), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
+								extractedCompositedKey(rawId, domainId);
+							}
+							
+						}
+					}
 				}
 
-				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), boolean.class);
+				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), Boolean.class);
 				setModalMethod.invoke(domainInstance, isModal);
 				
-				Method setDisabledMethod = clazz.getMethod(StringsUtils.setMethod("disabled"), boolean.class);
+				Method setDisabledMethod = clazz.getMethod(StringsUtils.setMethod("disabled"), Boolean.class);
 				setDisabledMethod.invoke(domainInstance, isDisabled);
 
 				return domainInstance;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param rawId
+	 * @param domain
+	 */
+	private void extractedCompositedKey(String rawId, Domain<?> domain) {
+		
+		Map<String, Object> ids = ReflectionUtils.parseQueryParams(rawId);
+		
+		ids.forEach((k, v) -> { 
+			try {
+				String key = k.substring(k.lastIndexOf(".") + 1);
+				Field field = domain.getClass().getDeclaredField(key);
+				Class<?> type = field.getType();
+				Object value = ReflectionUtils.extractedTypeValue(type, v);
+				ReflectionUtils.set(domain, StringsUtils.setMethod(key), new Class<?>[] { type }, new Object[] { value });
+			} catch (NoSuchFieldException | SecurityException ex) {
+				ex.printStackTrace();
+			}
+		});
 	}
 
 	/**
@@ -106,35 +143,18 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		String[] parts = Arrays.stream(uri.split("/")).filter(s -> !s.isEmpty()).toArray(String[]::new);
 		if (parts.length > 2) {
 			String last = parts[parts.length - 1];
-			// Palavras reservadas que nunca são ID
 			String[] reserved = Constants.WORDS_RESERVED;
 			for (String keyword : reserved) {
 				if (keyword.equalsIgnoreCase(last)) {
 					return null;
 				}
 			}
-			// Considera ID se for um número, UUID ou alfanumérico simples
 			if (last.matches("[a-zA-Z0-9\\-]+")) {
+				return last;
+			} else if(last.contains("id.")) {
 				return last;
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * @param rawId
-	 * @param targetType
-	 * @return
-	 */
-	private Object convertId(String rawId, Class<?> targetType) {
-		if (targetType == Long.class)
-			return Long.valueOf(rawId);
-		if (targetType == Integer.class)
-			return Integer.valueOf(rawId);
-		if (targetType == String.class)
-			return rawId;
-		if (targetType == UUID.class)
-			return UUID.fromString(rawId);
-		throw new IllegalArgumentException("Tipo de ID não suportado: " + targetType);
 	}
 }

@@ -8,7 +8,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-public class EntityOneView extends DomainAbstract<EntityOneView, Long> {
+public class EntityOneView extends DomainAbstract<Long> {
 
 	private Long id;
 
