@@ -1,6 +1,8 @@
 package br.com.enginer.domain.ui.port.outbound;
 
-public interface LoggerOutboundPort {
+import br.com.enginer.domain.OutboundPort;
+
+public interface LoggerOutboundPort extends OutboundPort {
 
 	void info(Class<?> clazz, String message);
 

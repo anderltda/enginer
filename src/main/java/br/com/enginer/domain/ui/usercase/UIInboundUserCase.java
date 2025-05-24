@@ -1,16 +1,11 @@
 package br.com.enginer.domain.ui.usercase;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 import br.com.enginer.domain.ui.port.inbound.UIInboundPort;
 import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
-import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
+import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
-import br.com.enginer.domain.ui.usercase.template.FormTemplate;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 
 /**
@@ -18,16 +13,25 @@ import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
  */
 public class UIInboundUserCase implements UIInboundPort {
 
-	private final ActionInboundPort actionInboundPort;
 	private final LoggerOutboundPort logger;
+	private final RepositoryOutboundPort repositoryOutboundPort;
 
 	/**
-	 * @param actionInboundPort
 	 * @param logger
+	 * @param repositoryOutboundPort
 	 */
-	public UIInboundUserCase(ActionInboundPort actionInboundPort, LoggerOutboundPort logger) {
-		this.actionInboundPort = actionInboundPort;
+	public UIInboundUserCase(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort) {
 		this.logger = logger;
+		this.repositoryOutboundPort = repositoryOutboundPort;
+	}
+	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws Exception
+	 */
+	private Object injectedDependency(Domain<?> domain) throws Exception {
+		return ReflectionUtils.executeInjectedDependencyUserCase(domain.getClass(), repositoryOutboundPort);
 	}
 
 	/**
@@ -35,29 +39,13 @@ public class UIInboundUserCase implements UIInboundPort {
 	 */
 	@Override
 	public Form form(Domain<?> domain) throws CheckedException {
-		
 		try {
-			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
-			map.put(TypeTemplate.FORM, true);
-			map.put(TypeTemplate.FILTER, false);
-			map.put(TypeTemplate.TAB, false);
-			map.put(TypeTemplate.MODAL, domain.isModal());
-			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-			
-			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? actionInboundPort.searchWithById(domain) : null;
-
-			if (loadedDomain != null) {
-				domain = loadedDomain;
-			}
-
-			domain.setActionInboundPort(actionInboundPort);
-			
-			return FormTemplate.create(domain, map);
-
+			Object newInstanceUserCase = injectedDependency(domain);
+			Form form = (Form) ReflectionUtils.executeMethod(newInstanceUserCase, "form", domain);
+			return form;
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o formulário com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ")" + ex.getMessage(), ex);
+			throw new CheckedException(ex.getMessage(), ex);
 		}
 	}
 	
@@ -66,29 +54,13 @@ public class UIInboundUserCase implements UIInboundPort {
 	 */
 	@Override
 	public Form tab(Domain<?> domain) throws CheckedException {
-		
 		try {
-			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
-			map.put(TypeTemplate.TAB, true);
-			map.put(TypeTemplate.FORM, false);
-			map.put(TypeTemplate.FILTER, false);
-			map.put(TypeTemplate.MODAL, domain.isModal());
-			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-			
-			Domain<?> loadedDomain = actionInboundPort.searchWithById(domain);
-
-			if (loadedDomain != null) {
-				domain = loadedDomain;
-			}
-
-			domain.setActionInboundPort(actionInboundPort);
-			
-			return FormTemplate.create(domain, map);
-
+			Object newInstanceUserCase = injectedDependency(domain);
+			Form form = (Form) ReflectionUtils.executeMethod(newInstanceUserCase, "tab", domain);
+			return form;
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o tab com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+			throw new CheckedException(ex.getMessage(), ex);
 		}
 	}
 
@@ -97,23 +69,13 @@ public class UIInboundUserCase implements UIInboundPort {
 	 */
 	@Override
 	public Form filter(Domain<?> domain) throws CheckedException {
-		
 		try {
-			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
-			map.put(TypeTemplate.FILTER, true);
-			map.put(TypeTemplate.FORM, false);
-			map.put(TypeTemplate.TAB, false);
-			map.put(TypeTemplate.MODAL, domain.isModal());
-			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-			
-			domain.setActionInboundPort(actionInboundPort);
-			
-			return FormTemplate.create(domain, map);
-
+			Object newInstanceUserCase = injectedDependency(domain);
+			Form form = (Form) ReflectionUtils.executeMethod(newInstanceUserCase, "filter", domain);
+			return form;
 		} catch (Exception ex) {
 			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
-			throw new CheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+			throw new CheckedException(ex.getMessage(), ex);
 		}
 	}
 }

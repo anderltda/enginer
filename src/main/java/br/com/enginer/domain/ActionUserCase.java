@@ -12,7 +12,7 @@ import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
-public interface UserCase {
+public interface ActionUserCase {
 	
 	void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort);
 	void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort);

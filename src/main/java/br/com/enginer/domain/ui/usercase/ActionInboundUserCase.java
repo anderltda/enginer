@@ -6,7 +6,6 @@ import java.util.Map;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
-import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
 import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
@@ -21,20 +20,17 @@ public class ActionInboundUserCase implements ActionInboundPort {
 
 	private final LoggerOutboundPort logger;
 	private final RepositoryOutboundPort repositoryOutboundPort;
-	private PublisherOutboundPort publisherOutboundPort;
-	private SubscriberInboundPort subscriberInboundPort;
+	private final PublisherOutboundPort publisherOutboundPort;
 
 	/**
 	 * @param logger
 	 * @param repositoryOutboundPort
 	 * @param publisherOutboundPort
-	 * @param subscriberInboundPort
 	 */
-	public ActionInboundUserCase(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort, SubscriberInboundPort subscriberInboundPort) {
+	public ActionInboundUserCase(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort) {
 		this.logger = logger;
 		this.repositoryOutboundPort = repositoryOutboundPort;
 		this.publisherOutboundPort = publisherOutboundPort;
-		this.subscriberInboundPort = subscriberInboundPort;
 	}
 
 	/**
@@ -43,7 +39,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 * @throws Exception
 	 */
 	private Object injectedDependency(Domain<?> domain) throws Exception {
-		return ReflectionUtils.executeInjectedDependencyUserCase(domain.getClass(), repositoryOutboundPort, publisherOutboundPort, subscriberInboundPort);
+		return ReflectionUtils.executeInjectedDependencyUserCase(domain.getClass(), repositoryOutboundPort, publisherOutboundPort);
 	}
 
 	/**
@@ -53,18 +49,14 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	public Domain<?> searchWithById(Domain<?> domain) throws CheckedException {
 
 		try {
-
 			Object object = injectedDependency(domain);
-			
 			return (Domain<?>) ReflectionUtils.executeMethod(object, "buscarPorId", domain);
-
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 
 	}
-
 
 	/**
 	 *
@@ -74,11 +66,8 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	public List<Domain<?>> searchByConditions(Domain<?> domain, Map<String, Object> filter) throws CheckedException {
 
 		try {
-			
 			Object object = injectedDependency(domain);
-			
 			return (List<Domain<?>>) ReflectionUtils.executeMethod(object, "buscarTodos", domain, filter);
-
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
@@ -90,20 +79,14 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 */
 	@Override
 	public PageResult<?> searchPaginated(Domain<?> domain, Map<String, Object> filter) throws CheckedException {
-
 		PageResult<?> pageResult = null;
-
 		try {
-			
 			Object object = injectedDependency(domain);
-
 			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "buscarTodosPaginado", domain, filter);
-
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
-
 		return pageResult;
 	}
 
@@ -112,20 +95,14 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 */
 	@Override
 	public PageResult<?> searchPaginatedByMethod(Domain<?> domain, Map<String, Object> filter, String method) throws CheckedException {
-
 		PageResult<?> pageResult = null;
-
 		try {
-			
 			Object object = injectedDependency(domain);
-
 			pageResult = (PageResult<?>) ReflectionUtils.executeMethod(object, "buscarTodosPaginado", filter, method);
-
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
-
 		return pageResult;
 	}
 
@@ -134,24 +111,16 @@ public class ActionInboundUserCase implements ActionInboundPort {
 	 */
 	@Override
 	public Domain<?> methodName(Domain<?> domain) throws CheckedException {
-
-		Domain<?> newDomain = null;
-
+		Domain<?> domainNew = null;
 		try {
-
-			Object object = injectedDependency(domain);
-
 			ActionLogger actionLogger = domain.getActionLogger();
-
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
-			
-			newDomain =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getAction(), domain);
-			
+			Object object = injectedDependency(domain);
+			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getAction(), domain);
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
-
-		return newDomain;
+		return domainNew;
 	}
 }

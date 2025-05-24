@@ -1,13 +1,10 @@
 package br.com.enginer.domain.example.dto.data;
-       
+
 import java.time.LocalDate;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class EntityTwoData extends DomainAbstract<String> {
 
 	private String id;
@@ -15,7 +12,7 @@ public class EntityTwoData extends DomainAbstract<String> {
 	private Integer hex;
 	private Double cost;
 	private LocalDate inclusionDate;
-	
+
 	private EntityStatusData entityStatusData;
 	private EntityTreeData entityTreeData;
 

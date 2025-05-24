@@ -3,11 +3,12 @@ package br.com.enginer.domain.ui.port.inbound;
 import java.util.List;
 import java.util.Map;
 
+import br.com.enginer.domain.InboundPort;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 
-public interface ActionInboundPort {
+public interface ActionInboundPort extends InboundPort {
 	
 	Domain<?> searchWithById(Domain<?> domain) throws CheckedException;
 	

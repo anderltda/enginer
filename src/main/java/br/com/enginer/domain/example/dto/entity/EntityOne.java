@@ -153,6 +153,9 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 	
+	@UIFilter(label = "Entity Nine", field = "keyNine", template = { TypeTemplate.FILTER })
+	private EntityNine entityNine;
+	
 	@Override
 	public Long getId() {
 		return id;
@@ -225,6 +228,14 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	public void setEntityTwo(EntityTwo entityTwo) {
 		this.entityTwo = entityTwo;
+	}
+	
+	public EntityNine getEntityNine() {
+		return entityNine;
+	}
+
+	public void setEntityNine(EntityNine entityNine) {
+		this.entityNine = entityNine;
 	}
 
 	@Override

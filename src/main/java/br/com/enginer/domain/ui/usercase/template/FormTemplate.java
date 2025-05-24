@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
@@ -116,15 +117,12 @@ import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
 public final class FormTemplate {
 
 	private static final Map<Class<? extends Annotation>, Class<? extends Annotation>> annotationMap = new HashMap<>();
+	private static TypeTemplate typeTemplate;
+	private static Boolean disabled = Boolean.FALSE;
+	private static Map<TypeTemplate, Boolean> mapTypeTemplates;
+	private static ActionUserCase userCase;
 
-	private static TypeTemplate TYPE_TEMPLATE;
-	
-	private static Boolean DISABLED = Boolean.FALSE;
-	
-	private static Map<TypeTemplate, Boolean> TYPE_TEMPLATE_MAPS;
-
-	private FormTemplate() {
-	}
+	private FormTemplate() {}
 
 	static {
 
@@ -158,22 +156,18 @@ public final class FormTemplate {
 	 * @param domain
 	 * @return
 	 */
-	public static Form create(Domain<?> domain, Map<TypeTemplate, Boolean> maps) throws Exception {
+	public static Form create(Domain<?> domain, ActionUserCase actionUserCase, Map<TypeTemplate, Boolean> maps) throws Exception {
 
+		List<Field> fields = new ArrayList<>();
+		Field field = null;
 		Form form = null;
 
 		try {
 			
-			TYPE_TEMPLATE_MAPS = maps;
-
-			TYPE_TEMPLATE = TYPE_TEMPLATE_MAPS.entrySet().iterator().next().getKey();
-
-			DISABLED = TYPE_TEMPLATE_MAPS.get(TypeTemplate.DISABLED);
-			
-			System.out.println(DISABLED);
-
-			List<Field> fields = new ArrayList<>();
-			Field field = null;
+			mapTypeTemplates = maps;
+			userCase = actionUserCase;
+			typeTemplate = mapTypeTemplates.entrySet().iterator().next().getKey();
+			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
 
 			form = new Form();
 			form.setTitle(getTitle(domain));
@@ -191,7 +185,7 @@ public final class FormTemplate {
 				int x = count;
 				int y = count % 2 == 0 ? count - 1 : count;
 
-				Default default_ = new Default(x, y, f.getName(), DISABLED, domain);
+				Default default_ = new Default(x, y, f.getName(), disabled, domain);
 
 				field = new Field();
 				fields.add(field);
@@ -502,9 +496,9 @@ public final class FormTemplate {
 
 		if (domain.getClass().isAnnotationPresent(UIPaginator.class)) {
 
-			TypeTemplate copyTypeTemplate = TYPE_TEMPLATE;
+			TypeTemplate copyTypeTemplate = typeTemplate;
 
-			TYPE_TEMPLATE = TypeTemplate.PAGINATOR;
+			typeTemplate = TypeTemplate.PAGINATOR;
 
 			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
 
@@ -567,7 +561,7 @@ public final class FormTemplate {
 
 			}
 
-			TYPE_TEMPLATE = copyTypeTemplate;
+			typeTemplate = copyTypeTemplate;
 		}
 
 		return paginator;
@@ -581,7 +575,7 @@ public final class FormTemplate {
 
 		if (uiFilter.select()) {
 			Object provider = f.getType().getDeclaredConstructor().newInstance();
-			List<?> options = (List<?>) ReflectionUtils.executeMethod(domain, "options", provider, filters);
+			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, "buscarTodos", provider, filters);
 			filter.setOptions(options);
 		}
 
@@ -840,7 +834,7 @@ public final class FormTemplate {
 
 	private static boolean checkTemplate(Annotation annotation) {
 		TypeTemplate[] type = (TypeTemplate[]) ReflectionUtils.get("template", annotation);
-		boolean containsFilter = Arrays.stream(type).anyMatch(t -> t == TYPE_TEMPLATE);
+		boolean containsFilter = Arrays.stream(type).anyMatch(t -> t == typeTemplate);
 		return containsFilter;
 	}
 
@@ -876,7 +870,7 @@ public final class FormTemplate {
 
 				for (UIButton uiButton : uiListButtons) {
 							
-					if (!uiButton.label().equals(Constants.LABEL_BACK) && DISABLED) {
+					if (!uiButton.label().equals(Constants.LABEL_BACK) && disabled) {
 						continue;
 					}
 					
@@ -888,7 +882,7 @@ public final class FormTemplate {
 						continue;
 					}
 					
-					if (TYPE_TEMPLATE_MAPS.get(TypeTemplate.MODAL)) {
+					if (mapTypeTemplates.get(TypeTemplate.MODAL)) {
 						if (uiButton.label().equals(Constants.LABEL_DELETE) || uiButton.label().equals(Constants.LABEL_BACK))
 							continue;
 					}
@@ -906,7 +900,7 @@ public final class FormTemplate {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 
 							if (buttonObject instanceof UIAction uiAction) {
-								if (uiButton.label().equals(Constants.LABEL_NEW) && TYPE_TEMPLATE_MAPS.get(TypeTemplate.MODAL)) {
+								if (uiButton.label().equals(Constants.LABEL_NEW) && mapTypeTemplates.get(TypeTemplate.MODAL)) {
 									Action action = getButtonAction(uiAction);
 									action.setClientMethod(Constants.METHOD_OPEN_MODAL_CREATE);
 									action.setRedirect(null);

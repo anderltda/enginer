@@ -36,21 +36,8 @@ import reactor.core.publisher.Mono;
 public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 
 	private final String dataSourceBasePath;
-
 	private final LoggerOutboundPort logger;
-
 	private final ObjectMapper objectMapper;
-
-	/**
-	 * @return
-	 */
-	private WebClient getWebClient() {
-		return WebClient
-				.builder()
-				.baseUrl(dataSourceBasePath)
-				.defaultHeader("Authorization", "SECRET_TOKEN", "Content-Type", MediaType.APPLICATION_JSON_VALUE, "Accept", MediaType.APPLICATION_JSON_VALUE)
-				.build();
-	}
 
 	/**
 	 * @param dataSourceBasePath
@@ -61,6 +48,20 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 		this.logger = logger;
 		this.objectMapper = objectMapper;
 		this.dataSourceBasePath = dataSourceBasePath;
+	}
+
+	/**
+	 * @return
+	 */
+	private WebClient getWebClient() {
+		return WebClient
+				.builder()
+				.baseUrl(dataSourceBasePath)
+				.defaultHeader(
+						"Authorization", "SECRET_TOKEN", 
+						"Content-Type", MediaType.APPLICATION_JSON_VALUE, 
+						"Accept", MediaType.APPLICATION_JSON_VALUE)
+				.build();
 	}
 
 	/**

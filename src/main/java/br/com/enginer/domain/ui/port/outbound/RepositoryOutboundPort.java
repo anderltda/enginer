@@ -3,6 +3,7 @@ package br.com.enginer.domain.ui.port.outbound;
 import java.util.List;
 import java.util.Map;
 
+import br.com.enginer.domain.OutboundPort;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
@@ -11,7 +12,7 @@ import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 /**
  * 
  */
-public interface RepositoryOutboundPort {
+public interface RepositoryOutboundPort extends OutboundPort {
 
 	public Domain<?> findById(Domain<?> domain, Object id) throws UncheckedException;
 	

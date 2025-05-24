@@ -1,7 +1,6 @@
 package br.com.enginer.domain.ui.usercase.schema.instance;
 
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
-import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
  * @param <I>
@@ -38,11 +37,6 @@ public interface Domain<I> {
      */
     void setDisabled(Boolean disabled);
 
-	/**
-	 * @param actionInboundPort
-	 */
-	public void setActionInboundPort(ActionInboundPort actionInboundPort);
-	
 	/**
 	 * @return
 	 */

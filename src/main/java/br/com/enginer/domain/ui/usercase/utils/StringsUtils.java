@@ -66,7 +66,18 @@ public class StringsUtils {
 	        throw new IllegalArgumentException("Pacote 'dto' não encontrado na classe: " + fullClassName);
 	    }
 	    String basePackage = fullClassName.substring(0, dtoIndex);
-	    return getNameUserCase(basePackage.concat(".usercase.").concat(clazz.getSimpleName()));
+	    return getNameUserCase(basePackage.concat(".usercase.").concat(removeIdSuffix(clazz.getSimpleName())));
+	}
+	
+	/**
+	 * @param className
+	 * @return
+	 */
+	public static String removeIdSuffix(String className) {
+	    if (className.endsWith("Id")) {
+	        return className.substring(0, className.length() - 2);
+	    }
+	    return className;
 	}
 
 	/**

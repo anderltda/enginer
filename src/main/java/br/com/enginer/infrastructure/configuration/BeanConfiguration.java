@@ -28,6 +28,7 @@ import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.ActionInboundUserCase;
+import br.com.enginer.domain.ui.usercase.SubscriberInboundUserCase;
 import br.com.enginer.domain.ui.usercase.UIInboundUserCase;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.infrastructure.configuration.deserializer.SafeLocalDateDeserializer;
@@ -103,23 +104,34 @@ public class BeanConfiguration {
 	}
 
 	/**
-	 * @param actionInboundPort
-	 * @return <UIInboundUserCase>
+	 * @param logger
+	 * @param repositoryOutboundPort
+	 * @return
 	 */
 	@Bean
-	UIInboundPort uIInboundPort(ActionInboundPort actionInboundPort, LoggerOutboundPort logger) {
-		return new UIInboundUserCase(actionInboundPort, logger);
+	UIInboundPort uIInboundPort(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort) {
+		return new UIInboundUserCase(logger, repositoryOutboundPort);
 	}
 	
 	/**
 	 * @param logger
 	 * @param repositoryOutboundPort
 	 * @param publisherOutboundPort
-	 * @param subscriberInboundPort
 	 * @return
 	 */
 	@Bean
-	ActionInboundPort actionInboundPort(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort, SubscriberInboundPort subscriberInboundPort) {
-		return new ActionInboundUserCase(logger, repositoryOutboundPort, publisherOutboundPort, subscriberInboundPort);
+	ActionInboundPort actionInboundPort(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort) {
+		return new ActionInboundUserCase(logger, repositoryOutboundPort, publisherOutboundPort);
+	}
+	
+	/**
+	 * @param logger
+	 * @param repositoryOutboundPort
+	 * @param publisherOutboundPort
+	 * @return
+	 */
+	@Bean
+	SubscriberInboundPort subscriberInboundPort(LoggerOutboundPort logger, RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort) {
+		return new SubscriberInboundUserCase(logger, repositoryOutboundPort, publisherOutboundPort);
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.enginer.domain;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,17 +8,19 @@ import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
-import br.com.enginer.domain.ui.usercase.exception.CheckedException;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
+import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.template.FormTemplate;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
 /**
  * 
  */
-public abstract class AbstractUserCase implements UserCase {
-	
+public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCase {
+
 	protected RepositoryOutboundPort repositoryOutboundPort;
 	protected PublisherOutboundPort publisherOutboundPort;
 	protected SubscriberInboundPort subscriberInboundPort;
@@ -29,7 +32,7 @@ public abstract class AbstractUserCase implements UserCase {
 	public void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort) {
 		this.repositoryOutboundPort = repositoryOutboundPort;
 	}
-	
+
 	/**
 	 *
 	 */
@@ -50,20 +53,98 @@ public abstract class AbstractUserCase implements UserCase {
 	 *
 	 */
 	@Override
-	public Domain<?> buscarPorId(Domain<?> domain) throws CheckedException {
+	public Form form(Domain<?> domain) throws UncheckedException {
+
+		try {
+
+			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			map.put(TypeTemplate.FORM, true);
+			map.put(TypeTemplate.FILTER, false);
+			map.put(TypeTemplate.TAB, false);
+			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+
+			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? buscarPorId(domain) : null;
+
+			if (loadedDomain != null) {
+				domain = loadedDomain;
+			}
+
+			return FormTemplate.create(domain, this, map);
+
+		} catch (Exception ex) {
+			throw new UncheckedException("Erro ao montar o formulário com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ")" + ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public Form tab(Domain<?> domain) throws UncheckedException {
+		try {
+
+			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			map.put(TypeTemplate.TAB, true);
+			map.put(TypeTemplate.FORM, false);
+			map.put(TypeTemplate.FILTER, false);
+			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+
+			System.out.println(repositoryOutboundPort);
+			
+			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? buscarPorId(domain) : null;
+
+			if (loadedDomain != null) {
+				domain = loadedDomain;
+			}
+
+			return FormTemplate.create(domain, this, map);
+
+		} catch (Exception ex) {
+			throw new UncheckedException("Erro ao montar o tab com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public Form filter(Domain<?> domain) throws UncheckedException {
+		try {
+
+			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			map.put(TypeTemplate.FILTER, true);
+			map.put(TypeTemplate.FORM, false);
+			map.put(TypeTemplate.TAB, false);
+			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+
+			return FormTemplate.create(domain, this, map);
+
+		} catch (Exception ex) {
+			throw new UncheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public Domain<?> buscarPorId(Domain<?> domain) throws UncheckedException {
 
 		if (domain.getId() != null) {
 			try {
-				
+
 				if (ReflectionUtils.extractIsJavaLangType(domain.getId().getClass())) {
 					return repositoryOutboundPort.findById(domain, domain.getId());
 				}
 
 				Map<String, Object> ids = ReflectionUtils.getCompositedKeyFields(domain);
 				return repositoryOutboundPort.findByIdComposite(domain, ids);
-				
+
 			} catch (Exception ex) {
-				throw new CheckedException(ex.getMessage(), ex);
+				throw new UncheckedException(ex.getMessage(), ex);
 			}
 
 		}
@@ -82,7 +163,8 @@ public abstract class AbstractUserCase implements UserCase {
 	 *
 	 */
 	@Override
-	public Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException {
+	public Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, String method)
+			throws UncheckedException {
 		return repositoryOutboundPort.findBySingle(domain, filter, method);
 	}
 
@@ -93,7 +175,7 @@ public abstract class AbstractUserCase implements UserCase {
 	public Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 		return repositoryOutboundPort.findBySingle(domain, filter, typeRepository, queryName);
 	}
-	
+
 	/**
 	 *
 	 */
@@ -157,7 +239,7 @@ public abstract class AbstractUserCase implements UserCase {
 	public PageResult<?> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 		return repositoryOutboundPort.paginator(domain, filter, typeRepository, queryName);
 	}
-	
+
 	/**
 	 *
 	 */
@@ -203,9 +285,9 @@ public abstract class AbstractUserCase implements UserCase {
 	 */
 	@Override
 	public void excluir(Domain<?> domain, Object ids) throws UncheckedException {
-		repositoryOutboundPort.delete(domain, ids);		
+		repositoryOutboundPort.delete(domain, ids);
 	}
-	
+
 	/**
 	 *
 	 */
@@ -213,7 +295,7 @@ public abstract class AbstractUserCase implements UserCase {
 	public void excluir(Domain<?> domain) throws UncheckedException {
 		repositoryOutboundPort.delete(domain);
 	}
-	
+
 	/**
 	 *
 	 */

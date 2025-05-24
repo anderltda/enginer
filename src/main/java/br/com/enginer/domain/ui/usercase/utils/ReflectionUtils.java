@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import br.com.enginer.domain.InboundPort;
+import br.com.enginer.domain.OutboundPort;
 import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
@@ -302,7 +304,8 @@ public class ReflectionUtils {
 	/**
 	 * EXECUTE METHOD REFLECTION USERCASE
 	 */
-
+	
+	
 	/**
 	 * Metodo responsavel por encontrar a classe UserCase do domain e injetar as
 	 * dependencias necessarias
@@ -315,16 +318,15 @@ public class ReflectionUtils {
 	 * @return - Retorna a classe instaciada do UserCase
 	 * @throws Exception
 	 */
-	public static Object executeInjectedDependencyUserCase(Class<?> clazz,
-			RepositoryOutboundPort repositoryOutboundPort, PublisherOutboundPort publisherOutboundPort,
-			SubscriberInboundPort subscriberInboundPort) throws Exception {
+	public static Object executeInjectedDependencyUserCase(Class<?> clazz, OutboundPort... outboundPorts) throws Exception {
+		
 		Object newInstanceUserCase = newInstance(StringsUtils.convertDtoToUsercasePackage(clazz));
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(RepositoryOutboundPort.class.getSimpleName()),
-				repositoryOutboundPort);
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(PublisherOutboundPort.class.getSimpleName()),
-				publisherOutboundPort);
-		executeMethod(newInstanceUserCase, StringsUtils.setMethod(SubscriberInboundPort.class.getSimpleName()),
-				subscriberInboundPort);
+		
+		for (OutboundPort outboundPort : outboundPorts) {
+			Class<?>[] interfaces = outboundPort.getClass().getInterfaces();
+			executeMethod(newInstanceUserCase, StringsUtils.setMethod(interfaces[0].getSimpleName()), outboundPort);
+		}
+		
 		return newInstanceUserCase;
 	}
 

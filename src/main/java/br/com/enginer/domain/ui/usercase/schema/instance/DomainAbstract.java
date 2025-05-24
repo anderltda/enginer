@@ -1,10 +1,6 @@
 package br.com.enginer.domain.ui.usercase.schema.instance;
 
-import java.util.HashMap;
-import java.util.List;
-
 import br.com.enginer.domain.ui.dto.logger.ActionLogger;
-import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 
 /**
  * 
@@ -16,25 +12,6 @@ public abstract class DomainAbstract<I> implements Domain<I> {
 	private Boolean disabled;
 	
 	private ActionLogger actionLogger;
-	
-	protected ActionInboundPort actionInboundPort;
-	
-	/**
-	 *
-	 */
-	@Override
-	public void setActionInboundPort(ActionInboundPort actionInboundPort) {
-		this.actionInboundPort = actionInboundPort;
-	}
-
-	/**
-	 * @param domain
-	 * @param filter
-	 * @return
-	 */
-	public List<Domain<?>> options(Domain<?> domain, HashMap<String, Object> filter) {
-		return actionInboundPort.searchByConditions(domain, filter);
-	}
 	
 	/**
 	 * @return
@@ -82,4 +59,5 @@ public abstract class DomainAbstract<I> implements Domain<I> {
 	public void setDisabled(Boolean disabled) {
 		this.disabled = disabled;
 	}
+
 }

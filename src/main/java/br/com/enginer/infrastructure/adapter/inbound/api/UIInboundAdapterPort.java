@@ -19,7 +19,7 @@ import br.com.enginer.infrastructure.tracking.TrackingProvider;
  */
 @RestController
 @RequestMapping("/v1/enginer/ui")
-public class CriarTelaStreamInboundAdapterPort {
+public class UIInboundAdapterPort {
 
 	private final UIInboundPort uIInboundPort;
 	private final LoggerOutboundPort logger;
@@ -30,7 +30,7 @@ public class CriarTelaStreamInboundAdapterPort {
 	 * @param logger
 	 * @param trackingProvider
 	 */
-	public CriarTelaStreamInboundAdapterPort(UIInboundPort uIInboundPort, LoggerOutboundPort logger, TrackingProvider trackingProvider) {
+	public UIInboundAdapterPort(UIInboundPort uIInboundPort, LoggerOutboundPort logger, TrackingProvider trackingProvider) {
 		this.uIInboundPort = uIInboundPort;
 		this.logger = logger;
 		this.trackingProvider = trackingProvider;
@@ -57,7 +57,7 @@ public class CriarTelaStreamInboundAdapterPort {
 			return ResponseEntity.ok(form);
 
 		} catch (Exception ex) {
-			logger.error(CriarTelaStreamInboundAdapterPort.class, "Erro ao criar entidade", ex);
+			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -88,7 +88,7 @@ public class CriarTelaStreamInboundAdapterPort {
 			return ResponseEntity.ok(form);
 
 		} catch (Exception ex) {
-			logger.error(CriarTelaStreamInboundAdapterPort.class, "Erro ao criar entidade", ex);
+			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			throw ex;
 		}
 
@@ -115,7 +115,7 @@ public class CriarTelaStreamInboundAdapterPort {
 			return ResponseEntity.ok(form);
 
 		} catch (Exception ex) {
-			logger.error(CriarTelaStreamInboundAdapterPort.class, "Erro ao criar entidade", ex);
+			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			throw ex;
 		}
 	}
