@@ -1,5 +1,13 @@
 package br.com.enginer.domain.ui.usercase.utils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 
 public class StringsUtils {
@@ -18,6 +26,16 @@ public class StringsUtils {
 	 */
 	public static String getMethod(String value) {
 		return "get".concat(firstUpper(value));
+	}
+	
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static String trim(Object value) {
+		if (value != null && value.toString().length() > 0)
+			return value.toString().trim();
+		return null;
 	}
 
 	/**
@@ -116,5 +134,49 @@ public class StringsUtils {
 		}
 		return builder.toString().trim();
 	}
+	
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static List<?> toList(Object value) {
+	    if (value == null) return Collections.emptyList();
+	    if (value instanceof List<?>) {
+	        return (List<?>) value;
+	    }
+	    if (value.getClass().isArray()) {
+	        return Arrays.asList((Object[]) value);
+	    }
+	    throw new IllegalArgumentException("Não é possível converter para List: " + value.getClass().getName());
+	}
 
+	/**
+	 * @param value
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> toMap(Object value) {
+	    if (value instanceof Map<?, ?> map) {
+	        return (Map<String, Object>) map;
+	    }
+	    throw new IllegalArgumentException("Não é possível converter para Map: " + value.getClass().getName());
+	}
+	
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static LocalDate toLocalDate(Object value) {
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE; 
+	    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+	    return LocalDate.parse(value.toString(), value.toString().contains("T") ? dateTimeFormatter : dateFormatter);
+	}
+	
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static LocalDateTime toLocalDateTime(Object value) {
+		return LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+	}
 }

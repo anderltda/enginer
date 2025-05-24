@@ -1,5 +1,6 @@
 package br.com.enginer.domain;
 
-public interface InboundPort {
-
-}
+/**
+ * 
+ */
+public interface InboundPort { }

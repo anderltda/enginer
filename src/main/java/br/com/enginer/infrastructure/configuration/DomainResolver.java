@@ -59,7 +59,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 		String modal = request.getHeader("X-UIModal");
 		String disabled = request.getHeader("X-UI-Mode");
 		
-		String rawId = extractIdFromUri(request.getRequestURI());
+		String id = extractIdFromUri(request.getRequestURI());
 
 		if (domainName != null) {
 			
@@ -78,37 +78,27 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 				Constructor<?> constructor = clazz.getDeclaredConstructor();
 				constructor.setAccessible(true);
-				Domain<?> domainInstance = (Domain<?>) constructor.newInstance();
+				Domain<?> domain = (Domain<?>) constructor.newInstance();
 				
-				if (rawId != null && !rawId.isEmpty()) {
-					if (domainInstance instanceof DomainId) {
-						extractedCompositedKey(rawId, domainInstance);
+				if (id != null && !id.isEmpty()) {
+					
+					if (domain instanceof DomainId) {
+						
+						extractKeyComposited(id, domain);
+						
 					} else {
-						Field idField = clazz.getDeclaredField("id");
-						Class<?> idType = idField.getType();
-						if (ReflectionUtils.extractIsJavaLangType(idType)) {
-							Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), idType);
-							Object typedId = ReflectionUtils.extractedTypeValue(idType, rawId);
-							setIdMethod.invoke(domainInstance, typedId);
-							
-						} else {
-							Domain<?> domainId = (Domain<?>) idType.getDeclaredConstructor().newInstance();
-							if (domainId instanceof DomainId) {
-								ReflectionUtils.set(domainInstance, StringsUtils.setMethod("id"), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
-								extractedCompositedKey(rawId, domainId);
-							}
-							
-						}
+						
+						extractKey(id, clazz, domain);
 					}
 				}
 
 				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), Boolean.class);
-				setModalMethod.invoke(domainInstance, isModal);
+				setModalMethod.invoke(domain, isModal);
 				
 				Method setDisabledMethod = clazz.getMethod(StringsUtils.setMethod("disabled"), Boolean.class);
-				setDisabledMethod.invoke(domainInstance, isDisabled);
+				setDisabledMethod.invoke(domain, isDisabled);
 
-				return domainInstance;
+				return domain;
 			}
 		}
 		return null;
@@ -116,9 +106,40 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 	/**
 	 * @param rawId
+	 * @param clazz
+	 * @param domain
+	 * @throws Exception
+	 */
+	private void extractKey(String rawId, Class<?> clazz, Domain<?> domain) throws Exception {
+
+		Field field = clazz.getDeclaredField("id");
+
+		Class<?> type = field.getType();
+
+		if (DomainId.class.isAssignableFrom(type)) {
+
+			Domain<?> domainId = (Domain<?>) type.getDeclaredConstructor().newInstance();
+
+			ReflectionUtils.set(domain, StringsUtils.setMethod("id"), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
+			
+			extractKeyComposited(rawId, domainId);
+
+		} else if (ReflectionUtils.isTypeMatching(domain.getClass(), "id", rawId)) {
+
+			Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), type);
+
+			Object typedId = ReflectionUtils.extractedTypeValue(type, rawId);
+
+			setIdMethod.invoke(domain, typedId);
+
+		}
+	}
+
+	/**
+	 * @param rawId
 	 * @param domain
 	 */
-	private void extractedCompositedKey(String rawId, Domain<?> domain) {
+	private void extractKeyComposited(String rawId, Domain<?> domain) {
 		
 		Map<String, Object> ids = ReflectionUtils.parseQueryParams(rawId);
 		

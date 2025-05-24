@@ -8,9 +8,7 @@ import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 public abstract class DomainAbstract<I> implements Domain<I> {
 	
 	private Boolean modal;
-	
 	private Boolean disabled;
-	
 	private ActionLogger actionLogger;
 	
 	/**

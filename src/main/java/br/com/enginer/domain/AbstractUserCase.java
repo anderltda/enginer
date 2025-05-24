@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.ui.dto.PageResult;
-import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 import br.com.enginer.domain.ui.usercase.template.FormTemplate;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
@@ -23,7 +23,6 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 
 	protected RepositoryOutboundPort repositoryOutboundPort;
 	protected PublisherOutboundPort publisherOutboundPort;
-	protected SubscriberInboundPort subscriberInboundPort;
 
 	/**
 	 *
@@ -40,13 +39,20 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	public void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort) {
 		this.publisherOutboundPort = publisherOutboundPort;
 	}
-
+	
 	/**
-	 *
+	 * @param domain
+	 * @return
+	 * @throws Exception
 	 */
-	@Override
-	public void setSubscriberInboundPort(SubscriberInboundPort subscriberInboundPort) {
-		this.subscriberInboundPort = subscriberInboundPort;
+	private Domain<?> findById(Domain<?> domain) throws Exception {
+		if (!(DomainId.class.isAssignableFrom(domain.getClass()))) {
+			Domain<?> loadedDomain = (ReflectionUtils.isTypeMatching(domain.getClass(), "id", domain.getId())) ? buscarPorId(domain) : null;
+			if (loadedDomain != null) {
+				domain = loadedDomain;
+			}
+		}
+		return domain;
 	}
 
 	/**
@@ -54,24 +60,20 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public Form form(Domain<?> domain) throws UncheckedException {
-
+		
 		try {
-
+			
 			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
 			map.put(TypeTemplate.FORM, true);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.TAB, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-
-			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? buscarPorId(domain) : null;
-
-			if (loadedDomain != null) {
-				domain = loadedDomain;
-			}
-
+			
+			domain = findById(domain);
+			
 			return FormTemplate.create(domain, this, map);
-
+			
 		} catch (Exception ex) {
 			throw new UncheckedException("Erro ao montar o formulário com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ")" + ex.getMessage(), ex);
 		}
@@ -82,25 +84,20 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public Form tab(Domain<?> domain) throws UncheckedException {
+		
 		try {
-
+			
 			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
 			map.put(TypeTemplate.TAB, true);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-
-			System.out.println(repositoryOutboundPort);
 			
-			Domain<?> loadedDomain = !ReflectionUtils.classIsIdType(domain.getClass()) ? buscarPorId(domain) : null;
-
-			if (loadedDomain != null) {
-				domain = loadedDomain;
-			}
-
+			domain = findById(domain);
+			
 			return FormTemplate.create(domain, this, map);
-
+			
 		} catch (Exception ex) {
 			throw new UncheckedException("Erro ao montar o tab com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
@@ -111,17 +108,18 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public Form filter(Domain<?> domain) throws UncheckedException {
+		
 		try {
-
+			
 			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
 			map.put(TypeTemplate.FILTER, true);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.TAB, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
-
+			
 			return FormTemplate.create(domain, this, map);
-
+			
 		} catch (Exception ex) {
 			throw new UncheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
@@ -132,22 +130,23 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public Domain<?> buscarPorId(Domain<?> domain) throws UncheckedException {
-
+		
 		if (domain.getId() != null) {
+			
 			try {
-
+				
 				if (ReflectionUtils.extractIsJavaLangType(domain.getId().getClass())) {
 					return repositoryOutboundPort.findById(domain, domain.getId());
 				}
-
+				
 				Map<String, Object> ids = ReflectionUtils.getCompositedKeyFields(domain);
 				return repositoryOutboundPort.findByIdComposite(domain, ids);
-
+				
 			} catch (Exception ex) {
 				throw new UncheckedException(ex.getMessage(), ex);
 			}
-
 		}
+		
 		return null;
 	}
 
@@ -268,8 +267,13 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 *
 	 */
 	@Override
-	public boolean existePorId(Domain<?> domain, Object id) throws UncheckedException {
-		return repositoryOutboundPort.existsById(domain, id);
+	public boolean existe(Domain<?> domain) throws UncheckedException {
+		
+		if(domain.getId() != null) {
+			return repositoryOutboundPort.existsById(domain, domain.getId());
+		}
+		
+		return false;
 	}
 
 	/**
@@ -293,7 +297,9 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public void excluir(Domain<?> domain) throws UncheckedException {
-		repositoryOutboundPort.delete(domain);
+		if(domain.getId() != null) {
+			repositoryOutboundPort.delete(domain, domain.getId());
+		}
 	}
 
 	/**

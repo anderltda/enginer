@@ -1,5 +1,7 @@
 package br.com.enginer.domain.example.dto.entity;
 
+import java.util.UUID;
+
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
@@ -14,10 +16,14 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -30,10 +36,14 @@ value = {
 	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(serverMethod = "atireiopaunogato")))
 }
 )
-public class EntityFive extends DomainAbstract<String> {
+@UIPaginator(
+    config = @UIConfig(expandable = true, multiSelection = true, editable = true),
+    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  })
+)
+public class EntityFive extends DomainAbstract<UUID> {
 
 	@UIId
-	private String id;
+	private UUID id;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100)
@@ -48,12 +58,12 @@ public class EntityFive extends DomainAbstract<String> {
 	private EntityStatus entityStatus;
 
 	@Override
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 	
 	@Override
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

@@ -42,20 +42,12 @@ public class UIInboundAdapterPort {
 	 */
 	@GetMapping({ "/tab", "/tab/{id}" })
 	public ResponseEntity<Form> tab(@UIDomain Domain<?> domain) throws Exception {
-
 		try {
-
 			trackingProvider.setInnerId(UUIDGenerator.generate());
-
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " +
-			// domain);
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r "
-			// + objectMapper.writeValueAsString(domain));
-
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
 			Form form = uIInboundPort.tab(domain);
-
 			return ResponseEntity.ok(form);
-
 		} catch (Exception ex) {
 			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -69,29 +61,17 @@ public class UIInboundAdapterPort {
 	 */
 	@GetMapping({ "/form", "/form/{id}" })
 	public ResponseEntity<Form> form(@UIDomain Domain<?> domain) throws Exception {
-
 		try {
-
 			trackingProvider.setInnerId(UUIDGenerator.generate());
-
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " +
-			// domain);
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r "
-			// + objectMapper.writeValueAsString(domain));
-
-			// if(true) {
-			// throw new AccessDeniedException("Usuário não autorizado");
-			// }
-
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
+			// if(true) { throw new AccessDeniedException("Usuário não autorizado"); }
 			Form form = uIInboundPort.form(domain);
-
 			return ResponseEntity.ok(form);
-
 		} catch (Exception ex) {
 			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			throw ex;
 		}
-
 	}
 
 	/**
@@ -100,24 +80,15 @@ public class UIInboundAdapterPort {
 	 */
 	@GetMapping({ "/filter", "/filter/{id}" })
 	public ResponseEntity<Form> filter(@UIDomain Domain<?> domain) throws Exception {
-
 		try {
-
 			trackingProvider.setInnerId(UUIDGenerator.generate());
-
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " +
-			// domain);
-			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r "
-			// + objectMapper.writeValueAsString(domain));
-
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Executando domínio: " + domain);
+			// logger.info(CriarTelaStreamInboundPortAdapter.class, "Payload recebido: \r " + objectMapper.writeValueAsString(domain));
 			Form form = uIInboundPort.filter(domain);
-
 			return ResponseEntity.ok(form);
-
 		} catch (Exception ex) {
 			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
 			throw ex;
 		}
 	}
-
 }

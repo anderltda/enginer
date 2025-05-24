@@ -1,8 +1,10 @@
 package br.com.enginer.domain.ui.usercase.utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,11 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import br.com.enginer.domain.InboundPort;
 import br.com.enginer.domain.OutboundPort;
-import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
-import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
-import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 
 public class ReflectionUtils {
@@ -123,14 +121,14 @@ public class ReflectionUtils {
 	 */
 	public static boolean isIdComposedType(Class<?> clazz) {
 		return (!clazz.isPrimitive() || !clazz.getName().startsWith("java.lang") || !clazz.equals(LocalDate.class)
-				|| !clazz.equals(LocalDateTime.class)) || clazz.equals(Id.class);
+				|| !clazz.equals(LocalDateTime.class)) || clazz.equals(Id.class) || classIsIdType(clazz);
 	}
 
 	/**
 	 * @param clazz
 	 * @return
 	 */
-	public static boolean classIsIdType(Class<?> clazz) {
+	public static Boolean classIsIdType(Class<?> clazz) {
 		return clazz.getSimpleName().endsWith("Id");
 	}
 
@@ -138,7 +136,7 @@ public class ReflectionUtils {
 	 * @param className
 	 * @return
 	 */
-	public static boolean classIsIdType(String className) {
+	public static Boolean classIsIdType(String className) {
 		return className.endsWith("Id");
 	}
 
@@ -291,8 +289,8 @@ public class ReflectionUtils {
 	public static Object newInstance(String newClassName) {
 		Object instance = null;
 		try {
-			Class<?> usercaseClass = Class.forName(newClassName);
-			instance = usercaseClass.getDeclaredConstructor().newInstance();
+			Class<?> instanceClass = Class.forName(newClassName);
+			instance = instanceClass.getDeclaredConstructor().newInstance();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException("Erro ao instanciar classe: " + newClassName, ex);
@@ -300,7 +298,21 @@ public class ReflectionUtils {
 
 		return instance;
 	}
-
+	
+	/**
+	 * @param newClassName
+	 * @return
+	 */
+	public static Object newInstance(Class<?> instanceClass) {
+		try {
+	        Constructor<?> constructor = instanceClass.getDeclaredConstructor();
+	        constructor.setAccessible(true);
+	        return constructor.newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException("Erro ao instanciar classe: " + instanceClass.getSimpleName(), ex);
+		}
+	}
+	
 	/**
 	 * EXECUTE METHOD REFLECTION USERCASE
 	 */
@@ -455,20 +467,66 @@ public class ReflectionUtils {
 	public static Object extractedTypeValue(Class<?> type, Object value) {
 		
 		if (type.equals(Integer.class)) {
-	    	return Integer.valueOf(value.toString());
-	    } else if (type.equals(Short.class)) {
-	    	return Short.valueOf(value.toString());
-	    } else if (type.equals(Long.class)) {
-	    	return Long.valueOf(value.toString());
-	    } else if (type.equals(Byte.class)) {
-	    	return Byte.valueOf(value.toString());    
-	    } else if (type.equals(BigInteger.class)) {
-	    	return new BigInteger(value.toString());	        
+			return Integer.parseInt(StringsUtils.trim(value));
+		} else if (type.equals(Short.class)) {
+			return Short.parseShort(StringsUtils.trim(value));
+		} else if (type.equals(Long.class)) {
+			return Long.parseLong(StringsUtils.trim(value));
+		} else if (type.equals(Double.class)) {
+			return Double.parseDouble(StringsUtils.trim(value));
+		} else if (type.equals(Float.class)) {
+			return Float.parseFloat(StringsUtils.trim(value));
+		} else if (type.equals(BigDecimal.class)) {
+			return new BigDecimal(StringsUtils.trim(value));
+		} else if (type.equals(List.class)) {
+			return StringsUtils.toList(value);
+		} else if (type.equals(Map.class)) {
+			return StringsUtils.toMap(value);
+		} else if (type.equals(LocalDate.class)) {
+			return StringsUtils.toLocalDate(value);
+	    } else if (type.equals(LocalDateTime.class)) {
+	    	return StringsUtils.toLocalDateTime(value);
+		} else if (type.equals(Byte.class)) {
+			return Byte.parseByte(StringsUtils.trim(value));
+		} else if (type.equals(BigInteger.class)) {
+			return new BigInteger(StringsUtils.trim(value));
 		} else if (type.equals(UUID.class)) {
-			return UUID.fromString(value.toString());	
+			return UUID.fromString(StringsUtils.trim(value));
 		} else if (type.equals(String.class)) {
-	        return value.toString();
-	    }
+			return StringsUtils.trim(value);
+		} else if (type.equals(value.getClass())) {
+			if(type.isInstance(value)) {
+				return value;
+			}
+		}
 		throw new IllegalArgumentException("Tipo de ID não suportado: " + type);
+	}
+	
+	/**
+	 * @param clazz
+	 * @param field
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public static Boolean isTypeMatching(Class<?> clazz, String field, Object value) throws Exception {
+
+		Boolean isMatch = Boolean.TRUE;
+		Field idField = clazz.getDeclaredField(field);
+		Class<?> type = idField.getType();
+
+		try {
+
+			if (value == null) {
+				return Boolean.FALSE;
+			}
+
+			extractedTypeValue(type, value);
+
+		} catch (IllegalArgumentException ex) {
+			isMatch = Boolean.FALSE;
+		}
+
+		return isMatch;
 	}
 }

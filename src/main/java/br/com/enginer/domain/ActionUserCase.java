@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.ui.dto.PageResult;
-import br.com.enginer.domain.ui.port.inbound.SubscriberInboundPort;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
@@ -15,8 +14,8 @@ import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 public interface ActionUserCase {
 	
 	void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort);
+	
 	void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort);
-	void setSubscriberInboundPort(SubscriberInboundPort subscriberInboundPort);
 	
 	Domain<?> buscarPorId(Domain<?> domain) throws CheckedException;
 	
@@ -48,7 +47,7 @@ public interface ActionUserCase {
 	
 	Integer buscarTotal(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 
-	boolean existePorId(Domain<?> domain, Object id) throws UncheckedException;
+	boolean existe(Domain<?> domain) throws UncheckedException;
 	
 	void excluir(Domain<?> domain) throws UncheckedException;
 	
