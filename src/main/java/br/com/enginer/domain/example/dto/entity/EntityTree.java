@@ -67,7 +67,7 @@ public class EntityTree extends DomainAbstract<String> {
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime localDateTime;
 	
-	@UIJoin(layoutTarget = "tab", icon = "edit")
+	@UIJoin(icon = "edit")
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	private EntityFour entityFour;
 	

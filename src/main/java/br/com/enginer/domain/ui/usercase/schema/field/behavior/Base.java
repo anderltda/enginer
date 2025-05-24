@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
+import br.com.enginer.domain.ui.usercase.enums.TypeLayoutTarget;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.field.behavior.validation.Validation;
 
@@ -22,7 +23,6 @@ public abstract class Base {
 	private String action;
 	private String domain;
 	private String method;
-	private String layoutTarget;
 	private Integer min;
 	private Integer max;
 	private Integer limit;
@@ -39,6 +39,7 @@ public abstract class Base {
 	private String format;
 	private TypeFileUpload mode;
 	private TypeTemplate[] template;
+	private TypeLayoutTarget layoutTarget;
 
 	private Position position;
 	private Validation validation;
@@ -131,11 +132,11 @@ public abstract class Base {
 		this.method = method;
 	}
 
-	public String getLayoutTarget() {
+	public TypeLayoutTarget getLayoutTarget() {
 		return layoutTarget;
 	}
 
-	public void setLayoutTarget(String layoutTarget) {
+	public void setLayoutTarget(TypeLayoutTarget layoutTarget) {
 		this.layoutTarget = layoutTarget;
 	}
 

@@ -59,7 +59,7 @@ public class EntityFour extends DomainAbstract<String> {
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime inclusionDateTime;
 
-	@UIJoin(layoutTarget = "tab", icon = "cloud")
+	@UIJoin(icon = "cloud")
 	//@UIFilter(label = "Entity Five", field = "reference")
 	private EntityFive entityFive;
 	

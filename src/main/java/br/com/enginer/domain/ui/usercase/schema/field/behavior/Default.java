@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeFileUpload;
+import br.com.enginer.domain.ui.usercase.enums.TypeLayoutTarget;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Area;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Checkbox;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Date;
@@ -213,7 +214,7 @@ public class Default {
 		Join join = new Join();
 		join.setLabel(label);
 		join.setDomain(StringsUtils.firstLower(domain));
-		join.setLayoutTarget("form");
+		join.setLayoutTarget(TypeLayoutTarget.form);
 		return join;
 	}
 

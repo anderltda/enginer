@@ -31,7 +31,7 @@ public class EntityAll extends DomainAbstract<Long> {
 	private Long id;
 	
 	@UIPosition(x = 1, y = 1)
-	@UIJoin(layoutTarget = "form")
+	@UIJoin()
 	@UIFilter(label = "Entity One", field = "name", readonly = false )
 	private EntityOne entityOne;
 	

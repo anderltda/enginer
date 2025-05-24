@@ -47,6 +47,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.usercase.enums.TypeLayoutTarget;
 import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -149,11 +150,11 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	private LocalDateTime prohibitedDateTime;
 
-	@UIJoin(layoutTarget = "tab", icon = "code")
+	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 	
-	@UIFilter(label = "Entity Nine", field = "keyNine", template = { TypeTemplate.FILTER })
+	@UIFilter(label = "Entity Nine", field = "keyNine", template = { TypeTemplate.FILTER, TypeTemplate.FORM })
 	private EntityNine entityNine;
 	
 	@Override

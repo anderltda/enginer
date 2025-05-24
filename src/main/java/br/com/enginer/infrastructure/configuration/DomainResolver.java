@@ -111,8 +111,10 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 	 * @throws Exception
 	 */
 	private void extractKey(String rawId, Class<?> clazz, Domain<?> domain) throws Exception {
+		
+		String fieldName = "id";
 
-		Field field = clazz.getDeclaredField("id");
+		Field field = clazz.getDeclaredField(fieldName);
 
 		Class<?> type = field.getType();
 
@@ -120,13 +122,13 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 			Domain<?> domainId = (Domain<?>) type.getDeclaredConstructor().newInstance();
 
-			ReflectionUtils.set(domain, StringsUtils.setMethod("id"), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
+			ReflectionUtils.set(domain, StringsUtils.setMethod(fieldName), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
 			
 			extractKeyComposited(rawId, domainId);
 
-		} else if (ReflectionUtils.isTypeMatching(domain.getClass(), "id", rawId)) {
+		} else if (ReflectionUtils.isTypeMatching(domain.getClass(), fieldName, rawId)) {
 
-			Method setIdMethod = clazz.getMethod(StringsUtils.setMethod("id"), type);
+			Method setIdMethod = clazz.getMethod(StringsUtils.setMethod(fieldName), type);
 
 			Object typedId = ReflectionUtils.extractedTypeValue(type, rawId);
 
