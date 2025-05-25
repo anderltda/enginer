@@ -135,7 +135,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 			
 			try {
 				
-				if (ReflectionUtils.extractIsJavaLangType(domain.getId().getClass())) {
+				if (ReflectionUtils.isTypeId(domain.getId().getClass())) {
 					return repositoryOutboundPort.findById(domain, domain.getId());
 				}
 				

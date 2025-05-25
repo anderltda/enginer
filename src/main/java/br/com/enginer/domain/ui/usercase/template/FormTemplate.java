@@ -397,7 +397,7 @@ public final class FormTemplate {
 
 					count--;
 
-				} else if (!ReflectionUtils.extractIsJavaLangType(f.getType())) {
+				} else if (!ReflectionUtils.isTypeId(f.getType())) {
 
 					field.setJoin(getJoin(domain, f, default_, annotations));
 

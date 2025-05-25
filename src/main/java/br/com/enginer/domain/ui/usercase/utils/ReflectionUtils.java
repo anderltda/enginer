@@ -85,8 +85,7 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param result
 	 */
-	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited,
-			List<Field> result) {
+	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited, List<Field> result) {
 
 		if (clazz == null || clazz.equals(classLimit) || visited.contains(clazz))
 			return;
@@ -95,7 +94,7 @@ public class ReflectionUtils {
 
 		for (Field field : clazz.getDeclaredFields()) {
 			Class<?> fieldType = field.getType();
-			if (extractIsJavaLangType(fieldType)) {
+			if (isTypeId(fieldType)) {
 				result.add(field);
 			} else {
 				result.add(field);
@@ -110,9 +109,10 @@ public class ReflectionUtils {
 	 * @param clazz
 	 * @return
 	 */
-	public static boolean extractIsJavaLangType(Class<?> clazz) {
-		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(LocalDate.class)
-				|| clazz.equals(LocalDateTime.class) || clazz.equals(Id.class);
+	public static boolean isTypeId(Class<?> clazz) {
+		return clazz.isPrimitive() || 
+			   clazz.getName().startsWith("java.lang") || 
+			   clazz.equals(UUID.class);
 	}
 	
 	/**
