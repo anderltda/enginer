@@ -31,13 +31,28 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	public void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort) {
 		this.repositoryOutboundPort = repositoryOutboundPort;
 	}
-
+	
+	/**
+	 * @return repositoryOutboundPort
+	 */
+	@Override
+	public RepositoryOutboundPort getRepositoryOutboundPort() {
+		return repositoryOutboundPort;
+	}
+	
 	/**
 	 *
 	 */
 	@Override
 	public void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort) {
 		this.publisherOutboundPort = publisherOutboundPort;
+	}
+	
+	/**
+	 * @return publisherOutboundPort
+	 */
+	public PublisherOutboundPort getPublisherOutboundPort() {
+		return publisherOutboundPort;
 	}
 	
 	/**
@@ -333,4 +348,5 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	public List<Domain<?>> salvar(Domain<?> domain, List<Domain<?>> entities, Boolean flush) throws UncheckedException {
 		return repositoryOutboundPort.save(domain, entities, flush);
 	}
+
 }

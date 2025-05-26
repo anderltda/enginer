@@ -351,9 +351,9 @@ public final class FormTemplate {
 
 							identity = true;
 
-						} else if (annotation instanceof UIFile uiFilter) {
+						} else if (annotation instanceof UIFile uiFile) {
 
-							boolean containsTemplate = checkTemplate(uiFilter);
+							boolean containsTemplate = checkTemplate(uiFile);
 
 							if (containsTemplate) {
 								field.setFile(getFiles(f, default_, annotations));
@@ -397,7 +397,7 @@ public final class FormTemplate {
 
 					count--;
 
-				} else if (!ReflectionUtils.isTypeId(f.getType())) {
+				} else if (!ReflectionUtils.isClassTypeCustom(f.getType())) {
 
 					field.setJoin(getJoin(domain, f, default_, annotations));
 
@@ -544,8 +544,7 @@ public final class FormTemplate {
 								continue;
 							}
 
-							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
-									new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
+							ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { buttonObject.getClass() }, new Object[] { buttonObject });
 						}
 						buttons.add(button);
 					}
@@ -572,15 +571,21 @@ public final class FormTemplate {
 		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
 
 		Filter filter = default_.getFilter(f.getType().getSimpleName());
-
+		
+		if(filter.getValue() != null) {
+			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(f.getType(), userCase.getRepositoryOutboundPort());
+			Domain<?> domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, filter.getValue());
+			filter.setValue(domainValue);
+		}
+		
 		if (uiFilter.select()) {
 			Object provider = f.getType().getDeclaredConstructor().newInstance();
-			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, "buscarTodos", provider, filters);
+			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, ActionUserCase.buscarTodos, provider, filters);
 			filter.setOptions(options);
 		}
 
 		addBehaviorAnnotation(filter, f, annotations);
-
+		
 		return filter;
 	}
 
@@ -823,8 +828,7 @@ public final class FormTemplate {
 				Method[] methods = uiSubmit.annotationType().getDeclaredMethods();
 				for (Method method : methods) {
 					Object submitObject = ReflectionUtils.get(method.getName(), uiSubmit);
-					ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()),
-							new Class<?>[] { submitObject.getClass() }, new Object[] { submitObject });
+					ReflectionUtils.set(button, StringsUtils.setMethod(method.getName()), new Class<?>[] { submitObject.getClass() }, new Object[] { submitObject });
 				}
 			}
 		}

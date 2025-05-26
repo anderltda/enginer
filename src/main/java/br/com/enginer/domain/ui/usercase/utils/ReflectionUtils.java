@@ -66,8 +66,7 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param pattern
 	 */
-	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited,
-			String pattern) {
+	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited, String pattern) {
 		if (clazz != null && !clazz.equals(classLimit)) {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (!visited.contains(field) && field.getName().matches(pattern)) {
@@ -113,6 +112,14 @@ public class ReflectionUtils {
 		return clazz.isPrimitive() || 
 			   clazz.getName().startsWith("java.lang") || 
 			   clazz.equals(UUID.class);
+	}
+	
+	/**
+	 * @param clazz
+	 * @return
+	 */
+	public static boolean isClassTypeCustom(Class<?> clazz) {
+		return (!clazz.equals(LocalDate.class) || !clazz.equals(LocalDateTime.class)) || !clazz.equals(Id.class) || !classIsIdType(clazz);
 	}
 	
 	/**
@@ -332,7 +339,7 @@ public class ReflectionUtils {
 	 */
 	public static Object executeInjectedDependencyUserCase(Class<?> clazz, OutboundPort... outboundPorts) throws Exception {
 		
-		Object newInstanceUserCase = newInstance(StringsUtils.convertDtoToUsercasePackage(clazz));
+		Object newInstanceUserCase = createUserCase(clazz);
 		
 		for (OutboundPort outboundPort : outboundPorts) {
 			Class<?>[] interfaces = outboundPort.getClass().getInterfaces();
@@ -340,6 +347,16 @@ public class ReflectionUtils {
 		}
 		
 		return newInstanceUserCase;
+	}
+	
+	/**
+	 * Metodo responsavel por criar uma classe UserCase
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 */
+	public static Object createUserCase(Class<?> clazz) throws Exception {
+		return newInstance(StringsUtils.convertDtoToUsercasePackage(clazz));
 	}
 
 	/**
@@ -528,5 +545,19 @@ public class ReflectionUtils {
 		}
 
 		return isMatch;
+	}
+	
+	
+	/**
+	 * Metodo responsavel por trazer a TYPE('Class') do FIELD informado da clazz
+	 * @param clazz - Classe que deseja sabe o type do field
+	 * @param field - Campo da classe que deseja saber o seu TYPE
+	 * @return - CLASS<?>(TYPE)
+	 * @throws Exception
+	 */
+	public static Class<?> getTypeFieldClass(Class<?> clazz, String field) throws Exception {
+		Field idField = clazz.getDeclaredField(field);
+		Class<?> type = idField.getType();
+		return type;
 	}
 }

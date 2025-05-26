@@ -1,6 +1,7 @@
 package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
@@ -60,8 +61,17 @@ public class EntityFour extends DomainAbstract<String> {
 	private LocalDateTime inclusionDateTime;
 
 	@UIJoin(icon = "cloud")
-	//@UIFilter(label = "Entity Five", field = "reference")
 	private EntityFive entityFive;
+	
+	public void setEntityStatusId(Long entityStatusId) {
+		this.entityStatus = new EntityStatus();
+		this.entityStatus.setId(entityStatusId);
+	}
+
+	public void setEntityFiveId(UUID entityFiveId) {
+		this.entityFive = new EntityFive();
+		this.entityFive.setId(entityFiveId);
+	}
 	
 	@Override
 	public String getId() {

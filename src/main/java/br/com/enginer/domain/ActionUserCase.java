@@ -13,9 +13,22 @@ import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
 
 public interface ActionUserCase {
 	
+	public static final String buscarPorId = "buscarPorId";
+	public static final String buscarTodos = "buscarTodos";
+	public static final String buscarPorRegistroUnico = "buscarPorRegistroUnico";
+	public static final String buscarPorIds = "buscarPorIds";
+	public static final String buscarTodosPaginado = "buscarTodosPaginado";
+	public static final String existe = "existe";
+	public static final String excluir = "excluir";
+	public static final String salvar = "salvar";
+	
 	void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort);
 	
 	void setPublisherOutboundPort(PublisherOutboundPort publisherOutboundPort);
+	
+	RepositoryOutboundPort getRepositoryOutboundPort();	
+	
+	PublisherOutboundPort getPublisherOutboundPort();
 	
 	Domain<?> buscarPorId(Domain<?> domain) throws CheckedException;
 	

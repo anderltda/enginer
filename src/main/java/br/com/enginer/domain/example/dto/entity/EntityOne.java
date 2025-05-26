@@ -113,8 +113,8 @@ public class EntityOne extends DomainAbstract<Long> {
 	private Long id;
 
 	@UIText(label = "Name")
-	@UIAutoCompleteSuggestion(suggestions = { "anderson", "pedro" })
-	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIAutoCompleteSuggestion(suggestions = { "Anderson", "Pedro", "Marcelo", "Michael", "Ramiro", "José" })
+	//@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)
 	@UIFieldValidation(
 		required = false,
@@ -153,10 +153,18 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
+
 	
-	@UIFilter(label = "Entity Nine", field = "keyNine", template = { TypeTemplate.FILTER, TypeTemplate.FORM })
-	private EntityNine entityNine;
-	
+	public void setEntityStatusId(Long entityStatusId) {
+		this.entityStatus = new EntityStatus();
+		this.entityStatus.setId(entityStatusId);
+	}
+
+	public void setEntityTwoId(String entityTwoId) {
+		this.entityTwo = new EntityTwo();
+		this.entityTwo.setId(entityTwoId);
+	}
+
 	@Override
 	public Long getId() {
 		return id;
@@ -231,14 +239,6 @@ public class EntityOne extends DomainAbstract<Long> {
 		this.entityTwo = entityTwo;
 	}
 	
-	public EntityNine getEntityNine() {
-		return entityNine;
-	}
-
-	public void setEntityNine(EntityNine entityNine) {
-		this.entityNine = entityNine;
-	}
-
 	@Override
 	public String toString() {
 		return "EntityOne [id=" + id + ", name=" + name + ", entityStatus=" + entityStatus + ", code=" + code + ", age="

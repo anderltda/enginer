@@ -71,6 +71,16 @@ public class EntityTree extends DomainAbstract<String> {
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	private EntityFour entityFour;
 	
+	public void setEntityStatusId(Long entityStatusId) {
+		this.entityStatus = new EntityStatus();
+		this.entityStatus.setId(entityStatusId);
+	}
+
+	public void setEntityFourId(String entityFourId) {
+		this.entityFour = new EntityFour();
+		this.entityFour.setId(entityFourId);
+	}
+	
 	@Override
 	public String getId() {
 		return id;
