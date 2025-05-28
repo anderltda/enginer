@@ -12,7 +12,6 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
@@ -154,15 +153,14 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
 
-	
-	public void setEntityStatusId(Long entityStatusId) {
+	public void setIdEntityStatus(Long idEntityStatus) {
 		this.entityStatus = new EntityStatus();
-		this.entityStatus.setId(entityStatusId);
+		this.entityStatus.setId(idEntityStatus);
 	}
 
-	public void setEntityTwoId(String entityTwoId) {
+	public void setIdEntityTwo(String idEntityTwo) {
 		this.entityTwo = new EntityTwo();
-		this.entityTwo.setId(entityTwoId);
+		this.entityTwo.setId(idEntityTwo);
 	}
 
 	@Override

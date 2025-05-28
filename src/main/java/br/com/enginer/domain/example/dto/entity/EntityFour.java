@@ -63,14 +63,14 @@ public class EntityFour extends DomainAbstract<String> {
 	@UIJoin(icon = "cloud")
 	private EntityFive entityFive;
 	
-	public void setEntityStatusId(Long entityStatusId) {
+	public void setIdEntityStatus(Long idEntityStatus) {
 		this.entityStatus = new EntityStatus();
-		this.entityStatus.setId(entityStatusId);
+		this.entityStatus.setId(idEntityStatus);
 	}
 
-	public void setEntityFiveId(UUID entityFiveId) {
+	public void setIdEntityFive(UUID idEntityFive) {
 		this.entityFive = new EntityFive();
-		this.entityFive.setId(entityFiveId);
+		this.entityFive.setId(idEntityFive);
 	}
 	
 	@Override

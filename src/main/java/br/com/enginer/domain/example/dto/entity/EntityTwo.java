@@ -58,14 +58,14 @@ public class EntityTwo extends DomainAbstract<String> {
 	@UIJoin(icon = "save")
 	private EntityTree entityTree;
 	
-	public void setEntityStatusId(Long entityStatusId) {
+	public void setIdEntityStatus(Long idEntityStatus) {
 		this.entityStatus = new EntityStatus();
-		this.entityStatus.setId(entityStatusId);
+		this.entityStatus.setId(idEntityStatus);
 	}
 
-	public void setEntityTreeId(String entityTreeId) {
+	public void setIdEntityTree(String idEntityTree) {
 		this.entityTree = new EntityTree();
-		this.entityTree.setId(entityTreeId);
+		this.entityTree.setId(idEntityTree);
 	}
 	
 	@Override
