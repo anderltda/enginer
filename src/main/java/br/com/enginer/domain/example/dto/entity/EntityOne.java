@@ -124,10 +124,14 @@ public class EntityOne extends DomainAbstract<Long> {
 	)
 	private String name;
 
-	@UIPosition(x = 1, y = 2)
+	@UIPosition(x = 2, y = 1)
 	@UIFieldValidation(required = false)
 	@UIFilter(label = "Entity Status", field = "name", readonly = false)
 	private EntityStatus entityStatus;
+	
+	@UIPosition(x = 1, y = 2)
+	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false)
+	private EntityNine entityNine;
 
 	@UIPosition(x = 2, y = 2)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false)
@@ -152,6 +156,36 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
+	
+	public void setIdEntityEight(Long idEntityEight) {
+		if(this.entityNine == null) {
+			this.entityNine = new EntityNine();
+			this.entityNine.setId(new EntityNineId());
+			this.entityNine.getId().setIdEntityEight(idEntityEight);
+		} else {
+			this.entityNine.getId().setIdEntityEight(idEntityEight);
+		}
+	}
+
+	public void setIdEntitySeven(Long idEntitySeven) {
+		if(this.entityNine == null) {
+			this.entityNine = new EntityNine();
+			this.entityNine.setId(new EntityNineId());
+			this.entityNine.getId().setIdEntitySeven(idEntitySeven);
+		} else {
+			this.entityNine.getId().setIdEntitySeven(idEntitySeven);
+		}
+	}
+
+	public void setIdEntitySix(Long idEntitySix) {
+		if(this.entityNine == null) {
+			this.entityNine = new EntityNine();
+			this.entityNine.setId(new EntityNineId());
+			this.entityNine.getId().setIdEntitySix(idEntitySix);
+		} else {
+			this.entityNine.getId().setIdEntitySix(idEntitySix);
+		}
+	}
 
 	public void setIdEntityStatus(Long idEntityStatus) {
 		this.entityStatus = new EntityStatus();
@@ -161,6 +195,11 @@ public class EntityOne extends DomainAbstract<Long> {
 	public void setIdEntityTwo(String idEntityTwo) {
 		this.entityTwo = new EntityTwo();
 		this.entityTwo.setId(idEntityTwo);
+	}
+	
+	public void setIdEntityNine(EntityNineId idEntityNine) {
+		this.entityNine = new EntityNine();
+		this.entityNine.setId(idEntityNine);
 	}
 
 	@Override
@@ -235,6 +274,14 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	public void setEntityTwo(EntityTwo entityTwo) {
 		this.entityTwo = entityTwo;
+	}
+	
+	public EntityNine getEntityNine() {
+		return entityNine;
+	}
+
+	public void setEntityNine(EntityNine entityNine) {
+		this.entityNine = entityNine;
 	}
 	
 	@Override

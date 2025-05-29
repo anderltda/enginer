@@ -1,5 +1,7 @@
 package br.com.enginer.domain.example.dto.entity;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
@@ -22,7 +24,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity Five")
+@UITitle("Entity Nine")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class,
 		UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class,
 		UIButtonSave.class }, value = { @UIButton(template = { TypeTemplate.FILTER,
@@ -35,10 +37,16 @@ public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	private EntityNineId id;
 
+	@UIPosition(x = 1, y = 1)
+	@UIText(label = "Key")
 	private String keyNine;
 
+	@UIPosition(x = 2, y = 1)
+	@UIText(label = "Code")
 	private String code;
 
+	@UIPosition(x = 3, y = 1)
+	@UIText(label = "Variable")
 	private String variable;
 
 	@Override
