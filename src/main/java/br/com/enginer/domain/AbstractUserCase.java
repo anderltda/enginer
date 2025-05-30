@@ -177,8 +177,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 *
 	 */
 	@Override
-	public Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, String method)
-			throws UncheckedException {
+	public Domain<?> buscarPorRegistroUnico(Domain<?> domain, Map<String, Object> filter, String method) throws UncheckedException {
 		return repositoryOutboundPort.findBySingle(domain, filter, method);
 	}
 
@@ -312,8 +311,23 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public void excluir(Domain<?> domain) throws UncheckedException {
-		if(domain.getId() != null) {
-			repositoryOutboundPort.delete(domain, domain.getId());
+
+		if (domain.getId() != null) {
+			
+			try {
+				
+				if (ReflectionUtils.isTypeId(domain.getId().getClass())) {
+					repositoryOutboundPort.delete(domain, domain.getId());
+				}
+				
+				ReflectionUtils.setId((DomainId) domain.getId());
+				//Map<String, Object> ids = ReflectionUtils.getCompositedKeyFields(domain_);
+				//repositoryOutboundPort.findByIdComposite(domain, ids);
+				//System.out.println((DomainId) domain.getId());
+				
+			} catch (Exception ex) {
+				throw new UncheckedException(ex.getMessage(), ex);
+			}
 		}
 	}
 

@@ -13,6 +13,8 @@ import br.com.enginer.infrastructure.adapter.outbound.repository.TypeRepository;
  * 
  */
 public interface RepositoryOutboundPort extends OutboundPort {
+	
+	public static final String findById = "findById";
 
 	public Domain<?> findById(Domain<?> domain, Object id) throws UncheckedException;
 	

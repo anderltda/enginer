@@ -1,11 +1,7 @@
 package br.com.enginer.infrastructure.configuration;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Map;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -76,86 +72,27 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 					throw new IllegalArgumentException("Classe " + clazz.getName() + " não pode ser instanciada diretamente.");
 				}
 
-				Constructor<?> constructor = clazz.getDeclaredConstructor();
-				constructor.setAccessible(true);
-				Domain<?> domain = (Domain<?>) constructor.newInstance();
+				Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(clazz);
 				
 				if (id != null && !id.isEmpty()) {
 					
 					if (domain instanceof DomainId) {
 						
-						extractKeyComposited(id, domain);
+						ReflectionUtils.extractKeyCompositedByQueryParameter(id, domain);
 						
 					} else {
 						
-						extractKey(id, clazz, domain);
+						ReflectionUtils.extractKeyByQueryParameter(id, clazz, domain);
 					}
 				}
 
-				Method setModalMethod = clazz.getMethod(StringsUtils.setMethod("modal"), Boolean.class);
-				setModalMethod.invoke(domain, isModal);
-				
-				Method setDisabledMethod = clazz.getMethod(StringsUtils.setMethod("disabled"), Boolean.class);
-				setDisabledMethod.invoke(domain, isDisabled);
+				ReflectionUtils.executeMethod(domain, StringsUtils.setMethod("modal"), isModal);
+				ReflectionUtils.executeMethod(domain, StringsUtils.setMethod("disabled"), isDisabled);
 
 				return domain;
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * @param rawId
-	 * @param clazz
-	 * @param domain
-	 * @throws Exception
-	 */
-	private void extractKey(String rawId, Class<?> clazz, Domain<?> domain) throws Exception {
-		
-		String fieldName = "id";
-
-		Field field = clazz.getDeclaredField(fieldName);
-
-		Class<?> type = field.getType();
-
-		if (DomainId.class.isAssignableFrom(type)) {
-
-			Domain<?> domainId = (Domain<?>) type.getDeclaredConstructor().newInstance();
-
-			ReflectionUtils.set(domain, StringsUtils.setMethod(fieldName), new Class<?>[] { domainId.getClass() }, new Object[] { domainId });
-			
-			extractKeyComposited(rawId, domainId);
-
-		} else if (ReflectionUtils.isTypeMatching(domain.getClass(), fieldName, rawId)) {
-
-			Method setIdMethod = clazz.getMethod(StringsUtils.setMethod(fieldName), type);
-
-			Object typedId = ReflectionUtils.extractedTypeValue(type, rawId);
-
-			setIdMethod.invoke(domain, typedId);
-
-		}
-	}
-
-	/**
-	 * @param rawId
-	 * @param domain
-	 */
-	private void extractKeyComposited(String rawId, Domain<?> domain) {
-		
-		Map<String, Object> ids = ReflectionUtils.parseQueryParams(rawId);
-		
-		ids.forEach((k, v) -> { 
-			try {
-				String key = k.substring(k.lastIndexOf(".") + 1);
-				Field field = domain.getClass().getDeclaredField(key);
-				Class<?> type = field.getType();
-				Object value = ReflectionUtils.extractedTypeValue(type, v);
-				ReflectionUtils.set(domain, StringsUtils.setMethod(key), new Class<?>[] { type }, new Object[] { value });
-			} catch (NoSuchFieldException | SecurityException ex) {
-				ex.printStackTrace();
-			}
-		});
 	}
 
 	/**

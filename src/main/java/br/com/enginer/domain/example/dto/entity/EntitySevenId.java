@@ -7,29 +7,23 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
-public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
-
-	@UIId
-	private Long idEntityEight;
-
+public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId {
+	
 	@UIId
 	private UUID idEntitySeven;
 
 	@UIId
 	private Long idEntitySix;
 	
-	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
-	private EntityEight entityEight;
+	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
+	private EntitySix entitySix;
 	
-	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
-	private EntitySeven entitySeven;
-	
-	public Long getIdEntityEight() {
-		return this.idEntityEight;
+	public EntitySix getEntitySix() {
+		return entitySix;
 	}
 
-	public void setIdEntityEight(Long idEntityEight) {
-		this.idEntityEight = idEntityEight;
+	public void setEntitySix(EntitySix entitySix) {
+		this.entitySix = entitySix;
 	}
 
 	public UUID getIdEntitySeven() {
@@ -47,22 +41,6 @@ public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 	public void setIdEntitySix(Long idEntitySix) {
 		this.idEntitySix = idEntitySix;
 	}
-	
-	public EntityEight getEntityEight() {
-		return entityEight;
-	}
-
-	public void setEntityEight(EntityEight entityEight) {
-		this.entityEight = entityEight;
-	}
-
-	public EntitySeven getEntitySeven() {
-		return entitySeven;
-	}
-
-	public void setEntitySeven(EntitySeven entitySeven) {
-		this.entitySeven = entitySeven;
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -70,20 +48,19 @@ public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		EntityNineId that = (EntityNineId) o;
+		EntitySevenId that = (EntitySevenId) o;
 		return java.util.Objects.equals(idEntitySeven, that.idEntitySeven)
-				&& java.util.Objects.equals(idEntitySix, that.idEntitySix)
-				&& java.util.Objects.equals(idEntityEight, that.idEntityEight);
+				&& java.util.Objects.equals(idEntitySix, that.idEntitySix);
 	}
 
 	@Override
 	public int hashCode() {
-		return java.util.Objects.hash(idEntitySeven, idEntitySix, idEntityEight);
+		return java.util.Objects.hash(idEntitySeven, idEntitySix);
 	}
-
+	
 	@Override
 	public Object[] getId() {
-		return null;
+		return new Object[] { idEntitySeven, idEntitySix };
 	}
 
 	@Override

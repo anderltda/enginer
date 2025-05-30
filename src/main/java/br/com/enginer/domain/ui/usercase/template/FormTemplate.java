@@ -17,6 +17,7 @@ import java.util.Map;
 
 import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
@@ -99,6 +100,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseError;
 import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.schema.instance.Button;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 import br.com.enginer.domain.ui.usercase.schema.paginator.Paginator;
 import br.com.enginer.domain.ui.usercase.schema.paginator.column.Column;
 import br.com.enginer.domain.ui.usercase.schema.paginator.config.Config;
@@ -568,18 +570,28 @@ public final class FormTemplate {
 
 	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
-		Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
-
-		Filter filter = default_.getFilter(f.getType().getSimpleName());
+		Class<?> typeClass = f.getType();
+		
+		Filter filter = default_.getFilter(typeClass.getSimpleName());
 		
 		if(filter.getValue() != null) {
+			
 			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(f.getType(), userCase.getRepositoryOutboundPort());
-			Domain<?> domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, filter.getValue());
-			filter.setValue(domainValue);
-		}
+			
+			Domain<?> value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, filter.getValue());
+			
+			filter.setValue(value);
+			
+		} else if(domain instanceof DomainId) {
+			
+			Domain<?> value = getDomainValue(typeClass, (DomainId) domain);
+
+			filter.setValue(value);
+		}  
 		
 		if (uiFilter.select()) {
-			Object provider = f.getType().getDeclaredConstructor().newInstance();
+			Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
+			Object provider = ReflectionUtils.newInstance(f.getType());
 			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, ActionUserCase.buscarTodos, provider, filters);
 			filter.setOptions(options);
 		}
@@ -588,6 +600,38 @@ public final class FormTemplate {
 		
 		return filter;
 	}
+
+	private static Domain<?> getDomainValue(Class<?> typeClass, DomainId domainId) throws Exception {
+		
+		Domain<?> domainValue  = null;
+		
+		Class<?> typeId = ReflectionUtils.getTypeFieldClass(typeClass, "id");
+		
+		if(ReflectionUtils.isIdComposedType(typeId)) {
+			
+			Domain<?> domain = ReflectionUtils.setKeyCompositedByDomain(typeClass, domainId);
+			
+			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(domain.getClass(), userCase.getRepositoryOutboundPort());
+			
+			domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, domain);
+			
+		} else {
+			
+			Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(typeClass);
+
+			String field = "id".concat(typeClass.getSimpleName());
+			
+			Object id = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field));
+			
+			if(id != null) {
+				domainValue = (Domain<?>) ReflectionUtils.executeMethod(userCase.getRepositoryOutboundPort(), RepositoryOutboundPort.findById, domain, id);
+			}
+			
+		}
+		
+		return domainValue;
+	}
+
 
 	private static Area getTextArea(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Area textarea = default_.getTextarea();

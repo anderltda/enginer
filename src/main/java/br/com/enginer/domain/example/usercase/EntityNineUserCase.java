@@ -42,4 +42,13 @@ public class EntityNineUserCase extends AbstractUserCase {
 		// TODO Auto-generated method stub
 		return super.form(domain);
 	}
+	
+	@Override
+	public Domain<?> salvar(Domain<?> domain) throws UncheckedException {
+		EntityNine entityNine = (EntityNine) domain;
+		entityNine.getId().setIdEntityEight(entityNine.getId().getEntityEight().getId());
+		entityNine.getId().setIdEntitySeven(entityNine.getId().getEntitySeven().getId().getIdEntitySeven());
+		entityNine.getId().setIdEntitySix(entityNine.getId().getEntitySeven().getId().getIdEntitySix());
+		return super.salvar(entityNine);
+	}
 }

@@ -1,5 +1,7 @@
 package br.com.enginer.domain.example.usercase;
 
+import java.util.UUID;
+
 import br.com.enginer.domain.AbstractUserCase;
 import br.com.enginer.domain.example.dto.entity.EntityNineId;
 import br.com.enginer.domain.example.dto.entity.EntityFive;
@@ -22,7 +24,7 @@ public class EntityFiveUserCase extends AbstractUserCase {
 		EntityNine entityNine = new EntityNine();
 		EntityNineId entityNineId = new EntityNineId();
 		entityNineId.setIdEntityEight(1l);
-		entityNineId.setIdEntitySeven(1l);
+		entityNineId.setIdEntitySeven(UUID.randomUUID());
 		entityNineId.setIdEntitySix(1l);
 		entityNine.setId(entityNineId);
 		

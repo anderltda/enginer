@@ -2,6 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
@@ -167,7 +168,7 @@ public class EntityOne extends DomainAbstract<Long> {
 		}
 	}
 
-	public void setIdEntitySeven(Long idEntitySeven) {
+	public void setIdEntitySeven(UUID idEntitySeven) {
 		if(this.entityNine == null) {
 			this.entityNine = new EntityNine();
 			this.entityNine.setId(new EntityNineId());

@@ -19,6 +19,8 @@ import java.util.UUID;
 
 import br.com.enginer.domain.OutboundPort;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
+import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
+import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
 public class ReflectionUtils {
 
@@ -127,8 +129,8 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static boolean isIdComposedType(Class<?> clazz) {
-		return (!clazz.isPrimitive() || !clazz.getName().startsWith("java.lang") || !clazz.equals(LocalDate.class)
-				|| !clazz.equals(LocalDateTime.class)) || clazz.equals(Id.class) || classIsIdType(clazz);
+		return (!clazz.isPrimitive() && !clazz.getName().startsWith("java.lang") && !clazz.equals(LocalDate.class)
+				&& !clazz.equals(LocalDateTime.class)) && classIsIdType(clazz);
 	}
 
 	/**
@@ -559,5 +561,108 @@ public class ReflectionUtils {
 		Field idField = clazz.getDeclaredField(field);
 		Class<?> type = idField.getType();
 		return type;
+	}
+	
+	/**
+	 * @param query
+	 * @param domain
+	 */
+	public static void extractKeyCompositedByQueryParameter(String query, Domain<?> domain) {
+		
+		Map<String, Object> ids = ReflectionUtils.parseQueryParams(query);
+		
+		ids.forEach((k, v) -> { 
+			
+			try {
+				
+				String key = k.substring(k.lastIndexOf(".") + 1);
+				
+				Field field = domain.getClass().getDeclaredField(key);
+				
+				Class<?> type = field.getType();
+				
+				Object value = ReflectionUtils.extractedTypeValue(type, v);
+				
+				ReflectionUtils.set(domain, StringsUtils.setMethod(key), new Class<?>[] { type }, new Object[] { value });
+				
+			} catch (NoSuchFieldException | SecurityException ex) {
+				ex.printStackTrace();
+			}
+		});
+	}
+	
+	/**
+	 * @param rawId
+	 * @param clazz
+	 * @param domain
+	 * @throws Exception
+	 */
+	public static void extractKeyByQueryParameter(String rawId, Class<?> clazz, Domain<?> domain) throws Exception {
+		
+		String fieldName = "id";
+
+		Field field = clazz.getDeclaredField(fieldName);
+
+		Class<?> type = field.getType();
+
+		if (DomainId.class.isAssignableFrom(type)) {
+
+			Domain<?> domainId = (Domain<?>) type.getDeclaredConstructor().newInstance();
+
+			ReflectionUtils.extractKeyCompositedByQueryParameter(rawId, domainId);
+
+			ReflectionUtils.executeMethod(domain, StringsUtils.setMethod(fieldName), domainId);
+
+		} else if (ReflectionUtils.isTypeMatching(domain.getClass(), fieldName, rawId)) {
+
+			Object id = ReflectionUtils.extractedTypeValue(type, rawId);
+
+			ReflectionUtils.executeMethod(domain, StringsUtils.setMethod(fieldName), id);
+
+		}
+	}
+	
+	/**
+	 * @param clazzDomain
+	 * @param domainId
+	 * @return
+	 * @throws Exception
+	 */
+	public static Domain<?> setKeyCompositedByDomain(Class<?> clazzDomain, DomainId domainId) throws Exception {
+		
+		Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
+		
+		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain.getClass(), "id");
+		
+		DomainId domainEmbeddedId = (DomainId) ReflectionUtils.newInstance(typeId);
+		
+		for (Field field : domainId.getClass().getDeclaredFields()) {
+			
+			field.setAccessible(true);
+			
+			Object object = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field.getName()));
+			
+			if(object != null) {
+				executeMethod(domainEmbeddedId, StringsUtils.setMethod(field.getName()), object);
+			}
+		}
+		
+
+		executeMethod(domain, StringsUtils.setMethod("id"), domainEmbeddedId);
+		
+		return domain;
+	}
+	
+	public static void setId(DomainId domainId) throws Exception {
+		
+		for (Field field : domainId.getClass().getDeclaredFields()) {
+			
+			Object object = executeMethod(domainId, StringsUtils.getMethod(field.getName()));
+
+			if(object != null) {
+				System.out.println(field.getName() + "=" + executeMethod(object, StringsUtils.getMethod("id")));
+			}
+		}
+		
 	}
 }
