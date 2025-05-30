@@ -58,7 +58,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Entity One")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNext.class, UIButtonNew.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 	value = {
-			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false,     action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_ADD_NEW, param = "{ disabled=false }"))),
+			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false,     action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_ADD_NEW, param = "{ disabled=false }"))),
 			@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 		})
 @UIPaginator(
@@ -70,13 +70,13 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				label = "Visualizar detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_FIND_BY_ID, param = "{ disabled=true }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, param = "{ disabled=true }"))
     		),	
     		@UIButton(
     				label = "Editar detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = true, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_TAB_FIND_BY_ID, param = "{ disabled=false }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, param = "{ disabled=false }"))
     		),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
