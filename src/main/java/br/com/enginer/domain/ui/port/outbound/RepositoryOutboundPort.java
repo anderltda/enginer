@@ -42,9 +42,9 @@ public interface RepositoryOutboundPort extends OutboundPort {
 
 	public boolean existsById(Domain<?> domain, Object id) throws UncheckedException;
 	
-	public void delete(Domain<?> domain, List<?> ids) throws UncheckedException;
+	public void delete(Domain<?> domain, Object id) throws UncheckedException;
 	
-	public void delete(Domain<?> domain, Object... ids) throws UncheckedException;
+	public void delete(Domain<?> domain, Map<String, Object> ids) throws UncheckedException;
 	
 	public Domain<?> save(Domain<?> domain, Boolean... flush) throws UncheckedException;
 	

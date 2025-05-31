@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import br.com.enginer.domain.OutboundPort;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
@@ -624,45 +625,65 @@ public class ReflectionUtils {
 	
 	/**
 	 * @param clazzDomain
-	 * @param domainId
+	 * @param domain
 	 * @return
 	 * @throws Exception
 	 */
-	public static Domain<?> setKeyCompositedByDomain(Class<?> clazzDomain, DomainId domainId) throws Exception {
+	public static Domain<?> setKeyCompositedByDomain(Class<?> clazzDomain, Domain<?> domain) throws Exception {
 		
-		Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
+		Domain<?> domain_ = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
 		
-		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain.getClass(), "id");
+		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain_.getClass(), "id");
 		
-		DomainId domainEmbeddedId = (DomainId) ReflectionUtils.newInstance(typeId);
+		Domain<?> domainEmbeddedId = (Domain<?>) ReflectionUtils.newInstance(typeId);
 		
-		for (Field field : domainId.getClass().getDeclaredFields()) {
+		for (Field field : domainEmbeddedId.getClass().getDeclaredFields()) {
 			
 			field.setAccessible(true);
 			
-			Object object = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field.getName()));
+			Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
 			
 			if(object != null) {
 				executeMethod(domainEmbeddedId, StringsUtils.setMethod(field.getName()), object);
 			}
 		}
 		
-
-		executeMethod(domain, StringsUtils.setMethod("id"), domainEmbeddedId);
+		executeMethod(domain_, StringsUtils.setMethod("id"), domainEmbeddedId);
 		
-		return domain;
+		return domain_;
 	}
 	
-	public static void setId(DomainId domainId) throws Exception {
+	/**
+	 * @param domainId
+	 * @return
+	 * @throws Exception
+	 */
+	public static Map<String, Object> getIdDomainId(DomainId domainId) throws Exception {
+		
+		Map<String, Object> ids = new HashMap<>();
 		
 		for (Field field : domainId.getClass().getDeclaredFields()) {
-			
-			Object object = executeMethod(domainId, StringsUtils.getMethod(field.getName()));
+				
+			if(field.getName().startsWith("id")) {
 
-			if(object != null) {
-				System.out.println(field.getName() + "=" + executeMethod(object, StringsUtils.getMethod("id")));
+				Object object = executeMethod(domainId, StringsUtils.getMethod(field.getName()));
+				
+				if(object != null) {
+					ids.put(field.getName(), object);
+				}
 			}
 		}
-		
+		return ids;
+	}
+	
+	/**
+	 * @param idMap
+	 * @return
+	 */
+	public static String encodeId(Map<String, Object> idMap) {
+	    return idMap.entrySet().stream()
+	        .filter(entry -> entry.getValue() != null)
+	        .map(entry -> entry.getKey() + "=" + entry.getValue())
+	        .collect(Collectors.joining("&"));
 	}
 }

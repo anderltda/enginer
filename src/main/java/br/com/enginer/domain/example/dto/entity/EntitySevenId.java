@@ -2,7 +2,6 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.util.UUID;
 
-import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
@@ -15,7 +14,7 @@ public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId 
 	@UIId
 	private Long idEntitySix;
 	
-	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
+	@UIId
 	private EntitySix entitySix;
 	
 	public EntitySix getEntitySix() {
@@ -60,7 +59,8 @@ public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId 
 	
 	@Override
 	public Object[] getId() {
-		return new Object[] { idEntitySeven, idEntitySix };
+		//return new Object[] { idEntitySeven, idEntitySix };
+		return null;
 	}
 
 	@Override

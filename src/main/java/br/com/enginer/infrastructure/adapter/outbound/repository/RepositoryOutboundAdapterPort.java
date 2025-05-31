@@ -550,25 +550,47 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public void delete(Domain<?> domain, List<?> ids) throws UncheckedException {
-		delete(domain, ids.toArray());
-	}
+	public void delete(Domain<?> domain, Object id) throws UncheckedException {
 
+		try {
+
+			String uri = UriUtils.buildUriId(domain);
+
+			getWebClient()
+				.delete()
+				.uri(uri, id)
+				.retrieve()
+				.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
+				.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
+				.toBodilessEntity()
+				.block();
+
+		} catch (CheckedException ex) {
+			logger.error(RepositoryOutboundAdapterPort.class, "[CheckedException] " + ex.getMessage(), ex);
+			throw ex;
+		} catch (WebClientResponseException ex) {
+			logger.error(RepositoryOutboundAdapterPort.class, "[WebClientResponseException] - " + ex.getStatusText(),
+					ex);
+			throw new UncheckedException("[WebClientResponseException]", ex);
+		} catch (Exception ex) {
+			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
+			throw new UncheckedException("[Erro inesperado]", ex);
+		}
+	}
+	
 	/**
 	 *
 	 */
 	@Override
-	public void delete(Domain<?> domain, Object... ids) throws UncheckedException {
+	public void delete(Domain<?> domain, Map<String, Object> ids) throws UncheckedException {
 		
 		try {
-			
-			String uri = File.separator + domain.getClass().getSimpleName();
 
-			WebClient.RequestHeadersUriSpec<?> request = getWebClient().delete();
+			String uri = UriUtils.buildUriIdComposite(domain);
 
-			WebClient.RequestHeadersSpec<?> requestSpec = (ids == null || ids.length == 0) ? request.uri(uri) : request.uri(builder -> builder.path(uri).queryParam("id", ids).build());
-
-			requestSpec
+			getWebClient()
+				.delete()
+				.uri(UriUtils.buildUriWithQueryParams(uri, ids))
 				.retrieve()
 				.onStatus(HttpStatusCode::is4xxClientError, GlobalWebClientErrorHandler::handle4xxError)
 				.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
@@ -584,7 +606,7 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 		} catch (Exception ex) {
 			logger.error(RepositoryOutboundAdapterPort.class, "[Erro inesperado] - " + ex.getMessage(), ex);
 			throw new UncheckedException("[Erro inesperado]", ex);
-		}		
+		}
 	}
 
 	/**

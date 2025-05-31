@@ -212,6 +212,16 @@ public final class FormTemplate {
 
 							identity = true;
 
+						} else if (annotation instanceof UIHidden uiHidden) {
+
+							boolean containsTemplate = checkTemplate(uiHidden);
+
+							if (containsTemplate) {
+								field.setHidden(getHidden(f, default_, annotations));
+							}
+
+							identity = true;
+
 						} else if (domain.getId() != null && annotation instanceof UIHidden uiHidden) {
 
 							boolean containsTemplate = checkTemplate(uiHidden);
@@ -572,20 +582,20 @@ public final class FormTemplate {
 
 		Class<?> typeClass = f.getType();
 		
+		Domain<?> typeClassDomain = (Domain<?>) ReflectionUtils.newInstance(typeClass);
+		
 		Filter filter = default_.getFilter(typeClass.getSimpleName());
 		
-		if(filter.getValue() != null) {
+		if(domain instanceof DomainId) {
 			
-			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(f.getType(), userCase.getRepositoryOutboundPort());
-			
-			Domain<?> value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, filter.getValue());
-			
+			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
+
 			filter.setValue(value);
 			
-		} else if(domain instanceof DomainId) {
-			
-			Domain<?> value = getDomainValue(typeClass, (DomainId) domain);
+		} else if(typeClassDomain instanceof Domain) {
 
+			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
+			
 			filter.setValue(value);
 		}  
 		
@@ -601,7 +611,7 @@ public final class FormTemplate {
 		return filter;
 	}
 
-	private static Domain<?> getDomainValue(Class<?> typeClass, DomainId domainId) throws Exception {
+	private static Domain<?> getDomainValueByDomainId(Class<?> typeClass, Domain<?> domain) throws Exception {
 		
 		Domain<?> domainValue  = null;
 		
@@ -609,29 +619,28 @@ public final class FormTemplate {
 		
 		if(ReflectionUtils.isIdComposedType(typeId)) {
 			
-			Domain<?> domain = ReflectionUtils.setKeyCompositedByDomain(typeClass, domainId);
+			Domain<?> domain_ = ReflectionUtils.setKeyCompositedByDomain(typeClass, domain);
 			
-			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(domain.getClass(), userCase.getRepositoryOutboundPort());
+			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(domain_.getClass(), userCase.getRepositoryOutboundPort());
 			
-			domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, domain);
+			domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, domain_);
 			
 		} else {
 			
-			Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(typeClass);
+			Domain<?> domain_ = (Domain<?>) ReflectionUtils.newInstance(typeClass);
 
 			String field = "id".concat(typeClass.getSimpleName());
 			
-			Object id = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field));
+			Object id = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field));
 			
 			if(id != null) {
-				domainValue = (Domain<?>) ReflectionUtils.executeMethod(userCase.getRepositoryOutboundPort(), RepositoryOutboundPort.findById, domain, id);
+				domainValue = (Domain<?>) ReflectionUtils.executeMethod(userCase.getRepositoryOutboundPort(), RepositoryOutboundPort.findById, domain_, id);
 			}
 			
 		}
 		
 		return domainValue;
 	}
-
 
 	private static Area getTextArea(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
 		Area textarea = default_.getTextarea();
@@ -987,6 +996,7 @@ public final class FormTemplate {
 		if (uiAction.redirect() instanceof UIActionRedirect uiActionRedirect) {
 			containsTemplate = checkTemplate(uiActionRedirect);
 			if (containsTemplate) {
+				action.setUi(uiActionRedirect.ui());
 				action.setRedirect(uiActionRedirect.value());
 				action.setParam(uiActionRedirect.param());
 			}

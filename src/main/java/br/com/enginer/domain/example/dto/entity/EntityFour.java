@@ -39,10 +39,10 @@ value = {
 	@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }
 )
-public class EntityFour extends DomainAbstract<String> {
+public class EntityFour extends DomainAbstract<UUID> {
 
 	@UIId
-	private String id;
+	private UUID id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
@@ -74,12 +74,12 @@ public class EntityFour extends DomainAbstract<String> {
 	}
 	
 	@Override
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

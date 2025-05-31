@@ -5,12 +5,21 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
  */
 public class Action {
 
+	private String ui;
 	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
 	private String param;
 	private ActionObject domain;
 	private ActionResponse response;
+	
+	public String getUi() {
+		return ui;
+	}
+
+	public void setUi(String ui) {
+		this.ui = ui;
+	}
 
 	public String getRedirect() {
 		return redirect;

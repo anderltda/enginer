@@ -1,6 +1,7 @@
 package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
@@ -35,10 +36,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 	}
 )
-public class EntityTwo extends DomainAbstract<String> {
+public class EntityTwo extends DomainAbstract<UUID> {
 
 	@UIId
-	private String id;
+	private UUID id;
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
 	private String color;
@@ -63,18 +64,18 @@ public class EntityTwo extends DomainAbstract<String> {
 		this.entityStatus.setId(idEntityStatus);
 	}
 
-	public void setIdEntityTree(String idEntityTree) {
+	public void setIdEntityTree(UUID idEntityTree) {
 		this.entityTree = new EntityTree();
 		this.entityTree.setId(idEntityTree);
 	}
 	
 	@Override
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 

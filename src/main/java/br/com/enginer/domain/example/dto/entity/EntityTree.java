@@ -2,6 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
@@ -38,10 +39,10 @@ value = {
 	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 }
 )
-public class EntityTree extends DomainAbstract<String> {
+public class EntityTree extends DomainAbstract<UUID> {
 
 	@UIId
-	private String id;
+	private UUID id;
 	
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
@@ -76,18 +77,18 @@ public class EntityTree extends DomainAbstract<String> {
 		this.entityStatus.setId(idEntityStatus);
 	}
 
-	public void setIdEntityFour(String idEntityFour) {
+	public void setIdEntityFour(UUID idEntityFour) {
 		this.entityFour = new EntityFour();
 		this.entityFour.setId(idEntityFour);
 	}
 	
 	@Override
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 
 	@Override
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	
