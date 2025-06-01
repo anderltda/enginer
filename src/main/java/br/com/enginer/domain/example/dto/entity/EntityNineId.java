@@ -3,26 +3,26 @@ package br.com.enginer.domain.example.dto.entity;
 import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
 public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 
-	@UIId
+	@UIIgnore
 	private Long idEntityEight;
 
-	@UIId
+	@UIIgnore
 	private UUID idEntitySeven;
 
-	@UIId
+	@UIIgnore
 	private Long idEntitySix;
-	
-	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
-	private EntityEight entityEight;
 	
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	private EntitySeven entitySeven;
+
+	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
+	private EntityEight entityEight;
 	
 	public Long getIdEntityEight() {
 		return this.idEntityEight;

@@ -12,8 +12,9 @@ public class EntitySevenUserCase extends AbstractUserCase {
 	@Override
 	public Domain<?> salvar(Domain<?> domain) throws UncheckedException {
 		EntitySeven entitySeven = (EntitySeven) domain;
-		entitySeven.getId().setIdEntitySeven(UUID.randomUUID());
-		entitySeven.getId().setIdEntitySix(entitySeven.getId().getEntitySix().getId());
+		if(entitySeven.getId().getIdEntitySeven() == null) {
+			entitySeven.getId().setIdEntitySeven(UUID.randomUUID());
+		}
 		return super.salvar(entitySeven);
 	}
 }

@@ -56,9 +56,18 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity One")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNext.class, UIButtonNew.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UIButtonAction(includes = { 
+		UIButtonBack.class, 
+		UIButtonClear.class, 
+		UIButtonNext.class, 
+		UIButtonNew.class, 
+		UIButtonEdit.class, 
+		UIButtonDelete.class, 
+		UIButtonSearch.class, 
+		UIButtonSave.class 
+}, 
 	value = {
-			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false,     action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_ADD_NEW, ui = "tab", param = "{ disabled=false }"))),
+			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", param = "{ disabled=false }"))),
 			@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 		})
 @UIPaginator(

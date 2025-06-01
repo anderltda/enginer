@@ -173,7 +173,7 @@ public class ActionInboundAdapterPort {
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
 			
-			JsonNode normalizedNode = NormalizeUtils.normalizeIdFieldNames(json);
+			JsonNode normalizedNode = NormalizeUtils.normalizer(json);
 			
 			logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
 
@@ -190,5 +190,4 @@ public class ActionInboundAdapterPort {
 			throw ex;
 		}
 	}
-
 }

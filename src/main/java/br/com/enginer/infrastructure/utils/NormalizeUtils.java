@@ -7,6 +7,9 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +68,7 @@ public class NormalizeUtils {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Object extractValueFromJson(Field field, JsonNode jsonNode) {
 		String fieldName = field.getName();
 		Class<?> fieldType = field.getType();
@@ -159,22 +162,92 @@ public class NormalizeUtils {
 	}
 
 	/**
-	 * @param originalNode
-	 * @return
-	 */
-	public static JsonNode normalizeIdFieldNames(JsonNode originalNode) {
-	    ObjectNode result = JsonNodeFactory.instance.objectNode();
-	    originalNode.fields().forEachRemaining(entry -> {
-	        String fieldName = entry.getKey();
-	        JsonNode value = entry.getValue();
-	        String newFieldName = fieldName.endsWith("Id") && fieldName.length() > 2 ? "id" : fieldName;
-	        if (value.isObject()) {
-	            result.set(newFieldName, normalizeIdFieldNames(value));
-	        } else {
-	            result.set(newFieldName, value);
-	        }
-	    });
+     * Ajusta o JSON: localiza o nó que termina com "Id", extrai e normaliza os campos de chave composta
+     * e move-os para um novo nó chamado "id", sobrescrevendo repetições com a última ocorrência.
+     */
+    public static JsonNode normalizer(JsonNode jsonNode) {
+        if (jsonNode != null && jsonNode.isObject()) {
+            adjust((ObjectNode) jsonNode);
+        }
+        return jsonNode;
+    }
 
-	    return result;
-	}
+    private static void adjust(ObjectNode root) {
+        String idFieldName = findCompositeIdFieldName(root);
+        if (idFieldName == null) return;
+
+        JsonNode originalIdNode = root.get(idFieldName);
+        ObjectNode normalizedIdNode = (ObjectNode) normalizeIdFieldNames(idFieldName, originalIdNode);
+
+        Map<String, Object> compositeKey = new LinkedHashMap<>();
+        findIdFields(normalizedIdNode, compositeKey); // sobrescreve com última ocorrência
+
+        ObjectNode newIdNode = JsonNodeFactory.instance.objectNode();
+        compositeKey.forEach(newIdNode::putPOJO);
+
+        root.remove(idFieldName);
+        root.set("id", newIdNode);
+    }
+
+    private static String findCompositeIdFieldName(ObjectNode root) {
+        for (Iterator<String> it = root.fieldNames(); it.hasNext(); ) {
+            String field = it.next();
+            if (field.endsWith("Id") && root.get(field).isObject()) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    private static JsonNode normalizeIdFieldNames(String parentName, JsonNode originalNode) {
+        ObjectNode result = JsonNodeFactory.instance.objectNode();
+        List<Map.Entry<String, JsonNode>> reversedEntries = new ArrayList<>();
+        originalNode.fields().forEachRemaining(reversedEntries::add);
+        Collections.reverse(reversedEntries);
+
+        for (Map.Entry<String, JsonNode> entry : reversedEntries) {
+            String fieldName = entry.getKey();
+            JsonNode value = entry.getValue();
+
+            if (value.isObject()) {
+                JsonNode child = normalizeIdFieldNames(fieldName, value);
+
+                if (child.has("id") && fieldName != null) {
+                    JsonNode idValue = child.get("id");
+                    String renamedKey = "id" + StringsUtils.capitalize(fieldName);
+                    result.set(renamedKey, idValue);
+
+                    child.fields().forEachRemaining(subEntry -> {
+                        if (!subEntry.getKey().equals("id")) {
+                            result.set(subEntry.getKey(), subEntry.getValue());
+                        }
+                    });
+                } else {
+                    result.set(fieldName, child);
+                }
+
+            } else {
+                result.set(fieldName, value);
+            }
+        }
+
+        return result;
+    }
+
+    private static void findIdFields(JsonNode node, Map<String, Object> result) {
+        if (!node.isObject()) return;
+
+        node.fields().forEachRemaining(entry -> {
+            String key = entry.getKey();
+            JsonNode value = entry.getValue();
+
+            if (key.startsWith("id") && !value.isObject()) {
+                if (value.isNumber()) result.put(key, value.numberValue());
+                else if (value.isTextual()) result.put(key, value.textValue());
+                else result.put(key, value.toString());
+            } else if (value.isObject()) {
+                findIdFields(value, result);
+            }
+        });
+    }
 }

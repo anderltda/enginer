@@ -2,19 +2,21 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.util.UUID;
 
-import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
 public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId {
 	
-	@UIId
+	@UIHidden
 	private UUID idEntitySeven;
 
-	@UIId
+	@UIIgnore
 	private Long idEntitySix;
 	
-	@UIId
+	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
 	private EntitySix entitySix;
 	
 	public EntitySix getEntitySix() {

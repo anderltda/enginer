@@ -2,9 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -21,6 +19,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Entity Six")
@@ -45,11 +44,11 @@ public class EntitySix extends DomainAbstract<Long> {
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
+	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT, showtime = true)
 	private LocalDate startDate;
 
 	@UIPosition(x = 2, y = 2)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
+	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT, showtime = true)
 	private LocalDate stopDate;
 
 	@Override

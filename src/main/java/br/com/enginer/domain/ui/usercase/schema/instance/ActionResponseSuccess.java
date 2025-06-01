@@ -6,6 +6,8 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 public class ActionResponseSuccess {
 
 	private String redirect;
+	private String ui;
+	private String param;
 	private String clientMethod;
 	private String serverMethod;
 
@@ -15,6 +17,22 @@ public class ActionResponseSuccess {
 
 	public void setRedirect(String redirect) {
 		this.redirect = redirect;
+	}
+
+	public String getUi() {
+		return ui;
+	}
+
+	public void setUi(String ui) {
+		this.ui = ui;
+	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
 	}
 
 	public String getClientMethod() {
@@ -32,4 +50,5 @@ public class ActionResponseSuccess {
 	public void setServerMethod(String serverMethod) {
 		this.serverMethod = serverMethod;
 	}
+
 }

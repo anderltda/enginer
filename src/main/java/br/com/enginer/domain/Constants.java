@@ -39,8 +39,8 @@ public class Constants {
 	/**
 	 * URL(s) dinamicas
 	 */
-	public static final String PATH_FIND_BY_ID = "/$module/$ui/$domain/$id";
-	public static final String PATH_ADD_NEW = "/$module/$ui/$domain";
+	public static final String PATH = "/$module/$ui/$domain";
+	public static final String PATH_FIND_BY_ID = PATH + "/$id";
 	
 	/**
 	 * Label dos buttons estaticos

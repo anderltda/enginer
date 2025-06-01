@@ -3,8 +3,8 @@ package br.com.enginer.domain.example.dto.entity;
 import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
@@ -50,10 +50,10 @@ public class EntityEight extends DomainAbstract<Long> {
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	private EntitySeven entitySeven;
 	
-	@UIHidden
+	@UIIgnore
 	private UUID idEntitySeven;
 	
-	@UIHidden
+	@UIIgnore
 	private Long idEntitySix;
 
 	@Override

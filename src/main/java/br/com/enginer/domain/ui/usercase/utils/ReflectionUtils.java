@@ -686,4 +686,26 @@ public class ReflectionUtils {
 	        .map(entry -> entry.getKey() + "=" + entry.getValue())
 	        .collect(Collectors.joining("&"));
 	}
+	
+	/**
+	 * @param clazzDomain
+	 * @param domain
+	 * @return
+	 * @throws Exception
+	 */
+	public static Boolean isIdNullKeyCompositedByDomain(Class<?> clazzDomain, Domain<?> domain) throws Exception {
+		
+		Domain<?> domainId = (Domain<?>)newInstance(clazzDomain);
+		
+		for (Field field : domainId.getClass().getDeclaredFields()) {
+			if(field.getName().startsWith("id")) {
+				Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
+				if(object == null) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }

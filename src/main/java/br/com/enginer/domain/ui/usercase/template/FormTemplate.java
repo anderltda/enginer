@@ -26,6 +26,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIFile;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIPassword;
@@ -145,6 +146,7 @@ public final class FormTemplate {
 		annotationMap.put(UIFilter.class, UIFilter.class);
 		annotationMap.put(UIJoin.class, UIJoin.class);
 		annotationMap.put(UIHidden.class, UIHidden.class);
+		annotationMap.put(UIIgnore.class, UIIgnore.class);
 
 		annotationMap.put(UIPosition.class, UIPosition.class);
 		annotationMap.put(UIAutoComplete.class, UIAutoComplete.class);
@@ -213,16 +215,6 @@ public final class FormTemplate {
 							identity = true;
 
 						} else if (annotation instanceof UIHidden uiHidden) {
-
-							boolean containsTemplate = checkTemplate(uiHidden);
-
-							if (containsTemplate) {
-								field.setHidden(getHidden(f, default_, annotations));
-							}
-
-							identity = true;
-
-						} else if (domain.getId() != null && annotation instanceof UIHidden uiHidden) {
 
 							boolean containsTemplate = checkTemplate(uiHidden);
 
@@ -396,6 +388,8 @@ public final class FormTemplate {
 
 							identity = true;
 
+						}  else if (annotation instanceof UIIgnore) {
+							identity = true;
 						}
 					}
 				}
@@ -586,14 +580,15 @@ public final class FormTemplate {
 		
 		Filter filter = default_.getFilter(typeClass.getSimpleName());
 		
-		if(domain instanceof DomainId) {
+		if(domain instanceof DomainId) { // Essa condicao is true quando o domain é um id de uma entidade
 			
 			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
 
 			filter.setValue(value);
 			
-		} else if(typeClassDomain instanceof Domain) {
-
+		} else if(typeClassDomain instanceof Domain) { // Essa condicao is true quando o domain nao é id de uma entidade
+			
+			
 			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
 			
 			filter.setValue(value);
@@ -904,7 +899,7 @@ public final class FormTemplate {
 		return title;
 	}
 
-	private static List<Button> getButton(Domain<?> domain) {
+	private static List<Button> getButton(Domain<?> domain) throws Exception {
 
 		List<Button> buttons = null;
 
@@ -931,12 +926,24 @@ public final class FormTemplate {
 						continue;
 					}
 					
-					if (uiButton.label().equals(Constants.LABEL_DELETE) && domain.getId() == null) {
-						continue;
+					if (uiButton.label().equals(Constants.LABEL_DELETE)) {
+						if (domain.getId() != null) {
+							Class<?> type = domain.getId().getClass();
+							if(ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
+								continue;
+							}
+						} else if (domain.getId() == null) {
+							continue;
+						}
 					}
 					
 					if (uiButton.label().equals(Constants.LABEL_CLEAR) && domain.getId() != null) {
-						continue;
+						Class<?> type = domain.getId().getClass();
+						if(!ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
+							continue;
+						} else {
+							continue;
+						}
 					}
 					
 					if (mapTypeTemplates.get(TypeTemplate.MODAL)) {
@@ -1036,6 +1043,8 @@ public final class FormTemplate {
 					containsTemplate = checkTemplate(uiActionResponseSuccess);
 					if (containsTemplate) {
 						success.setRedirect(uiActionRedirect.value());
+						success.setUi(uiActionResponseSuccess.redirect().ui());
+						success.setParam(uiActionResponseSuccess.redirect().param());
 					}
 				}
 
@@ -1051,6 +1060,8 @@ public final class FormTemplate {
 					containsTemplate = checkTemplate(uiActionResponseError);
 					if (containsTemplate) {
 						error.setRedirect(uiActionRedirect.value());
+						error.setUi(uiActionResponseError.redirect().ui());
+						error.setParam(uiActionResponseError.redirect().param());
 					}
 				}
 
