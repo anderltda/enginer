@@ -575,66 +575,81 @@ public final class FormTemplate {
 	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
 		Class<?> typeClass = f.getType();
-		
-		Domain<?> typeClassDomain = (Domain<?>) ReflectionUtils.newInstance(typeClass);
-		
+
 		Filter filter = default_.getFilter(typeClass.getSimpleName());
 		
-		if(domain instanceof DomainId) { // Essa condicao is true quando o domain é um id de uma entidade
+		Class<?> typeId = ReflectionUtils.getTypeFieldClass(typeClass, "id");
+
+		Domain<?> attribute = (Domain<?>) ReflectionUtils.newInstance(typeClass);
+		
+		Domain<?> value  = null;
+		
+		ActionUserCase actionUserCase = null;
+
+		if(domain instanceof DomainId) { /** Essa condicao is true quando o domain é um id de uma entidade */
 			
-			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
+			if(ReflectionUtils.isIdComposedType(typeId)) {
+				
+				Domain<?> compositeKey = ReflectionUtils.setCompositeKeyByDomainId(typeClass, ((DomainId)domain));
+				
+				if(compositeKey != null) {
+					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, compositeKey);
+				}
+				
+			} else {
+				
+				Domain<?> key = (Domain<?>) ReflectionUtils.newInstance(typeClass);
+				
+				Object keyValue = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod("id" + typeClass.getSimpleName()));
+				
+				if(keyValue != null) {
+					value = (Domain<?>) ReflectionUtils.executeMethod(userCase.getRepositoryOutboundPort(), RepositoryOutboundPort.findById, key, keyValue);
+				}
+			}
 
 			filter.setValue(value);
 			
-		} else if(typeClassDomain instanceof Domain) { // Essa condicao is true quando o domain nao é id de uma entidade
+		} else if(attribute instanceof Domain) { /** Essa condicao is true quando o domain nao é id de uma entidade */
 			
-			
-			Domain<?> value = getDomainValueByDomainId(typeClass, domain);
+			if(ReflectionUtils.isIdComposedType(typeId)) {
+				
+				Domain<?> compositeKey = (Domain<?>) ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(typeClass.getSimpleName()));
+				
+				if(compositeKey != null) {
+					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, compositeKey);
+				}
+				
+			} else {
+				
+				Domain<?> key = (Domain<?>) ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(typeClass.getSimpleName()));
+				
+				if(key != null) {
+					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(key.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, key);
+				}
+				
+			}
 			
 			filter.setValue(value);
 		}  
 		
-		if (uiFilter.select()) {
+		if (uiFilter.select()) { /** Essa condicao is true é criado um combo de uma entidade */
+
 			Map<String, Object> filters = ReflectionUtils.parseFilter(uiFilter.filter());
+
 			Object provider = ReflectionUtils.newInstance(f.getType());
+
 			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, ActionUserCase.buscarTodos, provider, filters);
+
 			filter.setOptions(options);
+
 		}
 
 		addBehaviorAnnotation(filter, f, annotations);
 		
 		return filter;
-	}
-
-	private static Domain<?> getDomainValueByDomainId(Class<?> typeClass, Domain<?> domain) throws Exception {
-		
-		Domain<?> domainValue  = null;
-		
-		Class<?> typeId = ReflectionUtils.getTypeFieldClass(typeClass, "id");
-		
-		if(ReflectionUtils.isIdComposedType(typeId)) {
-			
-			Domain<?> domain_ = ReflectionUtils.setKeyCompositedByDomain(typeClass, domain);
-			
-			ActionUserCase actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(domain_.getClass(), userCase.getRepositoryOutboundPort());
-			
-			domainValue = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, domain_);
-			
-		} else {
-			
-			Domain<?> domain_ = (Domain<?>) ReflectionUtils.newInstance(typeClass);
-
-			String field = "id".concat(typeClass.getSimpleName());
-			
-			Object id = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field));
-			
-			if(id != null) {
-				domainValue = (Domain<?>) ReflectionUtils.executeMethod(userCase.getRepositoryOutboundPort(), RepositoryOutboundPort.findById, domain_, id);
-			}
-			
-		}
-		
-		return domainValue;
 	}
 
 	private static Area getTextArea(java.lang.reflect.Field f, Default default_, Annotation[] annotations) {
@@ -927,6 +942,7 @@ public final class FormTemplate {
 					}
 					
 					if (uiButton.label().equals(Constants.LABEL_DELETE)) {
+						
 						if (domain.getId() != null) {
 							Class<?> type = domain.getId().getClass();
 							if(ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
@@ -938,8 +954,10 @@ public final class FormTemplate {
 					}
 					
 					if (uiButton.label().equals(Constants.LABEL_CLEAR) && domain.getId() != null) {
+
 						Class<?> type = domain.getId().getClass();
-						if(!ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
+
+						if (!ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
 							continue;
 						} else {
 							continue;

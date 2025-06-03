@@ -54,7 +54,7 @@ public class EntityFive extends DomainAbstract<UUID> {
 	private Integer factor;
 
 	@UIPosition(x = 1, y = 3)
-	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ne" })
+	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ge" })
 	private EntityStatus entityStatus;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

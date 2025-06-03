@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
@@ -50,11 +49,25 @@ public class EntityEight extends DomainAbstract<Long> {
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	private EntitySeven entitySeven;
 	
-	@UIIgnore
-	private UUID idEntitySeven;
-	
-	@UIIgnore
-	private Long idEntitySix;
+	public void setIdEntitySeven(UUID idEntitySeven) {
+		if(this.entitySeven == null) {
+			this.entitySeven = new EntitySeven();
+			this.entitySeven.setId(new EntitySevenId());
+			this.entitySeven.getId().setIdEntitySeven(idEntitySeven);
+		} else {
+			this.entitySeven.getId().setIdEntitySeven(idEntitySeven);
+		}
+	}
+
+	public void setIdEntitySix(Long idEntitySix) {
+		if(this.entitySeven == null) {
+			this.entitySeven = new EntitySeven();
+			this.entitySeven.setId(new EntitySevenId());
+			this.entitySeven.getId().setIdEntitySix(idEntitySix);
+		} else {
+			this.entitySeven.getId().setIdEntitySix(idEntitySix);
+		}
+	}
 
 	@Override
 	public Long getId() {
@@ -89,22 +102,6 @@ public class EntityEight extends DomainAbstract<Long> {
 		this.entitySeven = entitySeven;
 	}
 	
-	public UUID getIdEntitySeven() {
-		return idEntitySeven;
-	}
-
-	public void setIdEntitySeven(UUID idEntitySeven) {
-		this.idEntitySeven = idEntitySeven;
-	}
-	
-	public Long getIdEntitySix() {
-		return idEntitySix;
-	}
-
-	public void setIdEntitySix(Long idEntitySix) {
-		this.idEntitySix = idEntitySix;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

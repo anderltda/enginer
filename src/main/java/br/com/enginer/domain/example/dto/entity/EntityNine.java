@@ -38,12 +38,12 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
     }, 
 	value = { 
-				@UIButton(
-					template = { TypeTemplate.FILTER, TypeTemplate.FORM }, 
-					label = "Custom", icon = "google_plus", 
-					confirm = true, 
-					needsValidation = false, 
-					action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) 
+			@UIButton(
+				template = { TypeTemplate.FILTER, TypeTemplate.FORM }, 
+				label = "Custom", icon = "google_plus", 
+				confirm = true, 
+				needsValidation = false, 
+				action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) 
 	        }
 )
 @UIPaginator(

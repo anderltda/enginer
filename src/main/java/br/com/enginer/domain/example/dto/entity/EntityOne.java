@@ -166,6 +166,24 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
 	private EntityTwo entityTwo;
+
+	/**
+	 * BLOCO START
+	 */
+	public void setIdEntityStatus(Long idEntityStatus) {
+		this.entityStatus = new EntityStatus();
+		this.entityStatus.setId(idEntityStatus);
+	}
+
+	public void setIdEntityTwo(UUID idEntityTwo) {
+		this.entityTwo = new EntityTwo();
+		this.entityTwo.setId(idEntityTwo);
+	}
+	
+	public void setIdEntityNine(EntityNineId idEntityNine) {
+		this.entityNine = new EntityNine();
+		this.entityNine.setId(idEntityNine);
+	}
 	
 	public void setIdEntityEight(Long idEntityEight) {
 		if(this.entityNine == null) {
@@ -196,21 +214,10 @@ public class EntityOne extends DomainAbstract<Long> {
 			this.entityNine.getId().setIdEntitySix(idEntitySix);
 		}
 	}
-
-	public void setIdEntityStatus(Long idEntityStatus) {
-		this.entityStatus = new EntityStatus();
-		this.entityStatus.setId(idEntityStatus);
-	}
-
-	public void setIdEntityTwo(UUID idEntityTwo) {
-		this.entityTwo = new EntityTwo();
-		this.entityTwo.setId(idEntityTwo);
-	}
 	
-	public void setIdEntityNine(EntityNineId idEntityNine) {
-		this.entityNine = new EntityNine();
-		this.entityNine.setId(idEntityNine);
-	}
+	/**
+	 * BLOCO END
+	 */
 
 	@Override
 	public Long getId() {

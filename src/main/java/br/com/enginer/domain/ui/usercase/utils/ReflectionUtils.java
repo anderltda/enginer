@@ -130,8 +130,11 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static boolean isIdComposedType(Class<?> clazz) {
-		return (!clazz.isPrimitive() && !clazz.getName().startsWith("java.lang") && !clazz.equals(LocalDate.class)
-				&& !clazz.equals(LocalDateTime.class)) && classIsIdType(clazz);
+		return (!clazz.isPrimitive() && 
+				!clazz.getName().startsWith("java.lang") && 
+				!clazz.equals(LocalDate.class) && 
+				!clazz.equals(LocalDateTime.class)) && 
+				classIsIdType(clazz);
 	}
 
 	/**
@@ -625,32 +628,32 @@ public class ReflectionUtils {
 	
 	/**
 	 * @param clazzDomain
-	 * @param domain
+	 * @param domainId
 	 * @return
 	 * @throws Exception
 	 */
-	public static Domain<?> setKeyCompositedByDomain(Class<?> clazzDomain, Domain<?> domain) throws Exception {
+	public static Domain<?> setCompositeKeyByDomainId(Class<?> clazzDomain, DomainId domainId) throws Exception {
 		
-		Domain<?> domain_ = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
+		Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
 		
-		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain_.getClass(), "id");
+		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain.getClass(), "id");
 		
-		Domain<?> domainEmbeddedId = (Domain<?>) ReflectionUtils.newInstance(typeId);
+		Domain<?> domainIdEmbeddedId = (Domain<?>) ReflectionUtils.newInstance(typeId);
 		
-		for (Field field : domainEmbeddedId.getClass().getDeclaredFields()) {
+		for (Field field : domainIdEmbeddedId.getClass().getDeclaredFields()) {
 			
 			field.setAccessible(true);
 			
-			Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
+			Object object = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field.getName()));
 			
 			if(object != null) {
-				executeMethod(domainEmbeddedId, StringsUtils.setMethod(field.getName()), object);
+				executeMethod(domainIdEmbeddedId, StringsUtils.setMethod(field.getName()), object);
 			}
 		}
 		
-		executeMethod(domain_, StringsUtils.setMethod("id"), domainEmbeddedId);
+		executeMethod(domain, StringsUtils.setMethod("id"), domainIdEmbeddedId);
 		
-		return domain_;
+		return domain;
 	}
 	
 	/**
@@ -695,13 +698,19 @@ public class ReflectionUtils {
 	 */
 	public static Boolean isIdNullKeyCompositedByDomain(Class<?> clazzDomain, Domain<?> domain) throws Exception {
 		
-		Domain<?> domainId = (Domain<?>)newInstance(clazzDomain);
+		if(ReflectionUtils.isIdComposedType(domain.getId().getClass())) {
 		
-		for (Field field : domainId.getClass().getDeclaredFields()) {
-			if(field.getName().startsWith("id")) {
-				Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
-				if(object == null) {
-					return true;
+			Domain<?> domainId = (Domain<?>)newInstance(clazzDomain);
+			
+			for (Field field : domainId.getClass().getDeclaredFields()) {
+			
+				if(field.getName().startsWith("id")) {
+				
+					Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
+					
+					if(object == null) {
+						return true;
+					}
 				}
 			}
 		}
