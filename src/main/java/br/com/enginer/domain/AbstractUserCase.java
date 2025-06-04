@@ -318,10 +318,10 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 				
 				if (ReflectionUtils.isTypeId(domain.getId().getClass())) {
 					repositoryOutboundPort.delete(domain, domain.getId());
+				} else {
+					Map<String, Object> ids = ReflectionUtils.getIdDomainId((DomainId) domain.getId());
+					repositoryOutboundPort.delete(domain, ids);
 				}
-				
-				Map<String, Object> ids = ReflectionUtils.getIdDomainId((DomainId) domain.getId());
-				repositoryOutboundPort.delete(domain, ids);
 				
 			} catch (Exception ex) {
 				throw new UncheckedException(ex.getMessage(), ex);

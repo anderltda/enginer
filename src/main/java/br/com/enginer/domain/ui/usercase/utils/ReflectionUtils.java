@@ -706,7 +706,7 @@ public class ReflectionUtils {
 			
 				if(field.getName().startsWith("id")) {
 				
-					Object object = ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(field.getName()));
+					Object object = ReflectionUtils.executeMethod(domain.getId(), StringsUtils.getMethod(field.getName()));
 					
 					if(object == null) {
 						return true;
