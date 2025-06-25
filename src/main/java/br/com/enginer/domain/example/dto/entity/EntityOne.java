@@ -67,12 +67,27 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
 }, 
 	value = {
-			@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", param = "{ disabled=false }"))),
-			@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-		})
+				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", param = "{ disabled=false }"))),
+				@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
+		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn( initial = { "entityOne.height", "entityOne.age", "entityOne.name" }, hidden = { "entityOne.id", "entityTwo.id", "entityTwo.entityStatus.id", "entityTwo.entityTree.id", "entityTwo.entityTree.entityStatus.id", "entityTwo.entityTree.entityFour.id", "entityTwo.entityTree.entityFour.entityFive.id", "entityStatus.id" }),
+    column = @UIColumn( initial = { 
+    								"entityOne.height",
+                                    "entityOne.age", 
+                                    "entityOne.name" 
+                                   }, 
+    					 hidden = { 
+    							 	"entityOne.id", 
+    							 	"entityTwo.id", 
+    							 	"entityTwo.entityStatus.id", 
+    							 	"entityTwo.entityTree.id", 
+    							 	"entityTwo.entityTree.entityStatus.id", 
+    							 	"entityTwo.entityTree.entityFour.id", 
+    							 	"entityTwo.entityTree.entityFour.entityFive.id"
+    							   }
+    					,name = "{ 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'entityStatus.id':'Status Id', 'entityStatus.ativo':'SIM/NAO', 'entityStatus.name':'PEDRAO' }"
+    				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(

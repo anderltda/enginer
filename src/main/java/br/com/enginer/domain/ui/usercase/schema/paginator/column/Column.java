@@ -9,6 +9,7 @@ public class Column {
 
 	private List<String> initial;
 	private List<String> hidden;
+	private String name;
 
 	public List<String> getInitial() {
 		return initial;
@@ -24,5 +25,13 @@ public class Column {
 
 	public void setHidden(List<String> hidden) {
 		this.hidden = hidden;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

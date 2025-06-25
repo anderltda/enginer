@@ -10,4 +10,5 @@ public @interface UIColumn {
 	
 	String[] initial();
 	String[] hidden();
+    String name() default "";
 }
