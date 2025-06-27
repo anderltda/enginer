@@ -67,29 +67,35 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
 }, 
 	value = {
-				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", param = "{ disabled=false }"))),
+				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityFive", param = "{ disabled=false }"))),
 				@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
     column = @UIColumn( initial = { 
-    								"entityOne.height",
                                     "entityOne.age", 
-                                    "entityOne.name" 
+                                    "entityOne.name",
+                                    "entityOne.birthDate"
                                    }, 
-    					 hidden = { 
-    							 	"entityOne.id", 
-    							 	"entityTwo.id", 
-    							 	"entityTwo.entityStatus.id", 
-    							 	"entityTwo.entityTree.id", 
-    							 	"entityTwo.entityTree.entityStatus.id", 
-    							 	"entityTwo.entityTree.entityFour.id", 
-    							 	"entityTwo.entityTree.entityFour.entityFive.id"
+    					 visible = { 
+                                    "entityOne.age", 
+                                    "entityOne.name",
+                                    "entityOne.birthDate",
+                                    "entityOne.code",
+                                    "entityStatus.name",
+                                    "entityStatus.status",
+                                    "entityTwo.color"
     							   }
-    					,name = "{ 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'entityStatus.id':'Status Id', 'entityStatus.ativo':'SIM/NAO', 'entityStatus.name':'PEDRAO' }"
+    					,name = "{ 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
+    		@UIButton(
+    				label = "Abrir uma listagem", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = false, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disabled=true }"))
+    		),        		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
@@ -103,10 +109,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=false }"))
     		),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo", param = "$id"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id"))),            
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(domain = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo", param = "$id"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id"))),            
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
         }
     )
 )

@@ -514,9 +514,10 @@ public final class FormTemplate {
 			config.setExpandable(uiConfig.expandable());
 
 			UIColumn uiColumn = uiPaginator.column();
+			column.setName(uiColumn.name());
 			column.setInitial(Arrays.asList(uiColumn.initial()));
 			column.setHidden(Arrays.asList(uiColumn.hidden()));
-			column.setName(uiColumn.name());
+			column.setVisible(Arrays.asList(uiColumn.visible()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
@@ -1023,19 +1024,20 @@ public final class FormTemplate {
 			containsTemplate = checkTemplate(uiActionRedirect);
 			if (containsTemplate) {
 				action.setUi(uiActionRedirect.ui());
-				action.setRedirect(uiActionRedirect.value());
+				action.setDomain(uiActionRedirect.domain());
 				action.setParam(uiActionRedirect.param());
+				action.setRedirect(uiActionRedirect.value());
 			}
 		}
 
-		if (uiAction.domain() instanceof UIActionDomain uiActionDomain) {
+		if (uiAction.actionObject() instanceof UIActionDomain uiActionDomain) {
 			containsTemplate = checkTemplate(uiActionDomain);
 			if (containsTemplate) {
 				ActionObject actionObject = new ActionObject();
 				actionObject.setObject(uiActionDomain.object());
 				actionObject.setParam(uiActionDomain.param());
 				if (!actionObject.getObject().isEmpty() && !actionObject.getParam().isEmpty()) {
-					action.setDomain(actionObject);
+					action.setActionObject(actionObject);
 				}
 			}
 		}

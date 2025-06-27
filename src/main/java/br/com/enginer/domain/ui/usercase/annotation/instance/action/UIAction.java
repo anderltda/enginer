@@ -11,7 +11,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIAction {
     UIActionMethod method() default @UIActionMethod();
     UIActionRedirect redirect() default @UIActionRedirect();
-	UIActionDomain domain() default @UIActionDomain;
+	UIActionDomain actionObject() default @UIActionDomain;
 	UIActionResponse response() default @UIActionResponse();
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.PAGINATOR, TypeTemplate.PAGINATOR };
 }

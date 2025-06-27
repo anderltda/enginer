@@ -7,9 +7,18 @@ import java.util.List;
  */
 public class Column {
 
+	private String name;
 	private List<String> initial;
 	private List<String> hidden;
-	private String name;
+	private List<String> visible;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public List<String> getInitial() {
 		return initial;
@@ -27,11 +36,12 @@ public class Column {
 		this.hidden = hidden;
 	}
 
-	public String getName() {
-		return name;
+	public List<String> getVisible() {
+		return visible;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setVisible(List<String> visible) {
+		this.visible = visible;
 	}
+
 }

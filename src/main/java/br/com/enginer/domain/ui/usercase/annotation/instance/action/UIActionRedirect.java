@@ -11,6 +11,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIActionRedirect {
     String value() default "";
     String ui() default "form";
+    String domain() default "";
     String param() default "";
     TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.PAGINATOR, TypeTemplate.MODAL };
 }

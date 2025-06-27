@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 @Target({})
 public @interface UIColumn {
 	
-	String[] initial();
-	String[] hidden();
-    String name() default "";
+	String name() default "";
+	String[] initial() ;
+	String[] hidden() default {};
+	String[] visible() default {};
 }

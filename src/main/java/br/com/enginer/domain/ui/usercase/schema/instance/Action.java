@@ -6,19 +6,36 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
 public class Action {
 
 	private String ui;
+	private String domain;
+	private String param;
 	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
-	private String param;
-	private ActionObject domain;
+	private ActionObject actionObject;
 	private ActionResponse response;
-	
+
 	public String getUi() {
 		return ui;
 	}
 
 	public void setUi(String ui) {
 		this.ui = ui;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
 	}
 
 	public String getRedirect() {
@@ -44,21 +61,13 @@ public class Action {
 	public void setServerMethod(String serverMethod) {
 		this.serverMethod = serverMethod;
 	}
-	
-	public String getParam() {
-		return param;
+
+	public ActionObject getActionObject() {
+		return actionObject;
 	}
 
-	public void setParam(String param) {
-		this.param = param;
-	}
-
-	public ActionObject getDomain() {
-		return domain;
-	}
-
-	public void setDomain(ActionObject domain) {
-		this.domain = domain;
+	public void setActionObject(ActionObject actionObject) {
+		this.actionObject = actionObject;
 	}
 
 	public ActionResponse getResponse() {
@@ -68,4 +77,5 @@ public class Action {
 	public void setResponse(ActionResponse response) {
 		this.response = response;
 	}
+
 }
