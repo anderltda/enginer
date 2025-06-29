@@ -92,7 +92,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(
-    				label = "Abrir uma listagem", 
+    				label = "Abrir uma listagem Entity Two", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ field=color, value=$entityTwo.color }"))

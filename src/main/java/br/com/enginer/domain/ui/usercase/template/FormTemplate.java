@@ -174,6 +174,7 @@ public final class FormTemplate {
 			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
 
 			form = new Form();
+			form.setId(StringsUtils.firstLower(domain.getClass().getSimpleName()));
 			form.setTitle(getTitle(domain));
 			form.setTab(getTab(domain));
 			form.setPaginator(getPaginator(domain));

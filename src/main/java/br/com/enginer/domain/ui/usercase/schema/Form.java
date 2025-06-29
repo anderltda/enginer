@@ -13,12 +13,21 @@ import br.com.enginer.domain.ui.usercase.schema.validate.Validate;
  */
 public class Form {
 
+	private String id;
 	private String title;
 	private Tab tab;
 	private Row row;
 	private Validate validate;
 	private Paginator paginator;
 	private List<Field> fields;
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;

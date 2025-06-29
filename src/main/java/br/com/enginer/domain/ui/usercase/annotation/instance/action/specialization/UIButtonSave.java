@@ -27,7 +27,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
         method = @UIActionMethod(serverMethod = "salvar"),
         response = @UIActionResponse(
         	template = { TypeTemplate.FORM },
-    		error = @UIActionResponseError(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID)), 
+    		//error = @UIActionResponseError(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID)), 
     		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
         )
     )

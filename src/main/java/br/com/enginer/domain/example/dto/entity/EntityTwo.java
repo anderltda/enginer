@@ -37,7 +37,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity One")
+@UITitle("Entity Two")
 @UIButtonAction(includes = { 
 		UIButtonBack.class, 
 		UIButtonClear.class, 
@@ -65,16 +65,24 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
                                     "entityStatus.name",
                                     "entityStatus.status"
     							   }
-    					,name = "{ 'id':'Id TWO', 'color':'Cor', 'hex':'Hexagonal', 'cost':'Custo' }"
+    					,name = "{ 'id':'Id TWO', 'color':'Cor', 'hex':'Hexagonal', 'cost':'Custo', 'entityStatus.name':'Name', 'entityStatus.status':'Status' }"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(
-    				label = "Abrir uma listagem", 
+    				label = "Abrir uma listagem Entity One", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
-    		),        		
+    		), 
+    		@UIButton(
+    			    label = "Novo Entity One com Entity Two", 
+    			    icon = "add_circle",
+    			    needsValidation = false,
+    			    template = TypeTemplate.PAGINATOR, 
+    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    			    
+    		),   		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
