@@ -3,6 +3,7 @@ package br.com.enginer.domain.example.dto.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
@@ -11,17 +12,23 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
@@ -30,11 +37,61 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity Two")
-@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonNew.class, UIButtonFinish.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
+@UITitle("Entity One")
+@UIButtonAction(includes = { 
+		UIButtonBack.class, 
+		UIButtonClear.class, 
+		UIButtonNext.class, 
+		UIButtonNew.class, 
+		UIButtonEdit.class, 
+		UIButtonDelete.class, 
+		UIButtonSearch.class, 
+		UIButtonSave.class 
+}, 
 	value = {
-		@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-	}
+				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false }"))),
+		    })
+@UIPaginator(
+    config = @UIConfig(expandable = true, multiSelection = false, editable = true),
+    column = @UIColumn( initial = { 
+                                    "entityTwo.color", 
+                                    "entityTwo.hex",
+                                    "entityTwo.cost"
+                                   }, 
+    					 visible = { 
+	                                "entityTwo.color", 
+	                                "entityTwo.hex",
+	                                "entityTwo.cost",
+                                    "entityStatus.name",
+                                    "entityStatus.status"
+    							   }
+    					,name = "{ 'id':'Id TWO', 'color':'Cor', 'hex':'Hexagonal', 'cost':'Custo' }"
+    				  ),
+    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
+        value = {
+    		@UIButton(
+    				label = "Abrir uma listagem", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = false, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    		),        		
+    		@UIButton(
+    				label = "Visualizar (tab) detalhes do registro", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = false, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=true }"))
+    		),	
+    		@UIButton(
+    				label = "Editar (tab) detalhes do registro", 
+    				template = TypeTemplate.PAGINATOR, 
+    				highlight = true, 
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=false }"))
+    		),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
+        }
+    )
 )
 public class EntityTwo extends DomainAbstract<UUID> {
 
@@ -51,7 +108,7 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	
 	private Double cost;
 
-	@UIFieldValidation(required = true)
+	@UIFieldValidation(required = true, template = TypeTemplate.FORM)
 	@UIFilter(label = "Entity Status", field = "name", select = false)
 	private EntityStatus entityStatus;
 

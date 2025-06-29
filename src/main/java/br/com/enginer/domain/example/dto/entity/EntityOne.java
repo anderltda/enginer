@@ -84,9 +84,10 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
                                     "entityOne.code",
                                     "entityStatus.name",
                                     "entityStatus.status",
+                                    "entityTwo.id",
                                     "entityTwo.color"
     							   }
-    					,name = "{ 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
+    					,name = "{ 'entityTwo.id':'Id TWO', 'entityTwo.color':'Cor', 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
@@ -94,7 +95,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				label = "Abrir uma listagem", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disabled=true }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ field=color, value=$entityTwo.color }"))
     		),        		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
