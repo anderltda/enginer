@@ -55,7 +55,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity One")
+@UITitle("Primeiro")
 @UIButtonAction(includes = { 
 		UIButtonBack.class, 
 		UIButtonClear.class, 
@@ -85,9 +85,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
                                     "entityStatus.name",
                                     "entityStatus.status",
                                     "entityTwo.id",
-                                    "entityTwo.color"
+                                    "entityTwo.color",
+                                    "entityTwo.entityTree.animal",
+                                    "entityTwo.entityTree.entityFour.fruit",
+                                    "entityTwo.entityTree.entityFour.entityStatus.status",
+                                    "entityTwo.entityTree.entityFour.entityFive.reference",
+                                    "entityTwo.entityTree.entityFour.entityFive.entityStatus.status",
     							   }
-    					,name = "{ 'entityTwo.id':'Id TWO', 'entityTwo.color':'Cor', 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
+    					,name = "{ 'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', 'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', 'entityTwo.id':'Id TWO', 'entityTwo.color':'Cor', 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {

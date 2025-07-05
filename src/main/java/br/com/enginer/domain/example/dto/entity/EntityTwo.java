@@ -37,7 +37,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 /**
  * 
  */
-@UITitle("Entity Two")
+@UITitle("Segundo")
 @UIButtonAction(includes = { 
 		UIButtonBack.class, 
 		UIButtonClear.class, 

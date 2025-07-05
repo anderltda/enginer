@@ -21,7 +21,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-@UITitle("Entity Eight")
+@UITitle("Oitavo")
 @UIButtonAction(includes = { 
 		UIButtonBack.class, 
 		UIButtonClear.class, 

@@ -22,7 +22,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginat
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
-@UITitle("Entity Six")
+@UITitle("Sexto")
 @UIButtonAction(includes = { 
 					UIButtonBack.class, 
 					UIButtonClear.class, 
