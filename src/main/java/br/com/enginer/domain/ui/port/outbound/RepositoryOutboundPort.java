@@ -32,9 +32,9 @@ public interface RepositoryOutboundPort extends OutboundPort {
 	
 	public List<Domain<?>> findAllById(Domain<?> domain, List<?> ids) throws UncheckedException;
 	
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
+	public PageResult<Domain<?>> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
+	public PageResult<Domain<?>> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException;
 	
 	public Integer count(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException;
 	

@@ -368,9 +368,10 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 	 *
 	 */
 	@Override
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
+	@SuppressWarnings("unchecked")
+	public PageResult<Domain<?>> paginator(Domain<?> domain, Map<String, Object> filter, String... method) throws UncheckedException {
 
-		PageResult<?> pageResult = null;
+		PageResult<Domain<?>> result = null;
 
 		try {
 
@@ -378,7 +379,7 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 
 			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() {};
 
-			pageResult = getWebClient()
+			PageResult<?> pageResult = getWebClient()
 					.get()
 					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
 					.retrieve()
@@ -386,6 +387,16 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
 					.bodyToMono(typeRef)
 					.block();
+			
+			if (pageResult != null) {
+
+				List<Domain<?>> entities = (List<Domain<?>>) pageResult.getContent().stream()
+						.map(o -> objectMapper.convertValue(o, domain.getClass())).toList();
+				
+				result = new PageResult<>();
+				result.setPage(pageResult.getPage());
+				result.setContent(entities);
+			}
 
 		} catch (CheckedException ex) {
 			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
@@ -398,16 +409,17 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
-		return pageResult;
+		return result;
 	}
 	
 	/**
 	 *
 	 */
 	@Override
-	public PageResult<?> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
+	@SuppressWarnings("unchecked")
+	public PageResult<Domain<?>> paginator(Domain<?> domain, Map<String, Object> filter, TypeRepository typeRepository, String queryName) throws UncheckedException {
 
-		PageResult<?> pageResult = null;
+		PageResult<Domain<?>> result = null;
 
 		try {
 
@@ -415,7 +427,7 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 
 			ParameterizedTypeReference<PageResult<?>> typeRef = new ParameterizedTypeReference<>() {};
 
-			pageResult = getWebClient()
+			PageResult<?> pageResult = getWebClient()
 					.get()
 					.uri(UriUtils.buildUriWithQueryParams(uri, filter))
 					.retrieve()
@@ -423,6 +435,16 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 					.onStatus(HttpStatusCode::is5xxServerError, GlobalWebClientErrorHandler::handle5xxError)
 					.bodyToMono(typeRef)
 					.block();
+			
+			if (pageResult != null) {
+
+				List<Domain<?>> entities = (List<Domain<?>>) pageResult.getContent().stream()
+						.map(o -> objectMapper.convertValue(o, domain.getClass())).toList();
+				
+				result = new PageResult<>();
+				result.setPage(pageResult.getPage());
+				result.setContent(entities);
+			}			
 
 		} catch (CheckedException ex) {
 			logger.error(RepositoryOutboundAdapterPort.class, "[4XX or 5XX ERROR]", ex);
@@ -435,7 +457,7 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 			throw new UncheckedException("[Erro inesperado]", ex);
 		}
 
-		return pageResult;
+		return result;
 	}
 
 	/**
