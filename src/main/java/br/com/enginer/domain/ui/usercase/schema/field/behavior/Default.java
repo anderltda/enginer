@@ -33,13 +33,13 @@ public class Default {
 	private String field;
 	private Object value;
 	private Position position;
-	private Boolean disabled;
+	private Boolean disable;
 
-	public Default(Integer xposition, Integer yposition, String name, Boolean disabled, Object object) {
+	public Default(Integer xposition, Integer yposition, String name, Boolean disable, Object object) {
 		this.position = new Position(xposition, yposition);
 		this.label = StringsUtils.normalizeLabelToLowercaseCamelization(name);
 		this.field = StringsUtils.normalizeToCamelCaseFromPascalCase(name);
-		this.disabled = disabled;
+		this.disable = disable;
 		this.value = ReflectionUtils.get(StringsUtils.getMethod(name), object);
 	}
 
@@ -63,7 +63,7 @@ public class Default {
 		text.setMin(1);
 		text.setMax(20);
 		text.setPosition(position);
-		text.setDisabled(disabled);
+		text.setDisable(disable);
 		return text;
 	}
 
@@ -75,7 +75,7 @@ public class Default {
 		email.setMin(1);
 		email.setMax(50);
 		email.setPosition(position);
-		email.setDisabled(disabled);
+		email.setDisable(disable);
 		return email;
 	}
 
@@ -87,7 +87,7 @@ public class Default {
 		number.setMin(1);
 		number.setMax(50);
 		number.setPosition(position);
-		number.setDisabled(disabled);
+		number.setDisable(disable);
 		return number;
 	}
 
@@ -97,7 +97,7 @@ public class Default {
 		decimal.setField(field);
 		decimal.setValue(value);
 		decimal.setPosition(position);
-		decimal.setDisabled(disabled);
+		decimal.setDisable(disable);
 		return decimal;
 	}
 
@@ -108,7 +108,7 @@ public class Default {
 		password.setMin(1);
 		password.setMax(10);
 		password.setPosition(position);
-		password.setDisabled(disabled);
+		password.setDisable(disable);
 		return password;
 	}
 
@@ -120,7 +120,7 @@ public class Default {
 		date.setShowtime(showTime);
 		date.setFormat(showTime ? TypeDateFormat.DATE_TIME_FORMAT : TypeDateFormat.DATE_FORMAT);
 		date.setPosition(position);
-		date.setDisabled(disabled);
+		date.setDisable(disable);
 		return date;
 	}
 
@@ -130,7 +130,7 @@ public class Default {
 		time.setField(field);
 		time.setValue(value);
 		time.setPosition(position);
-		time.setDisabled(disabled);
+		time.setDisable(disable);
 		return time;
 	}
 
@@ -141,7 +141,7 @@ public class Default {
 		radio.setValue(value);
 		radio.setOptions(options);
 		radio.setPosition(position);
-		radio.setDisabled(disabled);
+		radio.setDisable(disable);
 		return radio;
 	}
 
@@ -151,7 +151,7 @@ public class Default {
 		checkbox.setField(field);
 		checkbox.setValue(value);
 		checkbox.setPosition(position);
-		checkbox.setDisabled(disabled);
+		checkbox.setDisable(disable);
 		return checkbox;
 	}
 
@@ -162,7 +162,7 @@ public class Default {
 		select.setValue(value);
 		select.setPosition(position);
 		select.setOptions(options);
-		select.setDisabled(disabled);
+		select.setDisable(disable);
 		return select;
 	}
 
@@ -172,7 +172,7 @@ public class Default {
 		tag.setField(field);
 		tag.setValue(value);
 		tag.setPosition(position);
-		tag.setDisabled(disabled);
+		tag.setDisable(disable);
 		return tag;
 	}
 
@@ -183,7 +183,7 @@ public class Default {
 		textarea.setValue(value);
 		textarea.setEditor(false);
 		textarea.setPosition(position);
-		textarea.setDisabled(disabled);
+		textarea.setDisable(disable);
 		return textarea;
 	}
 
@@ -196,7 +196,7 @@ public class Default {
 		file.setMode(TypeFileUpload.SIMPLE);
 		file.setFiles(files);
 		file.setPosition(position);
-		file.setDisabled(disabled);
+		file.setDisable(disable);
 		return file;
 	}
 
@@ -206,7 +206,7 @@ public class Default {
 		filter.setValue(value);
 		filter.setDomain(StringsUtils.firstLower(domain));
 		filter.setPosition(position);
-		filter.setDisabled(disabled);
+		filter.setDisable(disable);
 		return filter;
 	}
 

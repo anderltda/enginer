@@ -52,6 +52,7 @@ public class Constants {
 	public static final String LABEL_CLEAR = "Limpar";
 	public static final String LABEL_NEW = "Novo";
 	public static final String LABEL_SEARCH = "Buscar";
+	public static final String LABEL_ADD = "Adicionar";
 	
 	public static final String LABEL_NEXT = "Proximo";
 	public static final String LABEL_BEFORE = "Anterior";

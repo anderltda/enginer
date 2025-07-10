@@ -31,4 +31,11 @@ public interface UIInboundPort extends InboundPort {
 	 */
 	Form tab(Domain<?> domain) throws CheckedException;
 
+	/**
+	 * @param domain
+	 * @return
+	 * @throws CheckedException
+	 */
+	Form row(Domain<?> domain) throws CheckedException;	
+
 }

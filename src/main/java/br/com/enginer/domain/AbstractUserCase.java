@@ -139,6 +139,29 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 			throw new UncheckedException("Erro ao montar o filter com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
 		}
 	}
+	
+	/**
+	 *
+	 */
+	@Override
+	public Form row(Domain<?> domain) throws UncheckedException {
+		
+		try {
+			
+			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			map.put(TypeTemplate.ROW, true);
+			map.put(TypeTemplate.FILTER, false);
+			map.put(TypeTemplate.FORM, false);
+			map.put(TypeTemplate.TAB, false);
+			map.put(TypeTemplate.MODAL, domain.isModal());
+			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			
+			return FormTemplate.create(domain, this, map);
+			
+		} catch (Exception ex) {
+			throw new UncheckedException("Erro ao montar o row com o Domain ----->>>> (" + domain.getClass().getSimpleName() + ") - message erro: " + ex.getMessage(), ex);
+		}
+	}
 
 	/**
 	 *

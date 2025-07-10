@@ -82,7 +82,15 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     			    template = TypeTemplate.PAGINATOR, 
     		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
     			    
-    		),   		
+    		),
+    		@UIButton(
+    			    label = "Add Entity One com Entity Two", 
+    			    icon = "add_circle",
+    			    needsValidation = false,
+    			    template = TypeTemplate.PAGINATOR, 
+    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    			    
+    		),    		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 

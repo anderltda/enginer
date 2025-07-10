@@ -25,6 +25,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
@@ -46,6 +47,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeLayoutTarget;
 import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
@@ -64,6 +66,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonEdit.class, 
 		UIButtonDelete.class, 
 		UIButtonSearch.class, 
+		UIButtonAdd.class,
 		UIButtonSave.class 
 }, 
 	value = {
@@ -110,10 +113,19 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     		),	
     		@UIButton(
     				label = "Editar (tab) detalhes do registro", 
-    				template = TypeTemplate.PAGINATOR, 
+    				template = { TypeTemplate.PAGINATOR }, 
     				highlight = true, 
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=false }"))
     		),
+    		@UIButton(
+			    label = Constants.LABEL_SAVE,
+			    icon = "save",
+			    state = TypeButtonState.BTN_STATE_PRIMARY,
+			    template = { TypeTemplate.ROW },
+			    action = @UIAction(
+			        method = @UIActionMethod(serverMethod = "rowSalvar")
+			    )
+			),   		
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo", param = "$id"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
@@ -175,7 +187,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	private Boolean code = true;
 
 	@UIPosition(x = 1, y = 3)
-	@UINumber(label = "Age", min = 1, max = 60)
+	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
@@ -191,7 +203,8 @@ public class EntityOne extends DomainAbstract<Long> {
 	private LocalDateTime prohibitedDateTime;
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
-	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER })
+	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
+	@UIFieldValidation(required = true, template = TypeTemplate.ROW)
 	private EntityTwo entityTwo;
 
 	/**

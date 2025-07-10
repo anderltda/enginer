@@ -78,4 +78,19 @@ public class UIInboundUserCase implements UIInboundPort {
 			throw new CheckedException(ex.getMessage(), ex);
 		}
 	}
+
+	/**
+	 *
+	 */	
+	@Override
+	public Form row(Domain<?> domain) throws CheckedException {
+		try {
+			Object newInstanceUserCase = injectedDependency(domain);
+			Form form = (Form) ReflectionUtils.executeMethod(newInstanceUserCase, "row", domain);
+			return form;
+		} catch (Exception ex) {
+			logger.error(UIInboundUserCase.class, ex.getMessage(), ex);
+			throw new CheckedException(ex.getMessage(), ex);
+		}
+	}
 }

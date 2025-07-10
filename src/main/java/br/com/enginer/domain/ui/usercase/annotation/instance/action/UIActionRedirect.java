@@ -13,5 +13,5 @@ public @interface UIActionRedirect {
     String ui() default "form";
     String domain() default "";
     String param() default "";
-    TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.PAGINATOR, TypeTemplate.MODAL };
+    TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.PAGINATOR, TypeTemplate.MODAL };
 }

@@ -15,7 +15,7 @@ public @interface UIFilter {
 	String placeholder() default "";
 	String[] filter() default {}; // cada item é "chave=valor"
 	boolean select() default false;
-	boolean disabled() default false;
+	boolean disable() default false;
 	boolean readonly() default false;
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

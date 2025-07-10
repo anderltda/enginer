@@ -11,5 +11,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIActionResponse {
 	UIActionResponseSuccess success() default @UIActionResponseSuccess;
 	UIActionResponseError error() default @UIActionResponseError;
-    TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.MODAL };
+    TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.MODAL };
 }

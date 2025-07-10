@@ -30,4 +30,11 @@ public interface TemplateUserCase {
 	 */
 	Form filter(Domain<?> domain) throws UncheckedException;
 
+	/**
+	 * @param domain
+	 * @return
+	 * @throws UncheckedException
+	 */
+	Form row(Domain<?> domain) throws UncheckedException;	
+
 }

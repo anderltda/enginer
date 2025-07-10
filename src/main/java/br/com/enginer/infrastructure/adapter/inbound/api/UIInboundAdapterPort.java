@@ -63,6 +63,24 @@ public class UIInboundAdapterPort {
 	 * @return
 	 * @throws Exception
 	 */
+	@GetMapping({ "/row", "/row/{id}" })
+	public ResponseEntity<Form> row(@UIDomain Domain<?> domain) throws Exception {
+		try {
+			trackingProvider.setInnerId(UUIDGenerator.generate());
+			Form form = uIInboundPort.row(domain);
+			logger.info(UIInboundAdapterPort.class, "Payload gerado: \r " + objectMapper.writeValueAsString(form));
+			return ResponseEntity.ok(form);
+		} catch (Exception ex) {
+			logger.error(UIInboundAdapterPort.class, "Erro ao criar entidade", ex);
+			throw ex;
+		}
+	}	
+
+	/**
+	 * @param domain
+	 * @return
+	 * @throws Exception
+	 */
 	@GetMapping({ "/form", "/form/{id}" })
 	public ResponseEntity<Form> form(@UIDomain Domain<?> domain) throws Exception {
 		try {

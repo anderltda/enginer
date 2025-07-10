@@ -505,7 +505,9 @@ public final class FormTemplate {
 
 			TypeTemplate copyTypeTemplate = typeTemplate;
 
-			typeTemplate = TypeTemplate.PAGINATOR;
+			if(typeTemplate.equals(TypeTemplate.FILTER)) {
+				typeTemplate = TypeTemplate.PAGINATOR;
+			}
 
 			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
 

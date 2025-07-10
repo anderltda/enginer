@@ -27,7 +27,7 @@ public abstract class Base {
 	private Integer max;
 	private Integer limit;
 	private Boolean required;
-	private Boolean disabled;
+	private Boolean disable;
 	private Boolean editor;
 	private Boolean showtime;
 	private Boolean multi;
@@ -172,12 +172,12 @@ public abstract class Base {
 		this.required = required;
 	}
 
-	public Boolean getDisabled() {
-		return disabled;
+	public Boolean getDisable() {
+		return disable;
 	}
 
-	public void setDisabled(Boolean disabled) {
-		this.disabled = disabled;
+	public void setDisable(Boolean disable) {
+		this.disable = disable;
 	}
 
 	public Boolean getEditor() {
