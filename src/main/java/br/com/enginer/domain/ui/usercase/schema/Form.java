@@ -4,7 +4,6 @@ import java.util.List;
 
 import br.com.enginer.domain.ui.usercase.schema.field.Field;
 import br.com.enginer.domain.ui.usercase.schema.paginator.Paginator;
-import br.com.enginer.domain.ui.usercase.schema.row.Row;
 import br.com.enginer.domain.ui.usercase.schema.tab.Tab;
 import br.com.enginer.domain.ui.usercase.schema.validate.Validate;
 
@@ -16,7 +15,6 @@ public class Form {
 	private String id;
 	private String title;
 	private Tab tab;
-	private Row row;
 	private Validate validate;
 	private Paginator paginator;
 	private List<Field> fields;
@@ -43,14 +41,6 @@ public class Form {
 
 	public void setTab(Tab tab) {
 		this.tab = tab;
-	}
-
-	public Row getRow() {
-		return row;
-	}
-
-	public void setRow(Row row) {
-		this.row = row;
 	}
 
 	public Validate getValidate() {

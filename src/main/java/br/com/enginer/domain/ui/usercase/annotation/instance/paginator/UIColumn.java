@@ -10,6 +10,6 @@ public @interface UIColumn {
 	
 	String name() default "";
 	String[] initial() ;
-	String[] hidden() default {};
+	String[] row() default {};
 	String[] visible() default {};
 }
