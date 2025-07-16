@@ -73,14 +73,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				label = "Abrir uma listagem Entity One", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }"))
     		), 
     		@UIButton(
     			    label = "Novo Entity One com Entity Two", 
     			    icon = "add_circle",
     			    needsValidation = false,
     			    template = TypeTemplate.PAGINATOR, 
-    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }"))
     			    
     		),
     		@UIButton(
@@ -88,20 +88,20 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     			    icon = "add_circle",
     			    needsValidation = false,
     			    template = TypeTemplate.PAGINATOR, 
-    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disabled=false, field=entityTwo, value=$object }"))
+    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }"))
     			    
     		),    		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=true }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=true }"))
     		),	
     		@UIButton(
     				label = "Editar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = true, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=false }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=false }"))
     		),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),

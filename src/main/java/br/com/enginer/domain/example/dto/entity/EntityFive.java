@@ -2,6 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.util.UUID;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
@@ -10,6 +11,9 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponse;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
@@ -24,6 +28,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -33,6 +38,20 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Quinto")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
 value = {
+		@UIButton(
+				label = Constants.LABEL_SAVE,
+				icon = "save",
+				state = TypeButtonState.BTN_STATE_PRIMARY,
+				template = { TypeTemplate.FORM, TypeTemplate.MODAL },
+				action = @UIAction(
+						method = @UIActionMethod(serverMethod = "salvar"),
+						response = @UIActionResponse(
+								template = { TypeTemplate.FORM },
+								success = @UIActionResponseSuccess(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=false, field=entityFive, value=$object }")
+										)
+								)
+						)
+				),
 	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(serverMethod = "atireiopaunogato")))
 }
 )

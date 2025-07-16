@@ -5,19 +5,12 @@ package br.com.enginer.domain.ui.usercase.schema.instance;
  */
 public class ActionResponseSuccess {
 
-	private String redirect;
 	private String ui;
+	private String domain;
 	private String param;
+	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
-
-	public String getRedirect() {
-		return redirect;
-	}
-
-	public void setRedirect(String redirect) {
-		this.redirect = redirect;
-	}
 
 	public String getUi() {
 		return ui;
@@ -27,12 +20,28 @@ public class ActionResponseSuccess {
 		this.ui = ui;
 	}
 
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
 	public String getParam() {
 		return param;
 	}
 
 	public void setParam(String param) {
 		this.param = param;
+	}
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
 	}
 
 	public String getClientMethod() {

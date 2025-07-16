@@ -520,6 +520,7 @@ public final class FormTemplate {
 			column.setName(uiColumn.name());
 			column.setInitial(Arrays.asList(uiColumn.initial()));
 			column.setRow(Arrays.asList(uiColumn.row()));
+			column.setEditables(Arrays.asList(uiColumn.editables()));
 			column.setVisible(Arrays.asList(uiColumn.visible()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
@@ -1066,9 +1067,10 @@ public final class FormTemplate {
 				if (uiActionResponseSuccess.redirect() instanceof UIActionRedirect uiActionRedirect) {
 					containsTemplate = checkTemplate(uiActionResponseSuccess);
 					if (containsTemplate) {
-						success.setRedirect(uiActionRedirect.value());
 						success.setUi(uiActionResponseSuccess.redirect().ui());
+						success.setDomain(uiActionResponseSuccess.redirect().domain());
 						success.setParam(uiActionResponseSuccess.redirect().param());
+						success.setRedirect(uiActionRedirect.value());
 					}
 				}
 

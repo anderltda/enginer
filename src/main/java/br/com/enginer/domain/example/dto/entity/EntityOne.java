@@ -97,10 +97,16 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     							   },
     					 row = {
     							 "entityTwo.color",
-    							 //"entityNine.id.idEntitySeven", 
+    							 "entityFive.reference", 
     							 //"name",
     							 "age"
-    					       }
+    					       },
+    					editables = {
+	   							 //"entityTwo.color",
+	   							 //"entityNine.id.idEntitySeven", 
+	   							 //"name",
+	   							 "age"
+	   					       }
     					,name = "{ 'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', 'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', 'entityTwo.id':'Id TWO', 'entityTwo.color':'Cor', 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
@@ -109,19 +115,19 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				label = "Abrir uma listagem Entity Two", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ field=color, value=$entityTwo.color }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disable=true, field=color, value=$entityTwo.color }"))
     		),        		
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=true }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=true }"))
     		),	
     		@UIButton(
     				label = "Editar (tab) detalhes do registro", 
     				template = { TypeTemplate.PAGINATOR }, 
     				highlight = true, 
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disabled=false }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=false }"))
     		),
     		@UIButton(
 			    label = Constants.LABEL_SAVE,
@@ -210,8 +216,10 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIFieldValidation(required = true, template = TypeTemplate.ROW)
 	private EntityTwo entityTwo;
+
+	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
+	private EntityFive entityFive;
 
 	/**
 	 * BLOCO START
@@ -347,6 +355,14 @@ public class EntityOne extends DomainAbstract<Long> {
 		this.entityNine = entityNine;
 	}
 	
+	public EntityFive getEntityFive() {
+		return entityFive;
+	}
+
+	public void setEntityFive(EntityFive entityFive) {
+		this.entityFive = entityFive;
+	}
+
 	@Override
 	public String toString() {
 		return "EntityOne [id=" + id + ", name=" + name + ", entityStatus=" + entityStatus + ", code=" + code + ", age="
