@@ -11,6 +11,7 @@ public @interface UIColumn {
 	String name() default "";
 	String[] initial() ;
 	String[] row() default {};
+	String[] hidden() default {};
 	String[] editables() default {};
 	String[] visible() default {};
 }

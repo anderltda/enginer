@@ -10,6 +10,7 @@ public class Column {
 	private String name;
 	private List<String> initial;
 	private List<String> row;
+	private List<String> hidden;
 	private List<String> editables;
 	private List<String> visible;
 
@@ -36,7 +37,15 @@ public class Column {
 	public void setRow(List<String> row) {
 		this.row = row;
 	}
-	
+
+	public List<String> getHidden() {
+		return hidden;
+	}
+
+	public void setHidden(List<String> hidden) {
+		this.hidden = hidden;
+	}
+
 	public List<String> getEditables() {
 		return editables;
 	}

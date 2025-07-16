@@ -47,7 +47,7 @@ value = {
 						method = @UIActionMethod(serverMethod = "salvar"),
 						response = @UIActionResponse(
 								template = { TypeTemplate.FORM },
-								success = @UIActionResponseSuccess(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=false, field=entityFive, value=$object }")
+								success = @UIActionResponseSuccess(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=true, field=entityFive, value=$object }")
 										)
 								)
 						)
@@ -56,7 +56,7 @@ value = {
 }
 )
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelection = true, editable = true),
+    config = @UIConfig(expandable = false, multiSelection = false, editable = true),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  })
 )
 public class EntityFive extends DomainAbstract<UUID> {

@@ -520,6 +520,7 @@ public final class FormTemplate {
 			column.setName(uiColumn.name());
 			column.setInitial(Arrays.asList(uiColumn.initial()));
 			column.setRow(Arrays.asList(uiColumn.row()));
+			column.setHidden((Arrays.asList(uiColumn.hidden())));
 			column.setEditables(Arrays.asList(uiColumn.editables()));
 			column.setVisible(Arrays.asList(uiColumn.visible()));
 
