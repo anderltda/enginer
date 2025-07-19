@@ -75,12 +75,12 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn( initial = { 
+    column = @UIColumn( initials = { 
                                     "entityOne.age", 
                                     "entityOne.name",
                                     "entityOne.birthDate"
                                    }, 
-    					 visible = { 
+    					 visibles = { 
                                     "entityOne.age", 
                                     "entityOne.name",
                                     "entityOne.birthDate",
@@ -95,22 +95,37 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
                                     "entityTwo.entityTree.entityFour.entityFive.reference",
                                     "entityTwo.entityTree.entityFour.entityFive.entityStatus.status",
     							   },
-    					 row = {
+    					 rows = {
     							 "entityTwo.color",
     							 "entityFive.reference", 
-    							 //"name",
-    							 "age"
+    							 "age",
+    							 "height"
     					       },
     					editables = {
 	   							 //"entityTwo.color",
 	   							 //"entityNine.id.idEntitySeven", 
-	   							 //"name",
+	   							 "height",
 	   							 "age"
 	   					       },
-    					hidden = { 
+    					hiddens = { 
     							"entityTwo.color" 
     					}
-    					,name = "{ 'entityFive.reference': 'Produto','entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', 'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', 'entityTwo.id':'Id TWO', 'entityTwo.color':'Cor', 'name':'Nome One', 'code':'Codigo', 'prohibitedDateTime':'Data Proibida', 'age':'Idade', 'birthDate':'Data de Aniversario', 'height':'Altura', 'idEntitySix':'6', 'entityStatus.status': 'Status', 'entityStatus.name':'Nome do Status' }"
+    					,totalizador = "{ 'age': 'Quantidade Total:', 'height': 'Total a Pagar: R$' }"
+    					,name = "{ "
+    							+ "'entityFive.reference': 'Produto',"
+    							+ "'age':'Quantidade', "
+    							+ "'height':'Preco Unitario', "
+    							+ "'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', "
+    							+ "'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', "
+    							+ "'entityTwo.id':'Id TWO', "
+    							+ "'entityTwo.color':'Cor', "
+    							+ "'name':'Nome One', 'code': 'Codigo', "
+    							+ "'prohibitedDateTime':'Data Proibida', "
+    							+ "'birthDate':'Data de Aniversario', "
+    							+ "'idEntitySix':'6', "
+    							+ "'entityStatus.status': 'Status', "
+    							+ "'entityStatus.name':'Nome do Status' "
+    							+ "}"
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
@@ -206,7 +221,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
-	@UIText(label = "Height", mask = "0.00")
+	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)

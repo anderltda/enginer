@@ -8,11 +8,12 @@ import java.util.List;
 public class Column {
 
 	private String name;
-	private List<String> initial;
-	private List<String> row;
-	private List<String> hidden;
+	private String totalizador;
+	private List<String> initials;
+	private List<String> rows;
+	private List<String> hiddens;
 	private List<String> editables;
-	private List<String> visible;
+	private List<String> visibles;
 
 	public String getName() {
 		return name;
@@ -22,28 +23,36 @@ public class Column {
 		this.name = name;
 	}
 
-	public List<String> getInitial() {
-		return initial;
+	public String getTotalizador() {
+		return totalizador;
 	}
 
-	public void setInitial(List<String> initial) {
-		this.initial = initial;
+	public void setTotalizador(String totalizador) {
+		this.totalizador = totalizador;
 	}
 
-	public List<String> getRow() {
-		return row;
+	public List<String> getInitials() {
+		return initials;
 	}
 
-	public void setRow(List<String> row) {
-		this.row = row;
+	public void setInitials(List<String> initials) {
+		this.initials = initials;
 	}
 
-	public List<String> getHidden() {
-		return hidden;
+	public List<String> getRows() {
+		return rows;
 	}
 
-	public void setHidden(List<String> hidden) {
-		this.hidden = hidden;
+	public void setRows(List<String> rows) {
+		this.rows = rows;
+	}
+
+	public List<String> getHiddens() {
+		return hiddens;
+	}
+
+	public void setHiddens(List<String> hiddens) {
+		this.hiddens = hiddens;
 	}
 
 	public List<String> getEditables() {
@@ -54,12 +63,12 @@ public class Column {
 		this.editables = editables;
 	}
 
-	public List<String> getVisible() {
-		return visible;
+	public List<String> getVisibles() {
+		return visibles;
 	}
 
-	public void setVisible(List<String> visible) {
-		this.visible = visible;
+	public void setVisibles(List<String> visibles) {
+		this.visibles = visibles;
 	}
 
 }

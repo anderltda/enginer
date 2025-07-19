@@ -518,11 +518,12 @@ public final class FormTemplate {
 
 			UIColumn uiColumn = uiPaginator.column();
 			column.setName(uiColumn.name());
-			column.setInitial(Arrays.asList(uiColumn.initial()));
-			column.setRow(Arrays.asList(uiColumn.row()));
-			column.setHidden((Arrays.asList(uiColumn.hidden())));
+			column.setTotalizador(uiColumn.totalizador());
+			column.setInitials(Arrays.asList(uiColumn.initials()));
+			column.setRows(Arrays.asList(uiColumn.rows()));
+			column.setHiddens((Arrays.asList(uiColumn.hiddens())));
 			column.setEditables(Arrays.asList(uiColumn.editables()));
-			column.setVisible(Arrays.asList(uiColumn.visible()));
+			column.setVisibles(Arrays.asList(uiColumn.visibles()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();

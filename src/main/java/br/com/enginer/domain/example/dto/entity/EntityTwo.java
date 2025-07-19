@@ -53,12 +53,12 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn( initial = { 
+    column = @UIColumn( initials = { 
                                     "entityTwo.color", 
                                     "entityTwo.hex",
                                     "entityTwo.cost"
                                    }, 
-    					 visible = { 
+    					 visibles = { 
 	                                "entityTwo.color", 
 	                                "entityTwo.hex",
 	                                "entityTwo.cost",

@@ -9,9 +9,10 @@ import java.lang.annotation.Target;
 public @interface UIColumn {
 	
 	String name() default "";
-	String[] initial() ;
-	String[] row() default {};
-	String[] hidden() default {};
+	String totalizador() default "";
+	String[] initials() ;
+	String[] rows() default {};
+	String[] hiddens() default {};
 	String[] editables() default {};
-	String[] visible() default {};
+	String[] visibles() default {};
 }
