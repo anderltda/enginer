@@ -110,11 +110,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     					hiddens = { 
     							"entityTwo.color" 
     					}
-    					,totalizador = "{ 'age': 'Quantidade Total:', 'height': 'Total a Pagar: R$' }"
+    					,totalizador = "{ "
+    							+ "'age': 'Quantidade Total:', "
+    							+ "'height': 'Preço Unitário Total:' "
+    							+ "}"
     					,name = "{ "
     							+ "'entityFive.reference': 'Produto',"
     							+ "'age':'Quantidade', "
-    							+ "'height':'Preco Unitario', "
+    							+ "'height':'Preço Unitário', "
     							+ "'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', "
     							+ "'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', "
     							+ "'entityTwo.id':'Id TWO', "
