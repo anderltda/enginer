@@ -15,4 +15,5 @@ public @interface UIColumn {
 	String[] hiddens() default {};
 	String[] editables() default {};
 	String[] visibles() default {};
+	String[] calculations() default {};
 }

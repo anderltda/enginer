@@ -524,6 +524,7 @@ public final class FormTemplate {
 			column.setHiddens((Arrays.asList(uiColumn.hiddens())));
 			column.setEditables(Arrays.asList(uiColumn.editables()));
 			column.setVisibles(Arrays.asList(uiColumn.visibles()));
+			column.setCalculations(Arrays.asList(uiColumn.calculations()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();

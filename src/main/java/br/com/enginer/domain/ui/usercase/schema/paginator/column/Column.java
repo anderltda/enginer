@@ -14,6 +14,7 @@ public class Column {
 	private List<String> hiddens;
 	private List<String> editables;
 	private List<String> visibles;
+	private List<String> calculations;
 
 	public String getName() {
 		return name;
@@ -71,4 +72,11 @@ public class Column {
 		this.visibles = visibles;
 	}
 
+	public List<String> getCalculations() {
+		return calculations;
+	}
+
+	public void setCalculations(List<String> calculations) {
+		this.calculations = calculations;
+	}
 }

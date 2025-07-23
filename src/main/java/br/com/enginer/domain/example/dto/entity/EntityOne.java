@@ -8,6 +8,7 @@ import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
@@ -99,25 +100,28 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     							 "entityTwo.color",
     							 "entityFive.reference", 
     							 "age",
-    							 "height"
+    							 "height",
+    							 "valorPrecoQuant"
     					       },
     					editables = {
 	   							 //"entityTwo.color",
 	   							 //"entityNine.id.idEntitySeven", 
+    							//"valorPrecoQuant",
 	   							 "height",
 	   							 "age"
 	   					       },
-    					hiddens = { 
-    							"entityTwo.color" 
-    					}
-    					,totalizador = "{ "
+    					hiddens = { "entityTwo.color" }, 
+    					calculations = { "valorPrecoQuant = age * height" },
+    					totalizador = "{ "
     							+ "'age': 'Quantidade Total:', "
-    							+ "'height': 'Preço Unitário Total:' "
+    							+ "'height': 'Preço Unitário Total:', "
+    							+ "'valorPrecoQuant': 'Total:'"
     							+ "}"
     					,name = "{ "
     							+ "'entityFive.reference': 'Produto',"
-    							+ "'age':'Quantidade', "
-    							+ "'height':'Preço Unitário', "
+    							+ "'age':'Quantidade',"
+    							+ "'height':'Preço Unitário',"
+    							+ "'valorPrecoQuant':'Preço',"
     							+ "'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', "
     							+ "'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', "
     							+ "'entityTwo.id':'Id TWO', "
@@ -241,6 +245,17 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
 	private EntityFive entityFive;
+	
+	@UIHidden(template = { TypeTemplate.ROW })
+	private Double valorPrecoQuant;
+	
+	public Double getValorPrecoQuant() {
+		return valorPrecoQuant;
+	}
+
+	public void setValorPrecoQuant(Double valorPrecoQuant) {
+		this.valorPrecoQuant = valorPrecoQuant;
+	}
 
 	/**
 	 * BLOCO START
