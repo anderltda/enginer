@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
@@ -41,12 +42,14 @@ value = {
 )
 public class EntityTree extends DomainAbstract<UUID> {
 
-	@UIId
+	@UIId(label = "Id")
+	@UIColumn(label = "EntityTree Id")
 	private UUID id;
 	
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIColumn(label = "EntityTree Nome do Animal")
 	private String animal;
 	
 	@UIPosition(x = 2, y = 1)
@@ -55,17 +58,21 @@ public class EntityTree extends DomainAbstract<UUID> {
 	
 	@UIPosition(x = 1, y = 2)
 	@UISelect(label = "Inidicador", provider = ComboHelper.class, method = "indicadores")
+	@UIColumn(label = "EntityTree Indicador")
 	private Integer indicator;
 	
 	@UIPosition(x = 2, y = 2)
+	@UIColumn(label = "EntityTree Montante")
 	private Double amount;
 	
 	@UIPosition(x = 4, y = 2)
 	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
+	@UIColumn(label = "EntityTree Local da Data")
 	private LocalDate localDate;
 	
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIColumn(label = "EntityTree Data Local")
 	private LocalDateTime localDateTime;
 	
 	@UIJoin(icon = "edit")

@@ -187,5 +187,17 @@ public class Field {
 		this.blank = blank;
 	}
 
-	
+	public boolean isAnyInnerFieldInstantiated() {
+	    for (java.lang.reflect.Field field : this.getClass().getDeclaredFields()) {
+	    	field.setAccessible(true);
+	        try {
+	            if (field.get(this) != null) {
+	                return true;
+	            }
+	        } catch (IllegalAccessException ex) {
+	            return false;
+	        }
+	    }
+	    return false;
+	}
 }

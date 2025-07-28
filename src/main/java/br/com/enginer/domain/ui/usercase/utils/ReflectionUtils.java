@@ -19,6 +19,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.com.enginer.domain.OutboundPort;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
@@ -42,6 +46,61 @@ public class ReflectionUtils {
 		}
 		return fields;
 	}
+
+	
+	public static void extractFieldPaginator(
+			Map<String, String> columnNames, 
+			List<String> visibles, 
+			List<String> initials,
+			List<String> rows,
+			String simpleName, Class<?> clazz) {
+
+		if(simpleName != null) {
+			simpleName = simpleName + (".") + StringsUtils.firstLower(clazz.getSimpleName());
+		} else {
+			simpleName = StringsUtils.firstLower(clazz.getSimpleName());
+		}
+		
+		for (Field field : clazz.getDeclaredFields()) {
+			
+			String name = simpleName.concat(".").concat(field.getName());
+
+			// UIFilter
+			UIFilter uiFilter = field.getAnnotation(UIFilter.class);
+			if (uiFilter != null) {
+				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
+				continue;
+			}
+
+			// UIJoin
+			UIJoin uiJoin = field.getAnnotation(UIJoin.class);
+			if (uiJoin != null) {
+				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
+				continue;
+			}
+			
+			// UIRow
+			UIRow uiRow = field.getAnnotation(UIRow.class);
+			if(uiRow != null) {
+				rows.add(name);
+				continue;
+			}
+			
+			// UIColumn
+			UIColumn uiColumn = field.getAnnotation(UIColumn.class);
+			if (uiColumn != null) {
+				if(!uiColumn.hidden()) {
+					if(uiColumn.initial()) {
+						initials.add(name);
+					}
+					columnNames.put(name, uiColumn.label());
+					visibles.add(name);
+				}				
+				continue;
+			}
+		}	
+	}
+	
 
 	/**
 	 * @param clazz
@@ -69,7 +128,8 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param pattern
 	 */
-	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited, String pattern) {
+	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited,
+			String pattern) {
 		if (clazz != null && !clazz.equals(classLimit)) {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (!visited.contains(field) && field.getName().matches(pattern)) {
@@ -87,7 +147,8 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param result
 	 */
-	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited, List<Field> result) {
+	private static void extractFieldsRecursively(Class<?> clazz, Class<?> classLimit, Set<Class<?>> visited,
+			List<Field> result) {
 
 		if (clazz == null || clazz.equals(classLimit) || visited.contains(clazz))
 			return;
@@ -112,29 +173,25 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static boolean isTypeId(Class<?> clazz) {
-		return clazz.isPrimitive() || 
-			   clazz.getName().startsWith("java.lang") || 
-			   clazz.equals(UUID.class);
+		return clazz.isPrimitive() || clazz.getName().startsWith("java.lang") || clazz.equals(UUID.class);
 	}
-	
+
 	/**
 	 * @param clazz
 	 * @return
 	 */
 	public static boolean isClassTypeCustom(Class<?> clazz) {
-		return (!clazz.equals(LocalDate.class) || !clazz.equals(LocalDateTime.class)) || !clazz.equals(Id.class) || !classIsIdType(clazz);
+		return (!clazz.equals(LocalDate.class) || !clazz.equals(LocalDateTime.class)) || !clazz.equals(Id.class)
+				|| !classIsIdType(clazz);
 	}
-	
+
 	/**
 	 * @param clazz
 	 * @return
 	 */
 	public static boolean isIdComposedType(Class<?> clazz) {
-		return (!clazz.isPrimitive() && 
-				!clazz.getName().startsWith("java.lang") && 
-				!clazz.equals(LocalDate.class) && 
-				!clazz.equals(LocalDateTime.class)) && 
-				classIsIdType(clazz);
+		return (!clazz.isPrimitive() && !clazz.getName().startsWith("java.lang") && !clazz.equals(LocalDate.class)
+				&& !clazz.equals(LocalDateTime.class)) && classIsIdType(clazz);
 	}
 
 	/**
@@ -158,7 +215,7 @@ public class ReflectionUtils {
 	 * @return
 	 */
 	public static Map<String, Object> normalizeIdFieldNames(Map<String, Object> input) {
-		
+
 		Map<String, Object> result = new LinkedHashMap<>();
 
 		for (Map.Entry<String, Object> entry : input.entrySet()) {
@@ -311,26 +368,25 @@ public class ReflectionUtils {
 
 		return instance;
 	}
-	
+
 	/**
 	 * @param newClassName
 	 * @return
 	 */
 	public static Object newInstance(Class<?> instanceClass) {
 		try {
-	        Constructor<?> constructor = instanceClass.getDeclaredConstructor();
-	        constructor.setAccessible(true);
-	        return constructor.newInstance();
+			Constructor<?> constructor = instanceClass.getDeclaredConstructor();
+			constructor.setAccessible(true);
+			return constructor.newInstance();
 		} catch (Exception ex) {
 			throw new RuntimeException("Erro ao instanciar classe: " + instanceClass.getSimpleName(), ex);
 		}
 	}
-	
+
 	/**
 	 * EXECUTE METHOD REFLECTION USERCASE
 	 */
-	
-	
+
 	/**
 	 * Metodo responsavel por encontrar a classe UserCase do domain e injetar as
 	 * dependencias necessarias
@@ -343,20 +399,22 @@ public class ReflectionUtils {
 	 * @return - Retorna a classe instaciada do UserCase
 	 * @throws Exception
 	 */
-	public static Object executeInjectedDependencyUserCase(Class<?> clazz, OutboundPort... outboundPorts) throws Exception {
-		
+	public static Object executeInjectedDependencyUserCase(Class<?> clazz, OutboundPort... outboundPorts)
+			throws Exception {
+
 		Object newInstanceUserCase = createUserCase(clazz);
-		
+
 		for (OutboundPort outboundPort : outboundPorts) {
 			Class<?>[] interfaces = outboundPort.getClass().getInterfaces();
 			executeMethod(newInstanceUserCase, StringsUtils.setMethod(interfaces[0].getSimpleName()), outboundPort);
 		}
-		
+
 		return newInstanceUserCase;
 	}
-	
+
 	/**
 	 * Metodo responsavel por criar uma classe UserCase
+	 * 
 	 * @param clazz
 	 * @return
 	 * @throws Exception
@@ -463,32 +521,32 @@ public class ReflectionUtils {
 		}
 		return m;
 	}
-	
+
 	/**
 	 * @param query
 	 * @return
 	 */
 	public static Map<String, Object> parseQueryParams(String query) {
-	    Map<String, Object> result = new LinkedHashMap<>();
+		Map<String, Object> result = new LinkedHashMap<>();
 
-	    String[] pairs = query.split("&");
-	    for (String pair : pairs) {
-	        String[] keyValue = pair.split("=", 2);
-	        if (keyValue.length == 2) {
-	            result.put(keyValue[0], keyValue[1]);
-	        }
-	    }
+		String[] pairs = query.split("&");
+		for (String pair : pairs) {
+			String[] keyValue = pair.split("=", 2);
+			if (keyValue.length == 2) {
+				result.put(keyValue[0], keyValue[1]);
+			}
+		}
 
-	    return result;
+		return result;
 	}
-	
+
 	/**
 	 * @param type
 	 * @param value
 	 * @return
 	 */
 	public static Object extractedTypeValue(Class<?> type, Object value) {
-		
+
 		if (type.equals(Integer.class)) {
 			return Integer.parseInt(StringsUtils.trim(value));
 		} else if (type.equals(Short.class)) {
@@ -507,8 +565,8 @@ public class ReflectionUtils {
 			return StringsUtils.toMap(value);
 		} else if (type.equals(LocalDate.class)) {
 			return StringsUtils.toLocalDate(value);
-	    } else if (type.equals(LocalDateTime.class)) {
-	    	return StringsUtils.toLocalDateTime(value);
+		} else if (type.equals(LocalDateTime.class)) {
+			return StringsUtils.toLocalDateTime(value);
 		} else if (type.equals(Byte.class)) {
 			return Byte.parseByte(StringsUtils.trim(value));
 		} else if (type.equals(BigInteger.class)) {
@@ -518,13 +576,13 @@ public class ReflectionUtils {
 		} else if (type.equals(String.class)) {
 			return StringsUtils.trim(value);
 		} else if (type.equals(value.getClass())) {
-			if(type.isInstance(value)) {
+			if (type.isInstance(value)) {
 				return value;
 			}
 		}
 		throw new IllegalArgumentException("Tipo de ID não suportado: " + type);
 	}
-	
+
 	/**
 	 * @param clazz
 	 * @param field
@@ -552,10 +610,10 @@ public class ReflectionUtils {
 
 		return isMatch;
 	}
-	
-	
+
 	/**
 	 * Metodo responsavel por trazer a TYPE('Class') do FIELD informado da clazz
+	 * 
 	 * @param clazz - Classe que deseja sabe o type do field
 	 * @param field - Campo da classe que deseja saber o seu TYPE
 	 * @return - CLASS<?>(TYPE)
@@ -566,35 +624,36 @@ public class ReflectionUtils {
 		Class<?> type = idField.getType();
 		return type;
 	}
-	
+
 	/**
 	 * @param query
 	 * @param domain
 	 */
 	public static void extractKeyCompositedByQueryParameter(String query, Domain<?> domain) {
-		
+
 		Map<String, Object> ids = ReflectionUtils.parseQueryParams(query);
-		
-		ids.forEach((k, v) -> { 
-			
+
+		ids.forEach((k, v) -> {
+
 			try {
-				
+
 				String key = k.substring(k.lastIndexOf(".") + 1);
-				
+
 				Field field = domain.getClass().getDeclaredField(key);
-				
+
 				Class<?> type = field.getType();
-				
+
 				Object value = ReflectionUtils.extractedTypeValue(type, v);
-				
-				ReflectionUtils.set(domain, StringsUtils.setMethod(key), new Class<?>[] { type }, new Object[] { value });
-				
+
+				ReflectionUtils.set(domain, StringsUtils.setMethod(key), new Class<?>[] { type },
+						new Object[] { value });
+
 			} catch (NoSuchFieldException | SecurityException ex) {
 				ex.printStackTrace();
 			}
 		});
 	}
-	
+
 	/**
 	 * @param rawId
 	 * @param clazz
@@ -602,7 +661,7 @@ public class ReflectionUtils {
 	 * @throws Exception
 	 */
 	public static void extractKeyByQueryParameter(String rawId, Class<?> clazz, Domain<?> domain) throws Exception {
-		
+
 		String fieldName = "id";
 
 		Field field = clazz.getDeclaredField(fieldName);
@@ -625,7 +684,7 @@ public class ReflectionUtils {
 
 		}
 	}
-	
+
 	/**
 	 * @param clazzDomain
 	 * @param domainId
@@ -633,63 +692,61 @@ public class ReflectionUtils {
 	 * @throws Exception
 	 */
 	public static Domain<?> setCompositeKeyByDomainId(Class<?> clazzDomain, DomainId domainId) throws Exception {
-		
+
 		Domain<?> domain = (Domain<?>) ReflectionUtils.newInstance(clazzDomain);
-		
+
 		Class<?> typeId = ReflectionUtils.getTypeFieldClass(domain.getClass(), "id");
-		
+
 		Domain<?> domainIdEmbeddedId = (Domain<?>) ReflectionUtils.newInstance(typeId);
-		
+
 		for (Field field : domainIdEmbeddedId.getClass().getDeclaredFields()) {
-			
+
 			field.setAccessible(true);
-			
+
 			Object object = ReflectionUtils.executeMethod(domainId, StringsUtils.getMethod(field.getName()));
-			
-			if(object != null) {
+
+			if (object != null) {
 				executeMethod(domainIdEmbeddedId, StringsUtils.setMethod(field.getName()), object);
 			}
 		}
-		
+
 		executeMethod(domain, StringsUtils.setMethod("id"), domainIdEmbeddedId);
-		
+
 		return domain;
 	}
-	
+
 	/**
 	 * @param domainId
 	 * @return
 	 * @throws Exception
 	 */
 	public static Map<String, Object> getIdDomainId(DomainId domainId) throws Exception {
-		
+
 		Map<String, Object> ids = new HashMap<>();
-		
+
 		for (Field field : domainId.getClass().getDeclaredFields()) {
-				
-			if(field.getName().startsWith("id")) {
+
+			if (field.getName().startsWith("id")) {
 
 				Object object = executeMethod(domainId, StringsUtils.getMethod(field.getName()));
-				
-				if(object != null) {
+
+				if (object != null) {
 					ids.put(field.getName(), object);
 				}
 			}
 		}
 		return ids;
 	}
-	
+
 	/**
 	 * @param idMap
 	 * @return
 	 */
 	public static String encodeId(Map<String, Object> idMap) {
-	    return idMap.entrySet().stream()
-	        .filter(entry -> entry.getValue() != null)
-	        .map(entry -> entry.getKey() + "=" + entry.getValue())
-	        .collect(Collectors.joining("&"));
+		return idMap.entrySet().stream().filter(entry -> entry.getValue() != null)
+				.map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.joining("&"));
 	}
-	
+
 	/**
 	 * @param clazzDomain
 	 * @param domain
@@ -697,18 +754,19 @@ public class ReflectionUtils {
 	 * @throws Exception
 	 */
 	public static Boolean isIdNullKeyCompositedByDomain(Class<?> clazzDomain, Domain<?> domain) throws Exception {
-		
-		if(ReflectionUtils.isIdComposedType(domain.getId().getClass())) {
-		
-			Domain<?> domainId = (Domain<?>)newInstance(clazzDomain);
-			
+
+		if (ReflectionUtils.isIdComposedType(domain.getId().getClass())) {
+
+			Domain<?> domainId = (Domain<?>) newInstance(clazzDomain);
+
 			for (Field field : domainId.getClass().getDeclaredFields()) {
-			
-				if(field.getName().startsWith("id")) {
-				
-					Object object = ReflectionUtils.executeMethod(domain.getId(), StringsUtils.getMethod(field.getName()));
-					
-					if(object == null) {
+
+				if (field.getName().startsWith("id")) {
+
+					Object object = ReflectionUtils.executeMethod(domain.getId(),
+							StringsUtils.getMethod(field.getName()));
+
+					if (object == null) {
 						return true;
 					}
 				}

@@ -1,13 +1,14 @@
 package br.com.enginer.domain.ui.usercase.schema.paginator.column;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
  */
 public class Column {
 
-	private String name;
+	private Map<String, String> name;
 	private String totalizador;
 	private List<String> initials;
 	private List<String> rows;
@@ -16,11 +17,11 @@ public class Column {
 	private List<String> visibles;
 	private List<String> calculations;
 
-	public String getName() {
+	public Map<String, String> getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(Map<String, String> name) {
 		this.name = name;
 	}
 

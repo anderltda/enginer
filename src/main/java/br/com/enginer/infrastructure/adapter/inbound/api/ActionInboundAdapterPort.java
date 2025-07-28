@@ -3,6 +3,7 @@ package br.com.enginer.infrastructure.adapter.inbound.api;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import br.com.enginer.domain.ui.dto.PageResult;
+import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.port.inbound.ActionInboundPort;
 import br.com.enginer.domain.ui.port.outbound.LoggerOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UIDomain;
@@ -45,7 +48,8 @@ public class ActionInboundAdapterPort {
 	 * @param objectMapper
 	 * @param logger
 	 */
-	public ActionInboundAdapterPort(ActionInboundPort actionInboundPort, ObjectMapper objectMapper, LoggerOutboundPort logger) {
+	public ActionInboundAdapterPort(ActionInboundPort actionInboundPort, ObjectMapper objectMapper,
+			LoggerOutboundPort logger) {
 		this.actionInboundPort = actionInboundPort;
 		this.objectMapper = objectMapper;
 		this.logger = logger;
@@ -64,7 +68,7 @@ public class ActionInboundAdapterPort {
 			if (file.isEmpty()) {
 				return ResponseEntity.badRequest().body(Map.of("error", "Arquivo está vazio."));
 			}
-			
+
 			Path uploadPath = Path.of("/Users/anderson/Downloads/uploads/");
 			Files.createDirectories(uploadPath);
 
@@ -87,7 +91,8 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping("/validate/{method}/async")
-	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method, @RequestBody String value) throws CheckedException {
+	public ResponseEntity<Map<String, Boolean>> validate(@UIDomain Domain<?> domain, @PathVariable String method,
+			@RequestBody String value) throws CheckedException {
 
 		try {
 
@@ -120,7 +125,8 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/autocomplete" })
-	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
+	public ResponseEntity<List<Domain<?>>> autocomplete(@UIDomain Domain<?> domain,
+			@RequestParam Map<String, Object> filter) throws CheckedException {
 
 		try {
 
@@ -143,7 +149,8 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@GetMapping({ "/search" })
-	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter) throws CheckedException {
+	public ResponseEntity<PageResult<?>> search(@UIDomain Domain<?> domain, @RequestParam Map<String, Object> filter)
+			throws CheckedException {
 
 		try {
 
@@ -166,16 +173,40 @@ public class ActionInboundAdapterPort {
 	 * @throws CheckedException
 	 */
 	@PostMapping
-	public ResponseEntity<Domain<?>> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json) throws CheckedException {
+	public ResponseEntity<?> action(@UIDomain Domain<?> domain, @RequestBody JsonNode json) throws CheckedException {
 
 		try {
 
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
-			
+
 			JsonNode normalizedNode = NormalizeUtils.normalizer(json);
-			
+
 			logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
+
+			List<Domain<?>> newDomains = new ArrayList<>();
+			
+			if (normalizedNode.has("data") && normalizedNode.get("data").isArray()) {
+				
+				ArrayNode dataArray = (ArrayNode) normalizedNode.get("data");
+				
+				for (JsonNode itemNode : dataArray) {
+			
+					Domain<?> itemDomain = objectMapper.convertValue(itemNode, domain.getClass());
+				
+					newDomains.add(itemDomain);
+				
+				}
+				
+				JsonNode actionNode = normalizedNode.get("action");
+
+				ActionLogger actionLogger = objectMapper.convertValue(actionNode, ActionLogger.class);
+				
+				List<Domain<?>> domains = actionInboundPort.methodName(domain, newDomains, actionLogger);
+				
+				return ResponseEntity.ok(domains);
+			}
+			
 
 			Domain<?> newDomain = objectMapper.convertValue(normalizedNode, domain.getClass());
 

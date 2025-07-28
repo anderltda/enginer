@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
@@ -26,7 +27,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
@@ -53,7 +54,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn( initials = { 
+    column = @UIColumn_( initials = { 
                                     "entityTwo.color", 
                                     "entityTwo.hex",
                                     "entityTwo.cost"
@@ -111,17 +112,22 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 )
 public class EntityTwo extends DomainAbstract<UUID> {
 
-	@UIId
+	@UIId(label = "Id")
+	@UIColumn(label = "EntityTwo Id")
 	private UUID id;
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
+	@UIColumn(label = "Cor")
 	private String color;
 
 	@UIDate(label = "Date Inclusion", showtime = false, format = TypeDateFormat.DATE_FORMAT)
+	@UIColumn(label = "Data de Inclusao")
 	private LocalDate inclusionDate;
 
+	@UIColumn(label = "Hexagonal", initial = true)
 	private Integer hex;
 	
+	@UIColumn(label = "Custo", initial = true)
 	private Double cost;
 
 	@UIFieldValidation(required = true, template = TypeTemplate.FORM)

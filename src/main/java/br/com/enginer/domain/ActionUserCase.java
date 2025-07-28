@@ -72,8 +72,8 @@ public interface ActionUserCase {
 	
 	Domain<?> salvar(Domain<?> domain, Boolean flush) throws UncheckedException;
 	
-	List<Domain<?>> salvar(Domain<?> domain, List<Domain<?>> entities) throws UncheckedException;
+	List<Domain<?>> salvar(List<Domain<?>> entities) throws UncheckedException;
 	
-	List<Domain<?>> salvar(Domain<?> domain, List<Domain<?>> entities, Boolean flush) throws UncheckedException;
+	List<Domain<?>> salvar(List<Domain<?>> entities, Boolean flush) throws UncheckedException;
 
 }

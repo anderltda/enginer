@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ActionLogger {
 
 	private String domain;
-	private String action;
+	private String actionName;
 	private String id;
 	private String username;
 	private LocalDateTime datelocal;
@@ -21,12 +21,12 @@ public class ActionLogger {
 		this.domain = domain;
 	}
 
-	public String getAction() {
-		return action;
+	public String getActionName() {
+		return actionName;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
+	public void setActionName(String actionName) {
+		this.actionName = actionName;
 	}
 
 	public String getId() {

@@ -36,7 +36,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UIPaginator(actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class }))
 public class EntitySix extends DomainAbstract<Long> {
 
-	@UIId
+	@UIId(label = "Id")
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)

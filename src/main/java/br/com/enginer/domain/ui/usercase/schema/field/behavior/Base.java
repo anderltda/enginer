@@ -22,6 +22,7 @@ public abstract class Base {
 	private String title;
 	private String action;
 	private String domain;
+	private Class<?> domainClass;
 	private String method;
 	private Integer min;
 	private Integer max;
@@ -122,6 +123,14 @@ public abstract class Base {
 
 	public void setDomain(String domain) {
 		this.domain = domain;
+	}
+
+	public Class<?> getDomainClass() {
+		return domainClass;
+	}
+
+	public void setDomainClass(Class<?> domainClass) {
+		this.domainClass = domainClass;
 	}
 
 	public String getMethod() {

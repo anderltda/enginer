@@ -47,9 +47,9 @@ public class SubscriberInboundUserCase implements SubscriberInboundPort {
 		Domain<?> domainNew = null;
 		try {
 			ActionLogger actionLogger = domain.getActionLogger();
-			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
+			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getActionName());
 			Object object = injectedDependency(domain);
-			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getAction(), domain);
+			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getActionName(), domain);
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());

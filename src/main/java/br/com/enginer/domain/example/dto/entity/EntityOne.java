@@ -6,12 +6,14 @@ import java.util.UUID;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
@@ -36,7 +38,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
@@ -76,63 +78,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn( initials = { 
-                                    "entityOne.age", 
-                                    "entityOne.name",
-                                    "entityOne.birthDate"
-                                   }, 
-    					 visibles = { 
-                                    "entityOne.age", 
-                                    "entityOne.name",
-                                    "entityOne.birthDate",
-                                    "entityOne.code",
-                                    "entityStatus.name",
-                                    "entityStatus.status",
-                                    "entityTwo.id",
-                                    "entityTwo.color",
-                                    "entityTwo.entityTree.animal",
-                                    "entityTwo.entityTree.entityFour.fruit",
-                                    "entityTwo.entityTree.entityFour.entityStatus.status",
-                                    "entityTwo.entityTree.entityFour.entityFive.reference",
-                                    "entityTwo.entityTree.entityFour.entityFive.entityStatus.status",
-    							   },
-    					 rows = {
-    							 "entityTwo.color",
-    							 "entityFive.reference", 
-    							 "age",
-    							 "height",
-    							 "valorPrecoQuant"
-    					       },
-    					editables = {
-	   							 //"entityTwo.color",
-	   							 //"entityNine.id.idEntitySeven", 
-    							//"valorPrecoQuant",
-	   							 "height",
-	   							 "age"
-	   					       },
-    					hiddens = { "entityTwo.color" }, 
+			    column = @UIColumn_( 
     					calculations = { "valorPrecoQuant = age * height" },
     					totalizador = "{ "
     							+ "'age': 'Quantidade Total:', "
     							+ "'height': 'Preço Unitário Total:', "
     							+ "'valorPrecoQuant': 'Total:'"
     							+ "}"
-    					,name = "{ "
-    							+ "'entityFive.reference': 'Produto',"
-    							+ "'age':'Quantidade',"
-    							+ "'height':'Preço Unitário',"
-    							+ "'valorPrecoQuant':'Preço',"
-    							+ "'entityTwo.entityTree.entityFour.entityFive.entityStatus.status':'Quinto Status', "
-    							+ "'entityTwo.entityTree.entityFour.entityStatus.status':'Segundo Status', "
-    							+ "'entityTwo.id':'Id TWO', "
-    							+ "'entityTwo.color':'Cor', "
-    							+ "'name':'Nome One', 'code': 'Codigo', "
-    							+ "'prohibitedDateTime':'Data Proibida', "
-    							+ "'birthDate':'Data de Aniversario', "
-    							+ "'idEntitySix':'6', "
-    							+ "'entityStatus.status': 'Status', "
-    							+ "'entityStatus.name':'Nome do Status' "
-    							+ "}"
+
     				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
@@ -160,7 +113,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 			    state = TypeButtonState.BTN_STATE_PRIMARY,
 			    template = { TypeTemplate.ROW },
 			    action = @UIAction(
-			        method = @UIActionMethod(serverMethod = "rowSalvar")
+			        method = @UIActionMethod(serverMethod = "salvar")
 			    )
 			),   		
             @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
@@ -194,7 +147,8 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 )
 public class EntityOne extends DomainAbstract<Long> {
 
-	@UIId
+	@UIId(label = "Id")
+	@UIColumn(label = "EntityOne ID")
 	private Long id;
 
 	@UIText(label = "Name")
@@ -208,6 +162,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"),
 	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },   syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
 	)
+	@UIColumn(label = "EntityOne Nome")
 	private String name;
 
 	@UIPosition(x = 2, y = 1)
@@ -221,32 +176,43 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIPosition(x = 2, y = 2)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false)
+	@UIColumn(label = "EntityOne Codigo")
 	private Boolean code = true;
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
+	@UIColumn(label = "EntityOne Idade", initial = true)
+	@UIRow(editable = true)
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
+	@UIColumn(label = "EntityOne Altura")
+	@UIRow(editable = true)
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
 	@UIDate(label = "Birth Date")
+	@UIColumn(label = "EntityOne Data de Aniversario")
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIColumn(label = "EntityOne Data da Proibicao")
 	private LocalDateTime prohibitedDateTime;
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
+	@UIRow(domainField = "color", visible = false)
 	private EntityTwo entityTwo;
 
 	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
+	@UIRow(domainField = "reference")
 	private EntityFive entityFive;
 	
-	@UIHidden(template = { TypeTemplate.ROW })
+	@UIHidden(label = "Valor Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Valor Total")
+	@UIRow()
 	private Double valorPrecoQuant;
 	
 	public Double getValorPrecoQuant() {

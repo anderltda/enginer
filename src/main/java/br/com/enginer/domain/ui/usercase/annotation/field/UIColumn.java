@@ -9,7 +9,9 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface UIId {
-	String label();
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL };
+public @interface UIColumn {
+	String label(); // nome da coluna
+	boolean initial() default false; // aparece logo na tela
+	boolean hidden() default false; // nunca exibida
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.MODAL };
 }

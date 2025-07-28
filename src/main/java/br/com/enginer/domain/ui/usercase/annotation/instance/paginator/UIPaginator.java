@@ -11,6 +11,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonActi
 @Target(ElementType.TYPE)
 public @interface UIPaginator {
     UIConfig config() default @UIConfig(expandable = false, multiSelection = false, editable = false);
-    UIColumn column() default @UIColumn(initials = {});
+    UIColumn_ column() default @UIColumn_(initials = {});
     UIButtonAction actions() default @UIButtonAction(value = {});
 }

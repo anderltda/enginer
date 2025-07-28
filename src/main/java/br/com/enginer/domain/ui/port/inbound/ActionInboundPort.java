@@ -5,6 +5,7 @@ import java.util.Map;
 
 import br.com.enginer.domain.InboundPort;
 import br.com.enginer.domain.ui.dto.PageResult;
+import br.com.enginer.domain.ui.dto.logger.ActionLogger;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 
@@ -51,5 +52,14 @@ public interface ActionInboundPort extends InboundPort {
 	 * @throws CheckedException
 	 */
 	Domain<?> methodName(Domain<?> domain) throws CheckedException;
+	
+	/**
+	 * @param domain
+	 * @param domains
+	 * @param actionLogger
+	 * @return
+	 * @throws CheckedException
+	 */
+	List<Domain<?>> methodName(Domain<?> domain, List<Domain<?>> domains, ActionLogger actionLogger) throws CheckedException;
 	
 }

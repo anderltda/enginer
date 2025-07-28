@@ -19,6 +19,7 @@ import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIEmail;
@@ -31,6 +32,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIPassword;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRadio;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.UITextArea;
@@ -54,7 +56,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResp
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
@@ -172,13 +174,18 @@ public final class FormTemplate {
 			userCase = actionUserCase;
 			typeTemplate = mapTypeTemplates.entrySet().iterator().next().getKey();
 			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
+			
+			Paginator paginator = getPaginator(domain);
+			Tab tab = getTab(domain);
+			String title = getTitle(domain);
+			Validate validate = getValidate(domain);
 
 			form = new Form();
 			form.setId(StringsUtils.firstLower(domain.getClass().getSimpleName()));
-			form.setTitle(getTitle(domain));
-			form.setTab(getTab(domain));
-			form.setPaginator(getPaginator(domain));
-			form.setValidate(getValidate(domain));
+			form.setTitle(title);
+			form.setTab(tab);
+			form.setPaginator(paginator);
+			form.setValidate(validate);
 			form.setFields(fields);
 
 			List<java.lang.reflect.Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
@@ -476,6 +483,84 @@ public final class FormTemplate {
 				fieldSubmit.setButton(submit);
 				fields.add(fieldSubmit);
 			}
+			
+			
+			
+			
+			
+			Map<String, String> columnNames = new HashMap<>();
+			List<String> initials = new ArrayList<String>();
+			List<String> visibles = new ArrayList<String>();
+			List<String> rows = new ArrayList<String>();
+			List<String> editables = new ArrayList<String>();
+			List<String> hiddens = new ArrayList<String>();
+			String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
+			
+			for (java.lang.reflect.Field field_ : domain.getClass().getDeclaredFields()) {
+				
+				String name = domainName.concat(".").concat(field_.getName());
+
+				// UIFilter
+				UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
+				if (uiFilter != null) {
+					
+					UIRow uiRow = field_.getAnnotation(UIRow.class);
+					
+					if(uiRow != null) {
+						
+						rows.add(field_.getName().concat(".").concat(uiRow.domainField()));
+						
+						if(!uiRow.visible()) {
+							hiddens.add(field_.getName().concat(".").concat(uiRow.domainField()));
+						}
+					}
+					
+					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+					
+					continue;
+				}
+
+				// UIJoin
+				UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
+				if (uiJoin != null) {
+					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+					continue;
+				}
+				
+				// UIRow
+				UIRow uiRow = field_.getAnnotation(UIRow.class);
+				if(uiRow != null) {
+					rows.add(field_.getName());
+					
+					if(uiRow.editable()) {
+						editables.add(field_.getName());
+					}
+					
+					if(!uiRow.visible()) {
+						hiddens.add(field_.getName());
+					}
+				}
+				
+				// UIColumn
+				UIColumn uiColumn = field_.getAnnotation(UIColumn.class);
+				if (uiColumn != null) {
+					if(!uiColumn.hidden()) {
+						if(uiColumn.initial()) {
+							initials.add(name);
+						}
+						columnNames.put(field_.getName(), uiColumn.label());
+						visibles.add(name);
+					}
+				}
+				
+			}
+			
+			paginator.getColumn().setName(columnNames);
+			paginator.getColumn().setVisibles(visibles);
+			paginator.getColumn().setInitials(initials);
+			paginator.getColumn().setRows(rows);
+			paginator.getColumn().setEditables(editables);
+			paginator.getColumn().setHiddens(hiddens);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -516,14 +601,14 @@ public final class FormTemplate {
 			config.setMultiSelection(uiConfig.multiSelection());
 			config.setExpandable(uiConfig.expandable());
 
-			UIColumn uiColumn = uiPaginator.column();
-			column.setName(uiColumn.name());
+			UIColumn_ uiColumn = uiPaginator.column();
+			//column.setName(uiColumn.name());
+			//column.setInitials(Arrays.asList(uiColumn.initials()));
+			//column.setRows(Arrays.asList(uiColumn.rows()));
+			//column.setEditables(Arrays.asList(uiColumn.editables()));
+			//column.setVisibles(Arrays.asList(uiColumn.visibles()));
 			column.setTotalizador(uiColumn.totalizador());
-			column.setInitials(Arrays.asList(uiColumn.initials()));
-			column.setRows(Arrays.asList(uiColumn.rows()));
 			column.setHiddens((Arrays.asList(uiColumn.hiddens())));
-			column.setEditables(Arrays.asList(uiColumn.editables()));
-			column.setVisibles(Arrays.asList(uiColumn.visibles()));
 			column.setCalculations(Arrays.asList(uiColumn.calculations()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
@@ -585,7 +670,7 @@ public final class FormTemplate {
 
 		Class<?> typeClass = f.getType();
 
-		Filter filter = default_.getFilter(typeClass.getSimpleName());
+		Filter filter = default_.getFilter(typeClass);
 		
 		Class<?> typeId = ReflectionUtils.getTypeFieldClass(typeClass, "id");
 
@@ -792,7 +877,7 @@ public final class FormTemplate {
 
 		Object id = null;
 
-		Join join = default_.getJoin(f.getType().getSimpleName());
+		Join join = default_.getJoin(f.getType());
 
 		Object object = ReflectionUtils.get(StringsUtils.getMethod(f.getType().getSimpleName()), domain);
 

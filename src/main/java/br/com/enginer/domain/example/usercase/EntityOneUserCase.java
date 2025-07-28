@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.usercase;
 
+import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.AbstractUserCase;
@@ -52,5 +53,9 @@ public class EntityOneUserCase extends AbstractUserCase {
 		}
 		
 		return result;
+	}
+	
+	public void rowSalvar(List<Domain<?>> entityOnes) {
+		salvar(entityOnes);
 	}
 }

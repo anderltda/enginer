@@ -674,11 +674,13 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
+	public List<Domain<?>> save(List<Domain<?>> entities, Boolean... flush) throws UncheckedException {
 
 		try {
 
 			List<Domain<?>> savedList = new ArrayList<>();
+			
+			Domain<?> domain = (Domain<?>) entities.getFirst();
 			
 			String uri = UriUtils.buildUriSaveAll(domain, flush);
 

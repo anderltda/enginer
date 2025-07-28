@@ -72,6 +72,9 @@ public class BeanConfiguration {
 		
 		// Adiciona suporte para converter "" em null para objetos
 		mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+		
+		// Ignorar propriedades desconhecidas para todas as deserializações
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		// Ignora campos nulos ou vazios
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

@@ -49,6 +49,7 @@ public class Default {
 	 */
 	public Hidden getHidden() {
 		Hidden hidden = new Hidden();
+		hidden.setField(label);
 		hidden.setField(field);
 		hidden.setValue(value);
 		hidden.setPosition(new Position(0, 0));
@@ -200,20 +201,22 @@ public class Default {
 		return file;
 	}
 
-	public Filter getFilter(String domain) {
+	public Filter getFilter(Class<?> domain) {
 		Filter filter = new Filter();
 		filter.setLabel(label);
 		filter.setValue(value);
-		filter.setDomain(StringsUtils.firstLower(domain));
+		filter.setDomainClass(domain);
+		filter.setDomain(StringsUtils.firstLower(domain.getSimpleName()));
 		filter.setPosition(position);
 		filter.setDisable(disable);
 		return filter;
 	}
 
-	public Join getJoin(String domain) {
+	public Join getJoin(Class<?> domain) {
 		Join join = new Join();
 		join.setLabel(label);
-		join.setDomain(StringsUtils.firstLower(domain));
+		join.setDomainClass(domain);
+		join.setDomain(StringsUtils.firstLower(domain.getSimpleName()));
 		join.setLayoutTarget(TypeLayoutTarget.form);
 		return join;
 	}

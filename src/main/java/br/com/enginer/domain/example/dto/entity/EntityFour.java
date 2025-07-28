@@ -3,6 +3,7 @@ package br.com.enginer.domain.example.dto.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
@@ -41,12 +42,14 @@ value = {
 )
 public class EntityFour extends DomainAbstract<UUID> {
 
-	@UIId
+	@UIId(label = "Id")
+	@UIColumn(label = "EntityFour Id")
 	private UUID id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
 	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = { "dogMel", "dogMagrela" }, syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
+	@UIColumn(label = "EntityFour Nome da Fruta")
 	private String fruit;
 
 	@UIPosition(x = 1, y = 2)
@@ -54,12 +57,15 @@ public class EntityFour extends DomainAbstract<UUID> {
 	private EntityStatus entityStatus;
 
 	@UIPosition(x = 2, y = 2)
+	@UIColumn(label = "EntityFour Atributo")
 	private Integer attribute;
 
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
+	@UIColumn(label = "EntityFour Data e hora da inclusao")
 	private LocalDateTime inclusionDateTime;
 
+	@UIFilter(label = "Entity Five", field = "reference")
 	@UIJoin(icon = "cloud")
 	private EntityFive entityFive;
 	

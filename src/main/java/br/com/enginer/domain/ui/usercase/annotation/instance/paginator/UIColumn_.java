@@ -6,11 +6,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface UIColumn {
+public @interface UIColumn_ {
 	
 	String name() default "";
 	String totalizador() default "";
-	String[] initials() ;
+	String[] initials() default {};
 	String[] rows() default {};
 	String[] hiddens() default {};
 	String[] editables() default {};

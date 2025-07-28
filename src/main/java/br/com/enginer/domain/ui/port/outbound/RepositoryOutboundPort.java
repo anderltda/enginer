@@ -48,7 +48,7 @@ public interface RepositoryOutboundPort extends OutboundPort {
 	
 	public Domain<?> save(Domain<?> domain, Boolean... flush) throws UncheckedException;
 	
-	public List<Domain<?>> save(Domain<?> domain, List<Domain<?>> entities, Boolean... flush) throws UncheckedException;
+	public List<Domain<?>> save(List<Domain<?>> entities, Boolean... flush) throws UncheckedException;
 
 }
 

@@ -114,13 +114,33 @@ public class ActionInboundUserCase implements ActionInboundPort {
 		Domain<?> domainNew = null;
 		try {
 			ActionLogger actionLogger = domain.getActionLogger();
-			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getAction());
+			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getActionName());
 			Object object = injectedDependency(domain);
-			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getAction(), domain);
+			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getActionName(), domain);
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
 		}
 		return domainNew;
 	}
+
+	/**
+	 *
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Domain<?>> methodName(Domain<?> domain, List<Domain<?>> domains, ActionLogger actionLogger) throws CheckedException {
+		List<Domain<?>> domainNews = null;
+		try {
+			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getActionName());
+			Object object = injectedDependency(domain);
+			domainNews =  (List<Domain<?>>) ReflectionUtils.executeMethod(object, actionLogger.getActionName(), domains);
+		} catch (Exception ex) {
+			logger.error(ActionInboundUserCase.class, ex);
+			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
+		}
+		return domainNews;
+	}
+	
+	
 }

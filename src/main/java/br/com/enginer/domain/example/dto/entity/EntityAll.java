@@ -27,7 +27,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 )
 public class EntityAll extends DomainAbstract<Long> {
 
-	@UIId
+	@UIId(label = "Id")
 	private Long id;
 	
 	@UIPosition(x = 1, y = 1)
