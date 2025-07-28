@@ -128,8 +128,8 @@ public class ReflectionUtils {
 	 * @param visited
 	 * @param pattern
 	 */
-	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited,
-			String pattern) {
+	@SuppressWarnings("unused")
+	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited, String pattern) {
 		if (clazz != null && !clazz.equals(classLimit)) {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (!visited.contains(field) && field.getName().matches(pattern)) {
