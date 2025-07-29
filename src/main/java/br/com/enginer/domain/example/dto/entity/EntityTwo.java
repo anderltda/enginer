@@ -27,7 +27,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
@@ -54,20 +53,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-    column = @UIColumn_( initials = { 
-                                    "entityTwo.color", 
-                                    "entityTwo.hex",
-                                    "entityTwo.cost"
-                                   }, 
-    					 visibles = { 
-	                                "entityTwo.color", 
-	                                "entityTwo.hex",
-	                                "entityTwo.cost",
-                                    "entityStatus.name",
-                                    "entityStatus.status"
-    							   }
-    					,name = "{ 'id':'Id TWO', 'color':'Cor', 'hex':'Hexagonal', 'cost':'Custo', 'entityStatus.name':'Name', 'entityStatus.status':'Status' }"
-    				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(

@@ -22,7 +22,6 @@ import br.com.enginer.domain.OutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
@@ -48,12 +47,7 @@ public class ReflectionUtils {
 	}
 
 	
-	public static void extractFieldPaginator(
-			Map<String, String> columnNames, 
-			List<String> visibles, 
-			List<String> initials,
-			List<String> rows,
-			String simpleName, Class<?> clazz) {
+	public static void extractFieldPaginator(Map<String, String> columnNames, List<String> visibles, List<String> initials, String simpleName, Class<?> clazz) {
 
 		if(simpleName != null) {
 			simpleName = simpleName + (".") + StringsUtils.firstLower(clazz.getSimpleName());
@@ -68,21 +62,14 @@ public class ReflectionUtils {
 			// UIFilter
 			UIFilter uiFilter = field.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
+				extractFieldPaginator(columnNames, visibles, initials, simpleName, field.getType());
 				continue;
 			}
 
 			// UIJoin
 			UIJoin uiJoin = field.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
-				continue;
-			}
-			
-			// UIRow
-			UIRow uiRow = field.getAnnotation(UIRow.class);
-			if(uiRow != null) {
-				rows.add(name);
+				extractFieldPaginator(columnNames, visibles, initials, simpleName, field.getType());
 				continue;
 			}
 			
@@ -100,6 +87,26 @@ public class ReflectionUtils {
 			}
 		}	
 	}
+	
+	public static <T> void setAtIndex(List<T> list, int index, T value) {
+	    // Garante que a lista tenha tamanho suficiente
+	    while (list.size() <= index) {
+	        list.add(null);
+	    }
+	    list.set(index, value);
+	}
+	
+	public static <T> void removeTrailingNulls(List<T> list) {
+	    int lastNonNull = list.size() - 1;
+	    // Procura o último elemento não-nulo
+	    while (lastNonNull >= 0 && list.get(lastNonNull) == null) {
+	        lastNonNull--;
+	    }
+	    // Remove os nulls no final
+	    for (int i = list.size() - 1; i > lastNonNull; i--) {
+	        list.remove(i);
+	    }
+	}	
 	
 
 	/**

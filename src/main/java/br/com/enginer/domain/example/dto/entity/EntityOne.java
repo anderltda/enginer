@@ -38,7 +38,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
@@ -78,15 +77,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelection = false, editable = true),
-			    column = @UIColumn_( 
-    					calculations = { "valorPrecoQuant = age * height" },
-    					totalizador = "{ "
-    							+ "'age': 'Quantidade Total:', "
-    							+ "'height': 'Preço Unitário Total:', "
-    							+ "'valorPrecoQuant': 'Total:'"
-    							+ "}"
-
-    				  ),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(
@@ -182,13 +172,13 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Idade", initial = true)
-	@UIRow(editable = true)
+	@UIRow(editable = true, totalizer = true, order = 2)
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Altura")
-	@UIRow(editable = true)
+	@UIRow(editable = true, order = 3)
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
@@ -207,20 +197,71 @@ public class EntityOne extends DomainAbstract<Long> {
 	private EntityTwo entityTwo;
 
 	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
-	@UIRow(domainField = "reference")
+	@UIRow(domainField = "reference", order = 1)
 	private EntityFive entityFive;
 	
-	@UIHidden(label = "Valor Total", template = { TypeTemplate.ROW })
-	@UIColumn(label = "Valor Total")
-	@UIRow()
-	private Double valorPrecoQuant;
+	@UIHidden(label = "Multiplicacao Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Multiplicacao Total")
+	@UIRow(calculation = "age * height", order = 4)
+	private Double valorMultiplicacao;
+
+	@UIHidden(label = "Soma Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Soma Total")
+	@UIRow(calculation = "age + height", order = 5)
+	private Double valorSoma;
 	
-	public Double getValorPrecoQuant() {
-		return valorPrecoQuant;
+	@UIHidden(label = "Subtracao Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Subtracao Total")
+	@UIRow(calculation = "age - height + valorUm", order = 6)
+	private Double valorSubtracao;	
+	
+	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Divisao Total")
+	@UIRow(calculation = "age / height", order = 7)
+	private Double valorDivisao;	
+	
+	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
+	@UIRow(visible = false)
+	private Integer valorUm = 1;
+	
+	public Integer getValorUm() {
+		return valorUm;
 	}
 
-	public void setValorPrecoQuant(Double valorPrecoQuant) {
-		this.valorPrecoQuant = valorPrecoQuant;
+	public void setValorUm(Integer valorUm) {
+		this.valorUm = valorUm;
+	}
+
+	public Double getValorDivisao() {
+		return valorDivisao;
+	}
+
+	public void setValorDivisao(Double valorDivisao) {
+		this.valorDivisao = valorDivisao;
+	}
+
+	public Double getValorSubtracao() {
+		return valorSubtracao;
+	}
+
+	public void setValorSubtracao(Double valorSubtracao) {
+		this.valorSubtracao = valorSubtracao;
+	}
+
+	public Double getValorSoma() {
+		return valorSoma;
+	}
+
+	public void setValorSoma(Double valorSoma) {
+		this.valorSoma = valorSoma;
+	}
+
+	public Double getValorMultiplicacao() {
+		return valorMultiplicacao;
+	}
+
+	public void setValorMultiplicacao(Double valorMultiplicacao) {
+		this.valorMultiplicacao = valorMultiplicacao;
 	}
 
 	/**

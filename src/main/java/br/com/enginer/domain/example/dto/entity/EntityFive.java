@@ -28,7 +28,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
@@ -60,11 +59,6 @@ value = {
 )
 @UIPaginator(
 	    config = @UIConfig(expandable = false, multiSelection = false, editable = false),
-	    column = @UIColumn_(initials = { 
-		            "reference", 
-		            "factor",
-		            "entityFive.entityStatus.name"
-	           }),
 	    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  })
 	)
 public class EntityFive extends DomainAbstract<UUID> {

@@ -9,7 +9,7 @@ import java.util.Map;
 public class Column {
 
 	private Map<String, String> name;
-	private String totalizador;
+	private Map<String, String> totalizer;
 	private List<String> initials;
 	private List<String> rows;
 	private List<String> hiddens;
@@ -25,12 +25,12 @@ public class Column {
 		this.name = name;
 	}
 
-	public String getTotalizador() {
-		return totalizador;
+	public Map<String, String> getTotalizer() {
+		return totalizer;
 	}
 
-	public void setTotalizador(String totalizador) {
-		this.totalizador = totalizador;
+	public void setTotalizer(Map<String, String> totalizer) {
+		this.totalizer = totalizer;
 	}
 
 	public List<String> getInitials() {

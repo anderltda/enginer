@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
@@ -56,7 +57,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResp
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIColumn_;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
@@ -489,11 +489,14 @@ public final class FormTemplate {
 			
 			
 			Map<String, String> columnNames = new HashMap<>();
+			Map<String, String> totalizers = new HashMap<>();
 			List<String> initials = new ArrayList<String>();
 			List<String> visibles = new ArrayList<String>();
 			List<String> rows = new ArrayList<String>();
 			List<String> editables = new ArrayList<String>();
 			List<String> hiddens = new ArrayList<String>();
+			List<String> calculations = new ArrayList<String>();
+			
 			String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
 			
 			for (java.lang.reflect.Field field_ : domain.getClass().getDeclaredFields()) {
@@ -502,35 +505,66 @@ public final class FormTemplate {
 
 				// UIFilter
 				UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
+				
 				if (uiFilter != null) {
 					
 					UIRow uiRow = field_.getAnnotation(UIRow.class);
 					
 					if(uiRow != null) {
 						
-						rows.add(field_.getName().concat(".").concat(uiRow.domainField()));
+						if(uiRow.order() > 0) {
+							ReflectionUtils.setAtIndex(rows, uiRow.order()-1, field_.getName().concat(".").concat(uiRow.domainField()));
+						} else {
+							rows.add(field_.getName().concat(".").concat(uiRow.domainField()));
+						}
+						
 						
 						if(!uiRow.visible()) {
 							hiddens.add(field_.getName().concat(".").concat(uiRow.domainField()));
 						}
 					}
 					
-					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, null, field_.getType());
 					
 					continue;
 				}
 
 				// UIJoin
 				UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
+				
 				if (uiJoin != null) {
-					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+					
+					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, null, field_.getType());
+					
 					continue;
+				}
+				
+				// UIColumn
+				UIColumn uiColumn = field_.getAnnotation(UIColumn.class);
+				
+				if (uiColumn != null) {
+					
+					if(!uiColumn.hidden()) {
+						
+						if(uiColumn.initial()) {
+							initials.add(name);
+						}
+						
+						columnNames.put(field_.getName(), uiColumn.label());
+						visibles.add(name);
+					}
 				}
 				
 				// UIRow
 				UIRow uiRow = field_.getAnnotation(UIRow.class);
+				
 				if(uiRow != null) {
-					rows.add(field_.getName());
+					
+					if(uiRow.order() > 0) {
+						ReflectionUtils.setAtIndex(rows, uiRow.order() - 1, field_.getName());
+					} else {
+						rows.add(field_.getName());
+					}
 					
 					if(uiRow.editable()) {
 						editables.add(field_.getName());
@@ -539,29 +573,30 @@ public final class FormTemplate {
 					if(!uiRow.visible()) {
 						hiddens.add(field_.getName());
 					}
-				}
-				
-				// UIColumn
-				UIColumn uiColumn = field_.getAnnotation(UIColumn.class);
-				if (uiColumn != null) {
-					if(!uiColumn.hidden()) {
-						if(uiColumn.initial()) {
-							initials.add(name);
-						}
-						columnNames.put(field_.getName(), uiColumn.label());
-						visibles.add(name);
+					
+					if(!uiRow.calculation().isEmpty()) {
+						calculations.add(field_.getName().concat(" = ").concat(uiRow.calculation()));
+					}
+					
+					if(uiRow.totalizer()) {
+						totalizers.put(field_.getName(), uiColumn.label() + " Total: ");
 					}
 				}
 				
 			}
 			
+			rows.removeIf(Objects::isNull);
+			
 			paginator.getColumn().setName(columnNames);
 			paginator.getColumn().setVisibles(visibles);
 			paginator.getColumn().setInitials(initials);
+			
 			paginator.getColumn().setRows(rows);
+			paginator.getColumn().setTotalizer(totalizers);
 			paginator.getColumn().setEditables(editables);
 			paginator.getColumn().setHiddens(hiddens);
-
+			paginator.getColumn().setCalculations(calculations);
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw ex;
@@ -601,15 +636,15 @@ public final class FormTemplate {
 			config.setMultiSelection(uiConfig.multiSelection());
 			config.setExpandable(uiConfig.expandable());
 
-			UIColumn_ uiColumn = uiPaginator.column();
+			//UIColumn_ uiColumn = uiPaginator.column();
 			//column.setName(uiColumn.name());
 			//column.setInitials(Arrays.asList(uiColumn.initials()));
 			//column.setRows(Arrays.asList(uiColumn.rows()));
 			//column.setEditables(Arrays.asList(uiColumn.editables()));
 			//column.setVisibles(Arrays.asList(uiColumn.visibles()));
-			column.setTotalizador(uiColumn.totalizador());
-			column.setHiddens((Arrays.asList(uiColumn.hiddens())));
-			column.setCalculations(Arrays.asList(uiColumn.calculations()));
+			//column.setTotalizer(uiColumn.totalizador());
+			//column.setHiddens((Arrays.asList(uiColumn.hiddens())));
+			//column.setCalculations(Arrays.asList(uiColumn.calculations()));
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
