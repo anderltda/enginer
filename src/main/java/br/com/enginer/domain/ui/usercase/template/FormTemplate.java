@@ -101,6 +101,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.ActionObject;
 import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponse;
 import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseError;
 import br.com.enginer.domain.ui.usercase.schema.instance.ActionResponseSuccess;
+import br.com.enginer.domain.ui.usercase.schema.instance.ActionTrigger;
 import br.com.enginer.domain.ui.usercase.schema.instance.Button;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
@@ -1139,11 +1140,15 @@ public final class FormTemplate {
 	private static Action getButtonAction(UIAction uiAction) {
 		boolean containsTemplate = false;
 		Action action = new Action();
+		ActionTrigger actionTrigger = new ActionTrigger();
 		if (uiAction.method() instanceof UIActionMethod uiActionMethod) {
 			containsTemplate = checkTemplate(uiActionMethod);
 			if (containsTemplate) {
 				action.setClientMethod(uiActionMethod.clientMethod());
 				action.setServerMethod(uiActionMethod.serverMethod());
+				actionTrigger.setClientMethod(uiActionMethod.trigger().clientMethod());
+				actionTrigger.setServerMethod(uiActionMethod.trigger().serverMethod());
+				action.setTriggerMethod(actionTrigger);
 			}
 		}
 

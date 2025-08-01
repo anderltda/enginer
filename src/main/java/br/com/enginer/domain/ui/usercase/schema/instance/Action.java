@@ -11,6 +11,7 @@ public class Action {
 	private String redirect;
 	private String clientMethod;
 	private String serverMethod;
+	private ActionTrigger triggerMethod;
 	private ActionObject actionObject;
 	private ActionResponse response;
 
@@ -60,6 +61,14 @@ public class Action {
 
 	public void setServerMethod(String serverMethod) {
 		this.serverMethod = serverMethod;
+	}
+	
+	public ActionTrigger getTriggerMethod() {
+		return triggerMethod;
+	}
+
+	public void setTriggerMethod(ActionTrigger triggerMethod) {
+		this.triggerMethod = triggerMethod;
 	}
 
 	public ActionObject getActionObject() {

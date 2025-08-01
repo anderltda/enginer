@@ -8,9 +8,8 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface UIActionMethod {
+public @interface UIActionTriggerMethod {
     String clientMethod() default "";
     String serverMethod() default "";
-    UIActionTriggerMethod trigger() default @UIActionTriggerMethod;
     TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.PAGINATOR, TypeTemplate.MODAL };
 }
