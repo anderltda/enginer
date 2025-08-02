@@ -26,6 +26,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionDomain;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionTriggerMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
@@ -80,22 +81,31 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
     value = {
 		@UIButton(
-				label = "Abrir uma listagem Entity Two", 
-				template = TypeTemplate.PAGINATOR, 
-				highlight = false, 
-				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disable=true, field=color, value=$entityTwo.color }"))
+			label = "Abrir uma listagem Entity Two", 
+			template = TypeTemplate.PAGINATOR, 
+			highlight = false,
+			dropdown = true,
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disable=true, field=color, value=$entityTwo.color }")
+			)
 		),        		
 		@UIButton(
-				label = "Visualizar (tab) detalhes do registro", 
-				template = TypeTemplate.PAGINATOR, 
-				highlight = false, 
-				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=true }"))
+			label = "Visualizar (tab) detalhes do registro", 
+			template = TypeTemplate.PAGINATOR, 
+			highlight = false, 
+			dropdown = true,
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=true }")
+			)
 		),	
 		@UIButton(
-				label = "Editar (tab) detalhes do registro", 
-				template = { TypeTemplate.PAGINATOR }, 
-				highlight = true, 
-				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=false }"))
+			label = "Editar (tab) detalhes do registro", 
+			template = { TypeTemplate.PAGINATOR }, 
+			highlight = true,
+			dropdown = true,
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab",  param = "{ disableAll=false }")
+			)
 		),
 		@UIButton(
 		    label = Constants.LABEL_SAVE,
@@ -105,12 +115,34 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    action = @UIAction(
 		        method = @UIActionMethod(serverMethod = "salvar")
 		    )
-		),   		
-        @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
-        @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo", param = "$id"))),
-        @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
-        @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id"))),            
-        @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
+		), 
+		@UIButton(
+			label = Constants.LABEL_CLEAR, 
+			icon = "bin_alt", 
+			state = TypeButtonState.BTN_STATE_PRIMARY, 
+			template = { TypeTemplate.PAGINATOR }, 
+			needsValidation = true,
+			action = @UIAction( 
+				method = @UIActionMethod(clientMethod = "triggerMethod", 
+				trigger = @UIActionTriggerMethod(clientMethod = Constants.METHOD_CLEAR_FORM)) 
+			)
+		),
+		@UIButton(
+		    label = Constants.LABEL_SEARCH,
+		    icon = "search",
+		    state = TypeButtonState.BTN_STATE_PRIMARY,
+		    template = TypeTemplate.PAGINATOR,
+		    needsValidation = true,
+			action = @UIAction( 
+				method = @UIActionMethod(clientMethod = "triggerMethod", 
+				trigger = @UIActionTriggerMethod(serverMethod = "search")) 
+			)
+		),
+        @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", dropdown = true, action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
+        @UIButton(template = TypeTemplate.PAGINATOR, label = "Two domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo", param = "$id"))),
+        @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
+        @UIButton(template = TypeTemplate.PAGINATOR, label = "Four domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour", param = "$id"))),            
+        @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
     }
   )
 )

@@ -25,6 +25,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     confirm = true,
     needsValidation = false,
     highlight = true,
+    dropdown = true,
     template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
     		method = @UIActionMethod(clientMethod = "onDelete"),

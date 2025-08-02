@@ -17,6 +17,7 @@ public @interface UIButton {
 	String icon() default "";
 	boolean disabled() default false;
 	boolean highlight() default false;
+	boolean dropdown() default false;
 	boolean confirm() default false;
 	boolean needsValidation() default true;
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL };

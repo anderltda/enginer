@@ -16,7 +16,8 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @UIButton(
 		label = Constants.LABEL_ACTION_EDIT, 
 		template = TypeTemplate.PAGINATOR, 
-		highlight = false, 
+		highlight = false,
+		dropdown = true,
 		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, param = "{ disabled=false }"))
 )
 public @interface UIButtonEdit {}

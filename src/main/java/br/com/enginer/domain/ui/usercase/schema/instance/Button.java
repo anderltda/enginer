@@ -14,6 +14,7 @@ public class Button {
 	private String icon;
 	private Boolean disabled;
 	private Boolean highlight;
+	private Boolean dropdown;
 	private Boolean confirm;
 	private Boolean needsValidation;
 	private String state;
@@ -67,6 +68,14 @@ public class Button {
 
 	public void setHighlight(Boolean highlight) {
 		this.highlight = highlight;
+	}
+	
+	public Boolean getDropdown() {
+		return dropdown;
+	}
+
+	public void setDropdown(Boolean dropdown) {
+		this.dropdown = dropdown;
 	}
 
 	public Boolean getConfirm() {
