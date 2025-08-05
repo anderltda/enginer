@@ -119,9 +119,9 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIButton(
 			label = Constants.LABEL_CLEAR, 
 			icon = "bin_alt", 
+			needsValidation = false,
 			state = TypeButtonState.BTN_STATE_PRIMARY, 
 			template = { TypeTemplate.PAGINATOR }, 
-			needsValidation = true,
 			action = @UIAction( 
 				method = @UIActionMethod(clientMethod = "triggerMethod", 
 				trigger = @UIActionTriggerMethod(clientMethod = Constants.METHOD_CLEAR_FORM)) 
@@ -132,7 +132,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    icon = "search",
 		    state = TypeButtonState.BTN_STATE_PRIMARY,
 		    template = TypeTemplate.PAGINATOR,
-		    needsValidation = true,
 			action = @UIAction( 
 				method = @UIActionMethod(clientMethod = "triggerMethod", 
 				trigger = @UIActionTriggerMethod(serverMethod = "search")) 

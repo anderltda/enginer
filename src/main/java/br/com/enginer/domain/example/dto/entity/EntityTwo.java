@@ -59,12 +59,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				label = "Abrir uma listagem Entity One", 
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
+    				dropdown = true,
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }"))
     		), 
     		@UIButton(
     			    label = "Novo Entity One com Entity Two", 
     			    icon = "add_circle",
     			    needsValidation = false,
+    	    		dropdown = true,
     			    template = TypeTemplate.PAGINATOR, 
     		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }"))
     			    
@@ -73,6 +75,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     			    label = "Add Entity One com Entity Two", 
     			    icon = "add_circle",
     			    needsValidation = false,
+    			    dropdown = true,
     			    template = TypeTemplate.PAGINATOR, 
     		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }"))
     			    
@@ -80,18 +83,20 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     		@UIButton(
     				label = "Visualizar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
-    				highlight = false, 
+    				highlight = false,
+    				dropdown = true,
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=true }"))
     		),	
     		@UIButton(
     				label = "Editar (tab) detalhes do registro", 
     				template = TypeTemplate.PAGINATOR, 
-    				highlight = true, 
+    				highlight = true,
+    				dropdown = true,
     				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH_FIND_BY_ID, ui = "tab", param = "{ disableAll=false }"))
     		),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
-            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Another Method Action", dropdown = true, action = @UIAction(method = @UIActionMethod(clientMethod = "salvar"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Tree domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree", param = "$id"))),
+            @UIButton(template = TypeTemplate.PAGINATOR, label = "Five domain link", dropdown = true, action = @UIAction(actionObject = @UIActionDomain(object = "entityTwo.entityTree.entityFour.entityFive", param = "$id")))
         }
     )
 )
