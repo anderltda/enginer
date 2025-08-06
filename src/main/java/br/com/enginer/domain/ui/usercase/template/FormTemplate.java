@@ -633,7 +633,7 @@ public final class FormTemplate {
 			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
 
 			UIConfig uiConfig = uiPaginator.config();
-			config.setEditable(uiConfig.editable());
+			config.setEditableAllCell(uiConfig.editableAllCell());
 			config.setMultiSelection(uiConfig.multiSelection());
 			config.setExpandable(uiConfig.expandable());
 

@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface UIConfig {
 	boolean expandable();
 	boolean multiSelection();
-	boolean editable();
+	boolean editableAllCell();
 }
 
 

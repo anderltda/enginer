@@ -58,7 +58,7 @@ value = {
 }
 )
 @UIPaginator(
-	    config = @UIConfig(expandable = false, multiSelection = false, editable = false),
+	    config = @UIConfig(expandable = false, multiSelection = false, editableAllCell = false),
 	    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  })
 	)
 public class EntityFive extends DomainAbstract<UUID> {

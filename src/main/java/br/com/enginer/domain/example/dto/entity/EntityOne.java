@@ -77,7 +77,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 				@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 		    })
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelection = false, editable = true),
+    config = @UIConfig(expandable = true, multiSelection = false, editableAllCell = false),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
     value = {
 		@UIButton(

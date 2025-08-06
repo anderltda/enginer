@@ -10,6 +10,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonActi
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface UIPaginator {
-    UIConfig config() default @UIConfig(expandable = false, multiSelection = false, editable = false);
+    UIConfig config() default @UIConfig(expandable = false, multiSelection = false, editableAllCell = false);
     UIButtonAction actions() default @UIButtonAction(value = {});
 }
