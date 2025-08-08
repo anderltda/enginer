@@ -58,8 +58,8 @@ public class NormalizeUtils {
 			if (main.equals(LocalDateTime.class))
 				return LocalDateTime.now();
 			if (main.equals(Collection.class) || main.equals(List.class) || main.equals(Map.class))
-			    return new ArrayList<>();
-			
+				return new ArrayList<>();
+
 			// Caso seja uma classe com construtor padrão
 			return main.getDeclaredConstructor().newInstance();
 		} catch (Exception ex) {
@@ -74,7 +74,7 @@ public class NormalizeUtils {
 		Class<?> fieldType = field.getType();
 
 		System.out.println(fieldName);
-		
+
 		JsonNode valueNode = jsonNode.get(fieldName);
 		if (valueNode == null || valueNode.isNull())
 			return null;
@@ -162,92 +162,105 @@ public class NormalizeUtils {
 	}
 
 	/**
-     * Ajusta o JSON: localiza o nó que termina com "Id", extrai e normaliza os campos de chave composta
-     * e move-os para um novo nó chamado "id", sobrescrevendo repetições com a última ocorrência.
-     */
-    public static JsonNode normalizer(JsonNode jsonNode) {
-        if (jsonNode != null && jsonNode.isObject()) {
-            adjust((ObjectNode) jsonNode);
-        }
-        return jsonNode;
-    }
+	 * Ajusta o JSON: localiza o nó que termina com "Id", extrai e normaliza os
+	 * campos de chave composta e move-os para um novo nó chamado "id",
+	 * sobrescrevendo repetições com a última ocorrência.
+	 */
+	public static JsonNode normalizer(JsonNode jsonNode) {
+		if (jsonNode != null && jsonNode.isObject()) {
+			adjust((ObjectNode) jsonNode);
+		}
+		return jsonNode;
+	}
 
-    private static void adjust(ObjectNode root) {
-        String idFieldName = findCompositeIdFieldName(root);
-        if (idFieldName == null) return;
+	private static void adjust(ObjectNode root) {
+		String idFieldName = findCompositeIdFieldName(root);
+		if (idFieldName == null)
+			return;
 
-        JsonNode originalIdNode = root.get(idFieldName);
-        ObjectNode normalizedIdNode = (ObjectNode) normalizeIdFieldNames(idFieldName, originalIdNode);
+		JsonNode originalIdNode = root.get(idFieldName);
+		ObjectNode normalizedIdNode = (ObjectNode) normalizeIdFieldNames(idFieldName, originalIdNode);
 
-        Map<String, Object> compositeKey = new LinkedHashMap<>();
-        findIdFields(normalizedIdNode, compositeKey); // sobrescreve com última ocorrência
+		Map<String, Object> compositeKey = new LinkedHashMap<>();
+		findIdFields(normalizedIdNode, compositeKey); // sobrescreve com última ocorrência
 
-        ObjectNode newIdNode = JsonNodeFactory.instance.objectNode();
-        compositeKey.forEach(newIdNode::putPOJO);
+		ObjectNode newIdNode = JsonNodeFactory.instance.objectNode();
+		compositeKey.forEach(newIdNode::putPOJO);
 
-        root.remove(idFieldName);
-        root.set("id", newIdNode);
-    }
+		root.remove(idFieldName);
+		root.set("id", newIdNode);
+	}
 
-    private static String findCompositeIdFieldName(ObjectNode root) {
-        for (Iterator<String> it = root.fieldNames(); it.hasNext(); ) {
-            String field = it.next();
-            if (field.endsWith("Id") && root.get(field).isObject()) {
-                return field;
-            }
-        }
-        return null;
-    }
+	private static String findCompositeIdFieldName(ObjectNode root) {
+		for (Iterator<String> it = root.fieldNames(); it.hasNext();) {
+			String field = it.next();
+			if (field.endsWith("Id") && root.get(field).isObject()) {
+				return field;
+			}
+		}
+		return null;
+	}
 
-    private static JsonNode normalizeIdFieldNames(String parentName, JsonNode originalNode) {
-        ObjectNode result = JsonNodeFactory.instance.objectNode();
-        List<Map.Entry<String, JsonNode>> reversedEntries = new ArrayList<>();
-        originalNode.fields().forEachRemaining(reversedEntries::add);
-        Collections.reverse(reversedEntries);
+	private static JsonNode normalizeIdFieldNames(String parentName, JsonNode originalNode) {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		List<Map.Entry<String, JsonNode>> reversedEntries = new ArrayList<>();
+		originalNode.fields().forEachRemaining(reversedEntries::add);
+		Collections.reverse(reversedEntries);
 
-        for (Map.Entry<String, JsonNode> entry : reversedEntries) {
-            String fieldName = entry.getKey();
-            JsonNode value = entry.getValue();
+		for (Map.Entry<String, JsonNode> entry : reversedEntries) {
+			String fieldName = entry.getKey();
+			JsonNode value = entry.getValue();
 
-            if (value.isObject()) {
-                JsonNode child = normalizeIdFieldNames(fieldName, value);
+			if (value.isObject()) {
+				JsonNode child = normalizeIdFieldNames(fieldName, value);
 
-                if (child.has("id") && fieldName != null) {
-                    JsonNode idValue = child.get("id");
-                    String renamedKey = "id" + StringsUtils.capitalize(fieldName);
-                    result.set(renamedKey, idValue);
+				if (child.has("id") && fieldName != null) {
+					JsonNode idValue = child.get("id");
+					String renamedKey = "id" + StringsUtils.capitalize(fieldName);
+					result.set(renamedKey, idValue);
 
-                    child.fields().forEachRemaining(subEntry -> {
-                        if (!subEntry.getKey().equals("id")) {
-                            result.set(subEntry.getKey(), subEntry.getValue());
-                        }
-                    });
-                } else {
-                    result.set(fieldName, child);
-                }
+					child.fields().forEachRemaining(subEntry -> {
+						if (!subEntry.getKey().equals("id")) {
+							result.set(subEntry.getKey(), subEntry.getValue());
+						}
+					});
+				} else {
+					result.set(fieldName, child);
+				}
 
-            } else {
-                result.set(fieldName, value);
-            }
-        }
+			} else {
+				result.set(fieldName, value);
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    private static void findIdFields(JsonNode node, Map<String, Object> result) {
-        if (!node.isObject()) return;
+	private static void findIdFields(JsonNode node, Map<String, Object> result) {
+		if (!node.isObject())
+			return;
 
-        node.fields().forEachRemaining(entry -> {
-            String key = entry.getKey();
-            JsonNode value = entry.getValue();
-
-            if (key.startsWith("id") && !value.isObject()) {
-                if (value.isNumber()) result.put(key, value.numberValue());
-                else if (value.isTextual()) result.put(key, value.textValue());
-                else result.put(key, value.toString());
-            } else if (value.isObject()) {
-                findIdFields(value, result);
-            }
-        });
-    }
+		node.fields().forEachRemaining(entry -> {
+			String key = entry.getKey();
+			JsonNode value = entry.getValue();
+			if (key.startsWith("id") && !value.isObject()) {
+				if (value.isNull()) {
+					result.put(key, null);
+				} else if (value.isNumber()) {
+					result.put(key, value.numberValue());
+				} else if (value.isTextual()) {
+					String text = value.textValue();
+					if ("null".equals(text)) {
+						result.put(key, null);
+					} else {
+						result.put(key, text);
+					}
+				} else {
+					result.put(key, value.toString());
+				}
+			} else if (value.isObject()) {
+				findIdFields(value, result);
+			}
+		});
+	}
 }

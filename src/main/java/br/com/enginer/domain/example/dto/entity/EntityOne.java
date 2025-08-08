@@ -77,7 +77,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 				@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
 		    })
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelection = false, editableAllCell = false),
+    config = @UIConfig(expandable = true, multiSelectable = false),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
     value = {
 		@UIButton(
@@ -154,6 +154,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	}), 
 	conditional = @UIConditional({
 		@UIConditionalOn(label = "Age", field = "entityOne.age", operator = TypeOperator.LESS_THAN, matchs = { "entityOne.entityTwo.hex" }),
+		@UIConditionalOn(label = "BirthDate", field = "entityOne.birthDate", operator = TypeOperator.LESS_THAN, matchs = { "entityOne.prohibitedDateTime" }),
 		@UIConditionalOn(label = "Hex", field = "entityOne.entityTwo.hex", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityOne.entityTwo.entityTree.indicator" }),
 		@UIConditionalOn(label = "Indicator", field = "entityOne.entityTwo.entityTree.indicator", operator = TypeOperator.NOT_EQUALS, matchs = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
 		@UIConditionalOn(label = "Attribute", field = "entityOne.entityTwo.entityTree.entityFour.attribute", operator = TypeOperator.EQUALS, matchs = { "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
@@ -172,7 +173,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIColumn(label = "EntityOne ID")
 	private Long id;
 
-	@UIText(label = "Name")
+	@UIText(label = "Name", template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	//@UIAutoCompleteSuggestion(suggestions = { "Anderson", "Pedro", "Marcelo", "Michael", "Ramiro", "José" })
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)
@@ -188,15 +189,15 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIPosition(x = 2, y = 1)
 	@UIFieldValidation(required = false)
-	@UIFilter(label = "Entity Status", field = "name", readonly = false)
+	@UIFilter(label = "Entity Status", field = "name", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 1, y = 2)
-	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false)
+	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	private EntityNine entityNine;
 
 	@UIPosition(x = 2, y = 2)
-	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false)
+	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Codigo")
 	private Boolean code = true;
 
@@ -222,37 +223,37 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIColumn(label = "EntityOne Data da Proibicao")
 	private LocalDateTime prohibitedDateTime;
 
-	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code")
+	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIRow(domainField = "color", visible = false)
+	@UIRow(domainField = "color", visible = true)
 	private EntityTwo entityTwo;
 
-	@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
-	@UIRow(domainField = "reference", order = 1)
-	private EntityFive entityFive;
+	//@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
+	//@UIRow(domainField = "reference", order = 1)
+	//private EntityFive entityFive;
 	
 	@UIHidden(label = "Multiplicacao Total", template = { TypeTemplate.ROW })
-	@UIColumn(label = "Multiplicacao Total")
-	@UIRow(calculation = "age * height", order = 4)
+	//@UIColumn(label = "Multiplicacao Total")
+	//@UIRow(calculation = "age * height", order = 4)
 	private Double valorMultiplicacao;
 
 	@UIHidden(label = "Soma Total", template = { TypeTemplate.ROW })
-	@UIColumn(label = "Soma Total")
-	@UIRow(calculation = "age + height", order = 5)
+	//@UIColumn(label = "Soma Total")
+	//@UIRow(calculation = "age + height", order = 5)
 	private Double valorSoma;
 	
 	@UIHidden(label = "Subtracao Total", template = { TypeTemplate.ROW })
 	@UIColumn(label = "Subtracao Total")
-	@UIRow(calculation = "age - height + valorUm", order = 6)
+	//@UIRow(calculation = "age - height + valorUm", order = 6)
 	private Double valorSubtracao;	
 	
 	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
 	@UIColumn(label = "Divisao Total")
-	@UIRow(calculation = "age / height", order = 7)
+	//@UIRow(calculation = "age / height", order = 7)
 	private Double valorDivisao;	
 	
 	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
-	@UIRow(visible = false)
+	//@UIRow(visible = false)
 	private Integer valorUm = 1;
 	
 	public Integer getValorUm() {
@@ -429,13 +430,13 @@ public class EntityOne extends DomainAbstract<Long> {
 		this.entityNine = entityNine;
 	}
 	
-	public EntityFive getEntityFive() {
-		return entityFive;
-	}
+	//public EntityFive getEntityFive() {
+	//	return entityFive;
+	//}
 
-	public void setEntityFive(EntityFive entityFive) {
-		this.entityFive = entityFive;
-	}
+	//public void setEntityFive(EntityFive entityFive) {
+	//	this.entityFive = entityFive;
+	//}
 
 	@Override
 	public String toString() {

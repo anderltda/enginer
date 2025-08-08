@@ -13,5 +13,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIJoin {
 	String icon() default "";
 	TypeLayoutTarget layoutTarget() default TypeLayoutTarget.form;
-	TypeTemplate[] template() default { TypeTemplate.MODAL, TypeTemplate.TAB, TypeTemplate.FORM };
+	TypeTemplate[] template() default { TypeTemplate.MODAL, TypeTemplate.TAB, TypeTemplate.ROW, TypeTemplate.FORM };
 }

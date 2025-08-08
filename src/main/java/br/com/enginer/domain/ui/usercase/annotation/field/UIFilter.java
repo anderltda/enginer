@@ -17,5 +17,5 @@ public @interface UIFilter {
 	boolean select() default false;
 	boolean disable() default false;
 	boolean readonly() default false;
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

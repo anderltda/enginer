@@ -384,4 +384,12 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		return repositoryOutboundPort.save(entities, flush);
 	}
 
+	/**
+	 *
+	 */	
+	@Override
+	public Domain<?> plus(Domain<?> domain) {
+		return domain;
+	}
+	
 }

@@ -21,6 +21,7 @@ public interface ActionUserCase {
 	public static final String existe = "existe";
 	public static final String excluir = "excluir";
 	public static final String salvar = "salvar";
+	public static final String plus = "plus";
 	
 	void setRepositoryOutboundPort(RepositoryOutboundPort repositoryOutboundPort);
 	
@@ -75,5 +76,7 @@ public interface ActionUserCase {
 	List<Domain<?>> salvar(List<Domain<?>> entities) throws UncheckedException;
 	
 	List<Domain<?>> salvar(List<Domain<?>> entities, Boolean flush) throws UncheckedException;
+	
+	Domain<?> plus(Domain<?> domain);
 
 }

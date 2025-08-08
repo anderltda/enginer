@@ -11,5 +11,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Target(ElementType.FIELD)
 public @interface UIId {
 	String label();
-	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL };
+	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.MODAL };
 }

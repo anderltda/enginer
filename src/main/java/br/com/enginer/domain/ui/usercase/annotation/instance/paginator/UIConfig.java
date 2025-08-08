@@ -9,8 +9,9 @@ import java.lang.annotation.Target;
 @Target({})
 public @interface UIConfig {
 	boolean expandable();
-	boolean multiSelection();
-	boolean editableAllCell();
+	boolean multiSelectable();
+	boolean editableAllCell() default false;
+	boolean deletableCell() default false;
 }
 
 

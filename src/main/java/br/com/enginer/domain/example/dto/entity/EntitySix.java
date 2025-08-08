@@ -2,11 +2,19 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDate;
 
+import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponse;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseSuccess;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
@@ -18,8 +26,15 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Sexto")
@@ -32,8 +47,42 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 					UIButtonDelete.class, 
 					UIButtonSearch.class, 
 					UIButtonSave.class 
-				})
-@UIPaginator(actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class }))
+				},
+			value = {
+					@UIButton(
+					    label = Constants.LABEL_ADD,
+					    icon = "plus",
+					    state = TypeButtonState.BTN_STATE_PRIMARY,
+					    template = { TypeTemplate.ROW },
+					    needsValidation = true,
+						action = @UIAction(
+							method = @UIActionMethod(serverMethod = "plus"),
+							response = @UIActionResponse(
+							template = { TypeTemplate.ROW },
+							success = @UIActionResponseSuccess(
+									method = @UIActionMethod(clientMethod = "setDataSetField")
+						)))
+					)
+			})
+@UIPaginator(
+		config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true),
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class },
+		value = {
+				@UIButton(
+					    label = Constants.LABEL_SAVE,
+					    icon = "save",
+					    state = TypeButtonState.BTN_STATE_PRIMARY,
+					    template = { TypeTemplate.ROW },
+					    action = @UIAction(
+					        method = @UIActionMethod(serverMethod = "salvar")
+					    )
+					)
+		}))
+@UIValidate(
+		conditional = @UIConditional({
+			@UIConditionalOn(label = "Start",     field = "entitySix.startDate", operator = TypeOperator.LESS_THAN, matchs = { "entitySix.stopDate" })
+		})
+	)
 public class EntitySix extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
@@ -41,15 +90,29 @@ public class EntitySix extends DomainAbstract<Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Package")
+	@UIColumn(label = "Package")
+	@UIRow(order = 1)
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)
-	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT, showtime = true)
+	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT)
+	@UIColumn(label = "Data Aberta")	
+	@UIRow(order = 2)
 	private LocalDate startDate;
 
 	@UIPosition(x = 2, y = 2)
-	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT, showtime = true)
+	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT)
+	@UIColumn(label = "Data Fechada")
+	@UIRow(order = 3)
 	private LocalDate stopDate;
+
+	public EntitySix() {
+		super();
+	}
+
+	public EntitySix(Long id) {
+		this.id = id;
+	}
 
 	@Override
 	public Long getId() {

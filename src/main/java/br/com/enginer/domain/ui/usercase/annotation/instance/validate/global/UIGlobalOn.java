@@ -14,5 +14,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 public @interface UIGlobalOn {
 	String function();
 	String message();
-	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB };
 }

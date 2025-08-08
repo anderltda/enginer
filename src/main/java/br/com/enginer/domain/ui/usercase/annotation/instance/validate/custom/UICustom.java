@@ -11,5 +11,5 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Target(ElementType.TYPE)
 public @interface UICustom {
 	UICustomOn[] value() default {};
-	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB };
 }

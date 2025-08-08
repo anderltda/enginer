@@ -485,119 +485,6 @@ public final class FormTemplate {
 				fields.add(fieldSubmit);
 			}
 			
-			
-			
-			
-			
-			Map<String, String> columnNames = new HashMap<>();
-			Map<String, String> totalizers = new HashMap<>();
-			List<String> initials = new ArrayList<String>();
-			List<String> visibles = new ArrayList<String>();
-			List<String> rows = new ArrayList<String>();
-			List<String> editables = new ArrayList<String>();
-			List<String> hiddens = new ArrayList<String>();
-			List<String> calculations = new ArrayList<String>();
-			
-			String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
-			
-			for (java.lang.reflect.Field field_ : domain.getClass().getDeclaredFields()) {
-				
-				String name = domainName.concat(".").concat(field_.getName());
-
-				// UIFilter
-				UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
-				
-				if (uiFilter != null) {
-					
-					UIRow uiRow = field_.getAnnotation(UIRow.class);
-					
-					if(uiRow != null) {
-						
-						if(uiRow.order() > 0) {
-							ReflectionUtils.setAtIndex(rows, uiRow.order()-1, field_.getName().concat(".").concat(uiRow.domainField()));
-						} else {
-							rows.add(field_.getName().concat(".").concat(uiRow.domainField()));
-						}
-						
-						
-						if(!uiRow.visible()) {
-							hiddens.add(field_.getName().concat(".").concat(uiRow.domainField()));
-						}
-					}
-					
-					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, null, field_.getType());
-					
-					continue;
-				}
-
-				// UIJoin
-				UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
-				
-				if (uiJoin != null) {
-					
-					ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, null, field_.getType());
-					
-					continue;
-				}
-				
-				// UIColumn
-				UIColumn uiColumn = field_.getAnnotation(UIColumn.class);
-				
-				if (uiColumn != null) {
-					
-					if(!uiColumn.hidden()) {
-						
-						if(uiColumn.initial()) {
-							initials.add(name);
-						}
-						
-						columnNames.put(field_.getName(), uiColumn.label());
-						visibles.add(name);
-					}
-				}
-				
-				// UIRow
-				UIRow uiRow = field_.getAnnotation(UIRow.class);
-				
-				if(uiRow != null) {
-					
-					if(uiRow.order() > 0) {
-						ReflectionUtils.setAtIndex(rows, uiRow.order() - 1, field_.getName());
-					} else {
-						rows.add(field_.getName());
-					}
-					
-					if(uiRow.editable()) {
-						editables.add(field_.getName());
-					}
-					
-					if(!uiRow.visible()) {
-						hiddens.add(field_.getName());
-					}
-					
-					if(!uiRow.calculation().isEmpty()) {
-						calculations.add(field_.getName().concat(" = ").concat(uiRow.calculation()));
-					}
-					
-					if(uiRow.totalizer()) {
-						totalizers.put(field_.getName(), uiColumn.label() + " Total: ");
-					}
-				}
-				
-			}
-			
-			rows.removeIf(Objects::isNull);
-			
-			paginator.getColumn().setName(columnNames);
-			paginator.getColumn().setVisibles(visibles);
-			paginator.getColumn().setInitials(initials);
-			
-			paginator.getColumn().setRows(rows);
-			paginator.getColumn().setTotalizer(totalizers);
-			paginator.getColumn().setEditables(editables);
-			paginator.getColumn().setHiddens(hiddens);
-			paginator.getColumn().setCalculations(calculations);
-			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw ex;
@@ -634,18 +521,9 @@ public final class FormTemplate {
 
 			UIConfig uiConfig = uiPaginator.config();
 			config.setEditableAllCell(uiConfig.editableAllCell());
-			config.setMultiSelection(uiConfig.multiSelection());
+			config.setMultiSelectable(uiConfig.multiSelectable());
 			config.setExpandable(uiConfig.expandable());
-
-			//UIColumn_ uiColumn = uiPaginator.column();
-			//column.setName(uiColumn.name());
-			//column.setInitials(Arrays.asList(uiColumn.initials()));
-			//column.setRows(Arrays.asList(uiColumn.rows()));
-			//column.setEditables(Arrays.asList(uiColumn.editables()));
-			//column.setVisibles(Arrays.asList(uiColumn.visibles()));
-			//column.setTotalizer(uiColumn.totalizador());
-			//column.setHiddens((Arrays.asList(uiColumn.hiddens())));
-			//column.setCalculations(Arrays.asList(uiColumn.calculations()));
+			config.setDeletableCell(uiConfig.deletableCell());
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
@@ -697,10 +575,86 @@ public final class FormTemplate {
 			}
 
 			typeTemplate = copyTypeTemplate;
+			
 		}
+
+		configPaginator(domain, paginator);
 
 		return paginator;
 	}
+	
+	private static void configPaginator(Domain<?> domain, Paginator paginator) {
+		
+		Map<String, String> columnNames = new HashMap<>();
+		Map<String, String> totalizers = new HashMap<>();
+		List<String> initials = new ArrayList<String>();
+		List<String> visibles = new ArrayList<String>();
+		List<String> rows = new ArrayList<String>();
+		List<String> editables = new ArrayList<String>();
+		List<String> hiddens = new ArrayList<String>();
+		List<String> calculations = new ArrayList<String>();
+		
+		String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
+		
+		for (java.lang.reflect.Field field_ : domain.getClass().getDeclaredFields()) {
+			
+			String name = domainName.concat(".").concat(field_.getName());
+
+			// UIFilter
+			UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
+			if (uiFilter != null) {
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+				continue;
+			}
+			// UIJoin
+			UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
+			if (uiJoin != null) {
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+				continue;
+			}
+			// UIColumn
+			UIColumn uiColumn = field_.getAnnotation(UIColumn.class);
+			if (uiColumn != null) {
+				if(!uiColumn.hidden()) {
+					if(uiColumn.initial()) {
+						initials.add(name);
+					}
+					columnNames.put(field_.getName(), uiColumn.label());
+					visibles.add(name);
+				}
+			}
+			// UIRow
+			UIRow uiRow = field_.getAnnotation(UIRow.class);
+			if(uiRow != null) {
+				rows.add(field_.getName());
+				if(uiRow.editable()) {
+					editables.add(field_.getName());
+				}
+				if(!uiRow.visible()) {
+					hiddens.add(field_.getName());
+				}
+				if(!uiRow.calculation().isEmpty()) {
+					calculations.add(field_.getName().concat(" = ").concat(uiRow.calculation()));
+				}
+				if(uiRow.totalizer()) {
+					totalizers.put(field_.getName(), uiColumn.label() + " Total: ");
+				}
+			}
+			
+		}
+		
+		rows.removeIf(Objects::isNull);
+		
+		paginator.getColumn().setName(columnNames);
+		paginator.getColumn().setVisibles(visibles);
+		paginator.getColumn().setInitials(initials);
+		
+		paginator.getColumn().setRows(rows);
+		paginator.getColumn().setTotalizer(totalizers);
+		paginator.getColumn().setEditables(editables);
+		paginator.getColumn().setHiddens(hiddens);
+		paginator.getColumn().setCalculations(calculations);
+	}	
 
 	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {
 
@@ -1241,8 +1195,10 @@ public final class FormTemplate {
 				validate.setCustom(getCustom(domain, uiValidate.custom().value()));
 				validate.setConditional(getConditional(domain, uiValidate.conditional().value()));
 				validate.setDependency(getDependecy(domain, uiValidate.dependency().value()));
-				if (validate.getGlobal().size() == 0 && validate.getCustom().size() == 0
-						&& validate.getConditional().size() == 0 && validate.getDependency().size() == 0) {
+				if (validate.getGlobal().size() == 0 && 
+					validate.getCustom().size() == 0 && 
+					validate.getConditional().size() == 0 && 
+					validate.getDependency().size() == 0) {
 					validate = null;
 				}
 			}

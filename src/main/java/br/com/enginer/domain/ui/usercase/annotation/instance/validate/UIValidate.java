@@ -18,5 +18,5 @@ public @interface UIValidate {
 	UICustom custom() default @UICustom;
 	UIDependency dependency() default @UIDependency;
 	UIConditional conditional() default @UIConditional;
-	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB };
 }

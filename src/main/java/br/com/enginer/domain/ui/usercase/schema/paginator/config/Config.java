@@ -7,7 +7,8 @@ public class Config {
 
 	private Boolean expandable;
 	private Boolean editableAllCell;
-	private Boolean multiSelection;
+	private Boolean multiSelectable;
+	private Boolean deletableCell;
 
 	public Boolean getExpandable() {
 		return expandable;
@@ -25,12 +26,21 @@ public class Config {
 		this.editableAllCell = editableAllCell;
 	}
 
-	public Boolean getMultiSelection() {
-		return multiSelection;
+	public Boolean getMultiSelectable() {
+		return multiSelectable;
 	}
 
-	public void setMultiSelection(Boolean multiSelection) {
-		this.multiSelection = multiSelection;
+	public void setMultiSelectable(Boolean multiSelectable) {
+		this.multiSelectable = multiSelectable;
 	}
 
+	public Boolean getDeletableCell() {
+		return deletableCell;
+	}
+
+	public void setDeletableCell(Boolean deletableCell) {
+		this.deletableCell = deletableCell;
+	}
+
+	
 }

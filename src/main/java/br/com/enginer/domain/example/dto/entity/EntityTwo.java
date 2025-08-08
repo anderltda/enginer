@@ -52,7 +52,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false }"))),
 		    })
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelection = false, editableAllCell = true),
+    config = @UIConfig(expandable = true, multiSelectable = false, editableAllCell = true),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
         value = {
     		@UIButton(

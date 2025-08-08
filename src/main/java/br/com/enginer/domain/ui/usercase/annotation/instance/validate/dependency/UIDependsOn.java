@@ -11,5 +11,5 @@ public @interface UIDependsOn {
 	String label();
 	String field();
 	String[] depends();
-	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.TAB };
+	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB };
 }

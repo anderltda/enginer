@@ -10,8 +10,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionTriggerMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
@@ -22,14 +20,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity Rows")
-@UIPaginator(config = @UIConfig(expandable = true, multiSelection = false, editableAllCell = true), 
+@UIPaginator(config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true, editableAllCell = true), 
 actions = @UIButtonAction(
 value = { 
 		@UIButton(label = Constants.LABEL_BACK, icon = "undo", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW },
 				action = @UIAction( method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(clientMethod = "onBack")) )),
 		
 		@UIButton(label = Constants.LABEL_ADD, icon = "plus", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW },
-				  action = @UIAction( method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(serverMethod = "plus")) )),	
+				  action = @UIAction( method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(clientMethod = "setDataSetField")) )),	
 		
 		@UIButton(label = Constants.LABEL_SAVE, icon = "save", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW }, 
 				action = @UIAction(method = @UIActionMethod(serverMethod = "salvar"))) 
