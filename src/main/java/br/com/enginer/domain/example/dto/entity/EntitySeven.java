@@ -63,9 +63,20 @@ public class EntitySeven extends DomainAbstract<EntitySevenId> {
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Dado")
-	@UIColumn(label = "Dado")
-	@UIRow(editable = true, order = 2)
+	@UIColumn(label = "EntitySeven Dado")
+	@UIRow(editable = true, order = -2)
 	private String dado;
+	
+
+	public EntitySeven() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public EntitySeven(EntitySevenId id) {
+		super();
+		this.id = id;
+	}
 
 	@Override
 	public EntitySevenId getId() {

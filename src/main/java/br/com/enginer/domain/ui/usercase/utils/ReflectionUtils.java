@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,10 +49,14 @@ public class ReflectionUtils {
 	}
 
 	
-	public static void extractFieldPaginator(Map<String, String> columnNames, List<String> visibles, List<String> initials, List<String> rows, String simpleName, Class<?> clazz) {
+	public static void extractFieldPaginator(Map<String, String> columnNames, List<String> visibles, List<String> initials, List<Map.Entry<String, Integer>> rowsMap, String simpleName, Class<?> clazz) {
 
 		if(simpleName != null) {
-			simpleName = simpleName + (".") + StringsUtils.firstLower(clazz.getSimpleName());
+			
+			String attribute = (classIsIdType(clazz) ? "id" : StringsUtils.firstLower(clazz.getSimpleName()));
+			
+			simpleName = simpleName + (".") + attribute;
+			
 		} else {
 			simpleName = StringsUtils.firstLower(clazz.getSimpleName());
 		}
@@ -63,13 +68,13 @@ public class ReflectionUtils {
 			// UIFilter
 			UIFilter uiFilter = field.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
+				extractFieldPaginator(columnNames, visibles, initials, rowsMap, simpleName, field.getType());
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				extractFieldPaginator(columnNames, visibles, initials, rows, simpleName, field.getType());
+				extractFieldPaginator(columnNames, visibles, initials, rowsMap, simpleName, field.getType());
 				continue;
 			}
 			// UIColumn
@@ -86,7 +91,7 @@ public class ReflectionUtils {
 			// UIRow
 			UIRow uiRow = field.getAnnotation(UIRow.class);
 			if(uiRow != null) {
-				rows.add(name);
+				rowsMap.add(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
 			}
 		}	
 	}

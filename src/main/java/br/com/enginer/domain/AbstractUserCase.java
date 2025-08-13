@@ -364,7 +364,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 *
 	 */
 	@Override
-	public List<Domain<?>> salvar(List<Domain<?>> entities) throws UncheckedException {
+	public List<Domain<?>> salvarLista(List<Domain<?>> entities) throws UncheckedException {
 		return repositoryOutboundPort.save(entities);
 	}
 
@@ -380,7 +380,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 *
 	 */
 	@Override
-	public List<Domain<?>> salvar(List<Domain<?>> entities, Boolean flush) throws UncheckedException {
+	public List<Domain<?>> salvarLista(List<Domain<?>> entities, Boolean flush) throws UncheckedException {
 		return repositoryOutboundPort.save(entities, flush);
 	}
 

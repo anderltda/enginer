@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -61,6 +63,10 @@ public class RepositoryOutboundAdapterPort implements RepositoryOutboundPort {
 						"Authorization", "SECRET_TOKEN", 
 						"Content-Type", MediaType.APPLICATION_JSON_VALUE, 
 						"Accept", MediaType.APPLICATION_JSON_VALUE)
+		        .codecs(cfg -> {
+		            cfg.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON));
+		            cfg.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
+		        })				
 				.build();
 	}
 

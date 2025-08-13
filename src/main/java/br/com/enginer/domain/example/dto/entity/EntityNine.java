@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.dto.entity;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -58,14 +59,17 @@ public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Key")
+	@UIColumn(label = "EntityNine Key")
 	private String keyNine;
 
 	@UIPosition(x = 2, y = 1)
 	@UIText(label = "Code")
+	@UIColumn(label = "EntityNine Code")
 	private String code;
 
 	@UIPosition(x = 3, y = 1)
 	@UIText(label = "Variable")
+	@UIColumn(label = "EntityNine Variable")
 	private String variable;
 
 	@Override

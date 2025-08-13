@@ -2,12 +2,19 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.util.UUID;
 
+import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
@@ -15,10 +22,13 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Oitavo")
@@ -28,27 +38,54 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonBefore.class, 
 		UIButtonFinish.class,
 		UIButtonNew.class, 
+		UIButtonAdd.class, 
 		UIButtonDelete.class, 
 		UIButtonSearch.class, 
 		UIButtonSave.class 
 	})
-@UIPaginator(actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class }))
+@UIPaginator(
+		config = @UIConfig(deletableCell = true),
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class },
+		value = {
+	    		@UIButton(
+	    			    label = "Add EntitySeven", 
+	    			    icon = "add_circle",
+	    			    needsValidation = false,
+	    			    dropdown = true,
+	    			    template = TypeTemplate.PAGINATOR, 
+	    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEight", param = "{ disable=true, field=entitySeven.id, value=$object }"))
+	    			    
+	    		), 
+		}))
 public class EntityEight extends DomainAbstract<Long> {
 	
 	@UIId(label = "Id")
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
-	@UIText(label = "Package")
+	@UIText(label = "Position", max = 100)
+	@UIColumn(label = "EntityEight Position")
+	@UIRow()
 	private String position;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Properties")
+	@UIColumn(label = "EntityEight Properties", initial = true)
+	@UIRow()
 	private String properties;
 
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	private EntitySeven entitySeven;
 	
+	public EntityEight() {
+		super();
+	}
+
+	public EntityEight(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public void setIdEntitySeven(UUID idEntitySeven) {
 		if(this.entitySeven == null) {
 			this.entitySeven = new EntitySeven();

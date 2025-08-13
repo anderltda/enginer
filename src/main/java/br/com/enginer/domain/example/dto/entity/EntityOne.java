@@ -204,28 +204,30 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Idade", initial = true)
-	@UIRow(editable = true, totalizer = true, order = 2)
+	@UIRow(editable = true, totalizer = true, order = 3)
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Altura")
-	@UIRow(editable = true, order = 3)
+	@UIRow(editable = true, order = 4)
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
 	@UIDate(label = "Birth Date")
 	@UIColumn(label = "EntityOne Data de Aniversario")
+	@UIRow(visible = false)
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityOne Data da Proibicao")
+	@UIRow(order = 2)
 	private LocalDateTime prohibitedDateTime;
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIRow(domainField = "color", visible = true)
+	@UIRow(domainField = "color", order = 1)
 	private EntityTwo entityTwo;
 
 	//@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })

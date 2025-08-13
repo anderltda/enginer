@@ -23,6 +23,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
@@ -66,43 +67,33 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 			})
 @UIPaginator(
 		config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true),
-		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class },
-		value = {
-				@UIButton(
-					    label = Constants.LABEL_SAVE,
-					    icon = "save",
-					    state = TypeButtonState.BTN_STATE_PRIMARY,
-					    template = { TypeTemplate.ROW },
-					    action = @UIAction(
-					        method = @UIActionMethod(serverMethod = "salvar")
-					    )
-					)
-		}))
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }))
 @UIValidate(
 		conditional = @UIConditional({
-			@UIConditionalOn(label = "Start",     field = "entitySix.startDate", operator = TypeOperator.LESS_THAN, matchs = { "entitySix.stopDate" })
+			@UIConditionalOn(label = "Start", field = "entitySix.startDate", operator = TypeOperator.EQUALS, matchs = { "entitySix.stopDate" })
 		})
 	)
 public class EntitySix extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
+	@UIRow
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
-	@UIText(label = "Package")
-	@UIColumn(label = "Package")
-	@UIRow(order = 1)
+	@UIText(label = "Package", max = 100)
+	@UIColumn(label = "EntitySix Package")
+	@UIRow(editable = true, order = 1)
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)
 	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT)
-	@UIColumn(label = "Data Aberta")	
+	@UIColumn(label = "EntitySix Data Aberta")	
 	@UIRow(order = 2)
 	private LocalDate startDate;
 
 	@UIPosition(x = 2, y = 2)
 	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT)
-	@UIColumn(label = "Data Fechada")
+	@UIColumn(label = "EntitySix Data Fechada")
 	@UIRow(order = 3)
 	private LocalDate stopDate;
 

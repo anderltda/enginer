@@ -8,6 +8,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 public class EntityRowUserCase extends AbstractUserCase {
 	
 	public void rowSalvar(List<Domain<?>> entityRows) {
-		salvar(entityRows);
+		salvarLista(entityRows);
 	}
 }

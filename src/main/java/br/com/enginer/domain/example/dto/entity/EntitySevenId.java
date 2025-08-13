@@ -23,6 +23,18 @@ public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId 
 	@UIRow(domainField = "packageName", order = 1)
 	private EntitySix entitySix;
 	
+	
+	public EntitySevenId() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public EntitySevenId(UUID idEntitySeven, Long idEntitySix) {
+		super();
+		this.idEntitySeven = idEntitySeven;
+		this.idEntitySix = idEntitySix;
+	}
+
 	public EntitySix getEntitySix() {
 		return entitySix;
 	}

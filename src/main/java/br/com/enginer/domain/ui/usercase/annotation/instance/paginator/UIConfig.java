@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
 public @interface UIConfig {
-	boolean expandable();
-	boolean multiSelectable();
+	boolean expandable() default false;
+	boolean multiSelectable() default false;
 	boolean editableAllCell() default false;
 	boolean deletableCell() default false;
 }

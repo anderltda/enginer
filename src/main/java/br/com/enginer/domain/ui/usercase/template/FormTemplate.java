@@ -8,13 +8,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
@@ -589,6 +590,7 @@ public final class FormTemplate {
 		Map<String, String> totalizers = new HashMap<>();
 		List<String> initials = new ArrayList<String>();
 		List<String> visibles = new ArrayList<String>();
+		List<Map.Entry<String, Integer>> rowsMap = new ArrayList<>();
 		List<String> rows = new ArrayList<String>();
 		List<String> editables = new ArrayList<String>();
 		List<String> hiddens = new ArrayList<String>();
@@ -603,13 +605,23 @@ public final class FormTemplate {
 			// UIFilter
 			UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+				// UIRow
+				UIRow uiRow = field_.getAnnotation(UIRow.class);
+				if(uiRow != null) {
+					rowsMap.add(new AbstractMap.SimpleEntry<>(field_.getName().concat(".").concat(uiRow.domainField()), uiRow.order()));
+				}
+				
+				if(typeTemplate.equals(TypeTemplate.ROW)) {
+					continue;
+				}
+
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_.getType());
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rows, null, field_.getType());
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_.getType());
 				continue;
 			}
 			// UIColumn
@@ -626,7 +638,7 @@ public final class FormTemplate {
 			// UIRow
 			UIRow uiRow = field_.getAnnotation(UIRow.class);
 			if(uiRow != null) {
-				rows.add(field_.getName());
+				rowsMap.add(new AbstractMap.SimpleEntry<>(field_.getName(), uiRow.order()));
 				if(uiRow.editable()) {
 					editables.add(field_.getName());
 				}
@@ -641,19 +653,29 @@ public final class FormTemplate {
 				}
 			}
 			
+			
 		}
 		
-		rows.removeIf(Objects::isNull);
-		
+        // Ordena pela parte Integer
+		rowsMap.sort(Comparator.comparingInt(Map.Entry::getValue));
+		rowsMap.forEach(entry -> 
+			rows.add(entry.getKey())
+        );
+        
 		paginator.getColumn().setName(columnNames);
-		paginator.getColumn().setVisibles(visibles);
-		paginator.getColumn().setInitials(initials);
 		
-		paginator.getColumn().setRows(rows);
-		paginator.getColumn().setTotalizer(totalizers);
-		paginator.getColumn().setEditables(editables);
-		paginator.getColumn().setHiddens(hiddens);
-		paginator.getColumn().setCalculations(calculations);
+		if(typeTemplate.equals(TypeTemplate.ROW)) {
+			paginator.getColumn().setRows(rows);
+			paginator.getColumn().setEditables(editables);
+			paginator.getColumn().setHiddens(hiddens);
+			paginator.getColumn().setCalculations(calculations);
+			paginator.getColumn().setTotalizer(totalizers);
+		}
+
+		if(typeTemplate.equals(TypeTemplate.FILTER)) {
+			paginator.getColumn().setInitials(initials);
+			paginator.getColumn().setVisibles(visibles);
+		}
 	}	
 
 	private static Filter getFilter(Domain<?> domain, java.lang.reflect.Field f, Default default_, Annotation[] annotations, UIFilter uiFilter) throws Exception {

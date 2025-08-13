@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.AbstractUserCase;
+import br.com.enginer.domain.example.dto.entity.EntityEight;
 import br.com.enginer.domain.example.dto.entity.EntityFive;
 import br.com.enginer.domain.example.dto.entity.EntityFour;
+import br.com.enginer.domain.example.dto.entity.EntityNine;
 import br.com.enginer.domain.example.dto.entity.EntityOne;
+import br.com.enginer.domain.example.dto.entity.EntitySeven;
+import br.com.enginer.domain.example.dto.entity.EntitySevenId;
+import br.com.enginer.domain.example.dto.entity.EntitySix;
 import br.com.enginer.domain.example.dto.entity.EntityStatus;
 import br.com.enginer.domain.example.dto.entity.EntityTree;
 import br.com.enginer.domain.example.dto.entity.EntityTwo;
@@ -30,6 +35,18 @@ public class EntityOneUserCase extends AbstractUserCase {
 				EntityFour entityFour = (EntityFour) buscarPorId(entityTree.getEntityFour());
 				EntityFive entityFive = (EntityFive) buscarPorId(entityFour.getEntityFive());
 				
+				EntityNine entityNine = (EntityNine) buscarPorId(entityOne.getEntityNine());
+				EntityEight entityEight = (EntityEight) buscarPorId(new EntityEight(entityNine.getId().getIdEntityEight()));
+				
+				EntitySeven entitySeven = (EntitySeven) buscarPorId(new EntitySeven(new EntitySevenId(entityNine.getId().getIdEntitySeven(), entityNine.getId().getIdEntitySix())));
+				EntitySix entitySix = (EntitySix) buscarPorId(new EntitySix(entityNine.getId().getIdEntitySix()));
+				entitySeven.getId().setEntitySix(entitySix);
+				
+				entityNine.getId().setEntityEight(entityEight);
+				entityNine.getId().setEntitySeven(entitySeven);
+				
+				entityOne.setEntityNine(entityNine);
+
 				EntityStatus entityStatus = (EntityStatus) buscarPorId(entityOne.getEntityStatus());
 				entityOne.setEntityStatus(entityStatus);
 				
@@ -56,6 +73,6 @@ public class EntityOneUserCase extends AbstractUserCase {
 	}
 	
 	public void rowSalvar(List<Domain<?>> entityOnes) {
-		salvar(entityOnes);
+		salvarLista(entityOnes);
 	}
 }
