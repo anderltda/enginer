@@ -3,7 +3,11 @@ package br.com.enginer.domain.example.usercase;
 import java.util.Map;
 
 import br.com.enginer.domain.AbstractUserCase;
+import br.com.enginer.domain.example.dto.entity.EntityEight;
 import br.com.enginer.domain.example.dto.entity.EntityNine;
+import br.com.enginer.domain.example.dto.entity.EntitySeven;
+import br.com.enginer.domain.example.dto.entity.EntitySevenId;
+import br.com.enginer.domain.example.dto.entity.EntitySix;
 import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
@@ -25,10 +29,24 @@ public class EntityNineUserCase extends AbstractUserCase {
 		System.out.println(object.toString());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public PageResult<?> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
 		System.out.println(filter);
-		return super.buscarTodosPaginado(domain, filter);
+
+		PageResult<EntityNine> result = (PageResult<EntityNine>) super.buscarTodosPaginado(domain, filter);
+
+		if (result != null) {
+			result.getContent().forEach(nine -> {
+				EntitySeven seven = (EntitySeven) super.buscarPorId(new EntitySeven(new EntitySevenId(nine.getId().getIdEntitySeven(), nine.getId().getIdEntitySix())));
+				seven.getId().setEntitySix((EntitySix) super.buscarPorId(new EntitySix(nine.getId().getIdEntitySix())));
+				nine.getId().setEntityEight((EntityEight) super.buscarPorId(new EntityEight(nine.getId().getIdEntityEight())));
+				nine.getId().setEntitySeven(seven);
+			});
+		}
+
+		return result;
+
 	}
 
 	@Override

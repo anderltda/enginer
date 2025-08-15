@@ -22,10 +22,14 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
@@ -35,50 +39,50 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Terceiro")
-@UIButtonAction(includes = { UIButtonClear.class, UIButtonBack.class, UIButtonBefore.class, UIButtonNext.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  }, 
-value = {
-	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-}
+@UIButtonAction(includes = { UIButtonClear.class, UIButtonBack.class, UIButtonBefore.class, UIButtonNext.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class }, 
+	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
+	action = @UIAction(method = @UIActionMethod(clientMethod = "custom"))) }
 )
+@UIPaginator(config = @UIConfig(expandable = true, multiSelectable = false), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class }))
 public class EntityTree extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
 	@UIColumn(label = "EntityTree Id")
 	private UUID id;
-	
+
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIColumn(label = "EntityTree Nome do Animal")
 	private String animal;
-	
+
 	@UIPosition(x = 2, y = 1)
 	@UIFilter(label = "Entity Status", field = "name", select = false)
-	private EntityStatus entityStatus;	
-	
+	private EntityStatus entityStatus;
+
 	@UIPosition(x = 1, y = 2)
 	@UISelect(label = "Inidicador", provider = ComboHelper.class, method = "indicadores")
 	@UIColumn(label = "EntityTree Indicador")
 	private Integer indicator;
-	
+
 	@UIPosition(x = 2, y = 2)
 	@UIColumn(label = "EntityTree Montante")
 	private Double amount;
-	
+
 	@UIPosition(x = 4, y = 2)
 	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
 	@UIColumn(label = "EntityTree Local da Data")
 	private LocalDate localDate;
-	
+
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityTree Data Local")
 	private LocalDateTime localDateTime;
-	
+
 	@UIJoin(icon = "edit")
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	private EntityFour entityFour;
-	
+
 	public void setIdEntityStatus(Long idEntityStatus) {
 		this.entityStatus = new EntityStatus();
 		this.entityStatus.setId(idEntityStatus);
@@ -88,7 +92,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 		this.entityFour = new EntityFour();
 		this.entityFour.setId(idEntityFour);
 	}
-	
+
 	@Override
 	public UUID getId() {
 		return id;
@@ -98,7 +102,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	public String getAnimal() {
 		return animal;
 	}

@@ -114,10 +114,10 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	@UIColumn(label = "Data de Inclusao")
 	private LocalDate inclusionDate;
 
-	@UIColumn(label = "Hexagonal", initial = true)
+	@UIColumn(label = "Hexagonal")
 	private Integer hex;
 	
-	@UIColumn(label = "Custo", initial = true)
+	@UIColumn(label = "Custo")
 	private Double cost;
 
 	@UIFieldValidation(required = true, template = TypeTemplate.FORM)

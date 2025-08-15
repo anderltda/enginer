@@ -32,33 +32,14 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Oitavo")
-@UIButtonAction(includes = { 
-		UIButtonBack.class, 
-		UIButtonClear.class, 
-		UIButtonBefore.class, 
-		UIButtonFinish.class,
-		UIButtonNew.class, 
-		UIButtonAdd.class, 
-		UIButtonDelete.class, 
-		UIButtonSearch.class, 
-		UIButtonSave.class 
-	})
+@UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonAdd.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class })
 @UIPaginator(
-		config = @UIConfig(deletableCell = true),
-		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class },
-		value = {
-	    		@UIButton(
-	    			    label = "Add EntitySeven", 
-	    			    icon = "add_circle",
-	    			    needsValidation = false,
-	    			    dropdown = true,
-	    			    template = TypeTemplate.PAGINATOR, 
-	    		   		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEight", param = "{ disable=true, field=entitySeven.id, value=$object }"))
-	    			    
-	    		), 
-		}))
+	config = @UIConfig(deletableCell = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
+    value = { @UIButton(label = "Add EntitySeven", icon = "add_circle", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
+    action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEight", param = "{ disable=true, field=entitySeven.id, value=$object }"))) })
+)
 public class EntityEight extends DomainAbstract<Long> {
-	
+
 	@UIId(label = "Id")
 	private Long id;
 
@@ -70,13 +51,13 @@ public class EntityEight extends DomainAbstract<Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Properties")
-	@UIColumn(label = "EntityEight Properties", initial = true)
+	@UIColumn(label = "EntityEight Properties")
 	@UIRow()
 	private String properties;
 
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	private EntitySeven entitySeven;
-	
+
 	public EntityEight() {
 		super();
 	}
@@ -87,7 +68,7 @@ public class EntityEight extends DomainAbstract<Long> {
 	}
 
 	public void setIdEntitySeven(UUID idEntitySeven) {
-		if(this.entitySeven == null) {
+		if (this.entitySeven == null) {
 			this.entitySeven = new EntitySeven();
 			this.entitySeven.setId(new EntitySevenId());
 			this.entitySeven.getId().setIdEntitySeven(idEntitySeven);
@@ -97,7 +78,7 @@ public class EntityEight extends DomainAbstract<Long> {
 	}
 
 	public void setIdEntitySix(Long idEntitySix) {
-		if(this.entitySeven == null) {
+		if (this.entitySeven == null) {
 			this.entitySeven = new EntitySeven();
 			this.entitySeven.setId(new EntitySevenId());
 			this.entitySeven.getId().setIdEntitySix(idEntitySix);
@@ -138,7 +119,7 @@ public class EntityEight extends DomainAbstract<Long> {
 	public void setEntitySeven(EntitySeven entitySeven) {
 		this.entitySeven = entitySeven;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

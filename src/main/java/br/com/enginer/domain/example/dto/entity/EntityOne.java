@@ -203,7 +203,7 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Idade", initial = true)
+	@UIColumn(label = "EntityOne Idade")
 	@UIRow(editable = true, totalizer = true, order = 3)
 	private Integer age;
 

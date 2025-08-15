@@ -51,14 +51,12 @@ public class ReflectionUtils {
 	
 	public static void extractFieldPaginator(Map<String, String> columnNames, List<String> visibles, List<String> initials, List<Map.Entry<String, Integer>> rowsMap, String simpleName, Class<?> clazz) {
 
+		String attribute = (classIsIdType(clazz) ? "id" : StringsUtils.firstLower(clazz.getSimpleName()));
+
 		if(simpleName != null) {
-			
-			String attribute = (classIsIdType(clazz) ? "id" : StringsUtils.firstLower(clazz.getSimpleName()));
-			
 			simpleName = simpleName + (".") + attribute;
-			
 		} else {
-			simpleName = StringsUtils.firstLower(clazz.getSimpleName());
+			simpleName = attribute;
 		}
 		
 		for (Field field : clazz.getDeclaredFields()) {

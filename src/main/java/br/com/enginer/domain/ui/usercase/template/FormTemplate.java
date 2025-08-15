@@ -177,18 +177,19 @@ public final class FormTemplate {
 			typeTemplate = mapTypeTemplates.entrySet().iterator().next().getKey();
 			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
 			
-			Paginator paginator = getPaginator(domain);
-			Tab tab = getTab(domain);
+			Paginator paginator = !(typeTemplate.equals(TypeTemplate.FORM) || typeTemplate.equals(TypeTemplate.TAB)) ? getPaginator(domain) : null;
+			Tab tab = (typeTemplate.equals(TypeTemplate.TAB) || typeTemplate.equals(TypeTemplate.TAB)) ? getTab(domain) : null;
 			String title = getTitle(domain);
 			Validate validate = getValidate(domain);
 
 			form = new Form();
 			form.setId(StringsUtils.firstLower(domain.getClass().getSimpleName()));
 			form.setTitle(title);
-			form.setTab(tab);
-			form.setPaginator(paginator);
 			form.setValidate(validate);
 			form.setFields(fields);
+
+			form.setTab(tab);
+			form.setPaginator(paginator);
 
 			List<java.lang.reflect.Field> fs = ReflectionUtils.extractFieldsDomain(domain, false);
 
@@ -1062,10 +1063,10 @@ public final class FormTemplate {
 					if (uiButton.label().equals(Constants.LABEL_CLEAR) && domain.getId() != null) {
 
 						Class<?> type = domain.getId().getClass();
+						
+						Boolean idNull = ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain);
 
-						if (!ReflectionUtils.isIdNullKeyCompositedByDomain(type, domain)) {
-							continue;
-						} else {
+						if (!idNull) {
 							continue;
 						}
 					}
