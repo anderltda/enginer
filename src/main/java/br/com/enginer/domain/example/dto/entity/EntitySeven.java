@@ -9,6 +9,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
@@ -52,6 +53,19 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 					    action = @UIAction(
 					        method = @UIActionMethod(serverMethod = "salvar")
 					    )
+					),
+				@UIButton(
+					label = "Add EntitySix in Seven", 
+					needsValidation = false, 
+					dropdown = true, 
+					template = TypeTemplate.PAGINATOR, 
+					action = @UIAction(
+						redirect = @UIActionRedirect(
+							value = Constants.PATH, 
+							ui = "row", 
+							domain = "entitySeven", 
+							param = "{ disable=true, field=id.entitySix, value=$object }")
+						)
 					)
 		}))
 public class EntitySeven extends DomainAbstract<EntitySevenId> {

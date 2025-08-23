@@ -8,6 +8,7 @@ import br.com.enginer.domain.ui.dto.PageResult;
 import br.com.enginer.domain.ui.port.outbound.PublisherOutboundPort;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
+import br.com.enginer.domain.ui.usercase.exception.CheckedException;
 import br.com.enginer.domain.ui.usercase.exception.UncheckedException;
 import br.com.enginer.domain.ui.usercase.schema.Form;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
@@ -56,21 +57,6 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	}
 	
 	/**
-	 * @param domain
-	 * @return
-	 * @throws Exception
-	 */
-	private Domain<?> findById(Domain<?> domain) throws Exception {
-		if (!(DomainId.class.isAssignableFrom(domain.getClass()))) {
-			Domain<?> loadedDomain = (ReflectionUtils.isTypeMatching(domain.getClass(), "id", domain.getId())) ? buscarPorId(domain) : null;
-			if (loadedDomain != null) {
-				domain = loadedDomain;
-			}
-		}
-		return domain;
-	}
-
-	/**
 	 *
 	 */
 	@Override
@@ -85,7 +71,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
-			domain = findById(domain);
+			domain = formId(domain);
 			
 			return FormTemplate.create(domain, this, map);
 			
@@ -109,7 +95,7 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
 			
-			domain = findById(domain);
+			domain = formId(domain);
 			
 			return FormTemplate.create(domain, this, map);
 			
@@ -168,26 +154,17 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public Domain<?> buscarPorId(Domain<?> domain) throws UncheckedException {
-		
-		if (domain.getId() != null) {
-			
-			try {
-				
-				if (ReflectionUtils.isTypeId(domain.getId().getClass())) {
-					return repositoryOutboundPort.findById(domain, domain.getId());
-				}
-				
-				Map<String, Object> ids = ReflectionUtils.getCompositedKeyFields(domain);
-				return repositoryOutboundPort.findByIdComposite(domain, ids);
-				
-			} catch (Exception ex) {
-				throw new UncheckedException(ex.getMessage(), ex);
-			}
-		}
-		
-		return null;
+		return this.findById(domain);
 	}
 
+	/**
+	 *
+	 */
+	@Override
+	public Domain<?> buscarFormPorId(Domain<?> domain) throws CheckedException {
+		return this.findById(domain);
+	}
+	
 	/**
 	 *
 	 */
@@ -217,6 +194,14 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 */
 	@Override
 	public List<Domain<?>> buscarTodos(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
+		return repositoryOutboundPort.findAll(domain, filter);
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public List<Domain<?>> buscarFormTodos(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
 		return repositoryOutboundPort.findAll(domain, filter);
 	}
 
@@ -392,4 +377,50 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		return domain;
 	}
 	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws Exception
+	 */
+	private Domain<?> formId(Domain<?> domain) throws Exception {
+		if (!(DomainId.class.isAssignableFrom(domain.getClass()))) {
+			Domain<?> loadedDomain = (ReflectionUtils.isTypeMatching(domain.getClass(), "id", domain.getId())) ? buscarPorId(domain) : null;
+			if (loadedDomain != null) {
+				domain = loadedDomain;
+			}
+		}
+		return domain;
+	}	
+	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws UncheckedException
+	 */
+	private Domain<?> findById(Domain<?> domain) throws UncheckedException {
+		
+		if (domain.getId() != null) {
+			
+			try {
+				
+				if (ReflectionUtils.isTypeId(domain.getId().getClass())) {
+					return repositoryOutboundPort.findById(domain, domain.getId());
+				}
+				
+				Boolean idNull = ReflectionUtils.isIdNullKeyCompositedByDomain(domain.getId().getClass(), domain);
+				
+				if(idNull) {
+					return null;
+				}
+					
+				Map<String, Object> ids = ReflectionUtils.getCompositedKeyFields(domain);
+				return repositoryOutboundPort.findByIdComposite(domain, ids);
+				
+			} catch (Exception ex) {
+				throw new UncheckedException(ex.getMessage(), ex);
+			}
+		}
+		
+		return null;
+	}
 }

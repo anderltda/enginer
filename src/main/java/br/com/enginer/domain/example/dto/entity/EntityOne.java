@@ -88,7 +88,25 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 			action = @UIAction(
 				redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityTwo", param = "{ disable=true, field=color, value=$entityTwo.color }")
 			)
-		),        		
+		), 
+		@UIButton(
+			label = "Novo form Entity One com Entity Two", 
+			template = TypeTemplate.PAGINATOR, 
+			highlight = false,
+			dropdown = true,
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }")
+			)
+		),
+		@UIButton(
+			label = "Add Entity Two in Entity One", 
+			template = TypeTemplate.PAGINATOR, 
+			highlight = false,
+			dropdown = true,
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }")
+			)
+		), 		
 		@UIButton(
 			label = "Visualizar (tab) detalhes do registro", 
 			template = TypeTemplate.PAGINATOR, 

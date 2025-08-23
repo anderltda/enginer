@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.enginer.domain.ActionUserCase;
 import br.com.enginer.domain.Constants;
+import br.com.enginer.domain.TemplateUserCase;
 import br.com.enginer.domain.ui.port.outbound.RepositoryOutboundPort;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
@@ -127,7 +127,7 @@ public final class FormTemplate {
 	private static TypeTemplate typeTemplate;
 	private static Boolean disabled = Boolean.FALSE;
 	private static Map<TypeTemplate, Boolean> mapTypeTemplates;
-	private static ActionUserCase userCase;
+	private static TemplateUserCase userCase;
 
 	private FormTemplate() {}
 
@@ -164,7 +164,7 @@ public final class FormTemplate {
 	 * @param domain
 	 * @return
 	 */
-	public static Form create(Domain<?> domain, ActionUserCase actionUserCase, Map<TypeTemplate, Boolean> maps) throws Exception {
+	public static Form create(Domain<?> domain, TemplateUserCase templateUserCase, Map<TypeTemplate, Boolean> maps) throws Exception {
 
 		List<Field> fields = new ArrayList<>();
 		Field field = null;
@@ -173,7 +173,7 @@ public final class FormTemplate {
 		try {
 			
 			mapTypeTemplates = maps;
-			userCase = actionUserCase;
+			userCase = templateUserCase;
 			typeTemplate = mapTypeTemplates.entrySet().iterator().next().getKey();
 			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
 			
@@ -691,7 +691,7 @@ public final class FormTemplate {
 		
 		Domain<?> value  = null;
 		
-		ActionUserCase actionUserCase = null;
+		TemplateUserCase templateUserCase = null;
 
 		if(domain instanceof DomainId) { /** Essa condicao is true quando o domain é um id de uma entidade */
 			
@@ -700,8 +700,8 @@ public final class FormTemplate {
 				Domain<?> compositeKey = ReflectionUtils.setCompositeKeyByDomainId(typeClass, ((DomainId)domain));
 				
 				if(compositeKey != null) {
-					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
-					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, compositeKey);
+					templateUserCase = (TemplateUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(templateUserCase, TemplateUserCase.buscarFormPorId, compositeKey);
 				}
 				
 			} else {
@@ -724,8 +724,8 @@ public final class FormTemplate {
 				Domain<?> compositeKey = (Domain<?>) ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(typeClass.getSimpleName()));
 				
 				if(compositeKey != null) {
-					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
-					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, compositeKey);
+					templateUserCase = (TemplateUserCase) ReflectionUtils.executeInjectedDependencyUserCase(compositeKey.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(templateUserCase, TemplateUserCase.buscarFormPorId, compositeKey);
 				}
 				
 			} else {
@@ -733,8 +733,8 @@ public final class FormTemplate {
 				Domain<?> key = (Domain<?>) ReflectionUtils.executeMethod(domain, StringsUtils.getMethod(typeClass.getSimpleName()));
 				
 				if(key != null) {
-					actionUserCase = (ActionUserCase) ReflectionUtils.executeInjectedDependencyUserCase(key.getClass(), userCase.getRepositoryOutboundPort());
-					value = (Domain<?>) ReflectionUtils.executeMethod(actionUserCase, ActionUserCase.buscarPorId, key);
+					templateUserCase = (TemplateUserCase) ReflectionUtils.executeInjectedDependencyUserCase(key.getClass(), userCase.getRepositoryOutboundPort());
+					value = (Domain<?>) ReflectionUtils.executeMethod(templateUserCase, TemplateUserCase.buscarFormPorId, key);
 				}
 				
 			}
@@ -748,7 +748,7 @@ public final class FormTemplate {
 
 			Object provider = ReflectionUtils.newInstance(f.getType());
 
-			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, ActionUserCase.buscarTodos, provider, filters);
+			List<?> options = (List<?>) ReflectionUtils.executeMethod(userCase, TemplateUserCase.buscarFormTodos, provider, filters);
 
 			filter.setOptions(options);
 

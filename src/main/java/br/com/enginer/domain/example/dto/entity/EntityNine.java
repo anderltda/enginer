@@ -11,6 +11,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
@@ -32,13 +33,17 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Nono")
 @UIButtonAction(
-	includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class }, 
+	includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonAdd.class, UIButtonSave.class }, 
 	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
 	action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) })
 @UIPaginator(
-		config = @UIConfig(deletableCell = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
-        value = { @UIButton(label = "Add EntitySeven in Nine", icon = "add_circle", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
-        action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityNine", param = "{ disable=true, field=id.entitySeven, value=$object }"))) })
+		config = @UIConfig(deletableCell = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonAdd.class, UIButtonPaginatorSave.class }, 
+        value = { 
+    		@UIButton(label = "Add EntitySeven in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
+    		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityNine", param = "{ disable=true, field=id.entitySeven, value=$object }"))),
+    		@UIButton(label = "Add EntityEight in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
+            action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityNine", param = "{ disable=true, field=id.entityEight, value=$object }")))
+        })
 )
 public class EntityNine extends DomainAbstract<EntityNineId> {
 

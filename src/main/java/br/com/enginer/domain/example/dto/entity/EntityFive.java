@@ -41,7 +41,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonAdd.class, UIButtonSave.class  }, 
 value = {
 		@UIButton(
-				label = Constants.LABEL_SAVE,
+				label = Constants.LABEL_SAVE + " - 2",
 				icon = "save",
 				state = TypeButtonState.BTN_STATE_PRIMARY,
 				template = { TypeTemplate.FORM, TypeTemplate.MODAL },
@@ -59,8 +59,23 @@ value = {
 )
 @UIPaginator(
 	    config = @UIConfig(expandable = false, multiSelectable = false, editableAllCell = false),
-	    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  })
-	)
+	    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
+	    		value = {
+	    				@UIButton(
+	    					label = "Add EntityStatus in Five", 
+	    					needsValidation = false, 
+	    					dropdown = true, 
+	    					template = TypeTemplate.PAGINATOR, 
+	    					action = @UIAction(
+	    						redirect = @UIActionRedirect(
+	    							value = Constants.PATH, 
+	    							ui = "row", 
+	    							domain = "entityFive", 
+	    							param = "{ disable=true, field=entityStatus, value=$object }")
+	    						)
+	    					)
+	    			}
+	))
 public class EntityFive extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
