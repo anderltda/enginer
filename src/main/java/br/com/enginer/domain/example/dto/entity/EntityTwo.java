@@ -22,6 +22,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
@@ -41,7 +42,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UIButtonAction(includes = { 
 		UIButtonBack.class, 
 		UIButtonClear.class, 
-		UIButtonNext.class, 
+		UIButtonFinish.class,
 		UIButtonNew.class, 
 		UIButtonEdit.class, 
 		UIButtonDelete.class, 
