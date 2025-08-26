@@ -95,7 +95,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 			highlight = false,
 			dropdown = true,
 			action = @UIAction(
-				redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }")
+				redirect = @UIActionRedirect(value = Constants.PATH, ui = "form", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }")
 			)
 		),
 		@UIButton(
