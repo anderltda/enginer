@@ -72,13 +72,13 @@ public class EntitySeven extends DomainAbstract<EntitySevenId> {
 	
 	@UIJoin
 	@UIColumn(label = "Six")
-	@UIRow(domainField = "entitySix.packageName", order = 1)
+	@UIRow(fields = { "entitySix" })
 	private EntitySevenId id;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Dado")
 	@UIColumn(label = "EntitySeven Dado")
-	@UIRow(editable = true, order = -2)
+	@UIRow(editable = true)
 	private String dado;
 	
 

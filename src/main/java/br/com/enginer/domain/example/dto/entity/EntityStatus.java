@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import br.com.enginer.domain.ui.usercase.annotation.field.UICheckbox;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
@@ -36,23 +37,27 @@ public class EntityStatus extends DomainAbstract<Long> {
 	
 	@UIPosition(x = 1, y = 1)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
-	@UIColumn(label = "EntityStatus Nome do Status", hidden = true)
+	@UIColumn(label = "EntityStatus Nome do Status")
+	@UIRow()
 	private String name;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	@UISelect(label = "Escolha um Status!", method = "status", provider = ComboHelper.class)
-	@UIColumn(label = "EntityStatus Status do Status", hidden = true)
+	@UIColumn(label = "EntityStatus Status do Status")
+	@UIRow()
 	private Integer status;
 	
 	@UIPosition(x = 3, y = 2)
 	@UICheckbox(label = "Deseja que esse campo esteja ativo?")
 	@UIColumn(label = "Está ativo ??")
+	@UIRow()
 	private Boolean ativo;
 	
 	@UIPosition(x = 2, y = 2)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	@UIColumn(label = "EntityStatus Data da Localizacao", hidden = true)
+	@UIRow()
 	private LocalDateTime startDateTime;
 	
 	@Override

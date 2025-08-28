@@ -20,7 +20,7 @@ public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId 
 	
 	@UIColumn(label = "Six")
 	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
-	@UIRow(domainField = "packageName", order = 1)
+	@UIRow(fields = { "packageName" })
 	private EntitySix entitySix;
 	
 	

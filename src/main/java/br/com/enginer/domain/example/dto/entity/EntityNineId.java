@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 
@@ -19,9 +20,11 @@ public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 	private Long idEntitySix;
 	
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
+	@UIRow(fields = { "id", "dado" })
 	private EntitySeven entitySeven;
 
 	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
+	@UIRow(fields = { "position" })
 	private EntityEight entityEight;
 	
 	public Long getIdEntityEight() {

@@ -82,19 +82,19 @@ public class EntitySix extends DomainAbstract<Long> {
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Package", max = 100)
 	@UIColumn(label = "EntitySix Package")
-	@UIRow(editable = true, order = 1)
+	@UIRow(editable = true)
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)
 	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT)
 	@UIColumn(label = "EntitySix Data Aberta")	
-	@UIRow(order = 2)
+	@UIRow()
 	private LocalDate startDate;
 
 	@UIPosition(x = 2, y = 2)
 	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT)
 	@UIColumn(label = "EntitySix Data Fechada")
-	@UIRow(order = 3)
+	@UIRow()
 	private LocalDate stopDate;
 
 	public EntitySix() {

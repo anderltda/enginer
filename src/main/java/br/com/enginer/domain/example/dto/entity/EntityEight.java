@@ -56,6 +56,7 @@ public class EntityEight extends DomainAbstract<Long> {
 	private String properties;
 
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
+	@UIRow(fields = { "dado" })
 	private EntitySeven entitySeven;
 
 	public EntityEight() {

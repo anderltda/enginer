@@ -8,6 +8,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
@@ -56,6 +57,7 @@ public class EntityFour extends DomainAbstract<UUID> {
 			"dogMel", "dogMagrela" }, syncError = { "message1",
 					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	@UIColumn(label = "EntityFour Nome da Fruta")
+	@UIRow()
 	private String fruit;
 
 	@UIPosition(x = 1, y = 2)
@@ -64,15 +66,18 @@ public class EntityFour extends DomainAbstract<UUID> {
 
 	@UIPosition(x = 2, y = 2)
 	@UIColumn(label = "EntityFour Atributo")
+	@UIRow()
 	private Integer attribute;
 
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityFour Data e hora da inclusao")
+	@UIRow()
 	private LocalDateTime inclusionDateTime;
 
 	@UIFilter(label = "Entity Five", field = "reference")
 	@UIJoin(icon = "cloud")
+	@UIRow(fields = { "reference" })
 	private EntityFive entityFive;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

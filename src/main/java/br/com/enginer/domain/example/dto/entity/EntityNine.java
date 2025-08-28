@@ -3,6 +3,7 @@ package br.com.enginer.domain.example.dto.entity;
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
@@ -13,7 +14,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
@@ -48,21 +48,25 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIJoin
+	@UIRow(fields = { "entitySeven", "entityEight" })
 	private EntityNineId id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Key")
 	@UIColumn(label = "EntityNine Key")
+	@UIRow()
 	private String keyNine;
 
 	@UIPosition(x = 2, y = 1)
 	@UIText(label = "Code")
 	@UIColumn(label = "EntityNine Code")
+	@UIRow()
 	private String code;
 
 	@UIPosition(x = 3, y = 1)
 	@UIText(label = "Variable")
 	@UIColumn(label = "EntityNine Variable")
+	@UIRow()
 	private String variable;
 
 	@Override

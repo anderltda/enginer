@@ -180,25 +180,25 @@ public class ActionInboundAdapterPort {
 			logger.info(ActionInboundAdapterPort.class, "Executando domínio no save: " + domain);
 			logger.info(ActionInboundAdapterPort.class, "Payload recebido: \r " + json.toPrettyString());
 
-			JsonNode normalizedNode = NormalizeUtils.normalizer(json);
-
-			logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
-
 			List<Domain<?>> newDomains = new ArrayList<>();
 			
-			if (normalizedNode.has("data") && normalizedNode.get("data").isArray()) {
+			if (json.has("data") && json.get("data").isArray()) {
 				
-				ArrayNode dataArray = (ArrayNode) normalizedNode.get("data");
+				ArrayNode dataArray = (ArrayNode) json.get("data");
 				
 				for (JsonNode itemNode : dataArray) {
-			
-					Domain<?> itemDomain = objectMapper.convertValue(itemNode, domain.getClass());
+					
+					JsonNode normalizedNode = NormalizeUtils.normalizer(itemNode);
+					
+					logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
+					
+					Domain<?> itemDomain = objectMapper.convertValue(normalizedNode, domain.getClass());
 				
 					newDomains.add(itemDomain);
 				
 				}
 				
-				JsonNode actionNode = normalizedNode.get("action");
+				JsonNode actionNode = json.get("action");
 
 				ActionLogger actionLogger = objectMapper.convertValue(actionNode, ActionLogger.class);
 				
@@ -207,6 +207,9 @@ public class ActionInboundAdapterPort {
 				return ResponseEntity.ok(domains);
 			}
 			
+			JsonNode normalizedNode = NormalizeUtils.normalizer(json);
+			
+			logger.info(ActionInboundAdapterPort.class, "Payload normalized: \r " + normalizedNode.toPrettyString());
 
 			Domain<?> newDomain = objectMapper.convertValue(normalizedNode, domain.getClass());
 

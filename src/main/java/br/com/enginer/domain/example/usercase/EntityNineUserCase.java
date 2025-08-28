@@ -61,4 +61,14 @@ public class EntityNineUserCase extends AbstractUserCase {
 		return super.form(domain);
 	}
 	
+	@Override
+	public Domain<?> plus(Domain<?> domain) {
+		EntityNine nine = (EntityNine) domain;
+		EntitySeven seven = (EntitySeven) super.buscarPorId(new EntitySeven(new EntitySevenId(nine.getId().getIdEntitySeven(), nine.getId().getIdEntitySix())));
+		seven.getId().setEntitySix((EntitySix) super.buscarPorId(new EntitySix(nine.getId().getIdEntitySix())));
+		nine.getId().setEntityEight((EntityEight) super.buscarPorId(new EntityEight(nine.getId().getIdEntityEight())));
+		nine.getId().setEntitySeven(seven);
+		return nine;
+	}
+	
 }

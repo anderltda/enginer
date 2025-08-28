@@ -501,7 +501,7 @@ public final class FormTemplate {
 		return tab;
 	}
 
-	private static Paginator getPaginator(Domain<?> domain) {
+	private static Paginator getPaginator(Domain<?> domain) throws Exception {
 		Paginator paginator = new Paginator();
 		Config config = new Config();
 		Column column = new Column();
@@ -585,7 +585,7 @@ public final class FormTemplate {
 		return paginator;
 	}
 	
-	private static void configPaginator(Domain<?> domain, Paginator paginator) {
+	private static void configPaginator(Domain<?> domain, Paginator paginator) throws Exception {
 		
 		Map<String, String> columnNames = new HashMap<>();
 		Map<String, String> totalizers = new HashMap<>();
@@ -600,29 +600,17 @@ public final class FormTemplate {
 		String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
 		
 		for (java.lang.reflect.Field field_ : domain.getClass().getDeclaredFields()) {
-			
 			String name = domainName.concat(".").concat(field_.getName());
-
 			// UIFilter
 			UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				// UIRow
-				UIRow uiRow = field_.getAnnotation(UIRow.class);
-				if(uiRow != null) {
-					rowsMap.add(new AbstractMap.SimpleEntry<>(field_.getName().concat(".").concat(uiRow.domainField()), uiRow.order()));
-				}
-				
-				if(typeTemplate.equals(TypeTemplate.ROW)) {
-					continue;
-				}
-
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_.getType());
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_);
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_.getType());
+				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_);
 				continue;
 			}
 			// UIColumn
@@ -653,8 +641,6 @@ public final class FormTemplate {
 					totalizers.put(field_.getName(), uiColumn.label() + " Total: ");
 				}
 			}
-			
-			
 		}
 		
         // Ordena pela parte Integer

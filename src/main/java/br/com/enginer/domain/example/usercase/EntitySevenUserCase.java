@@ -23,9 +23,9 @@ public class EntitySevenUserCase extends AbstractUserCase {
 	
 	public Domain<?> plus(Domain<?> domain) {
 		EntitySeven entitySeven = (EntitySeven) domain;
-		entitySeven.setDado("ANDERSON");
+		entitySeven.setDado("Value set in user case plus");
 		
-		EntitySix entitySix = (EntitySix) buscarPorId(new EntitySix(entitySeven.getId().getIdEntitySix()));
+		EntitySix entitySix = (EntitySix) super.buscarPorId(new EntitySix(entitySeven.getId().getIdEntitySix()));
 		
 		if(entitySeven.getId().getIdEntitySeven() == null) {
 			entitySeven.getId().setIdEntitySeven(UUID.randomUUID());

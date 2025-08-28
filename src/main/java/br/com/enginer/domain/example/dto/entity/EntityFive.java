@@ -7,6 +7,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
@@ -85,15 +86,18 @@ public class EntityFive extends DomainAbstract<UUID> {
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityFive Referencia")
+	@UIRow(editable = true)
 	private String reference;
 	
 	@UIPosition(x = 2, y = 2)
 	@UINumber(label = "Factor", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityFive Fator")
+	@UIRow(editable = true)
 	private Integer factor;
 
 	@UIPosition(x = 1, y = 3)
 	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ge" }, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
+	@UIRow(fields = { "name", "status", "ativo" })
 	private EntityStatus entityStatus;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

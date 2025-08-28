@@ -9,6 +9,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -54,6 +55,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIColumn(label = "EntityTree Nome do Animal")
+	@UIRow()
 	private String animal;
 
 	@UIPosition(x = 2, y = 1)
@@ -63,24 +65,29 @@ public class EntityTree extends DomainAbstract<UUID> {
 	@UIPosition(x = 1, y = 2)
 	@UISelect(label = "Inidicador", provider = ComboHelper.class, method = "indicadores")
 	@UIColumn(label = "EntityTree Indicador")
+	@UIRow()
 	private Integer indicator;
 
 	@UIPosition(x = 2, y = 2)
 	@UIColumn(label = "EntityTree Montante")
+	@UIRow()
 	private Double amount;
 
 	@UIPosition(x = 4, y = 2)
 	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
 	@UIColumn(label = "EntityTree Local da Data")
+	@UIRow()
 	private LocalDate localDate;
 
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityTree Data Local")
+	@UIRow()
 	private LocalDateTime localDateTime;
 
 	@UIJoin(icon = "edit")
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
+	@UIRow(fields = { "fruit" })
 	private EntityFour entityFour;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

@@ -9,6 +9,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
@@ -24,7 +25,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
@@ -61,7 +61,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     				template = TypeTemplate.PAGINATOR, 
     				highlight = false, 
     				dropdown = true,
-    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disable=false, field=entityTwo, value=$object }"))
+    				action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disable=true, field=entityTwo, value=$object }"))
     		), 
     		@UIButton(
     			    label = "Novo Entity One com Entity Two", 
@@ -109,24 +109,30 @@ public class EntityTwo extends DomainAbstract<UUID> {
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
 	@UIColumn(label = "Cor")
+	@UIRow()
 	private String color;
 
 	@UIDate(label = "Date Inclusion", showtime = false, format = TypeDateFormat.DATE_FORMAT)
 	@UIColumn(label = "Data de Inclusao")
+	@UIRow()
 	private LocalDate inclusionDate;
 
 	@UIColumn(label = "Hexagonal")
+	@UIRow()
 	private Integer hex;
 	
 	@UIColumn(label = "Custo")
+	@UIRow()
 	private Double cost;
 
 	@UIFieldValidation(required = true, template = TypeTemplate.FORM)
 	@UIFilter(label = "Entity Status", field = "name", select = false)
+	@UIRow(fields = { "name", "status" })
 	private EntityStatus entityStatus;
 
 	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIJoin(icon = "save")
+	@UIRow(fields = { "animal" })
 	private EntityTree entityTree;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

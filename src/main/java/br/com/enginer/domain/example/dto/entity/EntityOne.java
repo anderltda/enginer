@@ -131,7 +131,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    state = TypeButtonState.BTN_STATE_PRIMARY,
 		    template = { TypeTemplate.ROW },
 		    action = @UIAction(
-		        method = @UIActionMethod(serverMethod = "salvar")
+		        method = @UIActionMethod(serverMethod = "salvarLista")
 		    )
 		), 
 		@UIButton(
@@ -245,7 +245,7 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIRow(domainField = "color", order = 1)
+	@UIRow(fields = { "color" }, order = 1)
 	private EntityTwo entityTwo;
 
 	//@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
