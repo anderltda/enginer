@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.usercase;
 
+import java.util.List;
 import java.util.Map;
 
 import br.com.enginer.domain.AbstractUserCase;
@@ -69,6 +70,21 @@ public class EntityNineUserCase extends AbstractUserCase {
 		nine.getId().setEntityEight((EntityEight) super.buscarPorId(new EntityEight(nine.getId().getIdEntityEight())));
 		nine.getId().setEntitySeven(seven);
 		return nine;
+	}
+	
+	@Override
+	public List<Domain<?>> salvarLista(List<Domain<?>> entities) throws UncheckedException {
+		
+		List<Domain<?>> list = super.salvarLista(entities);
+		list.forEach(domain -> {
+			EntityNine nine = (EntityNine) domain;
+			EntitySeven seven = (EntitySeven) super.buscarPorId(new EntitySeven(new EntitySevenId(nine.getId().getIdEntitySeven(), nine.getId().getIdEntitySix())));
+			seven.getId().setEntitySix((EntitySix) super.buscarPorId(new EntitySix(nine.getId().getIdEntitySix())));
+			nine.getId().setEntityEight((EntityEight) super.buscarPorId(new EntityEight(nine.getId().getIdEntityEight())));
+			nine.getId().setEntitySeven(seven);
+		});
+			
+		return list;
 	}
 	
 }
