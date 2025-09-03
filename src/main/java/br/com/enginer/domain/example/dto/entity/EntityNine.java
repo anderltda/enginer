@@ -10,6 +10,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionTriggerMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
@@ -25,6 +26,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -37,8 +39,29 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
 	action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) })
 @UIPaginator(
-		config = @UIConfig(deletableCell = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonAdd.class, UIButtonPaginatorSave.class }, 
-        value = { 
+		config = @UIConfig(deletableCell = true), 
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
+        value = {
+        		@UIButton(
+        			    label = "Limpar",
+        			    icon = "trash",
+        			    state = TypeButtonState.BTN_STATE_PRIMARY,
+        			    template = TypeTemplate.ROW,
+        						action = @UIAction( 
+        								method = @UIActionMethod(clientMethod = "triggerMethod", 
+        								trigger = @UIActionTriggerMethod(clientMethod = Constants.METHOD_CLEAR_FORM)) 
+        							)
+        			),        		
+        		@UIButton(
+        			    label = "Adicionar",
+        			    icon = "plus",
+        			    state = TypeButtonState.BTN_STATE_PRIMARY,
+        			    template = TypeTemplate.ROW,
+        				action = @UIAction( 
+        					method = @UIActionMethod(clientMethod = "triggerMethod", 
+        					trigger = @UIActionTriggerMethod(serverMethod = "plus")) 
+        				)
+        			),
     		@UIButton(label = "Add EntitySeven in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
     		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityNine", param = "{ disable=true, field=id.entitySeven, value=$object }"))),
     		@UIButton(label = "Add EntityEight in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
