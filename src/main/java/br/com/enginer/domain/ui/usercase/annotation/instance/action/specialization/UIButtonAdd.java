@@ -17,12 +17,15 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@UIButton(label = Constants.LABEL_ADD, 
+@UIButton(	  
+		  label = Constants.LABEL_ADD, 
 		  icon = "plus", 
 		  state = TypeButtonState.BTN_STATE_PRIMARY, 
 		  template = { TypeTemplate.ROW }, 
 		  needsValidation = true, 
-		  action = @UIAction(method = @UIActionMethod(serverMethod = ActionUserCase.plus), 
-		  response = @UIActionResponse(template = { TypeTemplate.ROW }, 
-		  success = @UIActionResponseSuccess(method = @UIActionMethod(clientMethod = "setDataSetField")))))
+		  action = @UIAction(
+			method = @UIActionMethod(serverMethod = ActionUserCase.plus), 
+			response = @UIActionResponse(template = { TypeTemplate.ROW }, success = @UIActionResponseSuccess(method = @UIActionMethod(clientMethod = "setDataSetField")))
+		  )
+)
 public @interface UIButtonAdd { }

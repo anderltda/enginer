@@ -20,6 +20,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
@@ -40,28 +41,18 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) })
 @UIPaginator(
 		config = @UIConfig(deletableCell = true), 
-		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorAdd.class, UIButtonPaginatorSave.class }, 
         value = {
-        		@UIButton(
-        			    label = "Limpar",
-        			    icon = "trash",
-        			    state = TypeButtonState.BTN_STATE_PRIMARY,
-        			    template = TypeTemplate.ROW,
-        						action = @UIAction( 
-        								method = @UIActionMethod(clientMethod = "triggerMethod", 
-        								trigger = @UIActionTriggerMethod(clientMethod = Constants.METHOD_CLEAR_FORM)) 
-        							)
-        			),        		
-        		@UIButton(
-        			    label = "Adicionar",
-        			    icon = "plus",
-        			    state = TypeButtonState.BTN_STATE_PRIMARY,
-        			    template = TypeTemplate.ROW,
-        				action = @UIAction( 
-        					method = @UIActionMethod(clientMethod = "triggerMethod", 
-        					trigger = @UIActionTriggerMethod(serverMethod = "plus")) 
-        				)
-        			),
+    		@UIButton(
+			    label = "Limpar",
+			    icon = "trash",
+			    state = TypeButtonState.BTN_STATE_PRIMARY,
+			    template = TypeTemplate.ROW,
+				action = @UIAction( 
+						method = @UIActionMethod(clientMethod = "triggerMethod", 
+						trigger = @UIActionTriggerMethod(clientMethod = Constants.METHOD_CLEAR_FORM)) 
+				)
+			),        		
     		@UIButton(label = "Add EntitySeven in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
     		action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityNine", param = "{ disable=true, field=id.entitySeven, value=$object }"))),
     		@UIButton(label = "Add EntityEight in Nine", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
