@@ -78,6 +78,7 @@ public class EntityFour extends DomainAbstract<UUID> {
 	@UIFilter(label = "Entity Five", field = "reference")
 	@UIJoin(icon = "cloud")
 	@UIRow(fields = { "reference" })
+	@UIColumn(label = "Entity Five", fields = { "reference", "factor", "entityStatus" })
 	private EntityFive entityFive;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

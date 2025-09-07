@@ -2,6 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.util.UUID;
 
+import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
@@ -21,10 +22,12 @@ public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 	
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
 	@UIRow(fields = { "id", "dado" })
+	@UIColumn(label = "Entity Seven", fields = { "id", "dado" })
 	private EntitySeven entitySeven;
 
 	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
 	@UIRow(fields = { "position" })
+	@UIColumn(label = "Entity Eight", fields = { "position" })
 	private EntityEight entityEight;
 	
 	public Long getIdEntityEight() {

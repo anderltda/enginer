@@ -11,6 +11,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Target(ElementType.FIELD)
 public @interface UIColumn {
 	String label(); // nome da coluna
+	String[] fields() default {}; // fields do domain - Apenas utilizado em Objects Domain
 	boolean initial() default false; // aparece logo na tela
 	boolean hidden() default false; // nunca exibida
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.MODAL };

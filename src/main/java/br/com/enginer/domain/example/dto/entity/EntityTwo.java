@@ -108,7 +108,7 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	private UUID id;
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
-	@UIColumn(label = "Cor")
+	@UIColumn(label = "Cor", initial = true)
 	@UIRow()
 	private String color;
 
@@ -117,11 +117,11 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	@UIRow()
 	private LocalDate inclusionDate;
 
-	@UIColumn(label = "Hexagonal")
+	@UIColumn(label = "Hexagonal", initial = true)
 	@UIRow()
 	private Integer hex;
 	
-	@UIColumn(label = "Custo")
+	@UIColumn(label = "Custo", initial = true)
 	@UIRow()
 	private Double cost;
 
@@ -133,6 +133,7 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIJoin(icon = "save")
 	@UIRow(fields = { "animal" })
+	@UIColumn(label = "Entity Tree", fields = { "animal", "indicator", "amount", "localDate", "localDateTime", "entityFour" })
 	private EntityTree entityTree;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

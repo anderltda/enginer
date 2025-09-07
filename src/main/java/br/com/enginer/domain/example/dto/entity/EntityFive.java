@@ -98,6 +98,7 @@ public class EntityFive extends DomainAbstract<UUID> {
 	@UIPosition(x = 1, y = 3)
 	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ge" }, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIRow(fields = { "name", "status", "ativo" })
+	@UIColumn(label = "Entity Status", fields = { "name", "status" })
 	private EntityStatus entityStatus;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

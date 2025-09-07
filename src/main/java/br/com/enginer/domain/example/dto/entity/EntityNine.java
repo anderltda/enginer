@@ -63,6 +63,7 @@ public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIJoin
 	@UIRow(fields = { "entitySeven", "entityEight" })
+	@UIColumn(label = "Id", fields = { "entitySeven", "entityEight" })
 	private EntityNineId id;
 
 	@UIPosition(x = 1, y = 1)

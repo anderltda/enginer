@@ -24,6 +24,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
+import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.field.type.Id;
 import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
@@ -66,8 +67,17 @@ public class ReflectionUtils {
         return fields.toArray(new Field[0]);
     }	
 	
-	
-	public static void extractFieldPaginator(Map<String, String> columnNames, List<String> visibles, List<String> initials, List<Map.Entry<String, Integer>> rowsMap, String simpleName, Field fieldClass) throws Exception {
+	/**
+	 * @param typeTemplate
+	 * @param columnNames
+	 * @param visibles
+	 * @param initials
+	 * @param rowsMap
+	 * @param simpleName
+	 * @param fieldClass
+	 * @throws Exception
+	 */
+	public static void extractFieldPaginator(TypeTemplate typeTemplate, Map<String, String> columnNames,  List<String> visibles, List<String> initials, List<Map.Entry<String, Integer>> rowsMap, String simpleName, Field fieldClass) throws Exception {
 
 		String attribute = (classIsIdType(fieldClass.getType()) && simpleName != null ? "id" : StringsUtils.firstLower(fieldClass.getType().getSimpleName()));
 
@@ -77,66 +87,62 @@ public class ReflectionUtils {
 			simpleName = attribute;
 		}
 		
-		UIRow uiRowFieldClass = fieldClass.getAnnotation(UIRow.class);
+		Field[] declaredFields = new Field[] {};
 		
-		if(uiRowFieldClass != null) {
+		if(typeTemplate.equals(TypeTemplate.ROW)) {
 			
-			Field[] declaredFields = getFieldsByName(fieldClass.getType(), uiRowFieldClass.fields());
-
-			for (Field field : declaredFields) {
-				String name = simpleName.concat(".").concat(field.getName());
-				// UIFilter
-				UIFilter uiFilter = field.getAnnotation(UIFilter.class);
-				if (uiFilter != null) {
-					extractFieldPaginator(columnNames, visibles, initials, rowsMap, simpleName, field);
-					continue;
-				}
-				// UIJoin
-				UIJoin uiJoin = field.getAnnotation(UIJoin.class);
-				if (uiJoin != null) {
-					extractFieldPaginator(columnNames, visibles, initials, rowsMap, simpleName, field);
-					continue;
-				}
-				// UIColumn
-				UIColumn uiColumn = field.getAnnotation(UIColumn.class);
-				if (uiColumn != null) {
-					if(!uiColumn.hidden()) {
-						if(uiColumn.initial()) {
-							initials.add(name);
-						}
-						columnNames.put(name, uiColumn.label());
-						visibles.add(name);
-					}				
-				}
-				// UIRow
-				UIRow uiRow = field.getAnnotation(UIRow.class);
-				if(uiRow != null) {
-					rowsMap.add(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
-				}
-			}	
+			UIRow uiRowFieldClass = fieldClass.getAnnotation(UIRow.class);
+			
+			if(uiRowFieldClass == null) {
+				return;
+			}
+			
+			declaredFields = getFieldsByName(fieldClass.getType(), uiRowFieldClass.fields());
+			
+		} else  {
+			
+			UIColumn uiColumnFieldClass = fieldClass.getAnnotation(UIColumn.class);
+			
+			if(uiColumnFieldClass == null) {
+				return;
+			}
+			
+			declaredFields = getFieldsByName(fieldClass.getType(), uiColumnFieldClass.fields());
 		}
+
+		for (Field field : declaredFields) {
+			String name = simpleName.concat(".").concat(field.getName());
+			// UIFilter
+			UIFilter uiFilter = field.getAnnotation(UIFilter.class);
+			if (uiFilter != null) {
+				extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, simpleName, field);
+				continue;
+			}
+			// UIJoin
+			UIJoin uiJoin = field.getAnnotation(UIJoin.class);
+			if (uiJoin != null) {
+				extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, simpleName, field);
+				continue;
+			}
+			// UIColumn
+			UIColumn uiColumn = field.getAnnotation(UIColumn.class);
+			if (uiColumn != null) {
+				if(!uiColumn.hidden()) {
+					if(uiColumn.initial()) {
+						initials.add(name);
+					}
+					columnNames.put(name, uiColumn.label());
+					visibles.add(name);
+				}				
+			}
+			// UIRow
+			UIRow uiRow = field.getAnnotation(UIRow.class);
+			if(uiRow != null) {
+				rowsMap.add(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
+			}
+		}	
 		
 	}
-	
-	public static <T> void setAtIndex(List<T> list, int index, T value) {
-	    // Garante que a lista tenha tamanho suficiente
-	    while (list.size() <= index) {
-	        list.add(null);
-	    }
-	    list.set(index, value);
-	}
-	
-	public static <T> void removeTrailingNulls(List<T> list) {
-	    int lastNonNull = list.size() - 1;
-	    // Procura o último elemento não-nulo
-	    while (lastNonNull >= 0 && list.get(lastNonNull) == null) {
-	        lastNonNull--;
-	    }
-	    // Remove os nulls no final
-	    for (int i = list.size() - 1; i > lastNonNull; i--) {
-	        list.remove(i);
-	    }
-	}	
 	
 
 	/**

@@ -54,7 +54,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
-	@UIColumn(label = "EntityTree Nome do Animal")
+	@UIColumn(label = "EntityTree Nome do Animal", initial = true)
 	@UIRow()
 	private String animal;
 
@@ -88,6 +88,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 	@UIJoin(icon = "edit")
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIRow(fields = { "fruit" })
+	@UIColumn(label = "Entity Four", fields = { "fruit", "attribute", "inclusionDateTime", "entityFive" })
 	private EntityFour entityFour;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

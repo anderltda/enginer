@@ -604,13 +604,13 @@ public final class FormTemplate {
 			// UIFilter
 			UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_);
+				ReflectionUtils.extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, null, field_);
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				ReflectionUtils.extractFieldPaginator(columnNames, visibles, initials, rowsMap, null, field_);
+				ReflectionUtils.extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, null, field_);
 				continue;
 			}
 			// UIColumn

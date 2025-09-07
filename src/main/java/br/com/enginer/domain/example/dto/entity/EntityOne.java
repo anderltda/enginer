@@ -202,16 +202,18 @@ public class EntityOne extends DomainAbstract<Long> {
 	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"),
 	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },   syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
 	)
-	@UIColumn(label = "EntityOne Nome")
+	@UIColumn(label = "EntityOne Nome", initial = true)
 	private String name;
 
 	@UIPosition(x = 2, y = 1)
 	@UIFieldValidation(required = false)
 	@UIFilter(label = "Entity Status", field = "name", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
+	@UIColumn(label = "Entity Status", fields = { "name", "status" })
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
+	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" })
 	private EntityNine entityNine;
 
 	@UIPosition(x = 2, y = 2)
@@ -221,13 +223,13 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Idade")
+	@UIColumn(label = "EntityOne Idade", initial = true)
 	@UIRow(editable = true, totalizer = true, order = 3)
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Altura")
+	@UIColumn(label = "EntityOne Altura", initial = true)
 	@UIRow(editable = true, order = 4)
 	private Double height;
 
@@ -245,12 +247,9 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
+	@UIColumn(label = "Entity Two", fields = { "color", "inclusionDate", "cost", "hex", "entityTree" })
 	@UIRow(fields = { "color" }, order = 1)
 	private EntityTwo entityTwo;
-
-	//@UIFilter(label = "Entity Five", field = "reference", template = { TypeTemplate.ROW })
-	//@UIRow(domainField = "reference", order = 1)
-	//private EntityFive entityFive;
 	
 	@UIHidden(label = "Multiplicacao Total", template = { TypeTemplate.ROW })
 	//@UIColumn(label = "Multiplicacao Total")
@@ -449,14 +448,6 @@ public class EntityOne extends DomainAbstract<Long> {
 	public void setEntityNine(EntityNine entityNine) {
 		this.entityNine = entityNine;
 	}
-	
-	//public EntityFive getEntityFive() {
-	//	return entityFive;
-	//}
-
-	//public void setEntityFive(EntityFive entityFive) {
-	//	this.entityFive = entityFive;
-	//}
 
 	@Override
 	public String toString() {
