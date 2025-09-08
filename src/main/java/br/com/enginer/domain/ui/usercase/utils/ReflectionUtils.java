@@ -67,46 +67,31 @@ public class ReflectionUtils {
         return fields.toArray(new Field[0]);
     }	
 	
+
 	/**
-	 * @param typeTemplate
-	 * @param columnNames
-	 * @param visibles
-	 * @param initials
-	 * @param rowsMap
+	 * @param param
 	 * @param simpleName
 	 * @param fieldClass
 	 * @throws Exception
 	 */
-	public static void extractFieldPaginator(TypeTemplate typeTemplate, Map<String, String> columnNames,  List<String> visibles, List<String> initials, List<Map.Entry<String, Integer>> rowsMap, String simpleName, Field fieldClass) throws Exception {
+	public static void extractFieldPaginator(Param param, String simpleName, Field fieldClass) throws Exception {
+
+		Field[] declaredFields = new Field[] {};
 
 		String attribute = (classIsIdType(fieldClass.getType()) && simpleName != null ? "id" : StringsUtils.firstLower(fieldClass.getType().getSimpleName()));
 
-		if(simpleName != null) {
-			simpleName = simpleName + (".") + attribute;
-		} else {
-			simpleName = attribute;
-		}
+		simpleName = ((simpleName != null) ? simpleName.concat(".").concat(attribute) : attribute);
 		
-		Field[] declaredFields = new Field[] {};
-		
-		if(typeTemplate.equals(TypeTemplate.ROW)) {
+		if(param.getTypeTemplate().equals(TypeTemplate.ROW)) {
 			
 			UIRow uiRowFieldClass = fieldClass.getAnnotation(UIRow.class);
-			
-			if(uiRowFieldClass == null) {
-				return;
-			}
-			
+			if(uiRowFieldClass == null) return;
 			declaredFields = getFieldsByName(fieldClass.getType(), uiRowFieldClass.fields());
 			
 		} else  {
 			
 			UIColumn uiColumnFieldClass = fieldClass.getAnnotation(UIColumn.class);
-			
-			if(uiColumnFieldClass == null) {
-				return;
-			}
-			
+			if(uiColumnFieldClass == null) return;
 			declaredFields = getFieldsByName(fieldClass.getType(), uiColumnFieldClass.fields());
 		}
 
@@ -115,13 +100,13 @@ public class ReflectionUtils {
 			// UIFilter
 			UIFilter uiFilter = field.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, simpleName, field);
+				extractFieldPaginator(param, simpleName, field);
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				extractFieldPaginator(typeTemplate, columnNames, visibles, initials, rowsMap, simpleName, field);
+				extractFieldPaginator(param, simpleName, field);
 				continue;
 			}
 			// UIColumn
@@ -129,16 +114,25 @@ public class ReflectionUtils {
 			if (uiColumn != null) {
 				if(!uiColumn.hidden()) {
 					if(uiColumn.initial()) {
-						initials.add(name);
+						param.addInitials(name);
 					}
-					columnNames.put(name, uiColumn.label());
-					visibles.add(name);
+					param.addColumnNames(name, uiColumn.label());
+					param.addVisibles(name);
 				}				
 			}
 			// UIRow
 			UIRow uiRow = field.getAnnotation(UIRow.class);
 			if(uiRow != null) {
-				rowsMap.add(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
+				param.addRowsMap(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
+				if (uiRow.editable()) {
+					param.addEditables(name);
+				}
+				if (!uiRow.visible()) {
+					param.addHiddens(name);
+				}
+				if (!uiRow.calculation().isEmpty()) {
+					param.addCalculations(name.concat(" = ").concat(uiRow.calculation()));
+				}
 			}
 		}	
 		
