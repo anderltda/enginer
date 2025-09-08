@@ -45,18 +45,18 @@ public class EntityEight extends DomainAbstract<Long> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Position", max = 100)
-	@UIColumn(label = "EntityEight Position")
-	@UIRow()
+	@UIColumn(label = "EntityEight Position", initial = false)
+	@UIRow(visible = true)
 	private String position;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Properties")
-	@UIColumn(label = "EntityEight Properties")
-	@UIRow()
+	@UIColumn(label = "EntityEight Properties", initial = false)
+	@UIRow(visible = true)
 	private String properties;
 
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
-	@UIRow(fields = { "dado" })
+	@UIRow(visible = true, fields = { "dado" })
 	private EntitySeven entitySeven;
 
 	public EntityEight() {

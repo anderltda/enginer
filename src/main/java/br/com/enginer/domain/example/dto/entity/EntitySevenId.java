@@ -18,15 +18,13 @@ public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId 
 	@UIIgnore
 	private Long idEntitySix;
 	
-	@UIColumn(label = "Six")
+	@UIColumn(label = "Six", initial = false)
 	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
-	@UIRow(fields = { "packageName" })
+	@UIRow(visible = true, fields = { "packageName" })
 	private EntitySix entitySix;
-	
 	
 	public EntitySevenId() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public EntitySevenId(UUID idEntitySeven, Long idEntitySix) {

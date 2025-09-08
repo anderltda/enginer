@@ -76,25 +76,25 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntitySix extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
-	@UIRow
+	@UIRow(visible = true)
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Package", max = 100)
-	@UIColumn(label = "EntitySix Package")
-	@UIRow(editable = true)
+	@UIColumn(label = "EntitySix Package", initial = true)
+	@UIRow(visible = true, editable = true)
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)
 	@UIDate(label = "Start", format = TypeDateFormat.DATE_FORMAT)
-	@UIColumn(label = "EntitySix Data Aberta")	
-	@UIRow()
+	@UIColumn(label = "EntitySix Data Aberta", initial = false)	
+	@UIRow(visible = true)
 	private LocalDate startDate;
 
 	@UIPosition(x = 2, y = 2)
 	@UIDate(label = "Stop", format = TypeDateFormat.DATE_FORMAT)
-	@UIColumn(label = "EntitySix Data Fechada")
-	@UIRow()
+	@UIColumn(label = "EntitySix Data Fechada", initial = false)
+	@UIRow(visible = true)
 	private LocalDate stopDate;
 
 	public EntitySix() {

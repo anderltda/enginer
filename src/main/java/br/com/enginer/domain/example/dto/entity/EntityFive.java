@@ -80,25 +80,25 @@ value = {
 public class EntityFive extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityFive Id")
+	@UIColumn(label = "EntityFive Id", initial = false)
 	private UUID id;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityFive Referencia")
-	@UIRow(editable = true)
+	@UIColumn(label = "EntityFive Referencia", initial = false)
+	@UIRow(visible = true, editable = true)
 	private String reference;
 	
 	@UIPosition(x = 2, y = 2)
 	@UINumber(label = "Factor", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityFive Fator")
-	@UIRow(editable = true)
+	@UIColumn(label = "EntityFive Fator", initial = false)
+	@UIRow(visible = true, editable = true)
 	private Integer factor;
 
 	@UIPosition(x = 1, y = 3)
 	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ge" }, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIRow(fields = { "name", "status", "ativo" })
-	@UIColumn(label = "Entity Status", fields = { "name", "status" })
+	@UIRow(visible = true, fields = { "name", "status", "ativo" })
+	@UIColumn(label = "Entity Status", fields = { "name", "status" }, initial = false)
 	private EntityStatus entityStatus;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

@@ -21,13 +21,13 @@ public class EntityNineId extends DomainAbstract<Object[]> implements DomainId {
 	private Long idEntitySix;
 	
 	@UIFilter(label = "Entity Seven", field = "dado", readonly = false)
-	@UIRow(fields = { "id", "dado" })
-	@UIColumn(label = "Entity Seven", fields = { "id", "dado" })
+	@UIRow(visible = true, fields = { "id", "dado" })
+	@UIColumn(label = "Entity Seven", fields = { "id", "dado" }, initial = false)
 	private EntitySeven entitySeven;
 
 	@UIFilter(label = "Entity Eight", field = "properties", readonly = false)
-	@UIRow(fields = { "position" })
-	@UIColumn(label = "Entity Eight", fields = { "position" })
+	@UIRow(visible = true, fields = { "position" })
+	@UIColumn(label = "Entity Eight", fields = { "position" }, initial = false)
 	private EntityEight entityEight;
 	
 	public Long getIdEntityEight() {

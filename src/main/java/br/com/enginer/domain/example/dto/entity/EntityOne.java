@@ -188,7 +188,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityOne extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityOne ID")
+	@UIColumn(label = "EntityOne ID", initial = false)
 	private Long id;
 
 	@UIText(label = "Name", template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
@@ -208,47 +208,47 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIPosition(x = 2, y = 1)
 	@UIFieldValidation(required = false)
 	@UIFilter(label = "Entity Status", field = "name", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
-	@UIColumn(label = "Entity Status", fields = { "name", "status" })
+	@UIColumn(label = "Entity Status", fields = { "name", "status" }, initial = false)
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
-	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" })
+	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" }, initial = false)
 	private EntityNine entityNine;
 
 	@UIPosition(x = 2, y = 2)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Codigo")
+	@UIColumn(label = "EntityOne Codigo", initial = false)
 	private Boolean code = true;
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Idade", initial = true)
-	@UIRow(editable = true, totalizer = true, order = 3)
+	@UIRow(visible = true, editable = true, totalizer = true, order = 3)
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Altura", initial = true)
-	@UIRow(editable = true, order = 4)
+	@UIColumn(label = "EntityOne Altura", initial = false)
+	@UIRow(visible = true, editable = true, order = 4)
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
 	@UIDate(label = "Birth Date")
-	@UIColumn(label = "EntityOne Data de Aniversario")
+	@UIColumn(label = "EntityOne Data de Aniversario", initial = false)
 	@UIRow(visible = false)
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIColumn(label = "EntityOne Data da Proibicao")
-	@UIRow(order = 2)
+	@UIColumn(label = "EntityOne Data da Proibicao", initial = false)
+	@UIRow(visible = true, order = 2)
 	private LocalDateTime prohibitedDateTime;
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIColumn(label = "Entity Two", fields = { "color", "inclusionDate", "cost", "hex", "entityTree" })
-	@UIRow(fields = { "color" }, order = 1)
+	@UIColumn(label = "Entity Two", fields = { "color", "inclusionDate", "cost", "hex", "entityTree" }, initial = true)
+	@UIRow(visible = true, fields = { "color" }, order = 1)
 	private EntityTwo entityTwo;
 	
 	@UIHidden(label = "Multiplicacao Total", template = { TypeTemplate.ROW })
@@ -262,12 +262,12 @@ public class EntityOne extends DomainAbstract<Long> {
 	private Double valorSoma;
 	
 	@UIHidden(label = "Subtracao Total", template = { TypeTemplate.ROW })
-	@UIColumn(label = "Subtracao Total")
+	@UIColumn(label = "Subtracao Total", initial = false)
 	//@UIRow(calculation = "age - height + valorUm", order = 6)
 	private Double valorSubtracao;	
 	
 	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
-	@UIColumn(label = "Divisao Total")
+	@UIColumn(label = "Divisao Total", initial = false)
 	//@UIRow(calculation = "age / height", order = 7)
 	private Double valorDivisao;	
 	

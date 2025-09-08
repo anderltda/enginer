@@ -8,18 +8,20 @@ import java.util.Map;
 
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 
+/**
+ * 
+ */
 public class Param {
 
 	private TypeTemplate typeTemplate;
 	private List<String> visibles;
 	private List<String> initials;
-	private List<Map.Entry<String, Integer>> rowsMap;
-	private Map<String, String> columnNames;
-
 	private List<String> rows;
 	private List<String> editables;
 	private List<String> hiddens;
 	private List<String> calculations;
+	private List<Map.Entry<String, Integer>> rowsMap;
+	private Map<String, String> columnNames;
 	private Map<String, String> totalizers;
 
 	public TypeTemplate getTypeTemplate() {

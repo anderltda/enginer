@@ -71,16 +71,15 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntitySeven extends DomainAbstract<EntitySevenId> {
 	
 	@UIJoin
-	@UIColumn(label = "Six")
-	@UIRow(fields = { "entitySix" })
+	@UIColumn(label = "Six", initial = false)
+	@UIRow(visible = true, fields = { "entitySix" })
 	private EntitySevenId id;
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Dado")
-	@UIColumn(label = "EntitySeven Dado")
-	@UIRow(editable = true)
+	@UIColumn(label = "EntitySeven Dado", initial = false)
+	@UIRow(visible = true, editable = true)
 	private String dado;
-	
 
 	public EntitySeven() {
 		super();

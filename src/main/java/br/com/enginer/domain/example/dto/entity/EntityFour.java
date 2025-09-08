@@ -48,7 +48,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityFour extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityFour Id")
+	@UIColumn(label = "EntityFour Id", initial = false)
 	private UUID id;
 
 	@UIPosition(x = 1, y = 1)
@@ -56,8 +56,8 @@ public class EntityFour extends DomainAbstract<UUID> {
 	@UIFieldValidation(required = false, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
 			"dogMel", "dogMagrela" }, syncError = { "message1",
 					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
-	@UIColumn(label = "EntityFour Nome da Fruta")
-	@UIRow()
+	@UIColumn(label = "EntityFour Nome da Fruta", initial = false)
+	@UIRow(visible = true)
 	private String fruit;
 
 	@UIPosition(x = 1, y = 2)
@@ -65,20 +65,20 @@ public class EntityFour extends DomainAbstract<UUID> {
 	private EntityStatus entityStatus;
 
 	@UIPosition(x = 2, y = 2)
-	@UIColumn(label = "EntityFour Atributo")
-	@UIRow()
+	@UIColumn(label = "EntityFour Atributo", initial = false)
+	@UIRow(visible = true)
 	private Integer attribute;
 
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIColumn(label = "EntityFour Data e hora da inclusao")
-	@UIRow()
+	@UIColumn(label = "EntityFour Data e hora da inclusao", initial = false)
+	@UIRow(visible = true)
 	private LocalDateTime inclusionDateTime;
 
 	@UIFilter(label = "Entity Five", field = "reference")
 	@UIJoin(icon = "cloud")
-	@UIRow(fields = { "reference" })
-	@UIColumn(label = "Entity Five", fields = { "reference", "factor", "entityStatus" })
+	@UIRow(visible = true, fields = { "reference" })
+	@UIColumn(label = "Entity Five", fields = { "reference", "factor", "entityStatus" }, initial = false)
 	private EntityFive entityFive;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

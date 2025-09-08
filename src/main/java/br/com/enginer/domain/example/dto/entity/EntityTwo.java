@@ -104,36 +104,36 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityTwo extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityTwo Id")
+	@UIColumn(label = "EntityTwo Id", initial = false)
 	private UUID id;
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
 	@UIColumn(label = "Cor", initial = true)
-	@UIRow()
+	@UIRow(visible = true)
 	private String color;
 
 	@UIDate(label = "Date Inclusion", showtime = false, format = TypeDateFormat.DATE_FORMAT)
-	@UIColumn(label = "Data de Inclusao")
-	@UIRow()
+	@UIColumn(label = "Data de Inclusao", initial = false)
+	@UIRow(visible = true)
 	private LocalDate inclusionDate;
 
 	@UIColumn(label = "Hexagonal", initial = true)
-	@UIRow()
+	@UIRow(visible = true)
 	private Integer hex;
 	
 	@UIColumn(label = "Custo", initial = true)
-	@UIRow()
+	@UIRow(visible = true)
 	private Double cost;
 
 	@UIFieldValidation(required = true, template = TypeTemplate.FORM)
 	@UIFilter(label = "Entity Status", field = "name", select = false)
-	@UIRow(fields = { "name", "status" })
+	@UIRow(visible = true, fields = { "name", "status" })
 	private EntityStatus entityStatus;
 
 	@UIFilter(label = "Entity Tree", field = "animal", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIJoin(icon = "save")
-	@UIRow(fields = { "animal" })
-	@UIColumn(label = "Entity Tree", fields = { "animal", "indicator", "amount", "localDate", "localDateTime", "entityFour" })
+	@UIRow(visible = true, fields = { "animal" })
+	@UIColumn(label = "Entity Tree", fields = { "animal", "indicator", "amount", "localDate", "localDateTime", "entityFour" }, initial = false)
 	private EntityTree entityTree;
 	
 	public void setIdEntityStatus(Long idEntityStatus) {

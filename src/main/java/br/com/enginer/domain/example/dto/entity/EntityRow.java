@@ -38,23 +38,23 @@ public class EntityRow extends DomainAbstract<String> {
 	private String id;
 
 	@UIHidden()
-	@UIColumn(label = "A")
-	@UIRow(editable = true, order = 1)
+	@UIColumn(label = "A", initial = true)
+	@UIRow(visible = true, editable = true, order = 1)
 	private String aaa;
 
 	@UIHidden()
-	@UIColumn(label = "B")
-	@UIRow(editable = true, order = 2)
+	@UIColumn(label = "B", initial = true)
+	@UIRow(visible = true, editable = true, order = 2)
 	private String bbb;
 
 	@UIHidden()
-	@UIColumn(label = "C")
-	@UIRow(editable = true, order = 3)
+	@UIColumn(label = "C", initial = true)
+	@UIRow(visible = true, editable = true, order = 3)
 	private String ccc;
 
 	@UIHidden()
-	@UIColumn(label = "D")
-	@UIRow(editable = true, order = 4)
+	@UIColumn(label = "D", initial = true)
+	@UIRow(visible = true, editable = true, order = 4)
 	private String ddd;
 
 	public String getAaa() {

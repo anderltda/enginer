@@ -32,32 +32,32 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityStatus extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityStatus Id", hidden = true)
+	@UIColumn(label = "EntityStatus Id", hidden = true, initial = false)
 	private Long id;
 	
 	@UIPosition(x = 1, y = 1)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
-	@UIColumn(label = "EntityStatus Nome do Status")
-	@UIRow()
+	@UIColumn(label = "EntityStatus Nome do Status", initial = false)
+	@UIRow(visible = true)
 	private String name;
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	@UISelect(label = "Escolha um Status!", method = "status", provider = ComboHelper.class)
-	@UIColumn(label = "EntityStatus Status do Status")
-	@UIRow()
+	@UIColumn(label = "EntityStatus Status do Status", initial = false)
+	@UIRow(visible = true)
 	private Integer status;
 	
 	@UIPosition(x = 3, y = 2)
 	@UICheckbox(label = "Deseja que esse campo esteja ativo?")
-	@UIColumn(label = "Está ativo ??")
-	@UIRow()
+	@UIColumn(label = "Está ativo ??", initial = false)
+	@UIRow(visible = true)
 	private Boolean ativo;
 	
 	@UIPosition(x = 2, y = 2)
 	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
-	@UIColumn(label = "EntityStatus Data da Localizacao", hidden = true)
-	@UIRow()
+	@UIColumn(label = "EntityStatus Data da Localizacao", hidden = true, initial = false)
+	@UIRow(visible = true)
 	private LocalDateTime startDateTime;
 	
 	@Override

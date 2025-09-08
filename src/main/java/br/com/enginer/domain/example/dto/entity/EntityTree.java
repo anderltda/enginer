@@ -48,14 +48,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityTree extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
-	@UIColumn(label = "EntityTree Id")
+	@UIColumn(label = "EntityTree Id", initial = false)
 	private UUID id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Animal Name", min = 4, max = 50)
 	@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIColumn(label = "EntityTree Nome do Animal", initial = true)
-	@UIRow()
+	@UIRow(visible = true)
 	private String animal;
 
 	@UIPosition(x = 2, y = 1)
@@ -64,31 +64,31 @@ public class EntityTree extends DomainAbstract<UUID> {
 
 	@UIPosition(x = 1, y = 2)
 	@UISelect(label = "Inidicador", provider = ComboHelper.class, method = "indicadores")
-	@UIColumn(label = "EntityTree Indicador")
-	@UIRow()
+	@UIColumn(label = "EntityTree Indicador", initial = false)
+	@UIRow(visible = true)
 	private Integer indicator;
 
 	@UIPosition(x = 2, y = 2)
-	@UIColumn(label = "EntityTree Montante")
-	@UIRow()
+	@UIColumn(label = "EntityTree Montante", initial = false)
+	@UIRow(visible = true)
 	private Double amount;
 
 	@UIPosition(x = 4, y = 2)
 	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
-	@UIColumn(label = "EntityTree Local da Data")
-	@UIRow()
+	@UIColumn(label = "EntityTree Local da Data", initial = false)
+	@UIRow(visible = true)
 	private LocalDate localDate;
 
 	@UIPosition(x = 3, y = 2)
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIColumn(label = "EntityTree Data Local")
-	@UIRow()
+	@UIColumn(label = "EntityTree Data Local", initial = false)
+	@UIRow(visible = true)
 	private LocalDateTime localDateTime;
 
 	@UIJoin(icon = "edit")
 	@UIFilter(label = "Entity Four", field = "fruit", template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
-	@UIRow(fields = { "fruit" })
-	@UIColumn(label = "Entity Four", fields = { "fruit", "attribute", "inclusionDateTime", "entityFive" })
+	@UIRow(visible = true, fields = { "fruit" })
+	@UIColumn(label = "Entity Four", fields = { "fruit", "attribute", "inclusionDateTime", "entityFive" }, initial = false)
 	private EntityFour entityFour;
 
 	public void setIdEntityStatus(Long idEntityStatus) {

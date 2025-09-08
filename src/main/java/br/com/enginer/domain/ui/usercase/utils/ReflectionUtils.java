@@ -48,25 +48,24 @@ public class ReflectionUtils {
 		}
 		return fields;
 	}
-	
-    /**
-     * Retorna uma lista de Fields de uma classe com base nos nomes informados.
-     *
-     * @param clazz        Classe a ser inspecionada
-     * @param fieldNames   Array com os nomes dos campos
-     * @return             Lista de campos refletidos
-     * @throws NoSuchFieldException se algum campo não existir na classe
-     */
-    public static Field[] getFieldsByName(Class<?> clazz, String[] fieldNames) throws Exception {
-        List<Field> fields = new ArrayList<>();
-        for (String name : fieldNames) {
-            Field field = clazz.getDeclaredField(name);
-            field.setAccessible(true);
-            fields.add(field);
-        }
-        return fields.toArray(new Field[0]);
-    }	
-	
+
+	/**
+	 * Retorna uma lista de Fields de uma classe com base nos nomes informados.
+	 *
+	 * @param clazz      Classe a ser inspecionada
+	 * @param fieldNames Array com os nomes dos campos
+	 * @return Lista de campos refletidos
+	 * @throws NoSuchFieldException se algum campo não existir na classe
+	 */
+	public static Field[] getFieldsByName(Class<?> clazz, String[] fieldNames) throws Exception {
+		List<Field> fields = new ArrayList<>();
+		for (String name : fieldNames) {
+			Field field = clazz.getDeclaredField(name);
+			field.setAccessible(true);
+			fields.add(field);
+		}
+		return fields.toArray(new Field[0]);
+	}
 
 	/**
 	 * @param param
@@ -78,20 +77,27 @@ public class ReflectionUtils {
 
 		Field[] declaredFields = new Field[] {};
 
-		String attribute = (classIsIdType(fieldClass.getType()) && simpleName != null ? "id" : StringsUtils.firstLower(fieldClass.getType().getSimpleName()));
+		Boolean initial = false;
+
+		String attribute = (classIsIdType(fieldClass.getType()) && simpleName != null ? "id"
+				: StringsUtils.firstLower(fieldClass.getType().getSimpleName()));
 
 		simpleName = ((simpleName != null) ? simpleName.concat(".").concat(attribute) : attribute);
-		
-		if(param.getTypeTemplate().equals(TypeTemplate.ROW)) {
-			
+
+		if (param.getTypeTemplate().equals(TypeTemplate.ROW)) {
+
 			UIRow uiRowFieldClass = fieldClass.getAnnotation(UIRow.class);
-			if(uiRowFieldClass == null) return;
+			if (uiRowFieldClass == null)
+				return;
 			declaredFields = getFieldsByName(fieldClass.getType(), uiRowFieldClass.fields());
-			
-		} else  {
-			
+
+		} else {
+
 			UIColumn uiColumnFieldClass = fieldClass.getAnnotation(UIColumn.class);
-			if(uiColumnFieldClass == null) return;
+			if (uiColumnFieldClass == null)
+				return;
+
+			initial = uiColumnFieldClass.initial();
 			declaredFields = getFieldsByName(fieldClass.getType(), uiColumnFieldClass.fields());
 		}
 
@@ -112,17 +118,19 @@ public class ReflectionUtils {
 			// UIColumn
 			UIColumn uiColumn = field.getAnnotation(UIColumn.class);
 			if (uiColumn != null) {
-				if(!uiColumn.hidden()) {
-					if(uiColumn.initial()) {
+				if (!uiColumn.hidden()) {
+
+					if (initial && uiColumn.initial()) {
 						param.addInitials(name);
 					}
+					
 					param.addColumnNames(name, uiColumn.label());
 					param.addVisibles(name);
-				}				
+				}
 			}
 			// UIRow
 			UIRow uiRow = field.getAnnotation(UIRow.class);
-			if(uiRow != null) {
+			if (uiRow != null) {
 				param.addRowsMap(new AbstractMap.SimpleEntry<>(name, uiRow.order()));
 				if (uiRow.editable()) {
 					param.addEditables(name);
@@ -134,10 +142,9 @@ public class ReflectionUtils {
 					param.addCalculations(name.concat(" = ").concat(uiRow.calculation()));
 				}
 			}
-		}	
-		
+		}
+
 	}
-	
 
 	/**
 	 * @param clazz
@@ -166,7 +173,8 @@ public class ReflectionUtils {
 	 * @param pattern
 	 */
 	@SuppressWarnings("unused")
-	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited, String pattern) {
+	private static void extractFieldsWithClassAbstract(Class<?> clazz, Class<?> classLimit, List<Field> visited,
+			String pattern) {
 		if (clazz != null && !clazz.equals(classLimit)) {
 			for (Field field : clazz.getDeclaredFields()) {
 				if (!visited.contains(field) && field.getName().matches(pattern)) {

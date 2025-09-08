@@ -62,26 +62,26 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIJoin
-	@UIRow(fields = { "entitySeven", "entityEight" })
-	@UIColumn(label = "Id", fields = { "entitySeven", "entityEight" })
+	@UIRow(visible = true, fields = { "entitySeven", "entityEight" })
+	@UIColumn(label = "Id", fields = { "entitySeven", "entityEight" }, initial = false)
 	private EntityNineId id;
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Key")
-	@UIColumn(label = "EntityNine Key")
-	@UIRow()
+	@UIColumn(label = "EntityNine Key", initial = false)
+	@UIRow(visible = true)
 	private String keyNine;
 
 	@UIPosition(x = 2, y = 1)
 	@UIText(label = "Code")
-	@UIColumn(label = "EntityNine Code")
-	@UIRow()
+	@UIColumn(label = "EntityNine Code", initial = false)
+	@UIRow(visible = true)
 	private String code;
 
 	@UIPosition(x = 3, y = 1)
 	@UIText(label = "Variable")
-	@UIColumn(label = "EntityNine Variable")
-	@UIRow()
+	@UIColumn(label = "EntityNine Variable", initial = false)
+	@UIRow(visible = true)
 	private String variable;
 
 	@Override
