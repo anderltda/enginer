@@ -70,8 +70,8 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		}))
 public class EntitySeven extends DomainAbstract<EntitySevenId> {
 	
-	@UIJoin
-	@UIColumn(label = "Six", initial = false)
+	@UIJoin()
+	@UIColumn(label = "Id", fields = { "idEntitySeven", "entitySix" }, initial = false)
 	@UIRow(visible = true, fields = { "entitySix" })
 	private EntitySevenId id;
 

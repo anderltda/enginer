@@ -13,13 +13,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainId;
 public class EntitySevenId extends DomainAbstract<Object[]> implements DomainId {
 	
 	@UIHidden
+	@UIColumn(label = "Id EntitySeven", initial = false)
 	private UUID idEntitySeven;
 
 	@UIIgnore
 	private Long idEntitySix;
 	
-	@UIColumn(label = "Six", initial = false)
 	@UIFilter(label = "Entity Six", field = "packageName", readonly = false)
+	@UIColumn(label = "Six", fields = { "id", "packageName", "startDate", "stopDate" }, initial = false)
 	@UIRow(visible = true, fields = { "packageName" })
 	private EntitySix entitySix;
 	

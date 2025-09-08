@@ -84,7 +84,7 @@ public class Param {
 	public List<String> getRows() {
 		// Ordena pela parte Integer
 		this.rowsMap.sort(Comparator.comparingInt(Map.Entry::getValue));
-		this.rowsMap.forEach(entry -> this.rows.add(entry.getKey()));
+		this.rowsMap.forEach(entry -> this.addRows(entry.getKey()));
 		return this.rows;
 	}
 
