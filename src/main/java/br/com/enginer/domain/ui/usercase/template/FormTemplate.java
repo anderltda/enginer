@@ -114,7 +114,7 @@ import br.com.enginer.domain.ui.usercase.schema.validate.conditional.Conditional
 import br.com.enginer.domain.ui.usercase.schema.validate.custom.Custom;
 import br.com.enginer.domain.ui.usercase.schema.validate.dependency.Dependency;
 import br.com.enginer.domain.ui.usercase.schema.validate.global.Global;
-import br.com.enginer.domain.ui.usercase.utils.Param;
+import br.com.enginer.domain.ui.usercase.utils.ParamUtils;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
 
@@ -606,8 +606,8 @@ public final class FormTemplate {
 	 */
 	private static void configPaginator(Domain<?> domain, Paginator paginator) throws Exception {
 
-		Param param = new Param();
-		param.setTypeTemplate(typeTemplate);
+		ParamUtils paramUtils = new ParamUtils();
+		paramUtils.setTypeTemplate(typeTemplate);
 
 		String domainName = StringsUtils.firstLower(domain.getClass().getSimpleName());
 
@@ -616,13 +616,13 @@ public final class FormTemplate {
 			// UIFilter
 			UIFilter uiFilter = field_.getAnnotation(UIFilter.class);
 			if (uiFilter != null) {
-				ReflectionUtils.extractFieldPaginator(param, null, field_);
+				ReflectionUtils.extractFieldPaginator(paramUtils, null, field_);
 				continue;
 			}
 			// UIJoin
 			UIJoin uiJoin = field_.getAnnotation(UIJoin.class);
 			if (uiJoin != null) {
-				ReflectionUtils.extractFieldPaginator(param, null, field_);
+				ReflectionUtils.extractFieldPaginator(paramUtils, null, field_);
 				continue;
 			}
 			// UIColumn
@@ -630,44 +630,44 @@ public final class FormTemplate {
 			if (uiColumn != null) {
 				if (!uiColumn.hidden()) {
 					if (uiColumn.initial()) {
-						param.addInitials(name);
+						paramUtils.addInitials(name);
 					}
-					param.addColumnNames(field_.getName(), uiColumn.label());
-					param.addVisibles(name);
+					paramUtils.addColumnNames(field_.getName(), uiColumn.label());
+					paramUtils.addVisibles(name);
 				}
 			}
 			// UIRow
 			UIRow uiRow = field_.getAnnotation(UIRow.class);
 			if (uiRow != null) {
-				param.addRowsMap(new AbstractMap.SimpleEntry<>(field_.getName(), uiRow.order()));
+				paramUtils.addRowsMap(new AbstractMap.SimpleEntry<>(field_.getName(), uiRow.order()));
 				if (uiRow.editable()) {
-					param.addEditables(field_.getName());
+					paramUtils.addEditables(field_.getName());
 				}
 				if (!uiRow.visible()) {
-					param.addHiddens(field_.getName());
+					paramUtils.addHiddens(field_.getName());
 				}
 				if (!uiRow.calculation().isEmpty()) {
-					param.addCalculations(field_.getName().concat(" = ").concat(uiRow.calculation()));
+					paramUtils.addCalculations(field_.getName().concat(" = ").concat(uiRow.calculation()));
 				}
 				if (uiRow.totalizer()) {
-					param.addTotalizers(field_.getName(), uiColumn.label() + " Total: ");
+					paramUtils.addTotalizers(field_.getName(), uiColumn.label() + " Total: ");
 				}
 			}
 		}
 
-		paginator.getColumn().setName(param.getColumnNames());
+		paginator.getColumn().setName(paramUtils.getColumnNames());
 
-		if (param.getTypeTemplate().equals(TypeTemplate.ROW)) {
-			paginator.getColumn().setRows(param.getRows());
-			paginator.getColumn().setEditables(param.getEditables());
-			paginator.getColumn().setHiddens(param.getHiddens());
-			paginator.getColumn().setCalculations(param.getCalculations());
-			paginator.getColumn().setTotalizer(param.getTotalizers());
+		if (paramUtils.getTypeTemplate().equals(TypeTemplate.ROW)) {
+			paginator.getColumn().setRows(paramUtils.getRows());
+			paginator.getColumn().setEditables(paramUtils.getEditables());
+			paginator.getColumn().setHiddens(paramUtils.getHiddens());
+			paginator.getColumn().setCalculations(paramUtils.getCalculations());
+			paginator.getColumn().setTotalizer(paramUtils.getTotalizers());
 		}
 
-		if (param.getTypeTemplate().equals(TypeTemplate.FILTER)) {
-			paginator.getColumn().setInitials(param.getInitials());
-			paginator.getColumn().setVisibles(param.getVisibles());
+		if (paramUtils.getTypeTemplate().equals(TypeTemplate.FILTER)) {
+			paginator.getColumn().setInitials(paramUtils.getInitials());
+			paginator.getColumn().setVisibles(paramUtils.getVisibles());
 		}
 	}
 

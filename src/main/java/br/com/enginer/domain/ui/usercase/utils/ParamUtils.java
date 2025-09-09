@@ -11,7 +11,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 /**
  * 
  */
-public class Param {
+public class ParamUtils {
 
 	private TypeTemplate typeTemplate;
 	private List<String> visibles;

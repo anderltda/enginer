@@ -68,7 +68,7 @@ public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Key")
-	@UIColumn(label = "EntityNine Key", initial = false)
+	@UIColumn(label = "EntityNine Key", initial = true)
 	@UIRow(visible = true)
 	private String keyNine;
 
@@ -80,7 +80,7 @@ public class EntityNine extends DomainAbstract<EntityNineId> {
 
 	@UIPosition(x = 3, y = 1)
 	@UIText(label = "Variable")
-	@UIColumn(label = "EntityNine Variable", initial = false)
+	@UIColumn(label = "EntityNine Variable", initial = true)
 	@UIRow(visible = true)
 	private String variable;
 

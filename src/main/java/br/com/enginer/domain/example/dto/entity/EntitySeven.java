@@ -77,7 +77,7 @@ public class EntitySeven extends DomainAbstract<EntitySevenId> {
 
 	@UIPosition(x = 2, y = 3)
 	@UIText(label = "Dado")
-	@UIColumn(label = "EntitySeven Dado", initial = false)
+	@UIColumn(label = "EntitySeven Dado", initial = true)
 	@UIRow(visible = true, editable = true)
 	private String dado;
 
