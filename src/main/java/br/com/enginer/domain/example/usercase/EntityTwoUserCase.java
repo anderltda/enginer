@@ -14,7 +14,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 
 public class EntityTwoUserCase extends AbstractUserCase {
 	
-	
 	@Override
 	@SuppressWarnings("unchecked")
 	public PageResult<EntityTwo> buscarTodosPaginado(Domain<?> domain, Map<String, Object> filter) throws UncheckedException {
@@ -29,9 +28,6 @@ public class EntityTwoUserCase extends AbstractUserCase {
 				EntityFive entityFive = (EntityFive) buscarPorId(entityFour.getEntityFive());
 				
 				EntityStatus entityStatus = (EntityStatus) buscarPorId(entityTwo.getEntityStatus());
-				entityTwo.setEntityStatus(entityStatus);
-				
-				entityStatus = (EntityStatus) buscarPorId(entityTwo.getEntityStatus());
 				entityTwo.setEntityStatus(entityStatus);
 				
 				entityStatus = (EntityStatus) buscarPorId(entityTree.getEntityStatus());

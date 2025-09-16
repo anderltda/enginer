@@ -85,13 +85,13 @@ public class EntityFive extends DomainAbstract<UUID> {
 	
 	@UIPosition(x = 1, y = 2)
 	@UIText(label = "Reference", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityFive Referencia", initial = false)
+	@UIColumn(label = "EntityFive Referencia", initial = true)
 	@UIRow(visible = true, editable = true)
 	private String reference;
 	
 	@UIPosition(x = 2, y = 2)
 	@UINumber(label = "Factor", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityFive Fator", initial = false)
+	@UIColumn(label = "EntityFive Fator", initial = true)
 	@UIRow(visible = true, editable = true)
 	private Integer factor;
 
