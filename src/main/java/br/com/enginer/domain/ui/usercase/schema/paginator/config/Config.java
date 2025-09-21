@@ -6,9 +6,9 @@ package br.com.enginer.domain.ui.usercase.schema.paginator.config;
 public class Config {
 
 	private Boolean expandable;
-	private Boolean editableAllCell;
+	private Boolean editable;
 	private Boolean multiSelectable;
-	private Boolean deletableCell;
+	private Boolean deletable;
 
 	public Boolean getExpandable() {
 		return expandable;
@@ -18,12 +18,12 @@ public class Config {
 		this.expandable = expandable;
 	}
 
-	public Boolean getEditableAllCell() {
-		return editableAllCell;
+	public Boolean getEditable() {
+		return editable;
 	}
 
-	public void setEditableAllCell(Boolean editableAllCell) {
-		this.editableAllCell = editableAllCell;
+	public void setEditable(Boolean editable) {
+		this.editable = editable;
 	}
 
 	public Boolean getMultiSelectable() {
@@ -34,13 +34,11 @@ public class Config {
 		this.multiSelectable = multiSelectable;
 	}
 
-	public Boolean getDeletableCell() {
-		return deletableCell;
+	public Boolean getDeletable() {
+		return deletable;
 	}
 
-	public void setDeletableCell(Boolean deletableCell) {
-		this.deletableCell = deletableCell;
+	public void setDeletable(Boolean deletable) {
+		this.deletable = deletable;
 	}
-
-	
 }

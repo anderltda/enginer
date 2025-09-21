@@ -40,7 +40,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
 	action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))) })
 @UIPaginator(
-		config = @UIConfig(deletableCell = true), 
+		config = @UIConfig(deletable = true, editable = true), 
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorAdd.class, UIButtonPaginatorSave.class }, 
         value = {
     		@UIButton(

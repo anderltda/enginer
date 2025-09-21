@@ -17,5 +17,6 @@ public @interface UIRow {
 	boolean editable() default false; // coluna editavel no paginator
 	boolean unique() default false; // valor da coluna é unica no paginator
 	boolean totalizer() default false; // totalizado de uma coluna, visualizado no footer do paginator
+	String label() default ""; // valor da label que será mostrada quando totalizer for true
 	TypeTemplate[] template() default { TypeTemplate.ROW };
 }

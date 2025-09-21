@@ -2,6 +2,7 @@ package br.com.enginer.domain.example.dto.entity;
 
 import java.time.LocalDateTime;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
@@ -10,6 +11,9 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
@@ -33,8 +37,21 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Dez")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class,
 		UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonAdd.class, UIButtonSave.class })
-@UIPaginator(config = @UIConfig(expandable = false, multiSelectable = false, editableAllCell = false), actions = @UIButtonAction(includes = {
-		UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class }))
+@UIPaginator(
+		config = @UIConfig(expandable = false, multiSelectable = false), 
+		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class },
+		value = {
+			@UIButton(
+				label = "Add 10 in 11", 
+				template = TypeTemplate.PAGINATOR, 
+				highlight = false,
+				dropdown = true,
+				action = @UIAction(
+					redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEleven", param = "{ disable=true, field=entityTen, value=$object }")
+				)
+			)
+		})
+)
 public class EntityTen extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")

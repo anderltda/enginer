@@ -34,7 +34,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Oitavo")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class, UIButtonNew.class, UIButtonAdd.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class })
 @UIPaginator(
-	config = @UIConfig(deletableCell = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
+	config = @UIConfig(deletable = true), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }, 
     value = { @UIButton(label = "Add EntitySeven", icon = "add_circle", needsValidation = false, dropdown = true, template = TypeTemplate.PAGINATOR, 
     action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEight", param = "{ disable=true, field=entitySeven.id, value=$object }"))) })
 )

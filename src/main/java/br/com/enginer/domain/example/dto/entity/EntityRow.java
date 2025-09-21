@@ -20,7 +20,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Entity Rows")
-@UIPaginator(config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true, editableAllCell = true), 
+@UIPaginator(config = @UIConfig(expandable = true, multiSelectable = false, deletable = true), 
 actions = @UIButtonAction(
 value = { 
 		@UIButton(label = Constants.LABEL_BACK, icon = "undo", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW },

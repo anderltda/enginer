@@ -3,8 +3,11 @@ package br.com.enginer.domain.example.dto.entity;
 import java.time.LocalDateTime;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -18,6 +21,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
@@ -32,41 +36,51 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UITitle("Onze")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonBefore.class, UIButtonFinish.class,
 		UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonAdd.class, UIButtonSave.class })
-@UIPaginator(config = @UIConfig(expandable = false, multiSelectable = false, editableAllCell = false), actions = @UIButtonAction(includes = {
-		UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class }))
+@UIPaginator(config = @UIConfig(expandable = false, editable = true, deletable = true, multiSelectable = false), actions = @UIButtonAction(includes = {
+		UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class, UIButtonPaginatorSave.class }))
 public class EntityEleven extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")
 	@UIColumn(label = "Id", initial = false)
+	@UIRow(visible = false)
 	private Long id;
 
-	@UIFilter(label = "Ten", field = "nome", readonly = false)
-	@UIColumn(label = "Ten", fields = { "id", "nome", "totalQuantidade", "valorTotal" }, initial = false)
-	@UIRow(visible = true, fields = { "nome" })
+	@UIPosition(x = 1, y = 1)
+	@UIFilter(label = "Ten", field = "name", readonly = false)
+	@UIColumn(label = "Ten", fields = { "id", "name", "totalAmount", "totalValue" }, initial = false)
+	@UIRow(visible = false, fields = { "name" })
 	private EntityTen entityTen;
 
+	@UIPosition(x = 2, y = 1)
 	@UIFilter(label = "Six", field = "packageName", readonly = false)
 	@UIColumn(label = "Six", fields = { "id", "packageName", "startDate", "stopDate" }, initial = false)
 	@UIRow(visible = true, fields = { "packageName" })
 	private EntitySix entitySix;
 
-	@UIPosition(x = 2, y = 1)
-	@UINumber(label = "Quantidade Total", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB,
-			TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
-	@UIColumn(label = "Quantidade Total", initial = false)
-	@UIRow(visible = true, editable = false)
+	@UIPosition(x = 1, y = 2)
+	@UINumber(label = "Quantidade", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
+	@UIColumn(label = "Quantidade", initial = false)
+	@UIRow(visible = true)
 	private Integer amount;
 
 	@UIPosition(x = 2, y = 2)
-	@UIColumn(label = "Valor Total", initial = false)
+	@UIColumn(label = "Valor Unitario", initial = false)
+	@UIDecimal(label = "Valor Unitario")
 	@UIRow(visible = true, editable = false)
 	private Double value;
 
+	@UIIgnore
 	@UIColumn(label = "Data de Criacao", initial = false)
 	private LocalDateTime dateCreate;
 
+	@UIIgnore
 	@UIColumn(label = "Data de Atualizacao", initial = false)
 	private LocalDateTime dateUpdate;
+	
+	@UIHidden(label = "Valor Total", template = { TypeTemplate.ROW })
+	@UIColumn(label = "Valor Total", initial = false)
+	@UIRow(calculation = "amount * value", totalizer = true, label = "Custo total" , visible = true)
+	private Double amountTotal;
 
 	public void setIdEntityTen(Long idEntityTen) {
 		this.entityTen = new EntityTen();
@@ -134,6 +148,14 @@ public class EntityEleven extends DomainAbstract<Long> {
 
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
+	}
+	
+	public Double getAmountTotal() {
+		return amountTotal;
+	}
+
+	public void setAmountTotal(Double amountTotal) {
+		this.amountTotal = amountTotal;
 	}
 
 	@Override

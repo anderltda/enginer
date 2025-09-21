@@ -66,7 +66,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 					)
 			})
 @UIPaginator(
-		config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true),
+		config = @UIConfig(expandable = true, multiSelectable = false, deletable = true),
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }))
 @UIValidate(
 		conditional = @UIConditional({
@@ -82,7 +82,7 @@ public class EntitySix extends DomainAbstract<Long> {
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Package", max = 100)
 	@UIColumn(label = "EntitySix Package", initial = true)
-	@UIRow(visible = true, editable = true)
+	@UIRow(visible = true)
 	private String packageName;
 
 	@UIPosition(x = 1, y = 2)

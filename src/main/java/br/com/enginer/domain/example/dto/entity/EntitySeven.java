@@ -41,7 +41,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
 	})
 @UIPaginator(
-		config = @UIConfig(expandable = true, multiSelectable = false, deletableCell = true),
+		config = @UIConfig(expandable = true, multiSelectable = false, deletable = true),
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class },
 		value = {
 				@UIButton(

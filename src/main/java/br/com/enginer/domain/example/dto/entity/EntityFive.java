@@ -59,7 +59,7 @@ value = {
 }
 )
 @UIPaginator(
-	    config = @UIConfig(expandable = false, multiSelectable = false, editableAllCell = false),
+	    config = @UIConfig(expandable = false, multiSelectable = false),
 	    actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
 	    		value = {
 	    				@UIButton(

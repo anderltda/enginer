@@ -220,7 +220,7 @@ public final class FormTemplate {
 
 						if (annotation instanceof UIId) {
 
-							boolean isId = domain.getId() != null;
+							boolean isId = domain.getId() != null || typeTemplate.equals(TypeTemplate.ROW);
 
 							if (isId) {
 								field.setHidden(getHidden(f, default_, annotations));
@@ -533,10 +533,10 @@ public final class FormTemplate {
 			UIPaginator uiPaginator = domain.getClass().getAnnotation(UIPaginator.class);
 
 			UIConfig uiConfig = uiPaginator.config();
-			config.setEditableAllCell(uiConfig.editableAllCell());
+			config.setEditable(uiConfig.editable());
 			config.setMultiSelectable(uiConfig.multiSelectable());
 			config.setExpandable(uiConfig.expandable());
-			config.setDeletableCell(uiConfig.deletableCell());
+			config.setDeletable(uiConfig.deletable());
 
 			UIButtonAction uiButtonAction = uiPaginator.actions();
 			UIButton[] uiButtons = uiButtonAction.value();
@@ -650,7 +650,7 @@ public final class FormTemplate {
 					paramUtils.addCalculations(field_.getName().concat(" = ").concat(uiRow.calculation()));
 				}
 				if (uiRow.totalizer()) {
-					paramUtils.addTotalizers(field_.getName(), uiColumn.label() + " Total: ");
+					paramUtils.addTotalizers(field_.getName(), (!uiRow.label().isEmpty() ? uiRow.label() : uiColumn.label()) + ":");
 				}
 			}
 		}

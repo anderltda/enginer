@@ -78,6 +78,8 @@ public class ReflectionUtils {
 		Field[] declaredFields = new Field[] {};
 
 		Boolean initial = false;
+		
+		Boolean visible = false;
 
 		String attribute = (classIsIdType(fieldClass.getType()) && simpleName != null ? "id" : StringsUtils.firstLower(fieldClass.getType().getSimpleName()));
 
@@ -87,6 +89,7 @@ public class ReflectionUtils {
 
 			UIRow uiRowFieldClass = fieldClass.getAnnotation(UIRow.class);
 			if (uiRowFieldClass == null) return;
+			visible = uiRowFieldClass.visible();
 			declaredFields = getFieldsByName(fieldClass.getType(), uiRowFieldClass.fields());
 
 		} else {
@@ -131,7 +134,7 @@ public class ReflectionUtils {
 				if (uiRow.editable()) {
 					paramUtils.addEditables(name);
 				}
-				if (!uiRow.visible()) {
+				if (!visible || !uiRow.visible()) {
 					paramUtils.addHiddens(name);
 				}
 				if (!uiRow.calculation().isEmpty()) {

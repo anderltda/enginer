@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
@@ -70,6 +71,7 @@ public class EntityTree extends DomainAbstract<UUID> {
 
 	@UIPosition(x = 2, y = 2)
 	@UIColumn(label = "EntityTree Montante", initial = false)
+	@UIDecimal(label = "Montante")
 	@UIRow(visible = true)
 	private Double amount;
 
