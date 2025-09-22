@@ -28,7 +28,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     dropdown = true,
     template = { TypeTemplate.PAGINATOR, TypeTemplate.FORM },
     action = @UIAction(
-    		method = @UIActionMethod(clientMethod = "onDelete"),
+    		method = @UIActionMethod(serverMethod = "excluir"),
             response = @UIActionResponse(
             	template = { TypeTemplate.FORM },
         		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 

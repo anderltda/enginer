@@ -16,7 +16,6 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIAsync;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIPattern;
@@ -193,7 +192,7 @@ public class EntityOne extends DomainAbstract<Long> {
 
 	@UIText(label = "Name", template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	//@UIAutoCompleteSuggestion(suggestions = { "Anderson", "Pedro", "Marcelo", "Michael", "Ramiro", "José" })
-	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	//@UIAutoComplete(domain = "entityOne", attribute = "name")
 	@UIPosition(x = 1, y = 1)
 	@UIFieldValidation(
 		required = false,

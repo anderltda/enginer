@@ -14,10 +14,12 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonActi
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
+import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
@@ -28,7 +30,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Status -> Stream")
 @UIButtonAction(includes = { UIButtonBack.class, UIButtonClear.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class  })
-@UIPaginator(actions = @UIButtonAction(includes = { UIButtonView.class } ) )
+@UIPaginator(config = @UIConfig(multiSelectable = false), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class } ) )
 public class EntityStatus extends DomainAbstract<Long> {
 
 	@UIId(label = "Id")

@@ -220,11 +220,9 @@ public final class FormTemplate {
 
 						if (annotation instanceof UIId) {
 
-							boolean isId = domain.getId() != null || typeTemplate.equals(TypeTemplate.ROW);
-
-							if (isId) {
-								field.setHidden(getHidden(f, default_, annotations));
-							}
+							Hidden hidden = getHidden(f, default_, annotations);
+							field.setHidden(hidden);
+							hidden.setValue(domain.getId());
 
 							identity = true;
 
