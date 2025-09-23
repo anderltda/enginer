@@ -21,14 +21,20 @@ import br.com.enginer.domain.ui.usercase.schema.instance.Domain;
 import br.com.enginer.domain.ui.usercase.utils.ReflectionUtils;
 import br.com.enginer.domain.ui.usercase.utils.StringsUtils;
 
+/**
+ * Utilitários para normalização de dados e JSON.
+ */
 public class NormalizeUtils {
 
+	/**
+	 * Normaliza o objeto Domain populando seus campos a partir do JsonNode.
+	 * 
+	 * @param jsonNode O nó JSON contendo os dados.
+	 * @param domain   A instância do Domain a ser populada.
+	 */
 	public static void normalize(JsonNode jsonNode, Domain<?> domain) {
-
 		List<Field> fields = ReflectionUtils.extractFieldsDomain(domain, false);
-
 		for (Field field : fields) {
-
 			if (jsonNode.has(field.getName())) {
 				System.out.println(StringsUtils.setMethod(field.getName()) + " = " + jsonNode.get(field.getName()));
 				ReflectionUtils.set(domain, StringsUtils.setMethod(field.getName()),
@@ -38,6 +44,12 @@ public class NormalizeUtils {
 		}
 	}
 
+	/**
+	 * Identifica a classe do campo e retorna uma instância padrão.
+	 * 
+	 * @param instance Nome completo da classe.
+	 * @return Instância padrão do tipo identificado ou null se não for possível.
+	 */
 	private static Object identifyFieldClass(String instance) {
 		try {
 			ClassLoader classLoader = NormalizeUtils.class.getClassLoader();
@@ -68,12 +80,17 @@ public class NormalizeUtils {
 		return null;
 	}
 
+	/**
+	 * Extrai o valor do JsonNode e converte para o tipo apropriado do campo.
+	 * 
+	 * @param field    O campo do Domain.
+	 * @param jsonNode O nó JSON contendo os dados.
+	 * @return O valor convertido ou null se não for possível.
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Object extractValueFromJson(Field field, JsonNode jsonNode) {
 		String fieldName = field.getName();
 		Class<?> fieldType = field.getType();
-
-		System.out.println(fieldName);
 
 		JsonNode valueNode = jsonNode.get(fieldName);
 		if (valueNode == null || valueNode.isNull())
@@ -168,39 +185,101 @@ public class NormalizeUtils {
 	 */
 	public static JsonNode normalizer(JsonNode jsonNode) {
 		if (jsonNode != null && jsonNode.isObject()) {
-			adjust((ObjectNode) jsonNode);
+			adjustRecursively((ObjectNode) jsonNode);
 		}
 		return jsonNode;
 	}
 
-	private static void adjust(ObjectNode root) {
-		String idFieldName = findCompositeIdFieldName(root);
-		if (idFieldName == null)
-			return;
+	/**
+	 * Ajusta recursivamente o nó JSON, procurando por campos que terminam com "Id"
+	 * ou que contenham objetos com campos "Id" para normalização.
+	 * 
+	 * @param node O nó JSON a ser ajustado.
+	 */
+	private static void adjustRecursively(ObjectNode node) {
+		List<String> keysToReplace = new ArrayList<>();
+		Map<String, JsonNode> replacementMap = new LinkedHashMap<>();
+		Iterator<Map.Entry<String, JsonNode>> it = node.fields();
+		while (it.hasNext()) {
+			Map.Entry<String, JsonNode> entry = it.next();
+			String key = entry.getKey();
+			JsonNode value = entry.getValue();
+			// Desce primeiro
+			if (value.isObject()) {
+				adjustRecursively((ObjectNode) value);
+			} else if (value.isArray()) {
+				for (JsonNode child : value) {
+					if (child.isObject())
+						adjustRecursively((ObjectNode) child);
+				}
+			}
+			// Se o campo termina com "Id" OU o objeto contém outro "*Id" por dentro,
+			// normaliza
+			if (value.isObject() && (key.endsWith("Id") || containsCompositeId(value))) {
+				ObjectNode normalizedIdNode = (ObjectNode) normalizeIdFieldNames(key, value);
 
-		JsonNode originalIdNode = root.get(idFieldName);
-		ObjectNode normalizedIdNode = (ObjectNode) normalizeIdFieldNames(idFieldName, originalIdNode);
+				Map<String, Object> compositeKey = new LinkedHashMap<>();
+				findIdFields(normalizedIdNode, compositeKey); // coleta idEntity*, já limpo
 
-		Map<String, Object> compositeKey = new LinkedHashMap<>();
-		findIdFields(normalizedIdNode, compositeKey); // sobrescreve com última ocorrência
-
-		ObjectNode newIdNode = JsonNodeFactory.instance.objectNode();
-		compositeKey.forEach(newIdNode::putPOJO);
-
-		root.remove(idFieldName);
-		root.set("id", newIdNode);
-	}
-
-	private static String findCompositeIdFieldName(ObjectNode root) {
-		for (Iterator<String> it = root.fieldNames(); it.hasNext();) {
-			String field = it.next();
-			if (field.endsWith("Id") && root.get(field).isObject()) {
-				return field;
+				ObjectNode newIdNode = JsonNodeFactory.instance.objectNode();
+				compositeKey.forEach((k, v) -> {
+					if (v == null) {
+						newIdNode.putNull(k);
+					} else if (v instanceof Number) {
+						// mantém número
+						if (v instanceof Integer)
+							newIdNode.put(k, (Integer) v);
+						else if (v instanceof Long)
+							newIdNode.put(k, (Long) v);
+						else if (v instanceof Double)
+							newIdNode.put(k, (Double) v);
+						else
+							newIdNode.putPOJO(k, v);
+					} else if (v instanceof Boolean) {
+						newIdNode.put(k, (Boolean) v);
+					} else {
+						newIdNode.put(k, String.valueOf(v));
+					}
+				});
+				keysToReplace.add(key);
+				replacementMap.put("id", newIdNode); // sempre substitui pelo nome "id"
 			}
 		}
-		return null;
+
+		// aplica no final
+		for (String k : keysToReplace)
+			node.remove(k);
+		replacementMap.forEach(node::set);
 	}
 
+	/**
+	 * Verifica se o nó JSON contém um campo que termina com "Id" e cujo valor é um
+	 * objeto (indicando chave composta).
+	 * 
+	 * @param node O nó JSON a ser verificado.
+	 * @return true se contiver tal campo, false caso contrário.
+	 */
+	private static boolean containsCompositeId(JsonNode node) {
+		if (!node.isObject())
+			return false;
+		Iterator<String> it = node.fieldNames();
+		while (it.hasNext()) {
+			String f = it.next();
+			JsonNode v = node.get(f);
+			if (f.endsWith("Id") && v != null && v.isObject())
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Normaliza os nomes dos campos "id" dentro do nó JSON, renomeando-os para
+	 * evitar conflitos.
+	 * 
+	 * @param parentName   Nome do campo pai (pode ser null).
+	 * @param originalNode O nó JSON original a ser normalizado.
+	 * @return Um novo nó JSON com os campos "id" renomeados.
+	 */
 	private static JsonNode normalizeIdFieldNames(String parentName, JsonNode originalNode) {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
 		List<Map.Entry<String, JsonNode>> reversedEntries = new ArrayList<>();
@@ -236,6 +315,13 @@ public class NormalizeUtils {
 		return result;
 	}
 
+	/**
+	 * Encontra todos os campos que começam com "id" no nó JSON e os adiciona ao
+	 * mapa de resultados.
+	 * 
+	 * @param node   O nó JSON a ser examinado.
+	 * @param result O mapa onde os campos encontrados serão armazenados.
+	 */
 	private static void findIdFields(JsonNode node, Map<String, Object> result) {
 		if (!node.isObject())
 			return;
