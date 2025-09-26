@@ -24,15 +24,12 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     state = TypeButtonState.BTN_STATE_PRIMARY,
     template = { TypeTemplate.FORM, TypeTemplate.MODAL },
     action = @UIAction(
-        method = @UIActionMethod(serverMethod = "salvar")
-        /*
-        ,
+        method = @UIActionMethod(serverMethod = "salvar"),
         response = @UIActionResponse(
         	template = { TypeTemplate.FORM },
     		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
     		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(Constants.PATH_FIND_BY_ID))
         )
-        */
     )
 )
 public @interface UIButtonSave {}

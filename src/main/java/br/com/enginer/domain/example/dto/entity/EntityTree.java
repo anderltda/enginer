@@ -14,7 +14,8 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UISelect;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoComplete;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.autocomplete.UIAutoCompleteSuggestion;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
@@ -53,8 +54,9 @@ public class EntityTree extends DomainAbstract<UUID> {
 	private UUID id;
 
 	@UIPosition(x = 1, y = 1)
+	@UIFieldValidation(required = true)
 	@UIText(label = "Animal Name", min = 4, max = 50)
-	@UIAutoComplete(domain = "entityOne", attribute = "name")
+	@UIAutoCompleteSuggestion(suggestions = { "Cavalo", "Cachorro", "Gato", "Elefante", "Macaco", "Camelo" })
 	@UIColumn(label = "EntityTree Nome do Animal", initial = true)
 	@UIRow(visible = true)
 	private String animal;
@@ -70,18 +72,21 @@ public class EntityTree extends DomainAbstract<UUID> {
 	private Integer indicator;
 
 	@UIPosition(x = 2, y = 2)
+	@UIFieldValidation(required = true)
 	@UIColumn(label = "EntityTree Montante", initial = false)
 	@UIDecimal(label = "Montante")
 	@UIRow(visible = true)
 	private Double amount;
 
 	@UIPosition(x = 4, y = 2)
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Date local", format = TypeDateFormat.DATE_FORMAT, showtime = false)
 	@UIColumn(label = "EntityTree Local da Data", initial = false)
 	@UIRow(visible = true)
 	private LocalDate localDate;
 
 	@UIPosition(x = 3, y = 2)
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Date local time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityTree Data Local", initial = false)
 	@UIRow(visible = true)

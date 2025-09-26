@@ -10,6 +10,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
@@ -84,18 +85,21 @@ public class EntityFive extends DomainAbstract<UUID> {
 	private UUID id;
 	
 	@UIPosition(x = 1, y = 2)
+	@UIFieldValidation(required = true)
 	@UIText(label = "Reference", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityFive Referencia", initial = true)
 	@UIRow(visible = true, editable = true)
 	private String reference;
 	
 	@UIPosition(x = 2, y = 2)
+	@UIFieldValidation(required = true)
 	@UINumber(label = "Factor", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityFive Fator", initial = true)
 	@UIRow(visible = true, editable = true)
 	private Integer factor;
 
 	@UIPosition(x = 1, y = 3)
+	@UIFieldValidation(required = true)
 	@UIFilter(label = "Entity Status", field = "name", select = true, filter = { "status=0", "status_op=ge" }, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIRow(visible = true, fields = { "name", "status", "ativo" })
 	@UIColumn(label = "Entity Status", fields = { "name", "status" }, initial = false)

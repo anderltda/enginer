@@ -196,7 +196,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIPosition(x = 1, y = 1)
 	@UIFieldValidation(
 		required = false,
-		template = TypeTemplate.FILTER,
+		template = { TypeTemplate.FILTER, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL },
 	    pattern  = @UIPattern(pattern = "^[^wW]*$",                   patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"),
 	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"),
 	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },   syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
@@ -205,20 +205,23 @@ public class EntityOne extends DomainAbstract<Long> {
 	private String name;
 
 	@UIPosition(x = 2, y = 1)
-	@UIFieldValidation(required = false)
+	@UIFieldValidation(required = true)
 	@UIFilter(label = "Entity Status", field = "name", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	@UIColumn(label = "Entity Status", fields = { "name", "status" }, initial = false)
 	private EntityStatus entityStatus;
 	
 	@UIPosition(x = 1, y = 2)
-	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
+	@UIFieldValidation(required = true)
+	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "send", template = { TypeTemplate.TAB, TypeTemplate.FORM })
+	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" }, initial = false)
 	private EntityNine entityNine;
 
 	@UIPosition(x = 2, y = 2)
+	@UIFieldValidation(required = true)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Codigo", initial = false)
-	private Boolean code = true;
+	private Boolean code;
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
@@ -227,18 +230,21 @@ public class EntityOne extends DomainAbstract<Long> {
 	private Integer age;
 
 	@UIPosition(x = 2, y = 3)
+	@UIFieldValidation(required = true)
 	@UIText(label = "Height", mask = "0.00", template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
 	@UIColumn(label = "EntityOne Altura", initial = false)
 	@UIRow(visible = true, editable = true, order = 4)
 	private Double height;
 
 	@UIPosition(x = 3, y = 3)
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Birth Date")
 	@UIColumn(label = "EntityOne Data de Aniversario", initial = false)
 	@UIRow(visible = false)
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityOne Data da Proibicao", initial = false)
 	@UIRow(visible = true, order = 2)

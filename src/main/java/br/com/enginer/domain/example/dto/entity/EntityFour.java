@@ -53,7 +53,7 @@ public class EntityFour extends DomainAbstract<UUID> {
 
 	@UIPosition(x = 1, y = 1)
 	@UIText(label = "Fruit Name", min = 4, max = 100)
-	@UIFieldValidation(required = false, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
+	@UIFieldValidation(required = true, pattern = @UIPattern(pattern = "^[^wW]*$", patternError = "*** PATTERN ***, nao pode adiciona a letra 'W'"), async = @UIAsync(method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"), sync = @UISync(syncFunc = {
 			"dogMel", "dogMagrela" }, syncError = { "message1",
 					"Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." }))
 	@UIColumn(label = "EntityFour Nome da Fruta", initial = false)
@@ -70,6 +70,7 @@ public class EntityFour extends DomainAbstract<UUID> {
 	private Integer attribute;
 
 	@UIPosition(x = 3, y = 2)
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Date Time Inclusion", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
 	@UIColumn(label = "EntityFour Data e hora da inclusao", initial = false)
 	@UIRow(visible = true)

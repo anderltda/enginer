@@ -108,10 +108,12 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	private UUID id;
 
 	@UISelect(label = "Colors", multi = false, provider = ComboHelper.class, method = "colors")
+	@UIFieldValidation(required = true)
 	@UIColumn(label = "Cor", initial = true)
 	@UIRow(visible = true)
 	private String color;
 
+	@UIFieldValidation(required = true)
 	@UIDate(label = "Date Inclusion", showtime = false, format = TypeDateFormat.DATE_FORMAT)
 	@UIColumn(label = "Data de Inclusao", initial = false)
 	@UIRow(visible = true)
@@ -121,6 +123,7 @@ public class EntityTwo extends DomainAbstract<UUID> {
 	@UIRow(visible = true)
 	private Integer hex;
 	
+	@UIFieldValidation(required = true)
 	@UIColumn(label = "Custo", initial = true)
 	@UIRow(visible = true)
 	private Double cost;
