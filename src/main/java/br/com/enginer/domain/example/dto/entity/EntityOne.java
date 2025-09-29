@@ -72,9 +72,36 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
 }, 
 	value = {
-				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityFive", param = "{ disabled=false }"))),
-				@UIButton(template = { TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = false, needsValidation = false, action = @UIAction(method = @UIActionMethod(clientMethod = "custom")))
-		    })
+		@UIButton(
+			label = Constants.LABEL_NEW + " - Tab",	
+			template = { TypeTemplate.FILTER }, 
+			icon = "send", 
+			needsValidation = false, 
+			action = @UIAction(
+				redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", domain = "entityOne", param = "{ disabled=false }")
+			)
+		),
+		@UIButton(
+			label = "Custom", 
+			template = { TypeTemplate.FORM }, 
+			icon = "google_plus", 
+			confirm = false, 
+			needsValidation = false, 
+			action = @UIAction(
+				method = @UIActionMethod(clientMethod = "custom")
+			)
+		),
+		@UIButton(
+		    label = Constants.LABEL_BACK,
+		    icon = "undo",
+		    needsValidation = false,
+		    state = TypeButtonState.BTN_STATE_DEFAULT,
+		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+		    action = @UIAction(
+		        method = @UIActionMethod(clientMethod = "onBack")
+		    )
+		),
+    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelectable = false),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
@@ -212,8 +239,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFieldValidation(required = true)
-	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "send", template = { TypeTemplate.TAB, TypeTemplate.FORM })
-	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
+	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false)
 	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" }, initial = false)
 	private EntityNine entityNine;
 

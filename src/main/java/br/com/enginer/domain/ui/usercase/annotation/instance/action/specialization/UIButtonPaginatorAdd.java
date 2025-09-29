@@ -19,14 +19,20 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @UIButton(	  
-		  label = Constants.LABEL_ADD, 
-		  icon = "plus", 
-		  state = TypeButtonState.BTN_STATE_PRIMARY, 
-		  template = { TypeTemplate.ROW }, 
-		  needsValidation = true, 
-		  action = @UIAction(
-			method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(serverMethod = ActionUserCase.plus)),
-			response = @UIActionResponse(template = { TypeTemplate.ROW }, success = @UIActionResponseSuccess(method = @UIActionMethod(clientMethod = "setDataSetField")))
-		  )
+	  label = Constants.LABEL_ADD, 
+	  icon = "plus", 
+	  state = TypeButtonState.BTN_STATE_PRIMARY, 
+	  template = { TypeTemplate.ROW }, 
+	  needsValidation = true, 
+	  action = @UIAction(
+			method = @UIActionMethod(
+				clientMethod = "triggerMethod", 
+				trigger = @UIActionTriggerMethod(serverMethod = ActionUserCase.plus)
+			),
+			response = @UIActionResponse(
+				template = { TypeTemplate.ROW }, 
+				success = @UIActionResponseSuccess(method = @UIActionMethod(clientMethod = "setDataSetField"))
+			)
+	  )
 )
 public @interface UIButtonPaginatorAdd { }

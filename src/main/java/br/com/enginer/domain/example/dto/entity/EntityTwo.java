@@ -19,8 +19,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMeth
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
@@ -30,7 +29,18 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustomOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependency;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
+import br.com.enginer.domain.ui.usercase.enums.TypeOperator;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
@@ -40,18 +50,40 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Segundo")
 @UIButtonAction(includes = { 
-		UIButtonBack.class, 
-		UIButtonClear.class, 
+		UIButtonBefore.class,
 		UIButtonFinish.class,
 		UIButtonNew.class, 
 		UIButtonEdit.class, 
 		UIButtonDelete.class, 
 		UIButtonSearch.class, 
 		UIButtonSave.class 
-}, 
+	}, 
 	value = {
-				@UIButton(template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false }"))),
-		    })
+		@UIButton(
+			template = { TypeTemplate.FILTER }, label = Constants.LABEL_NEW,  icon = "add_circle", needsValidation = false, 
+			action = @UIAction(redirect = @UIActionRedirect(value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false }"))
+		),
+		@UIButton(
+		    label = Constants.LABEL_BACK,
+		    icon = "undo",
+		    needsValidation = false,
+		    state = TypeButtonState.BTN_STATE_DEFAULT,
+		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+		    action = @UIAction(
+		        method = @UIActionMethod(clientMethod = "onBack")
+		    )
+		),
+		@UIButton(
+			    label = Constants.LABEL_CLEAR,
+			    icon = "bin_alt",
+			    needsValidation = false,
+			    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+			    state = TypeButtonState.BTN_STATE_DEFAULT,
+			    action = @UIAction(
+			        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+			    )
+		)		
+    })
 @UIPaginator(
     config = @UIConfig(expandable = true, multiSelectable = false),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
@@ -101,6 +133,19 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
         }
     )
 )
+@UIValidate(
+		conditional = @UIConditional({
+			@UIConditionalOn(label = "Hex", field = "entityTwo.hex", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityTwo.entityTree.indicator" }),
+			@UIConditionalOn(label = "Indicator", field = "entityTwo.entityTree.indicator", operator = TypeOperator.NOT_EQUALS, matchs = { "entityTwo.entityTree.entityFour.attribute" }),
+			@UIConditionalOn(label = "Attribute", field = "entityTwo.entityTree.entityFour.attribute", operator = TypeOperator.EQUALS, matchs = { "entityTwo.entityTree.entityFour.entityFive.factor" }),
+			@UIConditionalOn(label = "Factor", field = "entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "age" }),
+			@UIConditionalOn(label = "Entity Status do Entity One", field = "entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityTwo.entityStatus", "entityTwo.entityTree.entityStatus" }) 
+		}), 
+		dependency = @UIDependency({
+			@UIDependsOn(template = { TypeTemplate.FORM }, label = "Fruit", field = "entityTwo.entityTree.entityFour.fruit", depends = { "entityTwo.entityTree.entityFour.attribute" }),
+			@UIDependsOn(template = { TypeTemplate.FORM }, label = "Status", field = "entityTwo.entityStatus", depends = { "entityTwo.entityTree.entityStatus" }) 
+		})
+	)
 public class EntityTwo extends DomainAbstract<UUID> {
 
 	@UIId(label = "Id")
