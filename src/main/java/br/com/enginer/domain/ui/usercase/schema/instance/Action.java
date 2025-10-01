@@ -14,6 +14,7 @@ public class Action {
 	private ActionTrigger triggerMethod;
 	private ActionObject actionObject;
 	private ActionResponse response;
+	private Boolean needsValidation;
 
 	public String getUi() {
 		return ui;
@@ -87,4 +88,11 @@ public class Action {
 		this.response = response;
 	}
 
+	public Boolean getNeedsValidation() {
+		return needsValidation;
+	}
+
+	public void setNeedsValidation(Boolean needsValidation) {
+		this.needsValidation = needsValidation;
+	}
 }

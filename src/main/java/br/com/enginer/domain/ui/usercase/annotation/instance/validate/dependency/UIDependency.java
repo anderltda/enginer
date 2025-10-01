@@ -10,6 +10,6 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface UIDependency {
-	UIDependsOn[] value() default {};
+	UIDependencyOn[] value() default {};
 	TypeTemplate[] template() default { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB };
 }

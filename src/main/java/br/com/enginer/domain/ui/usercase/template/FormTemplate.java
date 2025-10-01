@@ -60,10 +60,13 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UISubmit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.UIValidate;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditional;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditional.UIConditionalOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustomOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependency;
-import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependencyOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.usercase.enums.TypeButton;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
@@ -557,8 +560,8 @@ public final class FormTemplate {
 						Button button = new Button(TypeButton.BUTTON);
 						for (Method method : methods) {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
-							if (buttonObject instanceof UIAction uiAction) {
-								button.setAction(getButtonAction(uiAction));
+							if (buttonObject instanceof UIAction) {
+								button.setAction(getButtonAction(uiButton));
 								continue;
 							}
 							if (method.getName().equals("template")) {
@@ -1227,16 +1230,15 @@ public final class FormTemplate {
 
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 
-							if (buttonObject instanceof UIAction uiAction) {
-								if (uiButton.label().equals(Constants.LABEL_NEW)
-										&& mapTypeTemplates.get(TypeTemplate.MODAL)) {
-									Action action = getButtonAction(uiAction);
+							if (buttonObject instanceof UIAction) {
+								if (uiButton.label().equals(Constants.LABEL_NEW) && mapTypeTemplates.get(TypeTemplate.MODAL)) {
+									Action action = getButtonAction(uiButton);
 									action.setClientMethod(Constants.METHOD_OPEN_MODAL_CREATE);
 									action.setRedirect(null);
 									button.setAction(action);
 									continue;
 								}
-								button.setAction(getButtonAction(uiAction));
+								button.setAction(getButtonAction(uiButton));
 								continue;
 							}
 
@@ -1256,11 +1258,12 @@ public final class FormTemplate {
 	}
 
 	/**
-	 * @param uiAction
+	 * @param uiButton
 	 * @return
 	 */
-	private static Action getButtonAction(UIAction uiAction) {
+	private static Action getButtonAction(UIButton uiButton) {
 		boolean containsTemplate = false;
+		UIAction uiAction = uiButton.action();
 		Action action = new Action();
 		ActionTrigger actionTrigger = new ActionTrigger();
 		if (uiAction.method() instanceof UIActionMethod uiActionMethod) {
@@ -1268,6 +1271,7 @@ public final class FormTemplate {
 			if (containsTemplate) {
 				action.setClientMethod(uiActionMethod.clientMethod());
 				action.setServerMethod(uiActionMethod.serverMethod());
+				action.setNeedsValidation(uiButton.needsValidation());
 				actionTrigger.setClientMethod(uiActionMethod.trigger().clientMethod());
 				actionTrigger.setServerMethod(uiActionMethod.trigger().serverMethod());
 				action.setTriggerMethod(actionTrigger);
@@ -1281,6 +1285,7 @@ public final class FormTemplate {
 				action.setDomain(uiActionRedirect.domain());
 				action.setParam(uiActionRedirect.param());
 				action.setRedirect(uiActionRedirect.value());
+				action.setNeedsValidation(uiButton.needsValidation());
 			}
 		}
 
@@ -1363,36 +1368,39 @@ public final class FormTemplate {
 			UIValidate uiValidate = domain.getClass().getAnnotation(UIValidate.class);
 			boolean containsTemplate = checkTemplate(uiValidate);
 			if (containsTemplate) {
-				validate.setGlobal(getGlobal(domain, uiValidate.global().value()));
-				validate.setCustom(getCustom(domain, uiValidate.custom().value()));
-				validate.setConditional(getConditional(domain, uiValidate.conditional().value()));
-				validate.setDependency(getDependecy(domain, uiValidate.dependency().value()));
+				validate.setGlobal(getGlobal(domain, uiValidate.global()));
+				validate.setCustom(getCustom(domain, uiValidate.custom()));
+				validate.setConditional(getConditional(domain, uiValidate.conditional()));
+				validate.setDependency(getDependecy(domain, uiValidate.dependency()));
 				if (validate.getGlobal().size() == 0 && validate.getCustom().size() == 0
 						&& validate.getConditional().size() == 0 && validate.getDependency().size() == 0) {
 					validate = null;
 				}
 			}
 		}
-
 		return validate;
 	}
 
 	/**
 	 * @param domain
-	 * @param uiDependsOns
+	 * @param uiDependency
 	 * @return
 	 */
-	private static List<Dependency> getDependecy(Domain<?> domain, UIDependsOn[] uiDependsOns) {
+	private static List<Dependency> getDependecy(Domain<?> domain, UIDependency uiDependency) {
 		List<Dependency> dependencys = new ArrayList<>();
-		Dependency dependency = null;
-		for (UIDependsOn uiDependsOn : uiDependsOns) {
-			boolean containsTemplate = checkTemplate(uiDependsOn);
-			if (containsTemplate) {
-				dependency = new Dependency();
-				dependency.setLabel(uiDependsOn.label());
-				dependency.setField(uiDependsOn.field());
-				dependency.setDepends(uiDependsOn.depends());
-				dependencys.add(dependency);
+		boolean containsTemplate = checkTemplate(uiDependency);
+		if (containsTemplate) {
+			UIDependencyOn[] uiDependencyOns = uiDependency.value();
+			Dependency dependency = null;
+			for (UIDependencyOn dependencyOn : uiDependencyOns) {
+				containsTemplate = checkTemplate(dependencyOn);
+				if (containsTemplate) {
+					dependency = new Dependency();
+					dependency.setLabel(dependencyOn.label());
+					dependency.setField(dependencyOn.field());
+					dependency.setDepends(dependencyOn.depends());
+					dependencys.add(dependency);
+				}
 			}
 		}
 		return dependencys;
@@ -1400,21 +1408,25 @@ public final class FormTemplate {
 
 	/**
 	 * @param domain
-	 * @param uiConditionalOns
+	 * @param uiConditional
 	 * @return
 	 */
-	private static List<Conditional> getConditional(Domain<?> domain, UIConditionalOn[] uiConditionalOns) {
+	private static List<Conditional> getConditional(Domain<?> domain, UIConditional uiConditional) {
 		List<Conditional> conditionals = new ArrayList<>();
-		Conditional conditional = null;
-		for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
-			boolean containsTemplate = checkTemplate(uiConditionalOn);
-			if (containsTemplate) {
-				conditional = new Conditional();
-				conditional.setLabel(uiConditionalOn.label());
-				conditional.setField(uiConditionalOn.field());
-				conditional.setOperator(uiConditionalOn.operator());
-				conditional.setMatchs(uiConditionalOn.matchs());
-				conditionals.add(conditional);
+		boolean containsTemplate = checkTemplate(uiConditional);
+		if(containsTemplate) {
+			UIConditionalOn[] uiConditionalOns = uiConditional.value();
+			Conditional conditional = null;
+			for (UIConditionalOn uiConditionalOn : uiConditionalOns) {
+				containsTemplate = checkTemplate(uiConditionalOn);
+				if (containsTemplate) {
+					conditional = new Conditional();
+					conditional.setLabel(uiConditionalOn.label());
+					conditional.setField(uiConditionalOn.field());
+					conditional.setOperator(uiConditionalOn.operator());
+					conditional.setMatchs(uiConditionalOn.matchs());
+					conditionals.add(conditional);
+				}
 			}
 		}
 		return conditionals;
@@ -1422,20 +1434,24 @@ public final class FormTemplate {
 
 	/**
 	 * @param domain
-	 * @param uiCustomOns
+	 * @param uiCustom
 	 * @return
 	 */
-	private static List<Custom> getCustom(Domain<?> domain, UICustomOn[] uiCustomOns) {
+	private static List<Custom> getCustom(Domain<?> domain, UICustom uiCustom) {
 		List<Custom> custons = new ArrayList<>();
-		Custom custom = null;
-		for (UICustomOn uiCustomOn : uiCustomOns) {
-			boolean containsTemplate = checkTemplate(uiCustomOn);
-			if (containsTemplate) {
-				custom = new Custom();
-				custom.setFunction(uiCustomOn.function());
-				custom.setMessage(uiCustomOn.message());
-				custom.setFields(uiCustomOn.fields());
-				custons.add(custom);
+		boolean containsTemplate = checkTemplate(uiCustom);
+		if(containsTemplate) {
+			UICustomOn[] uiCustomOns = uiCustom.value();
+			Custom custom = null;
+			for (UICustomOn uiCustomOn : uiCustomOns) {
+				containsTemplate = checkTemplate(uiCustomOn);
+				if (containsTemplate) {
+					custom = new Custom();
+					custom.setFunction(uiCustomOn.function());
+					custom.setMessage(uiCustomOn.message());
+					custom.setFields(uiCustomOn.fields());
+					custons.add(custom);
+				}
 			}
 		}
 		return custons;
@@ -1443,19 +1459,23 @@ public final class FormTemplate {
 
 	/**
 	 * @param domain
-	 * @param uiGlobalOns
+	 * @param uiGlobal
 	 * @return
 	 */
-	private static List<Global> getGlobal(Domain<?> domain, UIGlobalOn[] uiGlobalOns) {
+	private static List<Global> getGlobal(Domain<?> domain, UIGlobal uiGlobal) {
 		List<Global> globals = new ArrayList<>();
-		Global global = null;
-		for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
-			boolean containsTemplate = checkTemplate(uiGlobalOn);
-			if (containsTemplate) {
-				global = new Global();
-				global.setFunction(uiGlobalOn.function());
-				global.setMessage(uiGlobalOn.message());
-				globals.add(global);
+		boolean containsTemplate = checkTemplate(uiGlobal);
+		if (containsTemplate) {
+			UIGlobalOn[] uiGlobalOns = uiGlobal.value();
+			Global global = null;
+			for (UIGlobalOn uiGlobalOn : uiGlobalOns) {
+				containsTemplate = checkTemplate(uiGlobalOn);
+				if (containsTemplate) {
+					global = new Global();
+					global.setFunction(uiGlobalOn.function());
+					global.setMessage(uiGlobalOn.message());
+					globals.add(global);
+				}
 			}
 		}
 		return globals;

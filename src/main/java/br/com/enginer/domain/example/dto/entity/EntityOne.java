@@ -46,7 +46,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.validate.conditiona
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustom;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.custom.UICustomOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependency;
-import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependsOn;
+import br.com.enginer.domain.ui.usercase.annotation.instance.validate.dependency.UIDependencyOn;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobal;
 import br.com.enginer.domain.ui.usercase.annotation.instance.validate.global.UIGlobalOn;
 import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
@@ -71,39 +71,29 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonAdd.class,
 		UIButtonSave.class 
 }, 
-	value = {
-		@UIButton(
-			label = Constants.LABEL_NEW + " - Tab",	
-			template = { TypeTemplate.FILTER }, 
-			icon = "send", 
-			needsValidation = false, 
-			action = @UIAction(
-				redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", domain = "entityOne", param = "{ disabled=false }")
-			)
-		),
-		@UIButton(
-			label = "Custom", 
-			template = { TypeTemplate.FORM }, 
-			icon = "google_plus", 
-			confirm = false, 
-			needsValidation = false, 
-			action = @UIAction(
-				method = @UIActionMethod(clientMethod = "custom")
-			)
-		),
-		@UIButton(
-		    label = Constants.LABEL_BACK,
-		    icon = "undo",
-		    needsValidation = false,
-		    state = TypeButtonState.BTN_STATE_DEFAULT,
-		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-		    action = @UIAction(
-		        method = @UIActionMethod(clientMethod = "onBack")
-		    )
-		),
-    })
+value = {
+	@UIButton(
+		label = Constants.LABEL_NEW + " - Tab",	
+		template = { TypeTemplate.FILTER }, 
+		icon = "send", 
+		needsValidation = false, 
+		action = @UIAction(
+			redirect = @UIActionRedirect(value = Constants.PATH, ui = "tab", domain = "entityOne", param = "{ disabled=false }")
+		)
+	),
+	@UIButton(
+		label = "Custom", 
+		template = { TypeTemplate.FORM }, 
+		icon = "google_plus", 
+		confirm = false, 
+		needsValidation = false, 
+		action = @UIAction(
+			method = @UIActionMethod(clientMethod = "custom")
+		)
+	),
+})
 @UIPaginator(
-    config = @UIConfig(expandable = true, multiSelectable = false),
+    config = @UIConfig(expandable = true, multiSelectable = false, deletable = true, editable = true),
     actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class  },
     value = {
 		@UIButton(
@@ -206,9 +196,9 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		@UIConditionalOn(label = "Entity Status do Entity One", field = "entityOne.entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityOne.entityTwo.entityStatus", "entityOne.entityTwo.entityTree.entityStatus" }) 
 	}), 
 	dependency = @UIDependency({
-		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Age", field = "entityOne.age", depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
-		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Fruit", field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
-		@UIDependsOn(template = { TypeTemplate.FORM }, label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
+		@UIDependencyOn(template = { TypeTemplate.FORM }, label = "Age", field = "entityOne.age", depends = { "entityOne.entityTwo.hex", "entityOne.entityTwo.entityTree.indicator", "entityOne.entityTwo.entityTree.entityFour.entityFive.factor" }),
+		@UIDependencyOn(template = { TypeTemplate.FORM }, label = "Fruit", field = "entityOne.entityTwo.entityTree.entityFour.fruit", depends = { "entityOne.entityTwo.entityTree.entityFour.attribute" }),
+		@UIDependencyOn(template = { TypeTemplate.FORM }, label = "Status", field = "entityOne.entityStatus", depends = { "entityOne.entityTwo.entityStatus" }) 
 	})
 )
 public class EntityOne extends DomainAbstract<Long> {
@@ -239,10 +229,12 @@ public class EntityOne extends DomainAbstract<Long> {
 	
 	@UIPosition(x = 1, y = 2)
 	@UIFieldValidation(required = true)
+	//@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "send", template = { TypeTemplate.TAB, TypeTemplate.FORM })
+	//@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false)
 	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" }, initial = false)
 	private EntityNine entityNine;
-
+	
 	@UIPosition(x = 2, y = 2)
 	@UIFieldValidation(required = true)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })

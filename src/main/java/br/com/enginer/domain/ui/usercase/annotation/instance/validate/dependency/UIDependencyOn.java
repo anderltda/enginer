@@ -7,7 +7,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Repeatable(UIDependency.class)
-public @interface UIDependsOn {
+public @interface UIDependencyOn {
 	String label();
 	String field();
 	String[] depends();
