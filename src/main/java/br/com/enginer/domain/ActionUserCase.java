@@ -234,7 +234,21 @@ public interface ActionUserCase {
 	/**
 	 * @param domain
 	 * @return
+	 * @throws UncheckedException	
 	 */
-	Domain<?> plus(Domain<?> domain);
-
+	Domain<?> plus(Domain<?> domain) throws UncheckedException;
+	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws UncheckedException
+	 */
+	Domain<?> previous(Domain<?> domain) throws UncheckedException;
+	
+	/**
+	 * @param domain
+	 * @return
+	 * @throws UncheckedException
+	 */
+	Domain<?> next(Domain<?> domain) throws UncheckedException;
 }

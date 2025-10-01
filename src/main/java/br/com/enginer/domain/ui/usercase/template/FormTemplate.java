@@ -501,7 +501,8 @@ public final class FormTemplate {
 	 * @return
 	 */
 	private static Tab getTab(Domain<?> domain) {
-		Tab tab = new Tab(true);
+		Tab tab = new Tab(false);  // habilitado para cada acao chama o backend
+		//Tab tab = new Tab(true); // nao habilitado para cada acao chama o backend
 		return tab;
 	}
 

@@ -373,10 +373,26 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 	 *
 	 */	
 	@Override
-	public Domain<?> plus(Domain<?> domain) {
+	public Domain<?> plus(Domain<?> domain) throws UncheckedException {
 		return domain;
 	}
-	
+
+	/**
+	 *
+	 */		
+	@Override
+	public Domain<?> previous(Domain<?> domain) throws UncheckedException {
+		return domain;
+	}
+
+	/**
+	 *
+	 */		
+	@Override
+	public Domain<?> next(Domain<?> domain) throws UncheckedException {
+		return domain;
+	}
+
 	/**
 	 * @param domain
 	 * @return

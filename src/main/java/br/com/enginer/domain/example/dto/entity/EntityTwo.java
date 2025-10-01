@@ -134,12 +134,18 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
     )
 )
 @UIValidate(
+		global = @UIGlobal({ 
+			@UIGlobalOn(function = "customEntitySumValuesValidatorTab", message = "Encontramos erros, verifique todos os campos do tipo inteiro em seu formulario, a soma desses campos não pode ser maior que 100!!") 
+		}), 		
+		custom = @UICustom({
+			@UICustomOn(function = "customContainsNumberSpecialValidator", message = "Esse campo tem apenas 1 numero, o correto é ter pelo menos 2 numeros", fields = { "entityTwo.entityTree.amount", "entityTwo.entityTree.entityFour.entityFive.factor" }) 
+		}),		
 		conditional = @UIConditional({
 			@UIConditionalOn(label = "Hex", field = "entityTwo.hex", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityTwo.entityTree.indicator" }),
 			@UIConditionalOn(label = "Indicator", field = "entityTwo.entityTree.indicator", operator = TypeOperator.NOT_EQUALS, matchs = { "entityTwo.entityTree.entityFour.attribute" }),
 			@UIConditionalOn(label = "Attribute", field = "entityTwo.entityTree.entityFour.attribute", operator = TypeOperator.EQUALS, matchs = { "entityTwo.entityTree.entityFour.entityFive.factor" }),
-			@UIConditionalOn(label = "Factor", field = "entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "age" }),
-			@UIConditionalOn(label = "Entity Status do Entity One", field = "entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityTwo.entityStatus", "entityTwo.entityTree.entityStatus" }) 
+			@UIConditionalOn(label = "Factor", field = "entityTwo.entityTree.entityFour.entityFive.factor", operator = TypeOperator.GREATER_THAN_OR_EQUALS, matchs = { "entityTwo.hex" }),
+			@UIConditionalOn(label = "Entity Status do Entity Two", field = "entityTwo.entityStatus", operator = TypeOperator.NOT_EQUALS, matchs = { "entityTwo.entityTree.entityStatus" }) 
 		}), 
 		dependency = @UIDependency({
 			@UIDependsOn(template = { TypeTemplate.FORM }, label = "Fruit", field = "entityTwo.entityTree.entityFour.fruit", depends = { "entityTwo.entityTree.entityFour.attribute" }),

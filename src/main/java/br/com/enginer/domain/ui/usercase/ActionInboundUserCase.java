@@ -116,7 +116,7 @@ public class ActionInboundUserCase implements ActionInboundPort {
 			ActionLogger actionLogger = domain.getActionLogger();
 			logger.info(ActionInboundUserCase.class, "Action -> " + actionLogger.getActionName());
 			Object object = injectedDependency(domain);
-			domainNew =  (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getActionName(), domain);
+			domainNew = (Domain<?>) ReflectionUtils.executeMethod(object, actionLogger.getActionName(), domain);
 		} catch (Exception ex) {
 			logger.error(ActionInboundUserCase.class, ex);
 			throw new CheckedException(ex.getCause().getMessage(), ex.getCause());
