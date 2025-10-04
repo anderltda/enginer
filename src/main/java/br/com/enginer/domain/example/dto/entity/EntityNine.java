@@ -17,8 +17,8 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
@@ -38,7 +38,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	includes = { 
 		UIButtonNew.class, 
 		UIButtonBefore.class, 
-		UIButtonNext.class, 
+		UIButtonFinish.class, 
 		UIButtonDelete.class, 
 		UIButtonSearch.class, 
 		UIButtonAdd.class, 

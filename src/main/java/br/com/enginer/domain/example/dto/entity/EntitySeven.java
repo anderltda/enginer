@@ -12,13 +12,11 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedi
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
@@ -30,33 +28,31 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Setimo")
 @UIButtonAction(includes = { 
-		UIButtonBack.class, 
-		UIButtonClear.class, 
-		UIButtonBefore.class, 
-		UIButtonFinish.class,
-		UIButtonNew.class, 
-		UIButtonAdd.class,
-		UIButtonDelete.class, 
-		UIButtonSearch.class, 
-		UIButtonSave.class 
-	})
+	UIButtonBefore.class, 
+	UIButtonNext.class, 
+	UIButtonNew.class, 
+	UIButtonAdd.class,
+	UIButtonDelete.class, 
+	UIButtonSearch.class, 
+	UIButtonSave.class 
+})
 @UIPaginator(
 		config = @UIConfig(expandable = true, multiSelectable = false, deletable = true),
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class },
 		value = {
-				@UIButton(
-					label = "Add EntitySix in Seven", 
-					needsValidation = false, 
-					dropdown = true, 
-					template = TypeTemplate.PAGINATOR, 
-					action = @UIAction(
-						redirect = @UIActionRedirect(
-							value = Constants.PATH, 
-							ui = "row", 
-							domain = "entitySeven", 
-							param = "{ disable=true, field=id.entitySix, value=$object }")
-						)
+			@UIButton(
+				label = "Add EntitySix in Seven", 
+				needsValidation = false, 
+				dropdown = true, 
+				template = TypeTemplate.PAGINATOR, 
+				action = @UIAction(
+					redirect = @UIActionRedirect(
+						value = Constants.PATH, 
+						ui = "row", 
+						domain = "entitySeven", 
+						param = "{ disable=true, field=id.entitySix, value=$object }")
 					)
+				)
 		}))
 public class EntitySeven extends DomainAbstract<EntitySevenId> {
 	

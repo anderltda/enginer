@@ -21,8 +21,8 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
@@ -40,31 +40,31 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
 @UITitle("Sexto")
 @UIButtonAction(includes = { 
-					UIButtonBack.class, 
-					UIButtonClear.class, 
-					UIButtonBefore.class, 
-					UIButtonFinish.class,
-					UIButtonNew.class, 
-					UIButtonDelete.class, 
-					UIButtonSearch.class, 
-					UIButtonSave.class 
-				},
-			value = {
-					@UIButton(
-					    label = Constants.LABEL_ADD,
-					    icon = "plus",
-					    state = TypeButtonState.BTN_STATE_PRIMARY,
-					    template = { TypeTemplate.ROW },
-					    needsValidation = true,
-						action = @UIAction(
-							method = @UIActionMethod(serverMethod = "plus"),
-							response = @UIActionResponse(
-							template = { TypeTemplate.ROW },
-							success = @UIActionResponseSuccess(
-									method = @UIActionMethod(clientMethod = "setDataSetField")
-						)))
-					)
-			})
+	UIButtonBack.class, 
+	UIButtonClear.class, 
+	UIButtonBefore.class, 
+	UIButtonNext.class,
+	UIButtonNew.class, 
+	UIButtonDelete.class, 
+	UIButtonSearch.class, 
+	UIButtonSave.class 
+},
+value = {
+	@UIButton(
+	    label = Constants.LABEL_ADD,
+	    icon = "plus",
+	    state = TypeButtonState.BTN_STATE_PRIMARY,
+	    template = { TypeTemplate.ROW },
+	    needsValidation = true,
+		action = @UIAction(
+			method = @UIActionMethod(serverMethod = "plus"),
+			response = @UIActionResponse(
+			template = { TypeTemplate.ROW },
+			success = @UIActionResponseSuccess(
+					method = @UIActionMethod(clientMethod = "setDataSetField")
+		)))
+	)
+})
 @UIPaginator(
 		config = @UIConfig(expandable = true, multiSelectable = false, deletable = true),
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class }))

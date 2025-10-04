@@ -21,9 +21,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
@@ -42,7 +40,14 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UITitle("Terceiro")
-@UIButtonAction(includes = { UIButtonClear.class, UIButtonBack.class, UIButtonBefore.class, UIButtonNext.class, UIButtonNew.class, UIButtonDelete.class, UIButtonSearch.class, UIButtonSave.class }, 
+@UIButtonAction(includes = { 
+	UIButtonBefore.class, 
+	UIButtonNext.class, 
+	UIButtonNew.class, 
+	UIButtonDelete.class, 
+	UIButtonSearch.class, 
+	UIButtonSave.class 
+}, 
 	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
 	action = @UIAction(method = @UIActionMethod(clientMethod = "custom"))) }
 )
