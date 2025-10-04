@@ -17,6 +17,7 @@ public class Button {
 	private Boolean dropdown;
 	private Boolean confirm;
 	private Boolean needsValidation;
+	private String[] notDomain;
 	private String state;
 	private TypeTemplate[] template;
 	private Action action;
@@ -24,7 +25,7 @@ public class Button {
 	public Button() {
 		super();
 	}
-	
+
 	public Button(TypeButton type) {
 		super();
 		this.type = type.getValue();
@@ -69,7 +70,7 @@ public class Button {
 	public void setHighlight(Boolean highlight) {
 		this.highlight = highlight;
 	}
-	
+
 	public Boolean getDropdown() {
 		return dropdown;
 	}
@@ -92,6 +93,14 @@ public class Button {
 
 	public void setNeedsValidation(Boolean needsValidation) {
 		this.needsValidation = needsValidation;
+	}
+
+	public String[] getNotDomain() {
+		return notDomain;
+	}
+
+	public void setNotDomain(String[] notDomain) {
+		this.notDomain = notDomain;
 	}
 
 	public String getState() {

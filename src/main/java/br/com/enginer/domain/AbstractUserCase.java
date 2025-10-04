@@ -64,12 +64,13 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		
 		try {
 			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			Map<TypeTemplate, Object> map = new LinkedHashMap<TypeTemplate, Object>();
 			map.put(TypeTemplate.FORM, true);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.TAB, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			map.put(TypeTemplate.MAIN_DOMAIN, domain.getMainDomain());
 			
 			domain = formId(domain);
 			
@@ -88,12 +89,13 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		
 		try {
 			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			Map<TypeTemplate, Object> map = new LinkedHashMap<TypeTemplate, Object>();
 			map.put(TypeTemplate.TAB, true);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			map.put(TypeTemplate.MAIN_DOMAIN, domain.getMainDomain());
 			
 			domain = formId(domain);
 			
@@ -112,12 +114,13 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		
 		try {
 			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			Map<TypeTemplate, Object> map = new LinkedHashMap<TypeTemplate, Object>();
 			map.put(TypeTemplate.FILTER, true);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.TAB, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			map.put(TypeTemplate.MAIN_DOMAIN, domain.getMainDomain());
 			
 			return FormTemplate.create(domain, this, map);
 			
@@ -134,13 +137,14 @@ public abstract class AbstractUserCase implements TemplateUserCase, ActionUserCa
 		
 		try {
 			
-			Map<TypeTemplate, Boolean> map = new LinkedHashMap<TypeTemplate, Boolean>();
+			Map<TypeTemplate, Object> map = new LinkedHashMap<TypeTemplate, Object>();
 			map.put(TypeTemplate.ROW, true);
 			map.put(TypeTemplate.FILTER, false);
 			map.put(TypeTemplate.FORM, false);
 			map.put(TypeTemplate.TAB, false);
 			map.put(TypeTemplate.MODAL, domain.isModal());
 			map.put(TypeTemplate.DISABLED, domain.isDisabled());
+			map.put(TypeTemplate.MAIN_DOMAIN, domain.getMainDomain());
 			
 			return FormTemplate.create(domain, this, map);
 			

@@ -15,8 +15,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponse;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
@@ -48,21 +46,26 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class  
 }, 
 value = {
-		@UIButton(
-				label = Constants.LABEL_SAVE + " - 2",
-				icon = "save",
-				state = TypeButtonState.BTN_STATE_PRIMARY,
-				template = { TypeTemplate.FORM, TypeTemplate.MODAL },
-				action = @UIAction(
-						method = @UIActionMethod(serverMethod = "salvar"),
-						response = @UIActionResponse(
-								template = { TypeTemplate.FORM },
-								success = @UIActionResponseSuccess(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityOne", param = "{ disable=true, field=entityFive, value=$object }")
-										)
-								)
-						)
-				),
-	@UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, action = @UIAction(method = @UIActionMethod(serverMethod = "atireiopaunogato")))
+	@UIButton(
+	    label = Constants.LABEL_BACK,
+	    icon = "undo",
+	    needsValidation = false,
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = "onBack")
+	    )
+	),
+	@UIButton(
+		    label = Constants.LABEL_CLEAR,
+		    icon = "bin_alt",
+		    needsValidation = false,
+		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+		    state = TypeButtonState.BTN_STATE_DEFAULT,
+		    action = @UIAction(
+		        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+		    )
+	)		
 }
 )
 @UIPaginator(

@@ -1,7 +1,9 @@
 package br.com.enginer.infrastructure.configuration;
 
 import java.lang.reflect.Modifier;
+import java.net.URI;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -51,6 +53,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
+		String urlDomain = request.getHeader("X-UI-Url");
 		String domainName = request.getHeader("X-UIDomain");
 		String modal = request.getHeader("X-UIModal");
 		String disabled = request.getHeader("X-UI-Mode");
@@ -88,6 +91,7 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 
 				ReflectionUtils.executeMethod(domain, StringsUtils.setMethod("modal"), isModal);
 				ReflectionUtils.executeMethod(domain, StringsUtils.setMethod("disabled"), isDisabled);
+				extractMainDomainFromUri(domain, urlDomain);
 
 				return domain;
 			}
@@ -116,5 +120,39 @@ public class DomainResolver implements HandlerMethodArgumentResolver {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Extrai o domínio principal de uma URI.
+	 * @param uri A URI completa.
+	 * @return O domínio principal extraído, ou null se não for possível extrair
+	 * @throws Exception		
+	 */
+	private void extractMainDomainFromUri(Domain<?> domain, String uri) throws Exception {
+		if(uri != null) {
+			String mainDomain = thirdSegment(uri).orElse(null);
+			ReflectionUtils.executeMethod(domain, StringsUtils.setMethod("mainDomain"), mainDomain);
+		}
+	}
+	
+	/**
+	 * Retorna o terceiro segmento de uma URL ou path.
+	 * Exemplo: para "http://example.com/one/two/three", retorna Optional com "three".
+	 * Exemplo: para "/one/two/three", retorna Optional com "three".
+	 * Exemplo: para "/one/two", retorna Optional vazio.
+	 * 
+	 * @param urlOrPath A URL completa ou apenas o path.
+	 * @return Optional com o terceiro segmento, ou vazio se não existir.
+	 */
+	private Optional<String> thirdSegment(String urlOrPath) {
+		String path;
+		try {
+			path = URI.create(urlOrPath).getPath();
+		} catch (Exception e) {
+			path = urlOrPath;
+		}
+		return Arrays.stream(path.split("/")).filter(s -> !s.isEmpty())
+				.skip(2)
+				.findFirst();
 	}
 }

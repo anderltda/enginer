@@ -20,6 +20,7 @@ public @interface UIButton {
 	boolean dropdown() default false;
 	boolean confirm() default false;
 	boolean needsValidation() default true;
+	String[] notDomain() default {};
 	TypeTemplate[] template() default { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL };
 	TypeButtonState state() default TypeButtonState.BTN_STATE_DEFAULT; 
 	UIAction action() default @UIAction;

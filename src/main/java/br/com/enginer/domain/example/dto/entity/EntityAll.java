@@ -4,10 +4,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonClear;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
@@ -19,10 +16,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  * 
  */
 @UIButtonAction(includes = { 
-	UIButtonBack.class, 
-	UIButtonClear.class, 
 	UIButtonNext.class, 
-	UIButtonNew.class, 
 	UIButtonDelete.class, 
 	UIButtonSearch.class, 
 	UIButtonSave.class  
@@ -67,6 +61,14 @@ public class EntityAll extends DomainAbstract<Long> {
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "color_palette", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER })
 	private EntityNine entityNine;
+
+	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "send", template = { TypeTemplate.TAB, TypeTemplate.FORM })
+	@UIFilter(label = "Entity Ten", field = "name", readonly = false, template = { TypeTemplate.FILTER })
+	private EntityTen entityTen;
+
+	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "printer", template = { TypeTemplate.TAB, TypeTemplate.FORM })
+	@UIFilter(label = "Entity Eleven", field = "amount", readonly = false, template = { TypeTemplate.FILTER })
+	private EntityEleven entityEleven;
 	
 	@Override
 	public Long getId() {
@@ -148,5 +150,21 @@ public class EntityAll extends DomainAbstract<Long> {
 
 	public void setEntityNine(EntityNine entityNine) {
 		this.entityNine = entityNine;
+	}
+
+	public EntityTen getEntityTen() {
+		return entityTen;
+	}
+
+	public void setEntityTen(EntityTen entityTen) {
+		this.entityTen = entityTen;
+	}
+
+	public EntityEleven getEntityEleven() {
+		return entityEleven;
+	}
+
+	public void setEntityEleven(EntityEleven entityEleven) {
+		this.entityEleven = entityEleven;
 	}
 }

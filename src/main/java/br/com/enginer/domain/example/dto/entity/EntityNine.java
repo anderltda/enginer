@@ -17,8 +17,8 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonFinish;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorAdd;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonPaginatorSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
@@ -35,42 +35,37 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Nono")
 @UIButtonAction(
-	includes = { 
-		UIButtonNew.class, 
-		UIButtonBefore.class, 
-		UIButtonFinish.class, 
-		UIButtonDelete.class, 
-		UIButtonSearch.class, 
-		UIButtonAdd.class, 
-		UIButtonSave.class 
-	}, 
-	value = { 
-		@UIButton(
-				template = { TypeTemplate.FILTER, TypeTemplate.FORM }, 
-				label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
-				action = @UIAction(method = @UIActionMethod(serverMethod = "keyComposte"))
-		), 
-		@UIButton(
-			    label = Constants.LABEL_BACK,
-			    icon = "undo",
-			    needsValidation = false,
-			    state = TypeButtonState.BTN_STATE_DEFAULT,
-			    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-			    action = @UIAction(
-			        method = @UIActionMethod(clientMethod = "onBack")
-			    )
-		),
-		@UIButton(
-			    label = Constants.LABEL_CLEAR,
-			    icon = "bin_alt",
-			    needsValidation = false,
-			    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-			    state = TypeButtonState.BTN_STATE_DEFAULT,
-			    action = @UIAction(
-			        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
-			    )
-		)		
-	})
+includes = { 
+	UIButtonNew.class, 
+	UIButtonBefore.class, 
+	UIButtonNext.class, 
+	UIButtonDelete.class, 
+	UIButtonSearch.class, 
+	UIButtonAdd.class, 
+	UIButtonSave.class 
+}, 
+value = { 
+	@UIButton(
+	    label = Constants.LABEL_BACK,
+	    icon = "undo",
+	    needsValidation = false,
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = "onBack")
+	    )
+	),
+	@UIButton(
+	    label = Constants.LABEL_CLEAR,
+	    icon = "bin_alt",
+	    needsValidation = false,
+	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+	    )
+	)		
+})
 @UIPaginator(
 		config = @UIConfig(deletable = true, editable = true), 
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorAdd.class, UIButtonPaginatorSave.class }, 

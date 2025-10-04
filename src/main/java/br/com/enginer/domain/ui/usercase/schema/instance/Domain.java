@@ -18,24 +18,34 @@ public interface Domain<I> {
 	public void setId(I id);
 	
     /**
-     * Indica se o domínio é um modal.
+     * @return Indica se o domínio é um modal.
      */
-	Boolean isModal();
+	public Boolean isModal();
 
     /**
-     * Define se o domínio é um modal.
+     * @param Define se o domínio é um modal.
      */
-    void setModal(Boolean modal);
+	public void setModal(Boolean modal);
 	
     /**
-     * Informa se os campos estao disabled, porém apenas visualmente.
+     * @return Informa se os campos estao disabled, porém apenas visualmente.
      */
-    Boolean isDisabled();
+	public Boolean isDisabled();
 
     /**
-     * Define se o disabled está habilitado.
+     * @param Define se o disabled está habilitado.
      */
-    void setDisabled(Boolean disabled);
+	public void setDisabled(Boolean disabled);
+    
+    /**
+     * @param Define o domain principal.
+     */
+	public void setMainDomain(String mainDomain);
+    
+    /**
+     * @return Informar qual o domain principal.
+     */
+	public String getMainDomain();
 
 	/**
 	 * @return

@@ -8,6 +8,7 @@ import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
@@ -23,6 +24,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 
@@ -35,7 +37,30 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	UIButtonDelete.class, 
 	UIButtonSearch.class, 
 	UIButtonSave.class 
-})
+},
+value = {
+	@UIButton(
+	    label = Constants.LABEL_BACK,
+	    icon = "undo",
+	    needsValidation = false,
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = "onBack")
+	    )
+	),
+	@UIButton(
+		    label = Constants.LABEL_CLEAR,
+		    icon = "bin_alt",
+		    needsValidation = false,
+		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+		    state = TypeButtonState.BTN_STATE_DEFAULT,
+		    action = @UIAction(
+		        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+		    )
+	)		
+}
+)
 @UIPaginator(
 		config = @UIConfig(expandable = true, multiSelectable = false, deletable = true),
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonPaginatorSave.class },

@@ -128,9 +128,11 @@ public final class FormTemplate {
 
 	private static final Map<Class<? extends Annotation>, Class<? extends Annotation>> annotationMap = new HashMap<>();
 	private static TypeTemplate typeTemplate;
+	private static Boolean modal = Boolean.FALSE;
 	private static Boolean disabled = Boolean.FALSE;
-	private static Map<TypeTemplate, Boolean> mapTypeTemplates;
+	private static Map<TypeTemplate, Object> mapTypeTemplates;
 	private static TemplateUserCase userCase;
+	private static String mainDomain;
 
 	private FormTemplate() {}
 
@@ -170,18 +172,20 @@ public final class FormTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Form create(Domain<?> domain, TemplateUserCase templateUserCase, Map<TypeTemplate, Boolean> maps) throws Exception {
+	public static Form create(Domain<?> domain, TemplateUserCase templateUserCase, Map<TypeTemplate, Object> maps) throws Exception {
 
 		List<Field> fields = new ArrayList<>();
 		Field field = null;
 		Form form = null;
 
 		try {
-
+			
 			mapTypeTemplates = maps;
 			userCase = templateUserCase;
 			typeTemplate = mapTypeTemplates.entrySet().iterator().next().getKey();
-			disabled = mapTypeTemplates.get(TypeTemplate.DISABLED);
+			modal = (Boolean) mapTypeTemplates.get(TypeTemplate.MODAL);
+			disabled = (Boolean) mapTypeTemplates.get(TypeTemplate.DISABLED);
+			mainDomain = (String) mapTypeTemplates.get(TypeTemplate.MAIN_DOMAIN);
 
 			Paginator paginator = !(typeTemplate.equals(TypeTemplate.FORM) || typeTemplate.equals(TypeTemplate.TAB)) ? getPaginator(domain) : null;
 			Tab tab = (typeTemplate.equals(TypeTemplate.TAB) || typeTemplate.equals(TypeTemplate.TAB)) ? getTab(domain) : null;
@@ -1183,7 +1187,14 @@ public final class FormTemplate {
 
 				buttons = new ArrayList<>();
 
+				outer:
 				for (UIButton uiButton : uiListButtons) {
+					
+					for (String value : uiButton.notDomain()) {
+						if(mainDomain.equals(value)) {
+				            continue outer;
+						}
+					}
 
 					if (!uiButton.label().equals(Constants.LABEL_BACK) && disabled) {
 						continue;
@@ -1212,7 +1223,7 @@ public final class FormTemplate {
 						}
 					}
 
-					if (mapTypeTemplates.get(TypeTemplate.MODAL)) {
+					if (modal) {
 						if (uiButton.label().equals(Constants.LABEL_DELETE)
 								|| uiButton.label().equals(Constants.LABEL_BACK))
 							continue;
@@ -1231,7 +1242,7 @@ public final class FormTemplate {
 							Object buttonObject = ReflectionUtils.get(method.getName(), uiButton);
 
 							if (buttonObject instanceof UIAction) {
-								if (uiButton.label().equals(Constants.LABEL_NEW) && mapTypeTemplates.get(TypeTemplate.MODAL)) {
+								if (uiButton.label().equals(Constants.LABEL_NEW) && modal) {
 									Action action = getButtonAction(uiButton);
 									action.setClientMethod(Constants.METHOD_OPEN_MODAL_CREATE);
 									action.setRedirect(null);

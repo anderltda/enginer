@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDate;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
@@ -31,6 +32,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIPaginator;
+import br.com.enginer.domain.ui.usercase.enums.TypeButtonState;
 import br.com.enginer.domain.ui.usercase.enums.TypeDateFormat;
 import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
 import br.com.enginer.domain.ui.usercase.helper.ComboHelper;
@@ -48,8 +50,28 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	UIButtonSearch.class, 
 	UIButtonSave.class 
 }, 
-	value = { @UIButton(template = { TypeTemplate.FILTER, TypeTemplate.FORM }, label = "Custom", icon = "google_plus", confirm = true, needsValidation = false, 
-	action = @UIAction(method = @UIActionMethod(clientMethod = "custom"))) }
+value = {
+	@UIButton(
+	    label = Constants.LABEL_BACK,
+	    icon = "undo",
+	    needsValidation = false,
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = "onBack")
+	    )
+	),
+	@UIButton(
+		    label = Constants.LABEL_CLEAR,
+		    icon = "bin_alt",
+		    needsValidation = false,
+		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+		    state = TypeButtonState.BTN_STATE_DEFAULT,
+		    action = @UIAction(
+		        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+		    )
+	)		
+}
 )
 @UIPaginator(config = @UIConfig(expandable = true, multiSelectable = false), actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class }))
 public class EntityTree extends DomainAbstract<UUID> {

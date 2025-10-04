@@ -9,6 +9,7 @@ public abstract class DomainAbstract<I> implements Domain<I> {
 	
 	private Boolean modal;
 	private Boolean disabled;
+	private String mainDomain;
 	private ActionLogger actionLogger;
 	
 	/**
@@ -57,5 +58,20 @@ public abstract class DomainAbstract<I> implements Domain<I> {
 	public void setDisabled(Boolean disabled) {
 		this.disabled = disabled;
 	}
+	
+	/**
+	 * Define o domain principal.
+	 */
+	@Override
+	public void setMainDomain(String mainDomain) {
+		this.mainDomain = mainDomain;
+	}
 
+	/**
+	 * Informar qual o domain principal.
+	 */
+	@Override
+	public String getMainDomain() {
+		return this.mainDomain;
+	}
 }
