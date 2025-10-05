@@ -2,7 +2,6 @@ package br.com.enginer.domain.example.dto.entity;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIJoin;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -81,7 +80,6 @@ value = {
 		}))
 public class EntitySeven extends DomainAbstract<EntitySevenId> {
 	
-	@UIJoin(template = { TypeTemplate.MODAL, TypeTemplate.TAB, TypeTemplate.ROW, TypeTemplate.FILTER, TypeTemplate.FORM,  } )
 	@UIColumn(label = "Id", fields = { "idEntitySeven", "entitySix" }, initial = false)
 	@UIRow(visible = true, fields = { "entitySix" })
 	private EntitySevenId id;
