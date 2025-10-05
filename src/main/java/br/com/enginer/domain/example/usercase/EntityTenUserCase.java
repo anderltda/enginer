@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.usercase;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import br.com.enginer.domain.AbstractUserCase;
@@ -24,5 +25,20 @@ public class EntityTenUserCase extends AbstractUserCase {
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public Domain<?> salvar(Domain<?> domain) throws UncheckedException {
+
+		EntityTen entityTen = (EntityTen) domain;
+		
+		if(entityTen.getId() == null) {
+			entityTen.setDateCreate(LocalDateTime.now());
+		} else {
+			entityTen.setDateUpdate(LocalDateTime.now());
+		}
+		
+		
+		return super.salvar(domain);
 	}
 }

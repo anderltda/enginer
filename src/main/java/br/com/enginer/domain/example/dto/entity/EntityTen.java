@@ -5,15 +5,19 @@ import java.time.LocalDateTime;
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
-import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIText;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.validation.UIFieldValidation;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedirect;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponse;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseError;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResponseSuccess;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
@@ -22,7 +26,6 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.specializati
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNext;
-import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSave;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonSearch;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonView;
 import br.com.enginer.domain.ui.usercase.annotation.instance.paginator.UIConfig;
@@ -41,8 +44,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	UIButtonNew.class, 
 	UIButtonDelete.class, 
 	UIButtonSearch.class, 
-	UIButtonAdd.class, 
-	UIButtonSave.class 
+	UIButtonAdd.class
 },
 value = { 
 	@UIButton(
@@ -64,7 +66,21 @@ value = {
 	    action = @UIAction(
 	        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
 	    )
-	)		
+	),
+	@UIButton(
+	    label = Constants.LABEL_SAVE,
+	    icon = "save",
+	    state = TypeButtonState.BTN_STATE_PRIMARY,
+	    template = { TypeTemplate.FORM, TypeTemplate.MODAL },
+	    action = @UIAction(
+	        method = @UIActionMethod(serverMethod = "salvar"),
+	        response = @UIActionResponse(
+	        	template = { TypeTemplate.FORM },
+	    		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
+	    		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEleven", param = "{ disable=true, field=entityTen, value=$object }"))
+	        )
+	    )
+	)	
 }
 )
 @UIPaginator(
@@ -89,18 +105,18 @@ public class EntityTen extends DomainAbstract<Long> {
 	private Long id;
 
 	@UIPosition(x = 1, y = 1)
+	@UIFieldValidation(required = true, template = { TypeTemplate.FORM })
 	@UIText(label = "Descricao", min = 2, max = 100)
 	@UIColumn(label = "Nome", initial = true)
 	@UIRow(visible = true)
 	private String name;
 
-	@UIPosition(x = 1, y = 2)
-	@UINumber(label = "Quantidade Total", min = 0, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
+	@UIHidden
 	@UIColumn(label = "Quantidade Total", initial = false)
 	@UIRow(visible = true)
 	private Integer totalAmount;
 
-	@UIPosition(x = 2, y = 2)
+	@UIHidden
 	@UIColumn(label = "Valor Total", initial = false)
 	@UIRow(visible = true)
 	private Double totalValue;
@@ -111,9 +127,11 @@ public class EntityTen extends DomainAbstract<Long> {
 	@UIColumn(label = "", fields = { "name", "status" }, initial = false)
 	private EntityStatus entityStatus;
 
+	@UIHidden
 	@UIColumn(label = "Data de Criacao", initial = false)
 	private LocalDateTime dateCreate;
 
+	@UIHidden
 	@UIColumn(label = "Data de Atualizacao", initial = false)
 	private LocalDateTime dateUpdate;
 

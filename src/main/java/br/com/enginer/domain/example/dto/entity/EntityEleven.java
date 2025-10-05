@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIDecimal;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIId;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIIgnore;
 import br.com.enginer.domain.ui.usercase.annotation.field.UINumber;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
 import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
@@ -93,29 +91,28 @@ public class EntityEleven extends DomainAbstract<Long> {
 	@UIRow(visible = false, fields = { "name" })
 	private EntityTen entityTen;
 
-	@UIPosition(x = 2, y = 1)
+	@UIPosition(x = 1, y = 2)
 	@UIFilter(label = "Six", field = "packageName", readonly = false)
 	@UIColumn(label = "Six", fields = { "id", "packageName", "startDate", "stopDate" }, initial = false)
 	@UIRow(visible = true, fields = { "packageName" })
 	private EntitySix entitySix;
 
-	@UIPosition(x = 1, y = 2)
+	@UIPosition(x = 2, y = 2)
 	@UINumber(label = "Quantidade", min = 1, max = 100, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIColumn(label = "Quantidade", initial = false)
 	@UIRow(visible = true)
 	private Integer amount;
 
-	@UIPosition(x = 2, y = 2)
+	@UIHidden
 	@UIColumn(label = "Valor Unitario", initial = false)
-	@UIDecimal(label = "Valor Unitario")
-	@UIRow(visible = true, editable = false)
+	@UIRow(visible = true, editable = true)
 	private Double value;
 
-	@UIIgnore
+	@UIHidden
 	@UIColumn(label = "Data de Criacao", initial = false)
 	private LocalDateTime dateCreate;
 
-	@UIIgnore
+	@UIHidden
 	@UIColumn(label = "Data de Atualizacao", initial = false)
 	private LocalDateTime dateUpdate;
 	
