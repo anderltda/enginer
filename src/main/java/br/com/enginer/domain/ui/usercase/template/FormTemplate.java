@@ -188,7 +188,7 @@ public final class FormTemplate {
 			mainDomain = (String) mapTypeTemplates.get(TypeTemplate.MAIN_DOMAIN);
 
 			Paginator paginator = !(typeTemplate.equals(TypeTemplate.FORM) || typeTemplate.equals(TypeTemplate.TAB)) ? getPaginator(domain) : null;
-			Tab tab = (typeTemplate.equals(TypeTemplate.TAB) || typeTemplate.equals(TypeTemplate.TAB)) ? getTab(domain) : null;
+			Tab tab = (typeTemplate.equals(TypeTemplate.TAB)) ? getTab(domain) : null;
 			String title = getTitle(domain);
 			Validate validate = getValidate(domain);
 
@@ -508,8 +508,8 @@ public final class FormTemplate {
 	 * @return
 	 */
 	private static Tab getTab(Domain<?> domain) {
-		Tab tab = new Tab(false);  // habilitado para cada acao chama o backend
-		//Tab tab = new Tab(true); // nao habilitado para cada acao chama o backend
+		//Tab tab = new Tab(false);  // habilitado para cada acao chama o backend
+		Tab tab = new Tab(true); // nao habilitado para cada acao chama o backend
 		return tab;
 	}
 
