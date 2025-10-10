@@ -508,8 +508,8 @@ public final class FormTemplate {
 	 * @return
 	 */
 	private static Tab getTab(Domain<?> domain) {
-		//Tab tab = new Tab(false);  // habilitado para cada acao chama o backend
-		Tab tab = new Tab(true); // nao habilitado para cada acao chama o backend
+		Tab tab = new Tab(false);  // habilitado para cada acao chama o backend
+		//Tab tab = new Tab(true); // nao habilitado para cada acao chama o backend
 		return tab;
 	}
 
@@ -1177,11 +1177,11 @@ public final class FormTemplate {
 			UIButtonAction uiButtonAction = domain.getClass().getAnnotation(UIButtonAction.class);
 			UIButton[] uiButtons = domain.getClass().getAnnotationsByType(UIButton.class);
 
-			uiListButtons.addAll(Arrays.asList(uiButtons));
-
 			for (Class<? extends Annotation> custom : uiButtonAction.includes()) {
 				uiListButtons.add(custom.getAnnotation(UIButton.class));
 			}
+
+			uiListButtons.addAll(Arrays.asList(uiButtons));
 
 			if (uiListButtons.size() > 0) {
 

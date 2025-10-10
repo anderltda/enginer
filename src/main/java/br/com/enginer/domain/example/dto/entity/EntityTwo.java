@@ -23,6 +23,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResp
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionTriggerMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonNew;
@@ -52,6 +53,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Segundo")
 @UIButtonAction(includes = { 
+		UIButtonBefore.class,
 		UIButtonNew.class, 
 		UIButtonEdit.class, 
 		UIButtonDelete.class, 
@@ -59,16 +61,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonSave.class 
 	}, 
 	value = {
-		@UIButton(
-		    label = Constants.LABEL_BEFORE,
-		    icon = "chevron_left",
-		    state = TypeButtonState.BTN_STATE_PRIMARY,
-		    needsValidation = false,
-		    template = { TypeTemplate.TAB, TypeTemplate.MODAL },
-		    action = @UIAction(
-		        method = @UIActionMethod(clientMethod = "onPrevious")
-		    )
-		),			
 		@UIButton(
 		    label = Constants.LABEL_NEXT,
 		    icon = "chevron_right",
@@ -80,22 +72,22 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		    )
 		),
 		@UIButton(
-				label = Constants.LABEL_FINISH,
-			    icon = "save",
-			    state = TypeButtonState.BTN_STATE_PRIMARY,
-			    template = { TypeTemplate.TAB },
-			    notDomain = { "entityAll" },
-			    action = @UIAction(
-					method = @UIActionMethod(
-						clientMethod = "onFinish", 
-						trigger = @UIActionTriggerMethod(serverMethod = "salvar")
-					),
-			        response = @UIActionResponse(
-			        	template = { TypeTemplate.TAB },
-			    		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
-			    		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(ui = "tab", value = Constants.PATH_FIND_BY_ID))
-			        )
-			    )
+			label = Constants.LABEL_FINISH,
+		    icon = "save",
+		    state = TypeButtonState.BTN_STATE_PRIMARY,
+		    template = { TypeTemplate.TAB },
+		    notDomain = { "entityAll" },
+		    action = @UIAction(
+				method = @UIActionMethod(
+					clientMethod = "onFinish", 
+					trigger = @UIActionTriggerMethod(serverMethod = "salvar")
+				),
+		        response = @UIActionResponse(
+		        	template = { TypeTemplate.TAB },
+		    		error = @UIActionResponseError(method = @UIActionMethod(clientMethod = "onAlertTestError")), 
+		    		success = @UIActionResponseSuccess(redirect = @UIActionRedirect(ui = "tab", value = Constants.PATH_FIND_BY_ID))
+		        )
+		    )
 		),		
 		@UIButton(
 			template = { TypeTemplate.FILTER }, 
