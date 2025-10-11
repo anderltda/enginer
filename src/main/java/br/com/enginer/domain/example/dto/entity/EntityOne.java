@@ -217,7 +217,7 @@ public class EntityOne extends DomainAbstract<Long> {
 	    async    = @UIAsync(   method = "metodoJavaDominioEntityOne", asyncError = "Validação direto no field 'ASYNC'"),
 	    sync     = @UISync(  syncFunc = { "dogMel", "dogMagrela" },   syncError = { "message1", "Validação direto no field 'SYNC' - O campo está randomico, acabou caindo no erro." })
 	)
-	@UIColumn(label = "EntityOne Nome", initial = true)
+	@UIColumn(label = "Nome", initial = true)
 	private String name;
 
 	@UIPosition(x = 2, y = 1)
@@ -231,18 +231,18 @@ public class EntityOne extends DomainAbstract<Long> {
 	//@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "send", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	//@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false, template = { TypeTemplate.FILTER, TypeTemplate.MODAL })
 	@UIFilter(label = "Entity Nine", field = "keyNine", readonly = false)
-	@UIColumn(label = "Entity Nine", fields = { "keyNine", "code", "variable", "id" }, initial = false)
+	@UIColumn(label = "Entity Nine", fields = { "keyNine", "id" }, initial = true)
 	private EntityNine entityNine;
 	
 	@UIPosition(x = 2, y = 2)
 	@UIFieldValidation(required = true)
 	@UICheckbox(label = "<b>Code</b>: I hereby certify that the information above is true and accurate", enableSwitch = false, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Codigo", initial = false)
+	@UIColumn(label = "Codigo", initial = true)
 	private Boolean code;
 
 	@UIPosition(x = 1, y = 3)
 	@UINumber(label = "Age", min = 1, max = 60, template = { TypeTemplate.FILTER, TypeTemplate.ROW, TypeTemplate.FORM, TypeTemplate.TAB, TypeTemplate.MODAL })
-	@UIColumn(label = "EntityOne Idade", initial = true)
+	@UIColumn(label = "EntityOne Idade", initial = false)
 	@UIRow(visible = true, editable = true, totalizer = true, order = 3)
 	private Integer age;
 
@@ -256,20 +256,20 @@ public class EntityOne extends DomainAbstract<Long> {
 	@UIPosition(x = 3, y = 3)
 	@UIFieldValidation(required = true)
 	@UIDate(label = "Birth Date")
-	@UIColumn(label = "EntityOne Data de Aniversario", initial = false)
+	@UIColumn(label = "Aniversario", initial = true)
 	@UIRow(visible = false)
 	private LocalDate birthDate;
 
 	@UIPosition(x = 4, y = 3)
 	@UIFieldValidation(required = true)
 	@UIDate(label = "Prohibited Date Time", format = TypeDateFormat.DATE_TIME_FORMAT, showtime = true)
-	@UIColumn(label = "EntityOne Data da Proibicao", initial = false)
+	@UIColumn(label = "Data da Proibicao", initial = true)
 	@UIRow(visible = true, order = 2)
 	private LocalDateTime prohibitedDateTime;
 
 	@UIJoin(layoutTarget = TypeLayoutTarget.tab, icon = "code", template = { TypeTemplate.TAB, TypeTemplate.FORM })
 	@UIFilter(label = "Entity Two", field = "color", template = { TypeTemplate.FILTER, TypeTemplate.ROW })
-	@UIColumn(label = "Entity Two", fields = { "color", "inclusionDate", "cost", "hex", "entityTree" }, initial = true)
+	@UIColumn(label = "Entity Two", fields = { "color", "inclusionDate", "cost", "entityTree" }, initial = true)
 	@UIRow(visible = true, fields = { "color" }, order = 1)
 	private EntityTwo entityTwo;
 	
