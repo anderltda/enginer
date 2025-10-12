@@ -25,15 +25,41 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 @UIPaginator(config = @UIConfig(expandable = true, editableAll = true, multiSelectable = false, deletable = true), 
 actions = @UIButtonAction(
 value = { 
-		@UIButton(label = Constants.LABEL_BACK, icon = "undo", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW },
-				action = @UIAction( method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(clientMethod = "onBack")) )),
-		
-		@UIButton(label = Constants.LABEL_ADD, icon = "plus", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW },
-				  action = @UIAction( method = @UIActionMethod(clientMethod = "triggerMethod", trigger = @UIActionTriggerMethod(clientMethod = "setDataSetField")) )),	
-		
-		@UIButton(label = Constants.LABEL_SAVE, icon = "save", state = TypeButtonState.BTN_STATE_PRIMARY, template = { TypeTemplate.ROW }, 
-				action = @UIAction(method = @UIActionMethod(serverMethod = "rowSalvar"))) 
-		}))
+	@UIButton(
+		label = Constants.LABEL_BACK, 
+		icon = "undo", 
+		state = TypeButtonState.BTN_STATE_PRIMARY, 
+		template = { TypeTemplate.ROW },
+		action = @UIAction( 
+			method = @UIActionMethod(
+				clientMethod = "triggerMethod", 
+				trigger = @UIActionTriggerMethod(clientMethod = "onBack")
+			) 
+		)
+	),
+	@UIButton(
+		label = Constants.LABEL_ADD, 
+		icon = "plus", 
+		state = TypeButtonState.BTN_STATE_PRIMARY, 
+		template = { TypeTemplate.ROW },
+		action = @UIAction( 
+			 method = @UIActionMethod(
+				 clientMethod = "triggerMethod", 
+				 trigger = @UIActionTriggerMethod(clientMethod = "setDataSetField")
+			 ) 
+	    )
+	),	
+	@UIButton(
+		label = Constants.LABEL_SAVE, 
+		icon = "save", 
+		state = TypeButtonState.BTN_STATE_PRIMARY, 
+		template = { TypeTemplate.ROW }, 
+		action = @UIAction(
+			method = @UIActionMethod(serverMethod = "rowSalvar")
+		)
+	) 
+}
+))
 public class EntityRow extends DomainAbstract<Long> {
 	
 	@UIHidden()
