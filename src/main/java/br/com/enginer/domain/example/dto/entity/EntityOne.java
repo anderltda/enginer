@@ -274,27 +274,27 @@ public class EntityOne extends DomainAbstract<Long> {
 	private EntityTwo entityTwo;
 	
 	@UIHidden(label = "Multiplicacao Total", template = { TypeTemplate.ROW })
-	//@UIColumn(label = "Multiplicacao Total")
-	//@UIRow(calculation = "age * height", order = 4)
+	@UIColumn(label = "Multiplicacao Total", initial = false)
+	@UIRow(calculation = "age * height", totalizer = true, visible = true)
 	private Double valorMultiplicacao;
 
 	@UIHidden(label = "Soma Total", template = { TypeTemplate.ROW })
-	//@UIColumn(label = "Soma Total")
-	//@UIRow(calculation = "age + height", order = 5)
+	@UIColumn(label = "Soma Total", initial = false)
+	@UIRow(calculation = "age + height", totalizer = true, visible = true)
 	private Double valorSoma;
 	
 	@UIHidden(label = "Subtracao Total", template = { TypeTemplate.ROW })
 	@UIColumn(label = "Subtracao Total", initial = false)
-	//@UIRow(calculation = "age - height + valorUm", order = 6)
+	@UIRow(calculation = "age - height + valorUm", totalizer = true, visible = true)
 	private Double valorSubtracao;	
 	
 	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
 	@UIColumn(label = "Divisao Total", initial = false)
-	//@UIRow(calculation = "age / height", order = 7)
+	@UIRow(calculation = "age / height", totalizer = true, visible = true)
 	private Double valorDivisao;	
 	
 	@UIHidden(label = "Divisao Total", template = { TypeTemplate.ROW })
-	//@UIRow(visible = false)
+	@UIRow(visible = false)
 	private Integer valorUm = 1;
 	
 	public Integer getValorUm() {
