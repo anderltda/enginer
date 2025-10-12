@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
-import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
-import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
