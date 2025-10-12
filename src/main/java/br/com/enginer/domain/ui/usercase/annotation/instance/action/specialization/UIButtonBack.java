@@ -19,7 +19,7 @@ import br.com.enginer.domain.ui.usercase.enums.TypeTemplate;
     icon = "undo",
     needsValidation = false,
     state = TypeButtonState.BTN_STATE_DEFAULT,
-    template = { TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.TAB },
+    template = { TypeTemplate.FORM, TypeTemplate.ROW },
     action = @UIAction(
         method = @UIActionMethod(clientMethod = "onBack")
     )

@@ -23,6 +23,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResp
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionTriggerMethod;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
@@ -53,6 +54,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
  */
 @UITitle("Segundo")
 @UIButtonAction(includes = { 
+		UIButtonBack.class, 
 		UIButtonBefore.class,
 		UIButtonNew.class, 
 		UIButtonEdit.class, 
@@ -98,26 +100,6 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 				redirect = @UIActionRedirect(
 					value = Constants.PATH, ui = "filter", domain = "entityOne", param = "{ disabled=false }")
 			)
-		),
-		@UIButton(
-		    label = Constants.LABEL_BACK,
-		    icon = "undo",
-		    needsValidation = false,
-		    state = TypeButtonState.BTN_STATE_DEFAULT,
-		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-		    action = @UIAction(
-		        method = @UIActionMethod(clientMethod = "onBack")
-		    )
-		),
-		@UIButton(
-			    label = Constants.LABEL_CLEAR,
-			    icon = "bin_alt",
-			    needsValidation = false,
-			    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-			    state = TypeButtonState.BTN_STATE_DEFAULT,
-			    action = @UIAction(
-			        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
-			    )
 		)		
     })
 @UIPaginator(

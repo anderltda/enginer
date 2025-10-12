@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 
 import br.com.enginer.domain.Constants;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIColumn;
+import br.com.enginer.domain.ui.usercase.annotation.field.UIFilter;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIHidden;
 import br.com.enginer.domain.ui.usercase.annotation.field.UIRow;
+import br.com.enginer.domain.ui.usercase.annotation.field.behavior.UIPosition;
 import br.com.enginer.domain.ui.usercase.annotation.instance.UITitle;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionMethod;
@@ -38,6 +40,10 @@ public class EntityRow extends DomainAbstract<Long> {
 	
 	@UIHidden()
 	private Long id;
+	
+	@UIHidden()
+	@UIRow(visible = false, fields = { "name" })
+	private EntityTen entityTen;	
 
 	@UIHidden()
 	@UIColumn(label = "A", initial = true)
@@ -64,6 +70,11 @@ public class EntityRow extends DomainAbstract<Long> {
 
 	@UIHidden()
 	private LocalDateTime dateUpdate;
+	
+	public void setIdEntityTen(Long idEntityTen) {
+		this.entityTen = new EntityTen();
+		this.entityTen.setId(idEntityTen);
+	}	
 	
 	@Override
 	public Long getId() {
@@ -121,5 +132,13 @@ public class EntityRow extends DomainAbstract<Long> {
 
 	public void setDateUpdate(LocalDateTime dateUpdate) {
 		this.dateUpdate = dateUpdate;
+	}
+
+	public EntityTen getEntityTen() {
+		return entityTen;
+	}
+
+	public void setEntityTen(EntityTen entityTen) {
+		this.entityTen = entityTen;
 	}
 }

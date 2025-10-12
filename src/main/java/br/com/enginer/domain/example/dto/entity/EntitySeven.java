@@ -12,6 +12,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionRedi
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
@@ -33,6 +34,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	UIButtonNext.class, 
 	UIButtonNew.class, 
 	UIButtonAdd.class,
+	UIButtonBack.class, 
 	UIButtonDelete.class, 
 	UIButtonSearch.class, 
 	UIButtonSave.class 
@@ -43,20 +45,20 @@ value = {
 	    icon = "undo",
 	    needsValidation = false,
 	    state = TypeButtonState.BTN_STATE_DEFAULT,
-	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
+	    template = { TypeTemplate.DISABLED },
 	    action = @UIAction(
 	        method = @UIActionMethod(clientMethod = "onBack")
 	    )
 	),
 	@UIButton(
-		    label = Constants.LABEL_CLEAR,
-		    icon = "bin_alt",
-		    needsValidation = false,
-		    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-		    state = TypeButtonState.BTN_STATE_DEFAULT,
-		    action = @UIAction(
-		        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
-		    )
+	    label = Constants.LABEL_CLEAR,
+	    icon = "bin_alt",
+	    needsValidation = false,
+	    template = { TypeTemplate.DISABLED },
+	    state = TypeButtonState.BTN_STATE_DEFAULT,
+	    action = @UIAction(
+	        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
+	    )
 	)		
 }
 )

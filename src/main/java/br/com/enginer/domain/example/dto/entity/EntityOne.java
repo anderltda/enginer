@@ -71,7 +71,7 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 		UIButtonAdd.class,
 		UIButtonSave.class 
 }, 
-value = {
+value = {	
 	@UIButton(
 		label = Constants.LABEL_NEW + " - Tab",	
 		template = { TypeTemplate.FILTER }, 
@@ -83,7 +83,7 @@ value = {
 	),
 	@UIButton(
 		label = "Custom", 
-		template = { TypeTemplate.FORM }, 
+		template = { TypeTemplate.DISABLED }, 
 		icon = "google_plus", 
 		confirm = false, 
 		needsValidation = false, 

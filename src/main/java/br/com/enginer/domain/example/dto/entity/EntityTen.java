@@ -21,6 +21,7 @@ import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIActionResp
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButton;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.UIButtonAction;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonAdd;
+import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBack;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonBefore;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonDelete;
 import br.com.enginer.domain.ui.usercase.annotation.instance.action.specialization.UIButtonEdit;
@@ -42,31 +43,12 @@ import br.com.enginer.domain.ui.usercase.schema.instance.DomainAbstract;
 	UIButtonBefore.class, 
 	UIButtonNext.class, 
 	UIButtonNew.class, 
+	UIButtonBack.class, 
 	UIButtonDelete.class, 
 	UIButtonSearch.class, 
 	UIButtonAdd.class
 },
 value = { 
-	@UIButton(
-	    label = Constants.LABEL_BACK,
-	    icon = "undo",
-	    needsValidation = false,
-	    state = TypeButtonState.BTN_STATE_DEFAULT,
-	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-	    action = @UIAction(
-	        method = @UIActionMethod(clientMethod = "onBack")
-	    )
-	),
-	@UIButton(
-	    label = Constants.LABEL_CLEAR,
-	    icon = "bin_alt",
-	    needsValidation = false,
-	    template = { TypeTemplate.FORM, TypeTemplate.ROW },
-	    state = TypeButtonState.BTN_STATE_DEFAULT,
-	    action = @UIAction(
-	        method = @UIActionMethod(clientMethod = Constants.METHOD_CLEAR_FORM)
-	    )
-	),
 	@UIButton(
 	    label = Constants.LABEL_SAVE,
 	    icon = "save",
@@ -88,15 +70,25 @@ value = {
 		actions = @UIButtonAction(includes = { UIButtonView.class, UIButtonEdit.class, UIButtonDelete.class },
 		value = {
 			@UIButton(
-				label = "Add 10 in 11", 
+				label = "Add 10 --> 11", 
 				template = TypeTemplate.PAGINATOR, 
 				highlight = false,
 				dropdown = true,
 				action = @UIAction(
 					redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityEleven", param = "{ disable=true, field=entityTen, value=$object }")
 				)
-			)
-		})
+			),
+			@UIButton(
+				label = "Add 10 --> Row", 
+				template = TypeTemplate.PAGINATOR, 
+				highlight = false,
+				dropdown = true,
+				action = @UIAction(
+					redirect = @UIActionRedirect(value = Constants.PATH, ui = "row", domain = "entityRow", param = "{ disable=true, field=entityTen, value=$object }")
+				)
+			)			
+		}
+		)
 )
 public class EntityTen extends DomainAbstract<Long> {
 
@@ -112,19 +104,19 @@ public class EntityTen extends DomainAbstract<Long> {
 	private String name;
 
 	@UIHidden
-	@UIColumn(label = "Quantidade Total", initial = false)
+	@UIColumn(label = "Quantidade Total", initial = true)
 	@UIRow(visible = true)
 	private Integer totalAmount;
 
 	@UIHidden
-	@UIColumn(label = "Valor Total", initial = false)
+	@UIColumn(label = "Valor Total", initial = true)
 	@UIRow(visible = true)
 	private Double totalValue;
 
 	@UIPosition(x = 1, y = 3)
 	@UIFilter(label = "Status", field = "name", select = true, filter = { "status=0", "status_op=ge" }, template = { TypeTemplate.FILTER, TypeTemplate.TAB, TypeTemplate.FORM, TypeTemplate.ROW, TypeTemplate.MODAL })
 	@UIRow(visible = true, fields = { "name", "status", "ativo" })
-	@UIColumn(label = "", fields = { "name", "status" }, initial = false)
+	@UIColumn(label = "", fields = { "name", "status", "startDateTime" }, initial = false)
 	private EntityStatus entityStatus;
 
 	@UIHidden
