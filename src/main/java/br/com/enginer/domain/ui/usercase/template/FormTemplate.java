@@ -540,6 +540,7 @@ public final class FormTemplate {
 
 			UIConfig uiConfig = uiPaginator.config();
 			config.setEditable(uiConfig.editable());
+			config.setEditableAll(uiConfig.editableAll());
 			config.setMultiSelectable(uiConfig.multiSelectable());
 			config.setExpandable(uiConfig.expandable());
 			config.setDeletable(uiConfig.deletable());

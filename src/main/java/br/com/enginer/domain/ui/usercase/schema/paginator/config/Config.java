@@ -7,6 +7,7 @@ public class Config {
 
 	private Boolean expandable;
 	private Boolean editable;
+	private Boolean editableAll;
 	private Boolean multiSelectable;
 	private Boolean deletable;
 
@@ -40,5 +41,13 @@ public class Config {
 
 	public void setDeletable(Boolean deletable) {
 		this.deletable = deletable;
+	}
+
+	public Boolean getEditableAll() {
+		return editableAll;
+	}
+
+	public void setEditableAll(Boolean editableAll) {
+		this.editableAll = editableAll;
 	}
 }
