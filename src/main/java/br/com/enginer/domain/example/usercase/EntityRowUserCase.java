@@ -1,6 +1,5 @@
 package br.com.enginer.domain.example.usercase;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +15,6 @@ public class EntityRowUserCase extends AbstractUserCase {
 	
 	public List<EntityRow> rowSalvar(List<Domain<?>> entities) {
 		
-		entities.forEach(domain -> {
-			EntityRow entityRow = (EntityRow)domain;
-			 entityRow.setDateCreate(LocalDateTime.now());
-			 entityRow.setDateUpdate(LocalDateTime.now());
-		});
-			
 		List<Domain<?>> list = super.salvarLista(entities);
 		List<EntityRow> updatedList = new ArrayList<>();
 

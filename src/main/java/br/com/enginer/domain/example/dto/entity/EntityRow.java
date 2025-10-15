@@ -1,5 +1,6 @@
 package br.com.enginer.domain.example.dto.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.enginer.domain.Constants;
@@ -27,7 +28,8 @@ actions = @UIButtonAction(
 value = { 
 	@UIButton(
 		label = Constants.LABEL_BACK, 
-		icon = "undo", 
+		icon = "undo",
+		needsValidation = false,
 		state = TypeButtonState.BTN_STATE_PRIMARY, 
 		template = { TypeTemplate.ROW },
 		action = @UIAction( 
@@ -40,6 +42,7 @@ value = {
 	@UIButton(
 		label = Constants.LABEL_ADD, 
 		icon = "plus", 
+		needsValidation = true,
 		state = TypeButtonState.BTN_STATE_PRIMARY, 
 		template = { TypeTemplate.ROW },
 		action = @UIAction( 
@@ -51,7 +54,8 @@ value = {
 	),	
 	@UIButton(
 		label = Constants.LABEL_SAVE, 
-		icon = "save", 
+		icon = "save",
+		needsValidation = true,
 		state = TypeButtonState.BTN_STATE_PRIMARY, 
 		template = { TypeTemplate.ROW }, 
 		action = @UIAction(
@@ -61,45 +65,54 @@ value = {
 }
 ))
 public class EntityRow extends DomainAbstract<Long> {
-	
+
 	@UIHidden()
 	private Long id;
-	
+
 	@UIHidden()
 	@UIRow(visible = false, fields = { "name" })
-	private EntityTen entityTen;	
+	private EntityTen entityTen;
 
 	@UIHidden()
-	@UIColumn(label = "A", initial = true)
+	@UIColumn(label = "String", initial = true)
 	@UIRow(visible = true, editable = true, order = 1)
-	private String lineA;
+	private String lineString;
 
 	@UIHidden()
-	@UIColumn(label = "B", initial = true)
+	@UIColumn(label = "Integer", initial = true)
 	@UIRow(visible = true, editable = true, order = 2)
-	private String lineB;
+	private Integer lineInteger;
 
 	@UIHidden()
-	@UIColumn(label = "C", initial = true)
+	@UIColumn(label = "Double", initial = true)
 	@UIRow(visible = true, editable = true, order = 3)
-	private String lineC;
+	private Double lineDouble;
 
 	@UIHidden()
-	@UIColumn(label = "D", initial = true)
+	@UIColumn(label = "Long", initial = true)
 	@UIRow(visible = true, editable = true, order = 4)
-	private String lineD;
-	
-	@UIHidden()
-	private LocalDateTime dateCreate;
+	private Long lineLong;
 
 	@UIHidden()
-	private LocalDateTime dateUpdate;
-	
+	@UIColumn(label = "Boolean", initial = true)
+	@UIRow(visible = true, editable = true, order = 5)
+	private Boolean lineBoolean;
+
+	@UIHidden()
+	@UIColumn(label = "Date", initial = true)
+	@UIRow(visible = true, editable = true, order = 6)
+	private LocalDate lineDate;
+
+	@UIHidden()
+	@UIColumn(label = "Date Time", initial = true)
+	@UIRow(visible = true, editable = true, order = 7)
+	private LocalDateTime lineDateTime;
+
 	public void setIdEntityTen(Long idEntityTen) {
 		this.entityTen = new EntityTen();
 		this.entityTen.setId(idEntityTen);
-	}	
-	
+	}
+
 	@Override
 	public Long getId() {
 		return id;
@@ -110,59 +123,67 @@ public class EntityRow extends DomainAbstract<Long> {
 		this.id = id;
 	}
 
-	public String getLineA() {
-		return lineA;
-	}
-
-	public void setLineA(String lineA) {
-		this.lineA = lineA;
-	}
-
-	public String getLineB() {
-		return lineB;
-	}
-
-	public void setLineB(String lineB) {
-		this.lineB = lineB;
-	}
-
-	public String getLineC() {
-		return lineC;
-	}
-
-	public void setLineC(String lineC) {
-		this.lineC = lineC;
-	}
-
-	public String getLineD() {
-		return lineD;
-	}
-
-	public void setLineD(String lineD) {
-		this.lineD = lineD;
-	}
-
-	public LocalDateTime getDateCreate() {
-		return dateCreate;
-	}
-
-	public void setDateCreate(LocalDateTime dateCreate) {
-		this.dateCreate = dateCreate;
-	}
-
-	public LocalDateTime getDateUpdate() {
-		return dateUpdate;
-	}
-
-	public void setDateUpdate(LocalDateTime dateUpdate) {
-		this.dateUpdate = dateUpdate;
-	}
-
 	public EntityTen getEntityTen() {
 		return entityTen;
 	}
 
 	public void setEntityTen(EntityTen entityTen) {
 		this.entityTen = entityTen;
+	}
+
+	public String getLineString() {
+		return lineString;
+	}
+
+	public void setLineString(String lineString) {
+		this.lineString = lineString;
+	}
+
+	public Integer getLineInteger() {
+		return lineInteger;
+	}
+
+	public void setLineInteger(Integer lineInteger) {
+		this.lineInteger = lineInteger;
+	}
+
+	public Double getLineDouble() {
+		return lineDouble;
+	}
+
+	public void setLineDouble(Double lineDouble) {
+		this.lineDouble = lineDouble;
+	}
+
+	public Long getLineLong() {
+		return lineLong;
+	}
+
+	public void setLineLong(Long lineLong) {
+		this.lineLong = lineLong;
+	}
+
+	public Boolean getLineBoolean() {
+		return lineBoolean;
+	}
+
+	public void setLineBoolean(Boolean lineBoolean) {
+		this.lineBoolean = lineBoolean;
+	}
+
+	public LocalDate getLineDate() {
+		return lineDate;
+	}
+
+	public void setLineDate(LocalDate lineDate) {
+		this.lineDate = lineDate;
+	}
+
+	public LocalDateTime getLineDateTime() {
+		return lineDateTime;
+	}
+
+	public void setLineDateTime(LocalDateTime lineDateTime) {
+		this.lineDateTime = lineDateTime;
 	}
 }

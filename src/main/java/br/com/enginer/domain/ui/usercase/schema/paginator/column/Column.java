@@ -9,6 +9,7 @@ import java.util.Map;
 public class Column {
 
 	private Map<String, String> name;
+	private Map<String, String> type;
 	private Map<String, String> totalizer;
 	private List<String> initials;
 	private List<String> rows;
@@ -23,6 +24,14 @@ public class Column {
 
 	public void setName(Map<String, String> name) {
 		this.name = name;
+	}
+
+	public Map<String, String> getType() {
+		return type;
+	}
+
+	public void setType(Map<String, String> type) {
+		this.type = type;
 	}
 
 	public Map<String, String> getTotalizer() {

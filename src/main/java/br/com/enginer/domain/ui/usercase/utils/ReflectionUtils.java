@@ -124,6 +124,7 @@ public class ReflectionUtils {
 					}
 					
 					paramUtils.addColumnNames(name, uiColumn.label());
+					paramUtils.addColumnTypes(name, field.getType().getSimpleName());
 					paramUtils.addVisibles(name);
 				}
 			}

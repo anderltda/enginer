@@ -640,6 +640,7 @@ public final class FormTemplate {
 						paramUtils.addInitials(name);
 					}
 					paramUtils.addColumnNames(field_.getName(), uiColumn.label());
+					paramUtils.addColumnTypes(field_.getName(), field_.getType().getSimpleName());
 					paramUtils.addVisibles(name);
 				}
 			}
@@ -663,6 +664,7 @@ public final class FormTemplate {
 		}
 
 		paginator.getColumn().setName(paramUtils.getColumnNames());
+		paginator.getColumn().setType(paramUtils.getColumnTypes());
 
 		if (paramUtils.getTypeTemplate().equals(TypeTemplate.ROW)) {
 			paginator.getColumn().setRows(paramUtils.getRows());

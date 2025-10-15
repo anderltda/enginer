@@ -22,6 +22,7 @@ public class ParamUtils {
 	private List<String> calculations;
 	private List<Map.Entry<String, Integer>> rowsMap;
 	private Map<String, String> columnNames;
+	private Map<String, String> columnTypes;
 	private Map<String, String> totalizers;
 
 	public TypeTemplate getTypeTemplate() {
@@ -69,6 +70,18 @@ public class ParamUtils {
 		this.rowsMap.add(row);
 	}
 
+	public Map<String, String> getColumnTypes() {
+		return columnTypes;
+	}
+
+	public void addColumnTypes(String name, String type) {
+		if (this.columnTypes == null) {
+			this.columnTypes = new HashMap<String, String>();
+		}
+
+		this.columnTypes.put(name, type.toLowerCase().replace("local", ""));
+	}
+	
 	public Map<String, String> getColumnNames() {
 		return columnNames;
 	}
@@ -148,4 +161,7 @@ public class ParamUtils {
 		
 		this.totalizers.put(name, label);
 	}
+	
+	
+	
 }
